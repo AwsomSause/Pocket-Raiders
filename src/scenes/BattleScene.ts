@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, TOUGH, toughClip, WAIT, waitClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, FOE_TRAINER_OFF, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, TOUGH, toughClip, WAIT, waitClip, FOE_HEAL, foeHealClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -354,6 +354,9 @@ export class BattleScene extends Phaser.Scene {
   private waitTimer: Phaser.Time.TimerEvent | null = null;
   private waitedTurn = -1;
   private waitSprite: Phaser.GameObjects.Sprite | null = null;
+  /** Enemy heal (pass 13): the heal pips on the foe's plate, and how many heals the screen has shown used. */
+  private healPips: Phaser.GameObjects.Arc[] = [];
+  private healsShown = 0;
 
   /** Work begun in start `life` is stale: the scene has shut down since, is starting again (loading, before its
    * create), or has started again. */
@@ -799,6 +802,9 @@ export class BattleScene extends Phaser.Scene {
       this.enemyBox = this.skin ? this.makeSkinBox(this.skin.layout.foe, false) : this.makeInfoBox(0, 30, false);
       this.playerBox = this.skin ? this.makeSkinBox(this.skin.layout.player, true) : this.makeInfoBox(GAME_WIDTH - 390, MESSAGE_Y - 132, true);
     }
+    this.healPips = [];
+    this.healsShown = battle.enemyItemsUsed ?? 0;
+    if (!this.duo && battle.trainer) this.healPipsMake();
     this.header = this.add.text(GAME_WIDTH - 16, 10, '', textStyle(20, COLORS.textLight, { stroke: '#181818', strokeThickness: 4 })).setOrigin(1, 0);
     // Raid and Totem status sits under the enemy's box, away from the boss sprite.
     this.momentumText = this.add.text(GAME_WIDTH - 16, MESSAGE_Y - 160, '', textStyle(18, COLORS.textLight, { stroke: '#181818', strokeThickness: 4 })).setOrigin(1, 0);
@@ -2443,6 +2449,126 @@ export class BattleScene extends Phaser.Scene {
       });
     } catch {
       return Promise.resolve();
+    }
+  }
+
+  /**
+   * Heal pips (pass 13): a row of four small lights on the foe trainer's plate, one for each healing item they may
+   * still use (the same count as the info panel's "N of 4"); a used one is dark.
+   */
+  private healPipsMake(): void {
+    const box = this.enemyBox;
+    if (!box?.container) return;
+    const most = services().session.content.balance.trainerAi.maxHealItems ?? FOE_HEAL.most;
+    const [px, py, pw, ph] = box.spec ? box.spec.panel : [6, 2, 360, 100];
+    const y = py! + ph! - 2;
+    const x0 = px! + pw! - 24 - (most - 1) * 18;
+    const label = this.add.text(x0 - 14, y, 'HEALS', { fontFamily: FONT_FAMILY, fontSize: '13px', color: '#ffffff', stroke: '#16203f', strokeThickness: 4 }).setOrigin(1, 0.5);
+    label.name = 'heal-label';
+    box.container.add(label);
+    for (let i = 0; i < most; i++) {
+      const pip = this.add.circle(x0 + i * 18, y, 6, FOE_HEAL.color).setStrokeStyle(2, 0x16203f);
+      pip.name = 'heal-pip';
+      box.container.add(pip);
+      this.healPips.push(pip);
+    }
+    this.healPipsSync(this.healsShown, false);
+    // The pictures of the items a trainer heals with, ready for the toss.
+    const items = services().session.content.items;
+    const ids = ['potion', 'super-potion', 'hyper-potion', 'max-potion', 'full-restore'].map((id) => items.get(id)?.iconAssetId).filter((id): id is string => Boolean(id) && services().assets.has(id!));
+    void loadAssets(this, ids).catch(() => null);
+  }
+
+  /** Lights the pips for `used` heals gone (from the right); `pop`: the one just used pops as it goes dark. */
+  private healPipsSync(used: number, pop: boolean): void {
+    const n = this.healPips.length;
+    const was = this.healsShown;
+    this.healsShown = Math.max(0, used);
+    this.healPips.forEach((pip, i) => {
+      if (!pip.active) return;
+      const dark = i >= n - this.healsShown;
+      const justNow = pop && dark && i < n - was;
+      if (!justNow) {
+        pip.setFillStyle(dark ? 0xffffff : FOE_HEAL.color, dark ? 0.2 : 1);
+        return;
+      }
+      const rate = animationTimeScale(services().session.settings);
+      this.tweens.chain({
+        targets: pip,
+        tweens: [{ scale: 1.6, duration: 100 * rate }, { scale: 1, duration: 200 * rate }],
+        onComplete: () => pip.active && pip.setScale(1),
+        onStop: () => pip.active && pip.setScale(1),
+      });
+      this.time.delayedCall(100 * rate, () => pip.active && pip.setFillStyle(0xffffff, 0.2));
+    });
+  }
+
+  /**
+   * Enemy heal (redesign pass 13): the foe trainer leans in from the edge and tosses the item; it arcs over their
+   * Pokémon and bursts into green light, the bar climbs (`refill`) while the Pokémon hops, and one heal pip goes dark.
+   * Resolves when the bar has filled. Presentation only: the HP comes from the battle's event.
+   */
+  private async foeHealMoment(mon: PokemonInstance, itemId: string, heal: boolean, refill: () => Promise<void>): Promise<void> {
+    const sprite = this.condSprite('enemy');
+    const level = this.clipLevel();
+    let filling: Promise<void> | null = null;
+    const fill = (): void => void (filling ??= refill());
+    if (!sprite || !sprite.visible || this.duo) {
+      fill();
+      if (heal) this.healPipsSync(this.healsShown + 1, false);
+      await filling;
+      return;
+    }
+    const temps: Phaser.GameObjects.GameObject[] = [];
+    try {
+      const spot = { ...this.spotXY('enemy'), h: this.headHeight(sprite), side: 'enemy' as const };
+      const art = level === 'full' ? this.trainerArt() : null;
+      let tr: Phaser.GameObjects.Sprite | null = null;
+      let hand: Point | null = null;
+      if (art) {
+        const v = trainerVisual(this, art.assetId, art.label, FOE_TRAINER_OFF, spot.y + 8, 2);
+        if (v instanceof Phaser.GameObjects.Sprite) {
+          const box = drawnBox(v);
+          v.setOrigin((box.x + box.w / 2) / Math.max(1, v.frame.cutWidth), (box.y + box.h) / Math.max(1, v.frame.cutHeight));
+          const k = Math.min(208 / Math.max(1, box.h), 176 / Math.max(1, box.w));
+          v.setScale(k);
+          this.field.addAt(v, this.fieldBase);
+          tr = v;
+          temps.push(v);
+          hand = foeHand({ x: FOE_HEAL.trX, y: spot.y }, box.h * k);
+        } else v.destroy();
+      }
+      // The item's own picture (loaded when the plate was made), or a green light until it is.
+      const icon = services().session.content.items.get(itemId)?.iconAssetId;
+      if (!this.textures.exists('heal.orb')) {
+        const g = this.make.graphics({}, false);
+        g.fillStyle(FOE_HEAL.color, 1).fillCircle(15, 15, 12).lineStyle(3, 0xffffff, 1).strokeCircle(15, 15, 12);
+        g.generateTexture('heal.orb', 30, 30);
+        g.destroy();
+      }
+      const it = icon && this.textures.exists(icon) ? (itemVisual(this, icon, 0, 0, 2) as Phaser.GameObjects.Image) : this.add.image(0, 0, 'heal.orb');
+      it.setDepth(3000).setAlpha(0);
+      temps.push(it);
+      await new Promise<void>((done) => {
+        this.condPlay(sprite, foeHealClip(spot, hand, level), { it: { kind: 'free' as const, get: () => it }, ...(tr ? { tr: { kind: 'free' as const, get: () => tr } } : {}) }, (cut) => {
+          done();
+          if (cut || !sprite.active) return;
+          this.restAt(sprite, 'enemy');
+          if (sprite.visible) this.standUp(sprite, mon);
+        }, (name) => {
+          if (name === 'burst') {
+            fill();
+            if (sprite.active) this.washSprite(sprite, FOE_HEAL.color, FOE_HEAL.tint, 600, 300);
+          }
+          if (name === 'pip' && heal) this.healPipsSync(this.healsShown + 1, true);
+        });
+      });
+    } catch {
+      /* presentation only */
+    } finally {
+      temps.forEach((t) => t.active && t.destroy());
+      fill();
+      await filling;
     }
   }
 
@@ -6660,6 +6786,8 @@ export class BattleScene extends Phaser.Scene {
   private showRootMenu(): void {
     this.clearMenus();
     this.waitArm();
+    // The heal pips agree with the battle once the turn is over (a Revive on the bench, say).
+    if (this.healPips.length) this.healPipsSync(this.run.battle?.enemyItemsUsed ?? this.healsShown, false);
     this.rxExp.clear();
     this.rxLevel = null;
     const content = services().session.content;
@@ -7950,6 +8078,8 @@ export class BattleScene extends Phaser.Scene {
       if (e.type === 'move' && this.hold[e.side]?.kind === 'charge') await this.holdOff(e.side);
       // Drain: the lights carry the HP across; they take the pack's heal sparkle's place.
       if (e.type === 'drain' && e.amount > 0 && (await this.drainMoment(e.side))) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
+      // Pass 13: the foe trainer's own item gets its toss and burst over the foe (the shared item sparkle is yours).
+      if (e.type === 'item' && this.shown.enemy && e.targetUid === this.shown.enemy.uid && !this.duo) cues[index] = (cues[index] ?? []).filter((c) => !(c.kind === 'storyAnim' && c.anim === 'interaction.item'));
       const step = combo.get(index);
       if (step && 'k' in step) {
         cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'number');
@@ -8220,9 +8350,13 @@ export class BattleScene extends Phaser.Scene {
           const foeItem = this.shown.enemy && e.targetUid === this.shown.enemy.uid;
           preText = foeItem ? e.message : `You used the ${content.items.get(e.itemId)?.name ?? 'item'}!`;
           if (foeItem && this.shown.enemy) {
-            this.shown.enemy.hp = e.hpAfter;
-            await this.refreshInfoBox(this.enemyBox, this.shown.enemy, true);
-          }
+            // Pass 13: the trainer tosses it, it bursts green over their Pokémon and one heal pip goes dark.
+            const heal = e.hpAfter > this.shown.enemy.hp;
+            await this.foeHealMoment(this.shown.enemy, e.itemId, heal, async () => {
+              this.shown.enemy!.hp = e.hpAfter;
+              await this.refreshInfoBox(this.enemyBox, this.shown.enemy!, true);
+            });
+          } else if (e.itemId === 'revive' || e.itemId === 'max-revive') this.healPipsSync(this.healsShown + 1, false);
           break;
         }
         case 'held': {

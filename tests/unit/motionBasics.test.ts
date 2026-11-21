@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, WIN, winClip, TOUGH, toughClip, WAIT, waitClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, FLINCH, flinchClip, WIN, winClip, TOUGH, toughClip, WAIT, waitClip, FOE_HEAL, foeHealClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -462,6 +462,44 @@ describe('toughed it out (pass 11)', () => {
     expect(cues(r)).toEqual([['stamp', 0], ['free', 450]]);
     expect(r.segs.some((g) => g.prop === 'dx')).toBe(false);
     expect(cues(toughClip(ME, 'off'))).toEqual([['free', 0]]);
+  });
+});
+
+describe('enemy heal (pass 13)', () => {
+  const cues = (c: MotionClip) => c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && [f.name, f.at]);
+  const foe = { x: 648, y: 230, h: 120, side: 'enemy' as const };
+  const hand = { x: 950, y: 150 };
+  it('the trainer leans in, tosses the item along an arc to over the foe; a green burst, the foe hops, a pip goes dark', () => {
+    const c = foeHealClip(foe, hand, 'full');
+    expect(sampleClip(c, 0).tr).toMatchObject({ x: FOE_TRAINER_OFF });
+    expect(sampleClip(c, 720).tr!.x).toBeCloseTo(FOE_HEAL.trX);
+    expect(sampleClip(c, 999).it!.alpha).toBe(0);
+    expect(sampleClip(c, 1000).it).toMatchObject({ x: hand.x, y: hand.y, alpha: 1 });
+    // Halfway along the arc it is above the straight line between hand and foe.
+    const mid = sampleClip(c, 1250).it!;
+    expect(mid.y!).toBeLessThan((hand.y + (foe.y - 60)) / 2 - 100);
+    expect(sampleClip(c, 1500).it).toMatchObject({ x: foe.x, y: foe.y - 60, rot: 540 });
+    expect(sampleClip(c, 1600).it!.alpha).toBeCloseTo(0);
+    expect(sampleClip(c, 1620).mon!.dy).toBeCloseTo(-18);
+    expect(clipEnd(c).mon!.dy).toBeCloseTo(0);
+    expect(clipEnd(c).tr!.x).toBeGreaterThan(FOE_TRAINER_OFF);
+    expect(cues(c)).toEqual([['burst', 1500], ['pip', 1800]]);
+    expect(c.fx.filter((f) => f.kind === 'star')).toHaveLength(12);
+    expect(c.length).toBe(2400);
+  });
+  it('with no trainer the item drops in from above, straight', () => {
+    const c = foeHealClip(foe, null, 'full');
+    expect(Object.keys(c.base)).not.toContain('tr');
+    expect(sampleClip(c, 1000).it).toMatchObject({ x: foe.x, y: foe.y - 60 - 160 });
+    expect(sampleClip(c, 1250).it!.x).toBe(foe.x);
+  });
+  it('Reduced: the burst, a ring and the pip; Off: the cues at once', () => {
+    const r = foeHealClip(foe, hand, 'reduced');
+    expect(cues(r)).toEqual([['burst', 0], ['pip', 100]]);
+    expect(r.segs).toHaveLength(0);
+    const o = foeHealClip(foe, hand, 'off');
+    expect(cues(o)).toEqual([['burst', 0], ['pip', 0]]);
+    expect(o.length).toBe(0);
   });
 });
 

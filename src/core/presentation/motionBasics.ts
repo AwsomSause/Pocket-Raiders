@@ -860,6 +860,56 @@ export function toughClip(mon: MonSpot, level: ClipLevel): MotionClip {
 }
 
 /**
+ * Enemy heal (pass 13): the foe trainer leans in from the right edge (`trX`), tosses the item, which arcs (`arc` px high)
+ * over the foe to a burst of green light; the bar climbs (`barMs`) and one heal pip goes dark. `most` pips on the plate.
+ */
+export const FOE_HEAL = { trX: 900, toss: 1000, fly: 500, arc: 110, spin: 540, burst: 1500, barMs: 800, pip: 1800, out: 1900, color: 0x9df0a8, flash: 0xd6fff0, tint: 0.5, most: 4 } as const;
+
+/**
+ * Enemy heal (pass 13): the trainer leans in (part "tr"), winds and tosses; the item (part "it") spins along an arc
+ * from the hand to just over the foe and bursts ("burst": green wash, the bar starts climbing) in a flash, a ring and
+ * twelve green sparkles while the foe hops; a heal pip goes dark ("pip") and the trainer leans out again. `hand` is
+ * where the item leaves the trainer's hand (null: no trainer, it drops in from above). Reduced: the burst and the pip
+ * only. Off: the same cues at once.
+ */
+export function foeHealClip(foe: MonSpot, hand: Point | null, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('foeHeal', level);
+  const H = FOE_HEAL;
+  const over = { x: foe.x, y: foe.y - Math.min(foe.h * 0.5, 120) };
+  const it = b.part('it', { x: hand?.x ?? over.x, y: hand?.y ?? over.y - 160, rot: 0, sx: 1, sy: 1, alpha: 0 });
+  if (level !== 'full') {
+    b.fx({ kind: 'cue', at: 0, name: 'burst' });
+    b.fx({ kind: 'cue', at: level === 'off' ? 0 : 100, name: 'pip' });
+    if (level === 'off') return b.end(0);
+    b.fx({ kind: 'ring', at: 0, x: foe.x, y: over.y, r1: 120, flat: 1, d: 400, color: H.color, w: 6 });
+    b.beat(0, 'Heals');
+    return b.end(H.barMs);
+  }
+  const m = b.part('mon', { dy: 0 });
+  if (hand) {
+    const tr = b.part('tr', { x: FOE_TRAINER_OFF, y: foe.y + 8, rot: 0 });
+    tr.at(300).to(420, { x: H.trX }, 'out3');
+    b.fx({ kind: 'dust', at: 660, x: H.trX + 30, y: foe.y + 4, n: 6 });
+    tr.at(900).to(100, { rot: -10 }).to(100, { rot: 8 }, 'in3').to(300, { rot: 0 }, 'el');
+    tr.at(H.out).to(100, { rot: -8 }).to(300, { x: FOE_TRAINER_OFF + 20, rot: 0 }, 'in3');
+  }
+  it.at(H.toss).set({ alpha: 1 }).also(H.fly, { rot: H.spin }, 'lin');
+  it.arc(H.fly, hand?.x ?? over.x, hand?.y ?? over.y - 160, over.x, over.y, hand ? H.arc : 0).to(100, { s: 2, alpha: 0 });
+  b.fx({ kind: 'cue', at: H.burst, name: 'burst' });
+  b.fx({ kind: 'flash', at: H.burst, d: 200, alpha: 0.5, color: H.flash });
+  b.fx({ kind: 'ring', at: H.burst, x: foe.x, y: over.y, r1: 160, flat: 1, d: 450, color: H.color, w: 8 });
+  for (let i = 0; i < 12; i++) {
+    // Twelve sparkles around the body, spread evenly (no randomness: same clip every time).
+    const a = i * 2.4;
+    b.fx({ kind: 'star', at: H.burst + i * 50, x: foe.x + Math.round(Math.cos(a) * 80 * ((i % 3) + 1) / 3), y: over.y + Math.round(Math.sin(a) * 75 * ((i % 4) + 1) / 4), size: 15, points: 4, inner: 0.15, d: 300, color: H.color });
+  }
+  m.at(H.burst).to(120, { dy: -18 }, 'out').to(200, { dy: 0 }, 'bo');
+  b.fx({ kind: 'cue', at: H.pip, name: 'pip' });
+  b.beat(300, 'The trainer leans in').beat(H.toss, 'Tosses the item').beat(H.burst, 'Green burst; the bar climbs').beat(H.pip, 'A heal pip goes dark');
+  return b.end(H.burst + H.barMs + 100);
+}
+
+/**
  * Waiting on you (pass 11): how long the command menu sits with no input before your Pokémon notices (`idleMs`), and
  * the look of it: it glances round (`glance` degrees, `dx` px) as a yellow "?" pops at (`askDx`, `askDy`) from its
  * middle, then bounces on its feet twice (`hop` px) with a puff of dust each time and the message box nudges.

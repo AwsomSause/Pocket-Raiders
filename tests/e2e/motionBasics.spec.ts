@@ -1467,3 +1467,54 @@ test('waiting on you: six idle seconds at the menu and it glances round with a "
   await page.evaluate(() => { const w = window as any; w.__pkr.game.scene.getScene('Battle').events.off('update', w.__waitWatch); });
   expect(errors).toEqual([]);
 });
+
+test('enemy heal: four heal pips on the foe trainer\'s plate; the trainer leans in and tosses it, a green burst over the foe, the bar climbs and one pip goes dark', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await startBattle(page, 'heal-e2e');
+  const pips = () => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    return b.enemyBox.container.list.filter((o: any) => o.name === 'heal-pip').map((o: any) => (o.fillAlpha < 0.5 ? 0 : 1));
+  });
+  expect(await pips()).toEqual([1, 1, 1, 1]);
+  const seen = await page.evaluate(async () => {
+    const w = window as any;
+    const b = w.__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const mon = b.shown.enemy;
+    mon.hp = Math.max(1, Math.floor(mon.hp / 5));
+    const healed = mon.hp + 8;
+    // The run agrees: after the turn the foe has the healed HP (the screen re-reads the run when the events end).
+    const live = w.__pkr.session.run.battle.enemyTeam.find((m: any) => m.uid === mon.uid);
+    if (live) live.hp = healed;
+    const s = { trainer: false, item: false, wash: false, hop: 0, playerItemFx: false };
+    const home = b.spotXY('enemy').y;
+    const watch = () => {
+      const all = [...b.children.list, ...b.field.list];
+      s.trainer ||= b.field.list.some((o: any) => o.type === 'Sprite' && o !== b.enemySprite && o !== b.playerSprite && o.x > 800 && o.x < 1000 && !o.tintFill);
+      s.item ||= all.some((o: any) => o.type === 'Image' && o.depth === 3000 && o.alpha > 0.5 && o.y < home);
+      s.wash ||= all.some((o: any) => o.type === 'Sprite' && o.tintFill && o.tintTopLeft === 0x9df0a8);
+      if (b.enemySprite) s.hop = Math.max(s.hop, b.enemySprite.getData('standBase') ? 0 : home - b.enemySprite.y);
+    };
+    b.events.on('update', watch);
+    const before = structuredClone(w.__pkr.session.run);
+    await b.playEvents([{ type: 'item', itemId: 'hyper-potion', targetUid: mon.uid, message: 'The trainer used a Hyper Potion!', hpAfter: healed }], before, null);
+    b.events.off('update', watch);
+    return { ...s, hp: healed, shownHp: b.shown.enemy.hp };
+  });
+  expect(seen).toMatchObject({ trainer: true, item: true, wash: true });
+  expect(seen.hop).toBeGreaterThan(10);
+  // The bar has climbed to the event's HP before the battle goes on, and one pip went dark (from the right).
+  expect(seen.shownHp).toBe(seen.hp);
+  expect(await pips()).toEqual([1, 1, 1, 0]);
+  // Nothing left behind: the trainer has gone and no item hangs in the air.
+  await expect.poll(() => page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    return [...b.children.list, ...b.field.list].filter((o: any) => (o.type === 'Image' && o.depth === 3000) || (o.type === 'Sprite' && o.x > 800 && o !== b.enemySprite && o !== b.playerSprite)).length;
+  }), { timeout: 3000 }).toBe(0);
+  const e = await look(page, 'enemy');
+  expect({ x: e.x, y: e.y, alpha: e.alpha }).toEqual({ x: e.homeX, y: e.homeY, alpha: 1 });
+  expect(errors).toEqual([]);
+});
