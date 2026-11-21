@@ -282,7 +282,8 @@ describe('rarity', () => {
         if (cues.length > 0) any += 1;
         expect(run.story.flags['m:helped'] ?? 0).toBeLessThanOrEqual(REAL_RARITY.perBattle);
       }
-      expect(any).toBeLessThan(30);
+      // Kice 2026-11-17: the chances were raised, so most seeds now see one; the per-battle limit above still holds.
+      expect(any).toBeLessThan(60);
     } finally {
       openGate();
     }

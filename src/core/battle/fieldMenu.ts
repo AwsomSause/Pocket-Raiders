@@ -13,6 +13,7 @@ import { getSpecies } from '../pokemon';
 import { typeEffectiveness } from './damage';
 import { ALLY_AIMED, monAt, spotsOf, volAt, type Spot } from './doubles';
 import { forcedMoveId, type SlotCommand } from './engine';
+import { isGuest } from './guests';
 import { canReach, lanesOn, shiftProblem } from './triples';
 
 type View = { battle: BattleState; party: PokemonInstance[] };
@@ -26,7 +27,8 @@ export function commandPlan(view: View): SpotPlan[] {
   if (!d) return [];
   return spotsOf(view.battle).map((spot): SpotPlan => {
     const mon = monAt(view, 'player', spot);
-    if (!mon || mon.hp <= 0 || d.refill.includes(spot) || d.commanding.includes(mon.uid)) return { spot, kind: 'skip' };
+    // An ally the game controls picks its own move: the player is never asked for its spot.
+    if (!mon || mon.hp <= 0 || d.refill.includes(spot) || d.commanding.includes(mon.uid) || isGuest(view.battle, mon.uid)) return { spot, kind: 'skip' };
     const forced = forcedMoveId(volAt(view, 'player', spot) ?? undefined);
     const index = forced ? mon.moves.findIndex((m) => m.id === forced) : -1;
     return index >= 0 ? { spot, kind: 'forced', index } : { spot, kind: 'ask' };
@@ -83,9 +85,10 @@ export function targetChoices(view: View, content: Content | null, spot: Spot, m
 }
 
 /** Why the Pokémon in your `spot` can't be told to Shift, or null. `chosen` are the commands already given this turn. */
-export function shiftOptionProblem(battle: Pick<BattleState, 'doubles'>, spot: Spot, chosen: readonly (SlotCommand | null)[] = []): string | null {
+export function shiftOptionProblem(battle: Pick<BattleState, 'doubles' | 'guests'>, spot: Spot, chosen: readonly (SlotCommand | null)[] = []): string | null {
   const problem = shiftProblem(spotsOf(battle).length, spot);
   if (problem || !battle.doubles) return problem ?? 'Shifting is only possible in a triple battle';
+  if (battle.guests?.uids.length) return 'Your allies hold their places';
   if (chosen.some((c, i) => i !== spot && c?.action.kind === 'shift')) return 'Only one Pokémon can shift to the centre';
   return null;
 }

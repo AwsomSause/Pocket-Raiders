@@ -4,6 +4,7 @@ import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { addLevels, calcStats, getSpecies } from '../pokemon';
 import { calcDamage, typeEffectiveness } from '../battle/damage';
+import { guestGrudge, isGuest, isTempAlly } from '../battle/guests';
 import { runLevelCap } from '../regions';
 import { eggMoveOptions, familyId } from '../mastery';
 
@@ -96,9 +97,9 @@ export const TRUCE_GUEST = 'truce-guest';
 const COVER = 'truce-cover:';
 const AVENGE = 'truce-avenge:';
 
-const isPair = (battle: Pick<BattleState, 'loaner'>, mon: PokemonInstance): boolean => mon.uid === battle.loaner || !!mon.gn?.includes(TRUCE_GUEST);
+const isPair = (battle: Pick<BattleState, 'loaner' | 'guests'>, mon: PokemonInstance): boolean => isTempAlly(battle, mon.uid) || !!mon.gn?.includes(TRUCE_GUEST);
 /** The other one of the pair, if it can still fight. */
-function partnerOf(battle: Pick<BattleState, 'loaner'>, party: readonly PokemonInstance[], mon: PokemonInstance): PokemonInstance | undefined {
+function partnerOf(battle: Pick<BattleState, 'loaner' | 'guests'>, party: readonly PokemonInstance[], mon: PokemonInstance): PokemonInstance | undefined {
   return party.find((m) => m !== mon && m.hp > 0 && isPair(battle, m));
 }
 const truceOn = (battle: Pick<BattleState, 'eventRule'>): boolean => battle.eventRule?.gn === 'truce';
@@ -107,19 +108,35 @@ const truceOn = (battle: Pick<BattleState, 'eventRule'>): boolean => battle.even
  * "When one's below a third, the other stands in front (it takes the next hit)." Called before a foe's damaging move lands on one
  * of the pair: returns the partner's name when it steps in (the hit is not taken), once a fight for each of the two.
  */
-export function truceCover(content: Content, battle: BattleState, party: readonly PokemonInstance[], target: PokemonInstance): string {
+export function truceCover(content: Content, battle: BattleState, party: readonly PokemonInstance[], target: PokemonInstance, hit?: { user: PokemonInstance; moveId: string }): string {
   if (!truceOn(battle) || !isPair(battle, target) || target.hp <= 0) return '';
   if (target.hp * 3 >= calcStats(content, target).hp || battle.storyEffects.includes(`${COVER}${target.uid}`)) return '';
   const partner = partnerOf(battle, party, target);
   if (!partner) return '';
   battle.storyEffects.push(`${COVER}${target.uid}`);
+  // On the field (an ally the game plays), the one in front really takes the hit: the move's damage against its own type and
+  // stats (an average roll, no critical hit). It is left standing on 1 HP at worst: stepping in never knocks it out by itself.
+  const move = hit ? content.moves.get(hit.moveId) : undefined;
+  if (hit && move && (move.power ?? 0) > 0 && isGuest(battle, partner.uid)) {
+    const mine = calcStats(content, partner);
+    const theirs = calcStats(content, hit.user);
+    const physical = move.category === 'physical';
+    const damage = calcDamage(content.ruleset, {
+      level: hit.user.level, power: move.power ?? 0, attack: physical ? theirs.atk : theirs.spa, defense: physical ? mine.def : mine.spd, attackStage: 0, defenseStage: 0,
+      stab: getSpecies(content, hit.user.speciesId).types.includes(move.type), effectiveness: typeEffectiveness(content.typeChart, move.type, getSpecies(content, partner.speciesId).types), crit: false, burned: false, physical, randomFactor: 100,
+    });
+    partner.hp = Math.max(1, partner.hp - Math.max(0, damage));
+  }
   return getSpecies(content, partner.speciesId).name;
 }
 
 /** "When one's hit hard": a foe's move took a third or more of one of the pair's HP. The partner will answer it (truceAnswers). */
 export function truceHurt(content: Content, battle: BattleState, party: readonly PokemonInstance[], foeUid: string, target: PokemonInstance, damage: number): void {
   if (!truceOn(battle) || !isPair(battle, target) || damage * 3 < calcStats(content, target).hp) return;
-  if (!partnerOf(battle, party, target)) return;
+  const partner = partnerOf(battle, party, target);
+  if (!partner) return;
+  // The pair stand on the field and the game plays them: the partner's next real move goes at that foe (battle/doubles.ts).
+  if (isGuest(battle, partner.uid)) return guestGrudge(battle, partner.uid, foeUid);
   const tag = `${AVENGE}${foeUid}:${target.uid}`;
   if (!battle.storyEffects.includes(tag)) battle.storyEffects.push(tag);
 }
@@ -130,6 +147,7 @@ export function truceHurt(content: Content, battle: BattleState, party: readonly
  * takes the last HP: the knock-out is the player's.
  */
 export function truceAnswers(content: Content, battle: BattleState, party: readonly PokemonInstance[]): string[] {
+  // (With the pair on the field as allies the game plays, the answer is the partner's own next move: truceHurt.)
   if (!truceOn(battle)) return [];
   const lines: string[] = [];
   for (const tag of battle.storyEffects.filter((t) => t.startsWith(AVENGE))) {

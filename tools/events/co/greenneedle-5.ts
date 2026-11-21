@@ -564,8 +564,9 @@ const gn24: Json[] = [
 
 // =====================================================================================================================
 // gn.25  THE UNLIKELY FRIENDSHIP  (single, step 7, optional, before the battle; A5; once a run). The node's wild battle becomes
-// the pack fight: six Mightyena in one double battle with both of the pair on your side (the engine has two places a side, so
-// the Zangoose stands beside you and the Seviper waits right behind it; rule `truce`). New paired ability Truce.
+// the pack fight: six Mightyena in one triple battle with both of the pair on your side as allies the game plays (`allies`:
+// core/battle/guests.ts). The field holds three a side, so your lead stands with them and your next Pokémon comes in when a place
+// opens; rule `truce`: the pair cover each other. New paired ability Truce.
 // =====================================================================================================================
 const TRUCE_TINT = '#7a6b8f';
 const tru = (o: Json = {}): Json => ({ tint: TRUCE_TINT, tags: ['Pokémon', 'Story', 'Relationship'], effect: 'none', pokemon: 'zangoose', ...o });
@@ -573,11 +574,10 @@ const troom = (id: string, name: string, o: Json, intro: string, choices: Json[]
 const TRUCE_GUEST = 'truce-guest';
 const GUEST_GOES: Json = gn('dropMarked', { key: TRUCE_GUEST });
 /**
- * The pack fight: one double battle, six Mightyena, with both of the pair on your side. The Zangoose stands beside you (the fight's
- * ally); the Seviper is right behind it, in your party for this fight (mark `truce-guest`). Rule `truce`: they cover each other.
+ * The pack fight: one triple battle, six Mightyena (three out at a time), with the Zangoose and the Seviper on your side of the
+ * field. The game plays them; they can be hit and can faint; they go home when it ends. Rule `truce`: they cover each other.
  */
-const PACK: Json = { ...trainer('The Pack', { size: 6, team: ['mightyena', 'mightyena', 'mightyena', 'mightyena', 'mightyena', 'mightyena'], format: 'doubles', ally: 'zangoose', lv: 0, friendly: true, win: [GUEST_GOES, scene('gn-25-after')], lose: [GUEST_GOES, flag('truce-pack-lost'), scene('gn-25-after')] }), rule: { gn: 'truce' } };
-const SEVIPER_IN: Json[] = [{ ...join({ species: ['seviper'] }), asIs: true, direct: true }, gn('markLast', { key: TRUCE_GUEST, species: ['seviper'] })];
+const PACK: Json = { ...trainer('The Pack', { size: 6, team: ['mightyena', 'mightyena', 'mightyena', 'mightyena', 'mightyena', 'mightyena'], lv: 0, friendly: true, win: [GUEST_GOES, scene('gn-25-after')], lose: [GUEST_GOES, flag('truce-pack-lost'), scene('gn-25-after')] }), allies: ['zangoose', 'seviper'], rule: { gn: 'truce' } };
 const truceJoin = (species: string): Json => ({ ...join({ species: [species] }), ability: 'truce' });
 const OTHER: Json[] = [when('truce-one', { min: 1, max: 1 }, [truceJoin('seviper')]), when('truce-one', { min: 2, max: 2 }, [truceJoin('zangoose')])];
 const sightReq = (n: number): Json[] => [is('truce-one'), is('truce-sight', n - 1, n - 1), { kind: 'gn', test: 'laterStage', key: n === 1 ? 'truce-at' : `truce-sight${n - 1}-at` }];
@@ -603,7 +603,7 @@ const gn25: Json[] = [
     '*A pack comes out of the grass. Mightyena, six, and they\'ve done this before.*',
     'The Zangoose and the Seviper are already back to back. There\'s room beside them. Just.',
     '*When one of them is hit hard, the other goes straight for whatever did it. When one is nearly down, the other stands in front.*',
-  ), [ch('Fight beside them.', fight('The pack comes in low, two at a time. The Zangoose takes the place beside you. The Seviper is right behind it.', PACK, ...SEVIPER_IN))]),
+  ), [ch('Fight beside them.', fight('The pack comes in low, three at a time. The Zangoose takes the place beside you, and the Seviper the place beside it. They fight their own fight; you fight yours.', PACK))]),
   troom('gn-25-after', 'The Unlikely Friendship', {}, say(
     'The grass goes still.',
     'They check each other for injuries before they look at you.',

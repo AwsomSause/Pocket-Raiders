@@ -3,6 +3,7 @@
 // This file holds the pure rules: when a gate appears, and what the stage does to a fight and to the party.
 // Everything is seeded by the run (never by animation), and the outcome record lives in `run.legendary`.
 
+import { scaledCap } from '../stageLength';
 import { conditionMet } from '../events';
 import { timeOfDay } from '../arenaStyle';
 import { getTheme } from '../themes';
@@ -84,7 +85,7 @@ export function placeLegendaryGate(content: Content, run: RunState): void {
   const cfg = content.legendaryGate;
   const rec = legendaryRecord(run);
   const focus = focusOf(run);
-  if ((rec.placed[String(run.regionIndex)] ?? 0) >= cfg.perRegion + (focus.length > 0 ? 1 : 0)) return;
+  if ((rec.placed[String(run.regionIndex)] ?? 0) >= scaledCap(cfg.perRegion, run) + (focus.length > 0 ? 1 : 0)) return;
   const rng = new Rng(hashSeed(`${run.seed}::legend-gate::${run.regionIndex}:${stage.index}`));
   if (!rng.chance(Math.max(cfg.gateChance, ...focus.map((m) => m.gateChance)))) return;
   const pool = eligibleLegendary(content, run);

@@ -7,7 +7,6 @@ public/assets/images/pokemon/{,back/,shiny/,back/shiny/}custom/<id>.{png,json}. 
 the front mirrored and shiny is always the normal art. The Viking (one 152x168 picture) becomes a
 256x256 overworld sheet (4x4 frames of 64 px, every frame the same picture, so he stands and bobs).
 """
-import colorsys
 import json
 import os
 import re
@@ -104,25 +103,7 @@ for key in MONS:
     for folder, frames in (('', front), ('back', back), ('shiny', shiny), (os.path.join('back', 'shiny'), back_shiny)):
         write_atlas(frames, folder, OUT_ID.get(key, key))
 
-# Mega stone icons for batch 5: the Garchompite picture turned to the stone's main type colour.
-TYPE_HUE = {'normal': 0.1, 'fire': 0.0, 'water': 0.6, 'electric': 0.15, 'grass': 0.33, 'ice': 0.5, 'fighting': 0.03, 'poison': 0.8, 'ground': 0.1, 'flying': 0.65,
-            'psychic': 0.9, 'bug': 0.25, 'rock': 0.12, 'ghost': 0.75, 'dragon': 0.7, 'dark': 0.7, 'steel': 0.55, 'fairy': 0.93}
-stones_path = os.path.join(src, 'stones.json')
-if os.path.exists(stones_path):
-    base_icon = Image.open(os.path.join(out, 'items', 'garchompite.png')).convert('RGBA')
-    for st in json.load(open(stones_path)):
-        hue = TYPE_HUE.get(st['type'], 0.5)
-        px = base_icon.copy().load()
-        icon = base_icon.copy()
-        pix = icon.load()
-        for y in range(icon.height):
-            for x in range(icon.width):
-                r, g, b, a = pix[x, y]
-                if a:
-                    h, l, sat = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
-                    nr, ng, nb = colorsys.hls_to_rgb(hue, l, max(sat, 0.35))
-                    pix[x, y] = (round(nr * 255), round(ng * 255), round(nb * 255), a)
-        icon.save(os.path.join(out, 'items', st['id'].replace('-', '_') + '.png'), optimize=True)
+# Mega stone icons for batch 5 are made by tools/jet/make-mega-stones.py.
 
 viking = trim(Image.open(os.path.join(src, 'viking.png')).convert('RGBA'))
 scale = 56 / viking.height

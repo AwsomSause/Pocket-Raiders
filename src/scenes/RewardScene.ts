@@ -7,7 +7,7 @@ import Phaser from 'phaser';
 import { rewardSynergy } from '../core/rewardSynergy';
 import { compareReward } from '../core/rewardCompare';
 import { isRerollReward, rewardTargetProblem } from '../core/rewards';
-import { draftItemUses, type DraftItemKind } from '../core/run';
+import { draftItemUses, wishCandidates, type DraftItemKind } from '../core/run';
 import { services } from '../game/services';
 import { playSfx, playSfxLazy } from '../ui/audio';
 import { onInputAction } from '../ui/input';
@@ -182,12 +182,17 @@ export class RewardScene extends Phaser.Scene {
     // Party and Bag under the party strip; the draft items' buttons at the top right, beside the title.
     const rerolls = draftItemUses(content, run, 'reroll');
     const locks = draftItemUses(content, run, 'lock');
+    const wishes = draftItemUses(content, run, 'wishName');
     const buttons: { label: string; x: number; y: number; w: number; h: number; size: number; act: () => void }[] = [
       { label: 'Party', x: 680, y: 404, w: 104, h: 64, size: 26, act: () => this.openParty() },
       { label: 'Bag', x: 800, y: 404, w: 104, h: 64, size: 26, act: () => this.openBag() },
     ];
     if (rerolls > 0) buttons.push({ label: `Re-roll ×${rerolls}`, x: 0, y: 12, w: 100, h: 44, size: 18, act: () => this.startMode('reroll', 'Choose the card to swap for a new one (Cornn Berry).') });
     if (locks > 0) buttons.push({ label: `Lock ×${locks}`, x: 0, y: 12, w: 100, h: 44, size: 18, act: () => this.startMode('lock', 'Choose the card to keep in the next draft too (Lock Capsule).') });
+    if (wishes > 0) {
+      buttons.push({ label: `Wish: redraw ×${wishes}`, x: 0, y: 12, w: 100, h: 44, size: 16, act: () => this.wishRedraw() });
+      buttons.push({ label: `Wish: name ×${wishes}`, x: 0, y: 12, w: 100, h: 44, size: 16, act: () => this.startMode('wishName', "Choose the card to name a reward for (Jirachi's Wish).") });
+    }
     buttons.slice(2).forEach((b, n, extra) => (b.x = GAME_WIDTH - 40 - (extra.length - n) * 112 + 12));
     buttons.forEach((b, n) => {
       drawGlass(this, b.x, b.y, b.w, b.h, strip ? { tint: strip.btnTint, rim: strip.btnRim, radius: Math.min(strip.radius + 4, b.h / 2) } : { radius: 16 });
@@ -295,12 +300,57 @@ export class RewardScene extends Phaser.Scene {
 
   private activate(i: number): void {
     const draft = services().session.run!.draft!;
-    if (i < draft.length && this.mode) {
+    if (i < draft.length && this.mode === 'wishName') {
+      this.openWishPicker(i);
+    } else if (i < draft.length && this.mode) {
       const { message } = services().session.useDraftItem(this.mode, i);
       playSfx(this, 'ui.select');
       this.restart(message);
     } else if (i < draft.length) this.pickReward(i);
     else this.buttons[i - draft.length]?.act();
+  }
+
+  /** Jirachi: redraw the whole reward node. */
+  private wishRedraw(): void {
+    playSfx(this, 'ui.select');
+    const { message } = services().session.wishRedraw();
+    this.restart(message);
+  }
+
+  /** Jirachi: name one reward of the card's tier. */
+  private openWishPicker(draftIndex: number): void {
+    const { session } = services();
+    const rewardIds = wishCandidates(session.content, session.run!, draftIndex);
+    if (rewardIds.length === 0) return playSfx(this, 'ui.error', 0.5);
+    const picker: Picker = new Picker(this, {
+      glass: true,
+      title: 'Name a reward',
+      columns: 1,
+      rowHeight: 78,
+      rows: rewardIds.map((id) => {
+        const reward = session.content.rewards.get(id)!;
+        return {
+          problem: null,
+          hint: reward.description,
+          draw: (scene, box, w) => {
+            box.add(scene.add.text(16, 6, reward.name, textStyle(22)));
+            box.add(scene.add.text(16, 34, reward.description, textStyle(15, '#d8d0e0', { wordWrap: { width: w - 32 } })));
+          },
+        };
+      }),
+      onSelect: (n) => {
+        picker.close();
+        this.picker = null;
+        const { message } = session.useDraftItem('wishName', draftIndex, rewardIds[n]);
+        playSfx(this, 'ui.select');
+        this.restart(message);
+      },
+      onBack: () => {
+        picker.close();
+        this.picker = null;
+      },
+    });
+    this.picker = picker;
   }
 
   private closePicker(): void {

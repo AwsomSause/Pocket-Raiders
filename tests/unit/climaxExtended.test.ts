@@ -9,7 +9,7 @@ import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
 
 const mk = (cut?: 'standard' | 'extended', seed = 'cx1') => {
-  const r = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', ...(cut ? { expansion: { climaxCut: cut } } : {}) }), 0);
+  const r = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', ...(cut ? { expansion: { climaxCut: cut, stageLength: -10 } } : {}) }), 0);
   return r;
 };
 

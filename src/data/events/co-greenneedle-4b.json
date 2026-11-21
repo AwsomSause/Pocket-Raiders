@@ -109,8 +109,9 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-19-thirsty"
+        "op": "minigame",
+        "key": "gn-savanna",
+        "n": 1
        }
       ]
      }
@@ -230,8 +231,9 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-19-thirsty"
+        "op": "minigame",
+        "key": "gn-savanna",
+        "n": 1
        }
       ]
      }
@@ -3068,8 +3070,9 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-20-wall"
+        "op": "minigame",
+        "key": "gn-jungle",
+        "n": 1
        }
       ]
      }
@@ -3175,8 +3178,9 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-20-wall"
+        "op": "minigame",
+        "key": "gn-jungle",
+        "n": 1
        }
       ]
      }

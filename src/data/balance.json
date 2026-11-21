@@ -159,7 +159,7 @@
   "maxLevel": 500,
   "partyStrength": { "enabled": true, "grace": 3, "factor": 0.5, "maxBonus": 4, "levelCeiling": 2 },
   "trainerBonus": 1,
-  "gymBonus": -1,
+  "gymBonus": 0,
   "aceBonus": 1,
   "eliteFourBonus": 1,
   "championBonus": 2,
@@ -506,12 +506,12 @@
   ],
   "hiddenShare": 0.34,
   "rarityWeights": {
-   "common": 60,
-   "uncommon": 25,
-   "rare": 12,
-   "epic": 3
+   "common": 40,
+   "uncommon": 28,
+   "rare": 20,
+   "epic": 12
   },
-  "themeWeight": 2,
+  "themeWeight": 1.5,
   "checkBase": 40,
   "checkMin": 5,
   "checkMax": 95,
@@ -528,8 +528,8 @@
    "great-ball",
    "full-heal"
   ],
-  "gameEventWeight": 4,
-  "regionEventWeight": 6
+  "gameEventWeight": 2.5,
+  "regionEventWeight": 2.5
  },
  "attributeGrowth": [
   {
@@ -619,8 +619,8 @@
    "combo": { "bonus": 1.25 },
    "mindRead": { "types": ["psychic"] },
    "grudge": { "boost": { "atk": 1, "spa": 1 } },
-   "spectator": { "chance": 0.15, "boost": { "atk": 1 }, "names": ["A passing hiker", "A kid on a bike", "An old fisher", "A traveling merchant", "A curious scientist"] },
-   "arena": { "every": 3, "fraction": 0.0625, "interact": 0.2, "types": { "rock": "rocks", "ground": "rocks", "fire": "lava", "water": "flood" } }
+   "spectator": { "chance": 0.35, "boost": { "atk": 1 }, "names": ["A passing hiker", "A kid on a bike", "An old fisher", "A traveling merchant", "A curious scientist"] },
+   "arena": { "every": 3, "fraction": 0.0625, "interact": 0.2, "chance": 0.85, "types": { "rock": "rocks", "ground": "rocks", "fire": "lava", "water": "flood" } }
   },
   "bench": { "minFriendship": 200 },
   "underdog": { "levels": 4, "xpBonus": 1.25 }
@@ -649,7 +649,8 @@
   "rematch": { "enabled": true, "chance": 0.5, "levelBonus": 3, "ai": 0.85 }
  },
  "sos": {
-  "enabled": true
+  "enabled": true,
+  "callScale": 0.3
  },
  "moments": {
   "minor": { "perRun": null, "cooldownBattles": 0 },
@@ -754,7 +755,6 @@
  },
  "trainerAi": {
   "healBelow": 0.3,
-  "healFraction": 0.5,
   "maxItems": 1,
   "allTrainersUseItems": true,
   "maxSwitches": 2,

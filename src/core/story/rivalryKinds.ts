@@ -4,6 +4,8 @@
 //   Bitter     – your Pokémon fell to a foe that was nearly beaten itself (a narrow, humiliating loss).
 //   One-Sided  – your Pokémon fell to a much stronger foe that barely noticed it; it pays off when
 //                your Pokémon finally knocks that species out (the rivalry becomes Mutual).
+//   Grudge     – your Pokémon fell to a foe well below its own level (an upset it wants back).
+//   Respect    – your Pokémon fell in an even fight to a foe that was left hurt; it respects it.
 //   Friendly   – two teammates in a Friendly Competition tag in for each other in battle.
 //   Generational – a returning rival's Pokémon has evolved since you last met.
 // The tone is kept on the rivalry record; nothing here draws a random number.
@@ -28,16 +30,26 @@ export function noteRivalryLoss(content: Content, run: RunState, mon: PokemonIns
   const cfg = content.story.nemesis;
   const bitter = foe.hp > 0 && foe.hp <= maxHp(content, foe) * cfg.lowHpShare;
   const oneSided = !bitter && foe.level >= mon.level + cfg.oneSidedGap;
-  if (!bitter && !oneSided) return;
+  // Kice 2026-11-17: more kinds so One-Sided no longer dominates.
+  const grudge = !bitter && !oneSided && foe.level + 3 <= mon.level;
+  const respect = !bitter && !oneSided && !grudge && Math.abs(foe.level - mon.level) <= 2 && foe.hp > 0 && foe.hp <= maxHp(content, foe) * 0.5;
+  if (!bitter && !oneSided && !grudge && !respect) return;
+  const kind = bitter ? 'bitter' : oneSided ? 'oneSided' : grudge ? 'grudge' : 'respect';
   const name = (id: string) => content.species.get(id)?.name ?? id;
+  const texts = {
+    bitter: `Lost to ${name(foe.speciesId)} when it was nearly beaten, and won't forget it`,
+    oneSided: `Was brushed aside by a stronger ${name(foe.speciesId)}, and swore to catch up`,
+    grudge: `Lost to a ${name(foe.speciesId)} it should have beaten, and wants a rematch`,
+    respect: `Lost a fair fight with ${name(foe.speciesId)}, and respects it for it`,
+  };
   const cause = emit(content, run, 'rivalryFormed', {
     where,
     actors: [mon.uid],
-    data: { kind: bitter ? 'bitter' : 'oneSided', speciesId: foe.speciesId },
-    text: bitter ? `Lost to ${name(foe.speciesId)} when it was nearly beaten, and won't forget it` : `Was brushed aside by a stronger ${name(foe.speciesId)}, and swore to catch up`,
+    data: { kind, speciesId: foe.speciesId },
+    text: texts[kind],
   });
   const record = openRelationship(content, run, 'rivalry', { kind: 'pokemon', id: mon.uid }, foeRef(foe.speciesId), cause);
-  if (record) record.tone = bitter ? 'bitter' : 'oneSided';
+  if (record) record.tone = kind;
 }
 
 /** Your Pokémon knocked out `foe`: a One-Sided rivalry becomes Mutual. Returns true when it did. */

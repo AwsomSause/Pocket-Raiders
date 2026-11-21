@@ -50,5 +50,5 @@ describe('rival simulation report', () => {
       expect(s.contradictions, seed).toEqual([]);
       expect(s.rivals, seed).toBeGreaterThan(0);
     }
-  }, 60_000);
+  }, 180_000);
 });

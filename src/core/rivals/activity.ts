@@ -4,6 +4,7 @@
 // optional `rival.world` fields (near, goal, condition, pace, heardOfYou, stuck, news), the lead (by at most 1
 // a stage) and news lines. No save bump: every new field is optional.
 
+import { scaledCap } from '../stageLength';
 import { z } from 'zod';
 import data from '../../data/rivalActivity.json';
 import type { Content } from '../contentSchema';
@@ -129,7 +130,7 @@ export function rivalActivity(content: Content, run: RunState, before: Record<st
   }
 
   // 2. News (14.12): pending corrections first, then fresh items.
-  const max = run.stage?.kind === 'league' ? cfg.pacing.perLeagueStage : cfg.pacing.perStage;
+  const max = run.stage?.kind === 'league' ? cfg.pacing.perLeagueStage : scaledCap(cfg.pacing.perStage, run);
   let budget = Math.max(0, max - slots);
   let observed = 0;
   const fix = readFix(run);

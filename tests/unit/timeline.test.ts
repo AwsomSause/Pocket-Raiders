@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { content } from './helpers';
 import { gameplayFingerprint, step } from './autoplay';
 import { createPokemon } from '../../src/core/pokemon';
@@ -9,6 +9,11 @@ import { frontRunner, frontRunnerIntro, FRONT_RUNNER_ID, isFalseProtagonist, onF
 import { protagonistTitle } from '../../src/core/rivals/recognition';
 import { GameSession } from '../../src/game/GameSession';
 import { MemoryStorageProvider } from '../../src/save/storage';
+
+// A fixed day: GameSession reads today's game events, and a live dated week (Homeland Week) changes the first region,
+// so the first node can open a story stop instead of a battle depending on the calendar.
+beforeAll(() => { vi.useFakeTimers({ toFake: ['Date'] }); vi.setSystemTime(new Date('2026-11-10T12:00:00Z')); });
+afterAll(() => { vi.useRealTimers(); });
 
 /** Starts a run and loses it in the first battle. Returns the lost run's id. */
 function loseRun(session: GameSession, seed: string): string {

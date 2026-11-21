@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { scaledCap } from '../stageLength';
 import { cheerBattleStart } from '../greenneedle/cheer';
 import { stageNumber } from '../events';
 import { evolveMoments, noteCocoon } from '../moments/runMoments';
@@ -49,6 +50,7 @@ import { graduateMentorships } from './mentorship';
 import { awardLegacyTitles, recordEpitaph } from './legacy';
 import { noteStruggle, recordChampionMemory } from './highHype';
 import { clearMomentFlags, detectMoments } from './moments';
+import { momentCountKey } from './momentCaps';
 import { noteCodex } from './codex';
 import { noteRivalryLoss, noteRivalryWin } from './rivalryKinds';
 import { memoryAfterBattle } from '../memories/encounters';
@@ -573,7 +575,7 @@ function trainerVow(content: Content, run: RunState, triggers: StoryTrigger[], a
   const last = standing[0];
   if (standing.length !== 1 || !last || last.hp > maxHp(content, last) * rule.lowHpShare) return;
   const inRegion = vowedTrainers(run).filter((p) => p.battles[0]?.where.region === where.region);
-  if (inRegion.length >= rule.effect.perRegion || inRegion.filter((p) => p.battles[0]?.where.stage === where.stage).length >= rule.effect.perStage) return;
+  if (inRegion.length >= scaledCap(rule.effect.perRegion, run) || inRegion.filter((p) => p.battles[0]?.where.stage === where.stage).length >= scaledCap(rule.effect.perStage, run)) return;
   const profile = createEnemyProfile(content, run, {
     id: `trainer-${where.region}-${where.stage ?? 0}-${battleIndex(run)}`,
     name: trainer.name,
@@ -617,6 +619,7 @@ function resolveTriggers(content: Content, run: RunState, triggers: StoryTrigger
       emotions: def.emotions,
     });
     advanceChains(content, run, def.id, t.side === 'player' ? actor : undefined);
+    if (!suppressed) run.story.flags[momentCountKey(def.id)] = Number(run.story.flags[momentCountKey(def.id)] ?? 0) + 1;
     if (!suppressed) noteCodex(run, def.id);
     // Effects the engine has not already applied (it decides every Hyper moment's effect itself).
     if (!suppressed && def.effect && !ENGINE_EFFECTS.has(def.effect.kind)) {
@@ -671,6 +674,11 @@ function recordSeenMoves(content: Content, rival: Rival, moves: Record<string, n
 }
 
 /** The battle's outcome: boss wins and losses, and how close it was. */
+/** The movesets a rival remembers: its own moves only (not a lent, Hyper or Mega signature slot), at most 4 each (the save allows no more). */
+export function rememberedMoves(team: readonly PokemonInstance[]): string[][] {
+  return team.map((m) => m.moves.filter((x) => !x.lent && !x.hyper && !x.megaSig).map((x) => x.id).slice(0, 4));
+}
+
 function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   const battle = run.battle!;
   const index = battleIndex(run);
@@ -748,7 +756,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     spendRivalSpoils(run, rivalBack.id);
     endRivalBrain(run, rivalBack.id);
     // Moves: the rival's own sets (a move lent for the battle, a Hyper or Mega signature slot is not part of its team).
-    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), levels: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.level), moves: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.moves.filter((x) => !x.lent && !x.hyper && !x.megaSig).map((x) => x.id)), foes: fought };
+    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), levels: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.level), moves: rememberedMoves(battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6)), foes: fought };
     recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);
     // W2: everything else it watched (setup, switches, your lead, a sweep, a legend...) for its adaptation triggers.
     const leadUid = run.story.events.find((e) => e.type === 'battleStarted' && e.where.battle === index)?.actors[0];

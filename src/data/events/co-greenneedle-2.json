@@ -28029,6 +28029,13 @@
        "atMost": 3
       }
      ]
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "You keep climbing. He watches your team all the way up the stairs.",
+      "effects": []
+     }
     }
    ]
   },

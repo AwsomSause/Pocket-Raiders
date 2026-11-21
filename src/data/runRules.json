@@ -9,7 +9,7 @@
   },
   "difficulties": [
     {
-      "id": "casual",
+      "id": "casual", "enemyHeal": 0.7,
       "name": "Casual",
       "blurb": "Very gentle enemies and a big breather after each win. For learning the game.",
       "multiplier": 0.6,
@@ -17,7 +17,7 @@
       "winHeal": 0.6
     },
     {
-      "id": "story",
+      "id": "story", "enemyHeal": 0.85,
       "name": "Story",
       "blurb": "Gentler enemies. For enjoying the campaign.",
       "multiplier": 0.8,
@@ -25,7 +25,7 @@
       "winHeal": 0.5
     },
     {
-      "id": "standard",
+      "id": "standard", "enemyHeal": 1,
       "name": "Standard",
       "blurb": "The intended game.",
       "multiplier": 1.0,
@@ -33,7 +33,7 @@
       "winHeal": 0.35
     },
     {
-      "id": "veteran",
+      "id": "veteran", "enemyHeal": 1.1,
       "name": "Veteran",
       "blurb": "Enemies hit a little higher.",
       "multiplier": 1.2,
@@ -41,7 +41,7 @@
       "winHeal": 0.2
     },
     {
-      "id": "champion",
+      "id": "champion", "enemyHeal": 1.25,
       "name": "Champion",
       "blurb": "Tougher teams, fewer safety nets.",
       "multiplier": 1.4,
@@ -49,7 +49,7 @@
       "winHeal": 0.0
     },
     {
-      "id": "nightmare",
+      "id": "nightmare", "enemyHeal": 1.4,
       "name": "Nightmare",
       "blurb": "For the end of the road.",
       "multiplier": 1.7,
@@ -57,7 +57,7 @@
       "winHeal": 0.0
     },
     {
-      "id": "brutal",
+      "id": "brutal", "enemyHeal": 1.5,
       "name": "Brutal",
       "blurb": "Much stronger enemies, no breathers.",
       "multiplier": 1.9,
@@ -65,7 +65,7 @@
       "winHeal": 0.0
     },
     {
-      "id": "mythic",
+      "id": "mythic", "enemyHeal": 1.6,
       "name": "Mythic",
       "blurb": "Every enemy is far above you. Only for experts.",
       "multiplier": 2.0,

@@ -115,6 +115,9 @@ export function hasKeyItem(content: Content, inventory: Record<string, number>, 
   return false;
 }
 
+/** A Legendary Blessing lets the player use this mechanic without its key item (`grantMechanic`). */
+const grantsMechanic = (perks: Perks | undefined, mechanic: 'dynamax' | 'tera'): boolean => (perks ?? []).some((p) => p.kind === 'grantMechanic' && p.mechanic === mechanic);
+
 export interface FormOption {
   formId: string;
   /** The stone or orb that allows it; null for bosses, who need none. */
@@ -267,7 +270,7 @@ export function canDynamax(ctx: TransformContext): boolean {
 function dynamaxProblem(ctx: TransformContext, mon: PokemonInstance): string | null {
   const { content, battle, inventory } = ctx;
   if (ctx.disabledMechanics?.includes('dynamax')) return 'Dynamax is switched off for this run.';
-  if (!hasKeyItem(content, inventory, 'dynamax')) return 'You need a Dynamax Band to Dynamax.';
+  if (!hasKeyItem(content, inventory, 'dynamax') && !grantsMechanic(ctx.perks, 'dynamax')) return 'You need a Dynamax Band to Dynamax.';
   if (battle.transform.used.player.includes('dynamax')) return 'You have already Dynamaxed this battle.';
   if (oncePerPokemon(ctx, mon)) return oncePerPokemon(ctx, mon);
   const form = battle.transform.forms[mon.uid]?.kind;
@@ -399,7 +402,7 @@ export function teraOption(ctx: TransformContext): TypeName | null {
 function teraProblem(ctx: TransformContext, mon: PokemonInstance): string | null {
   const { content, battle, inventory } = ctx;
   if (ctx.disabledMechanics?.includes('tera')) return 'Terastallization is switched off for this run.';
-  if (!hasKeyItem(content, inventory, 'tera')) return 'You need a Tera Orb to Terastallize.';
+  if (!hasKeyItem(content, inventory, 'tera') && !grantsMechanic(ctx.perks, 'tera')) return 'You need a Tera Orb to Terastallize.';
   if (battle.transform.used.player.includes('tera')) return 'You have already Terastallized this battle.';
   return oncePerPokemon(ctx, mon);
 }

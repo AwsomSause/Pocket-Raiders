@@ -73,3 +73,23 @@ describe('lost rival fights', () => {
     if (plain) expect(playOut(fight(plain.id, 'sl-plain')).phase).toBe('over');
   });
 });
+
+describe('rival losses never end a run (Kice 2026-11-17)', () => {
+  it('Death-Block and Adventure runs survive a rival loss too', () => {
+    for (const [seed, rules] of [['sl9', { deathBlock: true }], ['sl10', { modeId: 'adventure' }]] as const) {
+      const run = start(seed);
+      Object.assign(run.rules, rules);
+      const after = playOut(rivalFight(run));
+      expect(after.phase).not.toBe('over');
+      expect(after.story.flags['story:losses']).toBe(1);
+    }
+  });
+  it('a trainer named like a run rival counts as that rival even with no rival flag', () => {
+    const run = start('sl11');
+    const r = debugReplaceEnemy(content, toBattle(run), 'mewtwo', 100);
+    r.story.rivals.push({ id: 'rvx', name: 'Silvan Test', encounters: 1, traits: {}, bonds: {} } as never);
+    r.battle!.trainer = { classId: 'hiker', name: 'Silvan Test' } as never;
+    r.party.forEach((p) => (p.level = 1));
+    expect(playOut(r).phase).not.toBe('over');
+  });
+});

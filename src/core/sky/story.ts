@@ -10,7 +10,7 @@ import { evolvedFormAt } from '../encounters';
 import { addItem, itemCount } from '../items';
 import { maxHp } from '../pokemon';
 import { Rng, hashSeed } from '../rng';
-import { getCampaign, levelCap } from '../regions';
+import { getCampaign, levelCap, runCampaign } from '../regions';
 import { newMon } from '../run';
 import { eventLevel } from '../events';
 import { stageKey } from '../mapItems';
@@ -51,7 +51,7 @@ export const SKY_BALANCE = {
 
 export const skyOf = (run: Pick<RunState, 'expansion'>): SkyState | undefined => run.expansion?.sky;
 
-const stagesPer = (content: Content, run: RunState): number => getCampaign(content, run.campaignId).stagesPerRegion;
+const stagesPer = (content: Content, run: RunState): number => runCampaign(content, run).stagesPerRegion;
 const avgLevel = (run: RunState): number => (run.party.length ? Math.round(run.party.reduce((n, m) => n + m.level, 0) / run.party.length) : 5);
 const clampLevel = (content: Content, run: RunState, level: number): number => Math.max(2, Math.min(levelCap(content, run.regionIndex), level));
 

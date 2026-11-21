@@ -1,3 +1,4 @@
+import { isTempAlly } from './battle/guests';
 import type { Content } from './contentSchema';
 import { hasPerk } from './mapItems';
 import { maxHp } from './pokemon';
@@ -10,7 +11,7 @@ import type { RunState } from './state';
 /** Revives one fallen Pokémon after a won or caught fight (mutates `run`). Returns its uid, or null. */
 export function lastChanceRevive(content: Content, run: RunState): string | null {
   if (!hasPerk(content, run, 'lastChance')) return null;
-  const fallen = run.party.filter((m) => m.hp <= 0 && m.uid !== run.battle?.loaner).sort((a, b) => b.level - a.level);
+  const fallen = run.party.filter((m) => m.hp <= 0 && !isTempAlly(run.battle, m.uid)).sort((a, b) => b.level - a.level);
   const mon = fallen[0];
   if (!mon) return null;
   mon.hp = Math.max(1, Math.floor(maxHp(content, mon) * content.balance.lastChance.share));

@@ -2,7 +2,7 @@
 
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { assignBlessing, blessingPerks, blessingRite, syncCommunion, useBlessingRite, BLESSINGS, BLESSING_TIER_ODDS, blessingAfterBattle, blessingShopFactor, BlessingStateSchema, getBlessing, rollBlessing, runBlessing } from '../../src/core/blessings';
+import { assignBlessing, blessingPerks, blessingRite, syncCommunion, useBlessingRite, BLESSINGS, BLESSING_TIER_ODDS, blessingAfterBattle, blessingShopFactor, BLESSING_TIERS, BlessingStateSchema, getBlessing, rollBlessing, runBlessing } from '../../src/core/blessings';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
 import { maxHp } from '../../src/core/pokemon';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -48,18 +48,24 @@ describe('rollBlessing', () => {
       expect(x.seen).toBe(false);
     }
   });
-  it('over many seeds every playable blessing shows up and tiers follow the odds (empty tiers fall down)', () => {
+  it('over many seeds every playable blessing shows up and each tier keeps its own share (an empty tier spreads out evenly)', () => {
     const counts: Record<string, number> = {};
-    for (let i = 0; i < 4000; i++) { const r = rollBlessing(`odds-${i}`)!; counts[r.id] = (counts[r.id] ?? 0) + 1; }
+    const tierCounts: Record<string, number> = {};
+    const N = 20000;
+    for (let i = 0; i < N; i++) { const r = rollBlessing(`odds-${i}`)!; counts[r.id] = (counts[r.id] ?? 0) + 1; tierCounts[r.tier] = (tierCounts[r.tier] ?? 0) + 1; }
     // Event-only blessings (pool: false, The Renegade from The Rift Whisper) are never rolled.
     const playable = BLESSINGS.filter((b) => b.status !== 'disabled' && b.pool);
     for (const b of playable) expect(counts[b.id] ?? 0, b.id).toBeGreaterThan(0);
-    // Divine 17%, shared by Ho-Oh, Dialga, Reshiram and Zekrom (about 4.25% each).
-    expect(counts['ho-oh']! / 4000).toBeGreaterThan(0.03);
-    expect(counts['ho-oh']! / 4000).toBeLessThan(0.07);
-    // Primordial 6.5% + the Origin rolls (1.5%) that fall down to it: Kyurem, The Empty Vessel, is the only rolled one (The Renegade is event-only).
-    expect(counts.kyurem! / 4000).toBeGreaterThan(0.06);
-    expect(counts.kyurem! / 4000).toBeLessThan(0.1);
+    const present = BLESSING_TIERS.filter((t) => playable.some((b) => b.tier === t));
+    const total = present.reduce((s, t) => s + BLESSING_TIER_ODDS[t]!.chance, 0);
+    for (const t of BLESSING_TIERS) {
+      const want = present.includes(t) ? BLESSING_TIER_ODDS[t]!.chance / total : 0;
+      expect(Math.abs((tierCounts[t] ?? 0) / N - want), t).toBeLessThan(0.01);
+    }
+    // A blessing alone in a rare tier stays rare: The Empty Vessel's share is its tier's, never the empty Origin tier's too.
+    const kyuremWant = BLESSING_TIER_ODDS.primordial!.chance / total / playable.filter((b) => b.tier === 'primordial').length;
+    expect(Math.abs(counts.kyurem! / N - kyuremWant)).toBeLessThan(0.01);
+    expect(counts.kyurem! / N).toBeLessThan(0.075);
   });
 });
 
@@ -138,7 +144,7 @@ describe('perk blessings', () => {
     expect(blessingPerks(run)).toHaveLength(1);
   });
   it('Zacian, Regidrago, Moltres and Munkidori add their perks every battle; Lele adds none', () => {
-    for (const id of ['zacian', 'regidrago', 'moltres', 'munkidori']) expect(blessingPerks(withBlessing(id)), id).toHaveLength(1);
+    for (const id of ['zacian', 'regidrago', 'moltres', 'munkidori']) expect(blessingPerks(withBlessing(id)), id).toHaveLength(id === 'regidrago' ? 2 : 1); // Regidrago: Dragon moves, and any move at full HP
     expect(blessingPerks(withBlessing('tapu-lele'))).toEqual([]);
   });
 });

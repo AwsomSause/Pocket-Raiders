@@ -15,6 +15,17 @@ const lead = (run: RunState, species: string, moves?: string[]): void => {
   run.party[0] = mon;
 };
 
+/**
+ * Both stages are walked now (core/greenneedle/zone.ts; tests/unit/gnscreen-savanna.test.ts and gnscreen-jungle.test.ts walk them).
+ * The rooms themselves are unchanged, and a run saved inside them before the walk existed still plays them one after another beside
+ * the node: these tests play the rooms that way (the walk put aside, the first room's stop left where the door put it).
+ */
+const rooms = (run: RunState): RunState => {
+  expect(run.phase).toBe('minigame');
+  run.minigame = null;
+  run.phase = 'map';
+  return run;
+};
 const here = (run: RunState, id: string): boolean => run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.some((x) => !x.used && x.eventId === id);
 
 describe('gn.19 The Deep Savanna', () => {
@@ -23,7 +34,7 @@ describe('gn.19 The Deep Savanna', () => {
     run.party.push(createPokemon(content, 'snorlax', run.party[0]!.level, 'p-big'));
     setup(run);
     open(run, 'gn-19-door');
-    return choose(run, 'gn-19-door', 'Walk in.').run;
+    return rooms(choose(run, 'gn-19-door', 'Walk in.').run);
   };
   /** A herd may be crossing (a seeded 35% roll): wait for it to pass. */
   const pastHerd = (run: RunState, id: string): RunState => (here(run, id) ? choose(run, id, 'Wait for the herd to pass.').run : run);
@@ -177,7 +188,7 @@ describe('gn.20 The Lush Jungle', () => {
     const run = gnRun(seed);
     setup(run);
     open(run, 'gn-20-door');
-    return choose(run, 'gn-20-door', 'Go in.').run;
+    return rooms(choose(run, 'gn-20-door', 'Go in.').run);
   };
   const toFlooded = (seed: string, setup?: (run: RunState) => void): RunState => {
     let run = choose(goIn(seed, setup), 'gn-20-wall', 'Walk on.').run;

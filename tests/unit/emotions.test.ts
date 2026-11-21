@@ -27,7 +27,10 @@ describe('the current emotion', () => {
     expect(currentEmotion(undefined, 10)).toBeNull();
     expect(currentEmotion(history([memory(1, [])]), 10)).toBeNull();
     expect(currentEmotion(history([memory(1, ['bravery']), memory(2, ['kindness']), memory(3, ['bravery'])]), 10)).toBe('bravery');
-    expect(currentEmotion(history([memory(1, ['bravery']), memory(2, ['kindness'])]), 10)).toBe('kindness');
+    // Kice 2026-11-17: a Pokémon sticks with its emotion until another leads it by two tags.
+    expect(currentEmotion(history([memory(1, ['bravery']), memory(2, ['kindness'])]), 10)).toBe('bravery');
+    expect(currentEmotion(history([memory(1, ['bravery']), memory(2, ['kindness']), memory(3, ['kindness'])]), 10)).toBe('bravery');
+    expect(currentEmotion(history([memory(1, ['bravery']), memory(2, ['kindness']), memory(3, ['kindness']), memory(4, ['kindness'])]), 10)).toBe('kindness');
     // Only the window counts: two old Bravery memories fall out of a window of 2.
     expect(currentEmotion(history([memory(1, ['bravery']), memory(2, ['bravery']), memory(3, ['patience']), memory(4, [])]), 1)).toBe('patience');
   });

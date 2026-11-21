@@ -8,7 +8,7 @@ gets a target height (px of the first front frame's visible art):
     of the form they come from). Art already inside that range is left alone.
 Presentation only: no rule, roll or save reads this.
 """
-import json, os
+import json, math, os
 from PIL import Image
 
 root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
@@ -37,6 +37,18 @@ TARGETS = {
 }
 
 
+def front_box(sprite):
+    p = os.path.join(P, sprite)
+    if not os.path.exists(p + '.png'):
+        return None
+    a = json.load(open(p + '.json'))
+    frames = a['textures'][0]['frames'] if 'textures' in a else a['frames']
+    fr = (frames[0] if isinstance(frames, list) else next(iter(frames.values())))['frame']
+    im = Image.open(p + '.png').convert('RGBA').crop((fr['x'], fr['y'], fr['x'] + fr['w'], fr['y'] + fr['h']))
+    b = im.getchannel('A').getbbox()
+    return (b[2] - b[0], b[3] - b[1]) if b else None
+
+
 def front_h(sprite):
     p = os.path.join(P, sprite)
     if not os.path.exists(p + '.png'):
@@ -59,7 +71,27 @@ for f in ('species.json', 'customSpecies.json', 'jetSpecies.json', 'storySpecies
     for s in load(f):
         sp[s['id']] = s
 H = {i: front_h(s['assets']['sprite']) for i, s in sp.items() if (s.get('assets') or {}).get('sprite')}
+jet_ids = {x['id'] for x in load('jetSpecies.json')}
 custom = [i for i, s in sp.items() if 'custom' in ((s.get('assets') or {}).get('sprite') or '')]
+
+# Jet batch 5 (dex 63-207) art was drawn 100-120 px tall whatever the Pokémon is. Those species have no hand-set TARGETS entry,
+# so they get one here: a pre-evolution of an existing species is 0.7x that species' height; every other plain species follows its
+# weight (fit to the base-game sprites: height = 39.5 + 6.2 ln(weight), kept between 32 and 100 px) and is never wider than 100 px.
+# Mega / G-Max forms are not set here: the form rule below makes them 1.0-1.25x of their base.
+INTO_EXISTING = {e['from']: e['to'] for e in json.load(open(os.path.join(D, 'jetSpecies.json')))['intoExisting']}
+AUTO = {}
+for _i, _s in sp.items():
+    if _i in TARGETS or _i not in jet_ids or _s.get('form') or not H.get(_i):
+        continue
+    if _i in INTO_EXISTING and H.get(INTO_EXISTING[_i]):
+        _t = round(H[INTO_EXISTING[_i]] * 0.7)
+    else:
+        _t = round(min(100, max(32, 39.5 + 6.2 * math.log(max(1, _s.get('weight') or 50)))))
+    _b = front_box(_s['assets']['sprite'])
+    if _b and _b[0] * _t / _b[1] > 100:
+        _t = round(100 * _b[1] / _b[0])
+    AUTO[_i] = min(H[_i], max(24, _t))  # shrink only: art drawn small on purpose (Promised Prince) stays as drawn
+TARGETS.update(AUTO)
 
 target = {}
 def goal(i, depth=0):

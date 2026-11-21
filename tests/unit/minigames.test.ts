@@ -1,5 +1,6 @@
 // Minigames (Blueprint section 4): every game runs through the same interface, is deterministic, pays once, and keeps its economy capped.
 
+import { isZone } from '../../src/core/greenneedle/zone';
 import { describe, expect, it } from 'vitest';
 import { beginMinigame, getMinigame, leaveMinigame, payout, medalFor, minigameAct, minigamePreview, minigameTick, minigameView } from '../../src/core/minigame/flow';
 import { gameModule, makeQuestion } from '../../src/core/minigame/games';
@@ -51,7 +52,9 @@ describe('minigame data', () => {
 });
 
 describe('every minigame', () => {
-  for (const def of content.minigames.games) {
+  // The walked zones (gn.19, gn.20) have no score and no end of their own: they hand over to their story rooms and end with them
+  // (tests/unit/gnscreen-savanna.test.ts, gnscreen-jungle.test.ts walk them through).
+  for (const def of content.minigames.games.filter((d) => !isZone(d.id))) {
     for (let tier = 0; tier < def.difficultyTiers.length; tier++) {
       it(`${def.id} (${def.difficultyTiers[tier]!.id}) is well formed, finishes, is JSON-safe and replays the same`, () => {
         const run = stopRun(`mg-${def.id}`, def.id);

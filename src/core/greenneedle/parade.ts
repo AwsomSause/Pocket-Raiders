@@ -84,20 +84,28 @@ export function paradeRare(content: Content, run: RunState, roll: number): strin
   return `The Sableye holds out a ${content.catalog.get(id)!.name}.`;
 }
 
+/** The Notebook line the Sableye would take: the least memorable one (the earliest of equals), or -1 with an empty Notebook. */
+export function leastMemory(run: RunState): number {
+  const list = run.story.chronicle;
+  let at = list.length ? 0 : -1;
+  list.forEach((c, i) => { if (c.importance < list[at]!.importance) at = i; });
+  return at;
+}
+
 /** Sableye: the least memorable Notebook line is erased. */
 export function paradeForget(run: RunState): string {
   const list = run.story.chronicle;
   if (!list.length) return '';
-  let at = 0;
-  list.forEach((c, i) => { if (c.importance < list[at]!.importance) at = i; });
+  const at = leastMemory(run);
   const [gone] = list.splice(at, 1);
   return `The Notebook line is gone: "${gone!.text}"`;
 }
 
 /** Mismagius: a nickname is given up, and one hidden node on this stage shows what it is. */
-export function paradeSecret(content: Content, run: RunState): string {
-  const mon = nicknamed(run);
-  if (!mon) return '';
+export function paradeSecret(content: Content, run: RunState, uid?: string): string {
+  // (The market screen says whose name is given; the older rooms take the first nicknamed Pokémon.)
+  const mon = uid ? run.party.find((m) => m.uid === uid) : nicknamed(run);
+  if (!mon?.care?.nickname) return '';
   const old = mon.care!.nickname!;
   delete mon.care!.nickname;
   for (const n of run.stage?.map.nodes ?? []) {

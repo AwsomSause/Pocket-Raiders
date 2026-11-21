@@ -3,6 +3,7 @@
 // Run History and save data. Everything
 // here reads and changes the permanent profile only.
 
+import { reliquary } from '../core/blessings';
 import { prologueGateActive } from '../core/story2/prologue';
 import { fitLine } from '../ui/fitText';
 import { candyPerkProblem } from '../core/candyShop';
@@ -94,7 +95,7 @@ import { sortTrainers, TRAINER_SORT_KEYS, TRAINER_SORT_LABELS } from '../core/tr
 import { hubArrivalNotice, openTools } from './hubTools';
 import { device } from '../game/deviceTools';
 
-type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'dock' | 'options' | 'save' | 'tools' | 'town' | 'back';
+type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'reliquary' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'dock' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
 const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
@@ -135,6 +136,7 @@ const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'hubtown', label: 'Hub Town', blurb: 'Walk the town as your Pokémon: every room is a building (Settings > Hub style makes it the Hub).' },
   { room: 'lobby', label: 'Arena Lobby', blurb: 'Back to the Arena Lobby menu.' },
   { room: 'dock', label: 'Hub dock', blurb: 'Back to the Hub dock and its buttons.' },
+  { room: 'reliquary', label: 'Reliquary', blurb: 'The Legendary Blessings you have found, and blank plinths for the ones still out there.' },
 ];
 const ROOMS = ALL_ROOMS;
 
@@ -225,7 +227,7 @@ const DOCK: { tab: string; buttons: DockEntry[] }[] = [
       { label: 'Trainers', rooms: ['archive', 'quests', 'mentors', 'network', 'card', 'wardrobe'] },
       { label: 'New Run', rooms: ['run'] },
       { label: 'Events', rooms: ['events', 'tales', 'chains', 'achievements', 'nook'] },
-      { label: 'Unlocks', rooms: ['bank', 'attributes', 'tree', 'prestige', 'research', 'mastery', 'moves', 'books', 'museum', 'intel'] },
+      { label: 'Unlocks', rooms: ['bank', 'attributes', 'tree', 'prestige', 'research', 'mastery', 'moves', 'books', 'museum', 'reliquary', 'intel'] },
       { label: 'Town', rooms: ['hubtown', 'town', 'merchant'] },
     ],
   },
@@ -901,6 +903,10 @@ export class HubScene extends Phaser.Scene {
         return `Title: ${p.activeTitle ?? 'none'} · ${CARD_FRAMES.filter((f) => frameOpen(p, f)).length}/${CARD_FRAMES.length} frames`;
       case 'mastery':
         return `${masteryFamilies(c, p).length} families met`;
+      case 'reliquary': {
+        const r = reliquary(p.blessings);
+        return `${r.filter((x) => x.found).length} of ${r.length} blessings found`;
+      }
       case 'history':
         return p.runHistory.length ? `${p.runHistory.length} runs recorded` : 'No finished runs yet';
       case 'attributes': {
@@ -979,6 +985,7 @@ export class HubScene extends Phaser.Scene {
       case 'prestige':
       case 'network':
       case 'museum':
+      case 'reliquary':
       case 'books':
       case 'chains':
       case 'intel':
@@ -1870,6 +1877,13 @@ export class HubScene extends Phaser.Scene {
         const next = LEGACY.museum.milestones.find((m) => seen.length < m.items);
         entries.push({ label: next ? `Next milestone: ${next.items} items` : 'Every milestone paid', sub: next ? `Pays ${next.research} Research Points once.` : 'The Museum is complete for now.', on: !next });
         for (const id of seen) entries.push({ label: content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id, sub: content.items.get(id)?.description ?? content.catalog.get(id)?.description ?? '' });
+        break;
+      }
+      case 'reliquary': {
+        const rows = reliquary(p.blessings);
+        title = `Reliquary  ·  ${rows.filter((r) => r.found).length} of ${rows.length} blessings found`;
+        const tierName = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+        for (const r of rows) entries.push(r.found ? { label: `${r.name}  ·  ${r.legendary}`, sub: r.text, right: tierName(r.tier), on: true } : { label: 'An empty plinth', sub: `A ${tierName(r.tier)} blessing no one has found yet. Find its Legendary's Sign in a run to add it.`, right: tierName(r.tier) });
         break;
       }
       case 'books': {

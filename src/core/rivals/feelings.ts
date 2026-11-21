@@ -33,8 +33,8 @@ export function rivalFeeling(rival: Rival): FeelingRead {
   if (rival.state === 'retired') return { feeling: 'fear', because: 'your Pokémon beat it too many times for it to keep going' };
   if (rival.encounters < 2 && !close) return { feeling: 'unresolved', because: 'it has only met you once' };
   if (lopsided && t.resilience < 40) return { feeling: 'fear', because: 'it was overpowered last time' };
-  if (lopsided && t.vindictiveness >= 55) return { feeling: 'resentment', because: 'it was outplayed and has not forgotten' };
-  if (rival.state === 'nemesis' && t.vindictiveness >= 55) return { feeling: 'resentment', because: 'it blames you for every setback' };
+  if (lopsided && t.vindictiveness >= 40) return { feeling: 'resentment', because: 'it was outplayed and has not forgotten' };
+  if (rival.state === 'nemesis' && t.vindictiveness >= 40) return { feeling: 'resentment', because: 'it blames you for every setback' };
   if (close && t.empathy >= 45) return { feeling: 'respect', because: 'your last battle was a close one' };
   if (rival.encounters >= 3 && t.empathy >= 55 && t.pride <= 50) return { feeling: 'respect', because: 'you have beaten it fairly, again and again' };
   if (rival.state === 'active' || rival.state === 'contender' || close) return { feeling: 'rivalry', because: close ? 'it nearly won' : 'it wants to settle the score' };

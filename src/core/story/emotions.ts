@@ -17,18 +17,26 @@ export const EMOTION_NAMES: Record<Emotion, string> = {
   perseverance: 'Perseverance',
 };
 
-/** A Pokémon's current emotion, or null before it has a tagged memory. */
+/** A different emotion must lead the current one by this many tags before the Pokémon changes (Kice 2026-11-17: stick with a feeling). */
+export const EMOTION_SWITCH_MARGIN = 2;
+
+/**
+ * A Pokémon's current emotion, or null before it has a tagged memory. It keeps its emotion until another one leads it
+ * by `EMOTION_SWITCH_MARGIN` tags among its latest tagged memories (`window`), so it no longer flips with every memory.
+ */
 export function currentEmotion(history: PokemonHistory | undefined, window: number): Emotion | null {
   if (!history) return null;
-  const tagged = history.memories.filter((m) => m.emotions.length > 0).sort((a, b) => a.seq - b.seq).slice(-window);
-  const count = new Map<Emotion, { n: number; last: number }>();
-  for (const m of tagged) for (const e of m.emotions) count.set(e, { n: (count.get(e)?.n ?? 0) + 1, last: m.seq });
-  let best: Emotion | null = null;
-  for (const [e, c] of count) {
-    const b = best ? count.get(best)! : null;
-    if (!b || c.n > b.n || (c.n === b.n && c.last > b.last)) best = e;
+  const tagged = history.memories.filter((m) => m.emotions.length > 0).sort((a, b) => a.seq - b.seq);
+  let held: Emotion | null = null;
+  for (let i = 0; i < tagged.length; i++) {
+    const count = new Map<Emotion, number>();
+    for (const m of tagged.slice(Math.max(0, i + 1 - window), i + 1)) for (const e of m.emotions) count.set(e, (count.get(e) ?? 0) + 1);
+    let lead: Emotion | null = null;
+    for (const [e, n] of count) if (!lead || n > count.get(lead)!) lead = e;
+    if (!held || !count.has(held)) held = lead;
+    else if (lead && lead !== held && count.get(lead)! >= count.get(held)! + EMOTION_SWITCH_MARGIN) held = lead;
   }
-  return best;
+  return held;
 }
 
 /** The current emotion of a party Pokémon in this run, with its name and heart colour. */

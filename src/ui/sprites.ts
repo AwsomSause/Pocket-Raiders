@@ -151,14 +151,21 @@ export function pokemonVisual(scene: Phaser.Scene, species: Species, side: 'fron
   const color = TYPE_COLORS[species.types[0] ?? 'normal'] ?? 0x888888;
   const holder = placeholder(scene, x, y, 40 * scale, color, species.name);
   if (wanted.some((k) => notLoadedYet(scene, k))) {
-    void loadAssets(scene, wanted).then(() => {
-      if (!holder.active) return;
-      const sprite = (shiny ? atlasSprite(scene, shinyKey, 0, 0, scale, stance) : null) ?? atlasSprite(scene, key, 0, 0, scale, stance);
-      if (!sprite) return;
-      holder.removeAll(true);
-      holder.add(sprite);
-      holder.emit('art-ready');
-    });
+    const fill = (retry: boolean): void => {
+      void loadAssets(scene, wanted).then(() => {
+        if (!holder.active) return;
+        const sprite = (shiny ? atlasSprite(scene, shinyKey, 0, 0, scale, stance) : null) ?? atlasSprite(scene, key, 0, 0, scale, stance);
+        if (!sprite) {
+          // One quiet retry when the first load failed (a hosting hiccup), so a wild foe does not keep the circle.
+          if (retry && wanted.some((k) => notLoadedYet(scene, k))) scene.time.delayedCall(1200, () => holder.active && fill(false));
+          return;
+        }
+        holder.removeAll(true);
+        holder.add(sprite);
+        holder.emit('art-ready');
+      });
+    };
+    fill(true);
   }
   return holder;
 }

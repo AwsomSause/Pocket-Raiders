@@ -49,7 +49,7 @@ import { ROUTE_LABELS, routeKind } from '../core/campaign/director';
 import { anomalyLine, stageAnomaly } from '../core/story/anomaly';
 import { StopCard, type StopLook } from '../ui/stopLooks';
 import { fishingOffer, raidPreview, totemPreview, mapActions, wipeStatus, mapChoices, mapPreviews, bossLootPreview, nextGymLeaders, type MapActionKind, type NodePreview } from '../core/run';
-import { bossInfo, currentRegion, getCampaign, runLevelCap } from '../core/regions';
+import { bossInfo, currentRegion, getCampaign, runLevelCap, runCampaign } from '../core/regions';
 import { blindMap } from '../core/rules';
 import { regionRules } from '../core/battle/typeRules';
 import { arenaFor, getTheme } from '../core/themes';
@@ -1242,7 +1242,7 @@ export class MapScene extends Phaser.Scene {
     this.rxWatching = false;
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
-      const stages = getCampaign(content, run.campaignId).stagesPerRegion;
+      const stages = runCampaign(content, run).stagesPerRegion;
       // Every status line the old header drew under its title (mentor, forecast, escort, objectives, pinned quest...).
       const lines = (this.children.list.filter((o) => o instanceof Phaser.GameObjects.Text && o.y >= 60 && o.y <= 112 && o.depth === 0 && o.text.trim() !== '') as Phaser.GameObjects.Text[]).sort((a, b) => a.y - b.y).map((t) => t.text);
       const hudBits = hud.text.split('  ·  ').filter((t) => !t.startsWith('₽'));
@@ -1394,7 +1394,7 @@ export class MapScene extends Phaser.Scene {
       if (stage.pseudo) {
         this.showBanner(`Inside Stage ${stage.index + 1}`, stage.pseudo.name, `${theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  Clear the rooms to walk back out`);
       } else if (league) {
-        const size = getCampaign(content, run.campaignId).eliteFourSize;
+        const size = runCampaign(content, run).eliteFourSize;
         const tournament = region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0);
         if (tournament) this.showBanner(region.name, 'Champion Tournament', `32 trainers, ${size + 1} wins to the title  ·  Healed after every round  ·  Ball Guy's shop after rounds 2 and 4`);
         else this.showBanner(region.name, 'Pokémon League', `Elite Four ×${size}, then ${leader.title}  ·  Healed after every battle`);
@@ -1890,7 +1890,7 @@ export class MapScene extends Phaser.Scene {
     const rows: { action: MapActionKind | null; itemId: string; title: string; text: string; problem: string | null }[] = mapActions(content, run).map((a) => ({
       action: a.kind,
       itemId: a.itemId,
-      title: `${content.catalog.get(a.itemId)!.name}${a.on ? ' (riding)' : ''}`,
+      title: `${a.title ?? content.catalog.get(a.itemId)!.name}${a.on ? ' (riding)' : ''}`,
       text: a.on ? 'Choose it again to get off.' : a.text,
       problem: a.on ? null : a.problem,
     }));

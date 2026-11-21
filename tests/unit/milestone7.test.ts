@@ -204,13 +204,14 @@ describe('effects in the game', () => {
     expect(run.log.counters['defeatedOrCaught.flying']).toBe(1);
   });
 
-  it('Love raises the Hyper chances (Toughened It Out 15% → 25% at Love 100, at most double)', () => {
+  // Pick spread (#1427) raised Toughened It Out's base to 25% (hyper.test.ts pins the same numbers).
+  it('Love raises the Hyper chances (Toughened It Out 25% → 35% at Love 100, at most double)', () => {
     const def = content.story.definitions.find((d) => d.triggerConditions.trigger === 'toughenedItOut')!;
     const at = (love: number) => hyperChance(def.chance!, { ...zeroAttributes(), love }, false);
-    expect(at(0)).toBeCloseTo(0.15);
-    expect(at(100)).toBeCloseTo(0.25);
-    expect(at(1000)).toBeCloseTo(0.3);
-    expect(attributeEffectText(content, 'love', 100)).toContain('Toughened It Out 25%');
+    expect(at(0)).toBeCloseTo(0.25);
+    expect(at(100)).toBeCloseTo(0.35);
+    expect(at(1000)).toBeCloseTo(0.5);
+    expect(attributeEffectText(content, 'love', 100)).toContain('Toughened It Out 35%');
   });
 });
 

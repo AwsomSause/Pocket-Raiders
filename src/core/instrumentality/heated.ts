@@ -4,6 +4,7 @@
 // It shares the "one cinematic per battle" budget: a battle that already granted a Hyper move grants no more (existing rule).
 // Pure, with its own seeded stream (`heated-moment`). Presentation (music dropping) never affects this.
 
+import { scaledCap } from '../stageLength';
 import type { Content } from '../contentSchema';
 import { bondMood, bondOf } from '../bond';
 import { maxHp } from '../pokemon';
@@ -32,8 +33,8 @@ export function heatedConditions(content: Content, run: Pick<RunState, 'expansio
   if (bond.sharedHistory < HEATED.minHistory) return 'too-new';
   const log = run.expansion.heatedLog;
   if (log?.mons.includes(mon.uid)) return 'used-for-mon';
-  if ((log?.perRegion[String(run.regionIndex)] ?? 0) >= HEATED.perRegion) return 'region-cap';
-  if ((log?.total ?? 0) >= HEATED.perRun) return 'run-cap';
+  if ((log?.perRegion[String(run.regionIndex)] ?? 0) >= scaledCap(HEATED.perRegion, run)) return 'region-cap';
+  if ((log?.total ?? 0) >= scaledCap(HEATED.perRun, run)) return 'run-cap';
   return 'ok';
 }
 

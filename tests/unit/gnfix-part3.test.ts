@@ -314,21 +314,30 @@ describe('gn.25 The Unlikely Friendship', () => {
     expect(truceCover(content, run.battle!, run.party, zan)).toBe('');
   });
 
-  it('when one is hit hard, the other goes for whatever did it', () => {
+  it('when one is hit hard, the other goes for whatever did it: its own next move, aimed at that foe', () => {
     const run = pack('fx25-avenge');
-    const { zan } = pair(run);
+    const { zan, sev } = pair(run);
     const b = run.battle!;
     const foe = b.enemyTeam[0]!;
-    const full = foe.hp;
     truceHurt(content, b, run.party, foe.uid, zan, 1); // a scratch: no answer
-    expect(truceAnswers(content, b, run.party)).toEqual([]);
+    expect(b.storyEffects.some((t) => t.startsWith('guest-grudge:'))).toBe(false);
     truceHurt(content, b, run.party, foe.uid, zan, Math.ceil(maxHp(content, zan) / 3));
-    const lines = truceAnswers(content, b, run.party);
-    expect(lines).toHaveLength(1);
-    expect(lines[0]).toMatch(/^Seviper goes straight for the Mightyena that hurt Zangoose/);
-    expect(foe.hp).toBeLessThan(full);
-    expect(foe.hp).toBeGreaterThanOrEqual(1); // the knock-out stays the player's
-    expect(truceAnswers(content, b, run.party)).toEqual([]); // answered once
+    // The Seviper is on the field and the game plays it: it is told who to go for (the engine aims its next move there).
+    expect(b.storyEffects).toContain(`guest-grudge:${sev.uid}:${foe.uid}`);
+    // No strike from outside the turn any more: the answer is a real move, which can knock out.
+    expect(truceAnswers(content, b, run.party)).toEqual([]);
+  });
+
+  it('standing in front costs the one who steps in: it takes the hit itself (never below 1 HP)', () => {
+    const run = pack('fx25-cover-real');
+    const { zan, sev } = pair(run);
+    const b = run.battle!;
+    const foe = b.enemyTeam[0]!;
+    zan.hp = 1;
+    const before = sev.hp;
+    expect(truceCover(content, b, run.party, zan, { user: foe, moveId: foe.moves.find((m) => (content.moves.get(m.id)?.power ?? 0) > 0)?.id ?? 'tackle' })).toBe('Seviper');
+    expect(sev.hp).toBeLessThan(before);
+    expect(sev.hp).toBeGreaterThanOrEqual(1);
   });
 
   it('the fight plays through the engine with the rule on', () => {

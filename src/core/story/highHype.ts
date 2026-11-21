@@ -2,7 +2,7 @@
 // Tournament Circuit ranking and the Final Rival's callback. Deterministic: wording is picked by a
 // hash of the run's seed, never by a gameplay random stream.
 
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import type { Content } from '../contentSchema';
 import { isHostile } from '../rivals/outcome';
 import type { PokemonInstance, RunState } from '../state';
@@ -107,6 +107,6 @@ export function finalRivalArenaTheme(content: Content, run: RunState, rivalId: s
   const rival = run.story.rivals.find((r) => r.id === rivalId);
   const stage = rival?.origin.where.stage;
   if (!rival || stage === null || stage === undefined) return null;
-  const per = Math.max(1, getCampaign(content, run.campaignId).stagesPerRegion);
+  const per = Math.max(1, runCampaign(content, run).stagesPerRegion);
   return run.usedThemes[rival.origin.where.region * per + stage] ?? null;
 }

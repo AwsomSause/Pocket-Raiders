@@ -10,6 +10,7 @@ import type { Content } from '../contentSchema';
 import { abilityOf, calcStats, createPokemon, getSpecies } from '../pokemon';
 import { calcDamage, typeEffectiveness } from '../battle/damage';
 import type { PlayerAction } from '../battle/engine';
+import { isTempAlly } from '../battle/guests';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { evilTeam } from '../evil/teams';
 import { hashSeed, Rng } from '../rng';
@@ -27,8 +28,9 @@ export type PondMark = z.infer<typeof PondMarkSchema>;
 
 /**
  * The return (Release or Reconcile): a Poliwrath plus this many Poliwhirl fight beside the player for this many turns, as allies (gn.01).
- * They are real Pokémon at the party's average level and each hits with its own best move (the game's damage formula).
- * The foe is left with at least 1 HP: a hit from outside the turn cannot faint a Pokémon in this engine, so the last blow is the player's.
+ * They are real Pokémon at the party's average level that stand on the player's side of the field, played by the game: they pick
+ * their own moves, can be hit, can faint and can land the knock-out (core/battle/guests.ts). The field holds three a side, so the
+ * Poliwrath stays out and the Poliwhirl take one turn each in the spot beside it; after `turns` full turns they all step back.
  */
 export const POND_RETURN = {
   release: { poliwhirl: 3, turns: 3 },
@@ -158,13 +160,18 @@ const returnKind = (run: Pick<RunState, 'story'>): 'release' | 'reconcile' | nul
  * duel), and runs the return. The return starts when the player is losing a Champion, Evil Team leader or climax fight, then the
  * allies fight beside the player for their turns (each hits with its own move at the end of the turn). Returns lines to show.
  */
-export function pondAfterTurn(content: Content, run: RunState): Cue[] {
+export function pondAfterTurn(content: Content, run: RunState, join?: (allies: PokemonInstance[], opts: { turns: number; rotate: boolean; anchor: string }) => void): Cue[] {
   const battle = run.battle;
   if (!battle) return [];
   const out: Cue[] = [];
   const mon = pondMon(run);
   if (battle.outcome && mon?.pond?.shy && battle.participants.includes(mon.uid)) mon.pond.shy = false;
   if (battle.eventRule?.pondDuel && mon && mon.hp <= 0 && !battle.outcome) battle.outcome = 'lose';
+  // The return's allies have just left the field (their turns ran out in the engine: battle/doubles.ts).
+  if (!battle.outcome && battle.storyEffects.includes(POND_ON_FIELD) && !battle.guests?.uids.length) {
+    battle.storyEffects = battle.storyEffects.filter((e) => e !== POND_ON_FIELD);
+    out.push(cue('player', 'The pond steps back to the edge of the field. The rest is yours.'));
+  }
   if (battle.outcome || battle.kind !== 'trainer') return out;
   const kind = returnKind(run);
   const foe = battle.enemyTeam[battle.enemyIndex];
@@ -173,16 +180,25 @@ export function pondAfterTurn(content: Content, run: RunState): Cue[] {
   const mark = battle.storyEffects.find((e) => e.startsWith('pond-return:'));
   if (!mark) {
     const lead = run.party[battle.activeIndex];
-    const standing = run.party.filter((m) => m.hp > 0).length;
-    if (pondFlag(run, FLAGS.fired) > 0 || !lead || lead.hp <= 0 || standing > POND_RETURN.losingAt || standing === run.party.length || !pondReturnPlace(content, run)) return out;
-    battle.storyEffects.push(`pond-return:${cfg.turns}`);
+    // The allies need the engine to put them on the field (`join`), a fight with room for them (not a raid, a Totem or a watched fight)
+    // and no replacement still owed; without those the return waits for a later turn.
+    const own = run.party.filter((m) => !isTempAlly(battle, m.uid));
+    const standing = own.filter((m) => m.hp > 0).length;
+    if (pondFlag(run, FLAGS.fired) > 0 || !lead || lead.hp <= 0 || standing > POND_RETURN.losingAt || standing === own.length || !pondReturnPlace(content, run)) return out;
+    if (!join || battle.guests || battle.loaner || battle.needsSwitch || battle.raid || battle.totem || battle.spectate) return out;
+    const allies = pondAllies(content, run, kind);
+    join(allies, { turns: cfg.turns, rotate: true, anchor: allies[0]!.uid });
+    if (!battle.guests) return out;
+    battle.storyEffects.push(POND_ON_FIELD);
     setPondFlag(run, FLAGS.fired, 1);
     // The doc's name for it (`poli.returned`), for any other event that asks.
     setPondFlag(run, 'poli-returned', 1);
     out.push(cue('player', 'A cry from off the field. Your lead turns its head before you do.'));
     out.push(cue('player', 'A Poliwrath walks onto the field. It looks at you. It recognises you first.'));
-    out.push(cue('player', `Behind it, ${cfg.poliwhirl === 4 ? 'four Poliwhirl, Burl among them' : 'three Poliwhirl'}. They take the field beside you, as allies.`));
+    out.push(cue('player', `Behind it, ${cfg.poliwhirl === 4 ? 'four Poliwhirl, Burl among them' : 'three Poliwhirl'}. They take the field beside you, as allies, a turn each beside the Poliwrath.`));
+    return out;
   }
+  // A battle saved in the middle of the old return (before the allies stood on the field) finishes the old way: strikes from the edge.
   const left = Number((battle.storyEffects.find((e) => e.startsWith('pond-return:')) ?? '').split(':')[1] ?? 0);
   if (left <= 0) return out;
   const foeName = nameOf(content, foe);
@@ -201,6 +217,9 @@ export function pondAfterTurn(content: Content, run: RunState): Cue[] {
   battle.storyEffects = battle.storyEffects.map((e) => (e.startsWith('pond-return:') ? `pond-return:${left - 1}` : e));
   return out;
 }
+
+/** The return's allies are on the field (as guests the game controls: core/battle/guests.ts). */
+const POND_ON_FIELD = 'pond-return-field';
 
 /** The pond's allies at the return: a Poliwrath, then the Poliwhirl, all at the party's average level. Rebuilt the same every time (no RNG). */
 export function pondAllies(content: Content, run: Pick<RunState, 'party' | 'story'>, kind: 'release' | 'reconcile'): PokemonInstance[] {

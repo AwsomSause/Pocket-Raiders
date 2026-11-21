@@ -5,6 +5,7 @@
 //   *Multiplier kinds multiply together (start at 1).
 //   *Offset kinds add together (start at 0).
 
+import { blessingRunPerks } from './blessings/runPerks';
 import { resolveCounterPerks } from './eventToolkit';
 import type { Archetype, ArchetypeModifier, ArchetypeModifierKind, Content, TypeName } from './contentSchema';
 
@@ -120,9 +121,9 @@ export function runArchetype(content: Content, run: { archetypeId: string; perkE
 }
 
 /** The run's whole perk list (trainer plus signature choices), or undefined for an unknown trainer. */
-export function runPerks(content: Content, run: { archetypeId: string; perkEffects?: ArchetypeModifier[]; itemCounters?: Record<string, number>; passives?: Record<string, number> }): Perks | undefined {
+export function runPerks(content: Content, run: { archetypeId: string; perkEffects?: ArchetypeModifier[]; itemCounters?: Record<string, number>; passives?: Record<string, number>; expansion?: { blessing?: { id: string; communion?: boolean; copy?: string } | null } }): Perks | undefined {
   const archetype = content.archetypes.get(run.archetypeId);
-  return archetype ? resolveCounterPerks([...archetype.modifiers, ...(run.perkEffects ?? []), ...passiveItemModifiers(content, run.passives)], run) : undefined;
+  return archetype ? resolveCounterPerks([...archetype.modifiers, ...(run.perkEffects ?? []), ...passiveItemModifiers(content, run.passives), ...blessingRunPerks(run)], run) : undefined;
 }
 
 /** Modifiers from run-long items that work like a trainer perk (`runModifier`, e.g. Tobias's Satchel), once per copy. */

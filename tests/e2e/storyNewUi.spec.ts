@@ -218,7 +218,7 @@ test('New UI: the loading screen and the update splash are the mock-up page; so 
   await expect(welcome).toContainText('First launch');
   await read(welcome);
   await expect(welcome.locator('[data-act="pick"]')).toHaveText(['Next', 'Skip the update log']);
-  expect(await welcome.innerHTML()).toContain('packs/mc/look_a/command.png');
+  expect(await welcome.innerHTML()).toContain('bosses/anim/hilda');
   expect(await welcome.innerHTML()).not.toContain('₽');
   await welcome.locator('[data-act="pick"]').first().click();
   await expect(welcome).toContainText('Update log 1/');
@@ -288,7 +288,7 @@ test('New UI: the prologue plays on the mock-up pages: talk pages with Prof. Van
   const session = () => page.evaluate(() => (window as any).__pkr.session.profile.story.protagonist);
   // The Look: two choices beside the Look's portrait; pointing at one shows it.
   await expect(pro.locator('[data-act="pick"]')).toHaveText(['Hilda', 'Nate']);
-  expect(await pro.innerHTML()).toContain('packs/mc/look_a/portrait.png');
+  expect(await pro.innerHTML()).toContain('bosses/anim/hilda');
   await pro.locator('[data-act="pick"]').nth(1).hover();
   await expect.poll(() => pro.innerHTML()).toContain('packs/mc/look_b/portrait.png');
   await pro.locator('[data-act="pick"]').first().click();

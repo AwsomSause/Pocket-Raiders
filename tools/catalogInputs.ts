@@ -20,7 +20,9 @@ export function readCatalogInputs(): CatalogInputs {
   const archetypes = readJson('archetypes.json') as { spriteAssetId: string }[];
   const rewards = readJson('rewards.json') as { iconAssetId: string }[];
   const megaStones = readJson('megaStones.json') as { items: { iconAssetId: string }[]; rewards: { iconAssetId: string }[] };
-  const items = [...(readJson('items.json') as { iconAssetId: string }[]), ...megaStones.items, ...megaStones.rewards];
+  // The Jet species file carries its own items and rewards (the Mega Stones of the new Megas); the game loads them, so the manifest must list their icons.
+  const jet = readJson('jetSpecies.json') as { items: { iconAssetId: string }[]; rewards: { iconAssetId: string }[] };
+  const items = [...(readJson('items.json') as { iconAssetId: string }[]), ...megaStones.items, ...megaStones.rewards, ...jet.items, ...jet.rewards];
   // Catalog items use the director's icon pack (same rule as catalogIconAssetId in src/data/index.ts).
   const catalogEntries = [...(readJson('itemCatalog.json') as { icon: string | null }[]), ...readdirSync(join(dataDir, 'itemCatalog')).filter((f) => f.endsWith('.json')).flatMap((f) => readJson(`itemCatalog/${f}`) as { icon: string | null }[])];
   const catalogIcons = catalogEntries.map((e) => `item.${e.icon?.includes('/') ? e.icon : `gen5/${e.icon ?? '0'}`}`);

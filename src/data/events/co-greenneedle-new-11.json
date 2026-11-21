@@ -97,8 +97,9 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-11-lane-a"
+        "op": "minigame",
+        "key": "gn-spirit-market",
+        "n": 1
        }
       ]
      }

@@ -908,6 +908,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
         if (d > daysIn[m - 1]!) problems.push(`${where} has a window edge on ${md}, which is not a calendar day`);
       }
     }
+    if (ge.schedule.kind === 'dated' && ge.schedule.start > ge.schedule.end) problems.push(`${where}: a dated window ends before it starts`);
     if ((ge.schedule.kind === 'weeklyRotation') !== (ge.seedRule === 'isoWeek')) problems.push(`${where}: weekly events use the ISO week, yearly ones the year`);
     if ((ge.schedule.kind === 'daily') !== (ge.seedRule === 'day')) problems.push(`${where}: day-rule events use the day edition and no other schedule does`);
   }

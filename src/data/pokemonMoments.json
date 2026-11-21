@@ -2915,8 +2915,8 @@
     ]
    },
    "trigger": "super",
-   "chance": 1,
-   "limit": "battle",
+   "chance": 0.25,
+   "limit": "region",
    "tier": "minor",
    "status": "supported",
    "effectText": "A super-effective hit that doesn't knock it out: Defence +1.",

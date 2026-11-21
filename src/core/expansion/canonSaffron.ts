@@ -10,7 +10,7 @@ import { discover } from '../progress';
 import { maxHp, movesAtLevel, xpForLevel } from '../pokemon';
 import { getSpecies } from '../pokemon';
 import { Rng } from '../rng';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import { newMon } from '../run';
 import type { PokemonInstance, RunState } from '../state';
 import { currentEnemy } from '../state';
@@ -264,7 +264,7 @@ export function ghostReturnEvent(content: Content, run: RunState): string | null
   const stage = run.stage;
   if (lab.regionIndex >= last) return stage.kind === 'league' && run.regionIndex === last ? ghostReturnEventFor(content, lab.ghost) : null;
   if (run.regionIndex !== lab.regionIndex + 1 || stage.kind !== 'stage') return null;
-  const target = Math.min(lab.stageIndex, getCampaign(content, run.campaignId).stagesPerRegion - 1);
+  const target = Math.min(lab.stageIndex, runCampaign(content, run).stagesPerRegion - 1);
   return stage.index === target ? ghostReturnEventFor(content, lab.ghost) : null;
 }
 

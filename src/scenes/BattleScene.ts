@@ -41,6 +41,7 @@ import { signatureDisplay } from '../core/story2/signature';
 import { introForBattle, introText, trainerIntro } from '../core/story2/cutscene';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, spotsOf, type Spot } from '../core/battle/doubles';
+import { isGuest } from '../core/battle/guests';
 import { commandPlan, shiftOptionProblem, targetChoices } from '../core/battle/fieldMenu';
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -122,7 +123,7 @@ import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
-import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
+import type { PlayerTrainerActor } from '../ui/playerTrainer';
 import { addMarks } from '../ui/battleFx/markAura';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
@@ -1168,33 +1169,10 @@ export class BattleScene extends Phaser.Scene {
    * Draws the player trainer (Look A, Overhaul P2) at the left of the player's platform for the opening throw; it then leaves (trainerOut). Trainers with their own
    * throwing sprite keep the older opening throw; in doubles the same trainer throws both balls. Skip: Enter, Space or a tap.
    */
-  private setupTrainerActor(doubles: boolean): void {
+  private setupTrainerActor(_doubles: boolean): void {
+    // Kice 2026-11-17: the custom Look A trainer no longer shows in battle. Trainers with their own back sprite throw with it, the rest borrow Hilda's (ownBackThrow).
     this.trainerActor = null;
     this.trainerReady = Promise.resolve();
-    const art = this.playerArt();
-    if (throwKind(art) === 'own') return;
-    const look = playerLookForBattle();
-    this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
-      if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
-      this.trainerHomeX = doubles ? 90 : 150;
-      const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, PLAYER_TRAINER_FEET, PLAYER_TRAINER_HEIGHT, this.motion, throwTint(art));
-      // Inside the field, behind the Pokémon: the trainer never covers your Pokémon, the text box or a style's menus.
-      this.field.addAt(actor.sprite, this.fieldBase);
-      actor.idle();
-      // Off screen until it walks in for the throw (the reference: your trainer only appears on your side).
-      actor.sprite.setVisible(false).setX(TRAINER_OFF_X);
-      if (this.standClipped()) actor.sprite.setMask(this.standMask());
-      this.trainerActor = actor;
-    });
-    const skip = (): void => this.trainerActor?.skip();
-    this.input.keyboard?.on('keydown-ENTER', skip);
-    this.input.keyboard?.on('keydown-SPACE', skip);
-    this.input.on('pointerdown', skip);
-    this.events.once('shutdown', () => {
-      this.input.keyboard?.off('keydown-ENTER', skip);
-      this.input.keyboard?.off('keydown-SPACE', skip);
-      this.input.off('pointerdown', skip);
-    });
   }
 
   /** Doubles opening: your trainer throws one ball to each of your two spots, then steps off. Presentation only. */
@@ -1237,8 +1215,9 @@ export class BattleScene extends Phaser.Scene {
 
   /** Trainers with their own throwing sprite: it shows at the left for a beat, then slides away (singles and doubles). */
   private async ownBackThrow(): Promise<void> {
-    const art = this.playerArt();
-    if (!art || this.motion === 'off') return;
+    const mine = this.playerArt();
+    if (!mine || this.motion === 'off') return;
+    const art = throwKind(mine) === 'own' ? mine : 'boss.hilda';
     const back = trainerBackVisual(this, art, TRAINER_POS.x - 90, MESSAGE_Y + 4, 260);
     if (!back) return;
     back.setDepth(5);
@@ -1670,6 +1649,10 @@ export class BattleScene extends Phaser.Scene {
       const role = raidRole(content, mon);
       const look = { tank: { text: 'TANK', color: 0x2c8ad8 }, striker: { text: 'STRIKER', color: 0xc8303c }, support: { text: 'SUPPORT', color: 0x1f9a52 } }[role];
       box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, look.text + (this.run.battle.raid.coop ? ` P${coopOwner(this.run.battle.raid, mon.uid) + 1}` : ''), look.color, 14);
+      box.container.add(box.roleBadge);
+    } else if (box.isPlayer && isGuest(this.run.battle, mon.uid)) {
+      // An ally the game plays (core/battle/guests.ts): its box says so, in both looks.
+      box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, 'ALLY', 0x1f9a52, 14);
       box.container.add(box.roleBadge);
     }
     this.dangerGlow(box, mon.hp / max);
@@ -4404,7 +4387,7 @@ export class BattleScene extends Phaser.Scene {
         window: this.rxWindow(),
         columns: 3,
         rowHeight: 70,
-        rows: partyRows(content, run.party, (i) => doublesSwitchProblem(view, i, taken), (i) => (onField.includes(i) ? 'IN BATTLE' : undefined)),
+        rows: partyRows(content, run.party, (i) => doublesSwitchProblem(view, i, taken), (i) => (onField.includes(i) ? 'IN BATTLE' : isGuest(view.battle, run.party[i]?.uid) ? 'ALLY' : undefined)),
         onSelect: (i) => (forced ? void this.act({ kind: 'switch', partyIndex: i }) : this.submit({ kind: 'switch', partyIndex: i })),
         onBack: forced ? undefined : () => this.showRootMenu(),
       });
@@ -4583,6 +4566,13 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
+    // Allies the game controls walked onto the field or left it (core/battle/guests.ts): the field has more or fewer places now,
+    // so the screen is laid out again from the battle as it stands (the same way a reloaded battle opens).
+    const places = !result.run.battle.doubles ? 1 : result.run.battle.doubles.trio ? 3 : 2;
+    if (places !== (this.duo?.size ?? 1)) {
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     this.busy = false;
     this.nextPrompt();
   }
@@ -4597,7 +4587,8 @@ export class BattleScene extends Phaser.Scene {
     if (end.outcome === 'win') void this.trainerIn().then((a) => a?.play('win'));
     if (end.outcome === 'win' && this.playerSprite) {
       if (services().session.settings.victoryPoses) {
-        const sp = getSpecies(content, this.activeMon().speciesId);
+        // The battle is already cleared from the run here, so activeMon() would read null: use the Pokémon the screen shows.
+        const sp = getSpecies(content, (this.run.party.find((m) => m.uid === this.shown.player.uid) ?? this.shown.player).speciesId);
         void victoryPose(this, this.playerSprite, victoryPoseFor(sp.types, sp.weight), this.motion);
       } else void hop(this, this.playerSprite, this.motion);
     }

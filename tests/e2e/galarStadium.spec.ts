@@ -9,6 +9,8 @@ async function waitForScene(page: Page, key: string) {
 }
 
 test('a Galar gym battle shows every stadium camera cut', async ({ page }) => {
+  // About 35 s of fixed screenshot waits plus the walk to the battle: 1.3 min alone, over 2 min on a shared CI runner.
+  test.setTimeout(240_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');

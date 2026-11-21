@@ -11,7 +11,10 @@ import type { Emotion } from '../story/schema';
 
 /** The feelings a battle can stir, and how many times they must be felt for a turning point. */
 export const FEELINGS = ['determination', 'bravery', 'perseverance', 'justice', 'patience'] as const;
-export const TURNING_POINT_AT = 3;
+export const TURNING_POINT_AT = 2;
+/** Kice 2026-11-17: justice was ~55% of all turning points, patience almost none. Justice needs more, the rest the base count. */
+const NEEDS: Partial<Record<(typeof FEELINGS)[number], number>> = { justice: 4 };
+const needed = (k: (typeof FEELINGS)[number]): number => NEEDS[k] ?? TURNING_POINT_AT;
 
 type Feel = (typeof FEELINGS)[number];
 
@@ -35,9 +38,12 @@ export function trackFeelings(content: Content, prior: RunState, run: RunState, 
       case 'damage':
         // Took a super-effective hit and is still standing.
         if (e.effectiveness > 1 && e.hpAfter > 0) feel(e.side, 'bravery');
+        // Justice: a side that has lost a teammate lands a super-effective hit on the one that did it.
+        if (e.effectiveness > 1) { const other = e.side === 'player' ? 'enemy' : 'player'; if (alliesLost(other) > 0) feel(other, 'justice'); }
         break;
       case 'stat':
         if (e.change < 0) feel(e.side, 'perseverance');
+        else if (e.change > 0) feel(e.side, 'patience'); // setting up, biding its time
         break;
       case 'status':
         feel(e.side, 'perseverance');
@@ -46,8 +52,6 @@ export function trackFeelings(content: Content, prior: RunState, run: RunState, 
         feel(e.side, 'patience');
         break;
       case 'move': {
-        // Fighting on after a teammate fell.
-        if (alliesLost(e.side) > 0) feel(e.side, 'justice');
         break;
       }
       default:
@@ -63,7 +67,7 @@ export function trackFeelings(content: Content, prior: RunState, run: RunState, 
     const uid = side === 'player' ? run.party[battle.activeIndex]?.uid : battle.enemyTeam[battle.enemyIndex]?.uid;
     if (!uid || battle.drama.turned.includes(uid)) continue;
     const f = battle.drama.feelings[uid] ?? {};
-    const top = FEELINGS.filter((k) => (f[k] ?? 0) >= TURNING_POINT_AT).sort((a, b) => (f[b] ?? 0) - (f[a] ?? 0))[0];
+    const top = FEELINGS.filter((k) => (f[k] ?? 0) >= needed(k)).sort((a, b) => (f[b] ?? 0) - (f[a] ?? 0))[0];
     if (!top) continue;
     battle.drama.turned.push(uid);
     out.push({ type: 'turningPoint', side, uid, emotion: top });

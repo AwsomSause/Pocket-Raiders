@@ -43,6 +43,8 @@ export interface SosInput {
   scary: boolean;
   /** The player's active Pokémon carries an Adrenaline Orb effect. */
   orb?: boolean;
+  /** Balance `sos.callScale`: multiplies how often a wild Pokémon calls (1 = the table's rates). */
+  scale?: number;
 }
 
 export type SosOutcome = { kind: 'none' } | { kind: 'failed' } | { kind: 'answered'; species: string; level: number };
@@ -57,7 +59,7 @@ export function rollSos(i: SosInput): SosOutcome {
   if (sos.allyUid || sos.answered >= (i.orb ? ORB_MAX_ANSWERED : 1) || caller.hp <= 0 || caller.status) return { kind: 'none' };
   const rng = new Rng(hashSeed(`sos::${caller.uid}::${battle.turn}`));
   const share = caller.hp / i.maxHp;
-  const callRate = entry.rate * (share <= 0.25 ? 5 : share <= 0.5 ? 3 : 1) * (i.orb ? ORB_CALL_BONUS : 1);
+  const callRate = entry.rate * (share <= 0.25 ? 5 : share <= 0.5 ? 3 : 1) * (i.orb ? ORB_CALL_BONUS : 1) * (i.scale ?? 1);
   if (rng.int(0, 99) >= callRate) return { kind: 'none' };
   let answer = entry.rate * 4;
   if (i.scary) answer *= 1.2;

@@ -6,6 +6,7 @@
 // A Legendary or Mythical caught this way is a special moment. Every roll is seeded per stop and uses no gameplay
 // stream, so previews, hovers and reloads agree. Nothing here depends on animation. If no rival is active, nothing happens.
 
+import { scaledCap } from '../stageLength';
 import { z } from 'zod';
 import json from '../../data/rivalStepIn.json';
 import type { Content } from '../contentSchema';
@@ -105,14 +106,14 @@ export function planStepIn(content: Content, run: RunState): StepInPlan | null {
   const rollC = rng.float();
   const rollAB = rng.float();
   const rollKind = rng.float();
-  if (catchable(content, b) && hostile(rival) && Number(run.story.flags[stepInFlag(run, 'c')] ?? 0) < STEP_IN.perStageCatch) {
+  if (catchable(content, b) && hostile(rival) && Number(run.story.flags[stepInFlag(run, 'c')] ?? 0) < scaledCap(STEP_IN.perStageCatch, run)) {
     const legend = legendKind(content, b.enemyTeam[b.enemyIndex]!.speciesId);
     // Beta 0.6 R6: a registered rival steps in on a catch 3% of the time, once per region (rivals/presence.ts).
     const rec = overhaulOf(run, rival.id);
     const fires = rec ? catchStepInRoll(`${run.seed}:${rival.id}`, rec, run.regionIndex, run.encountersCompleted) : rollC < (legend ? STEP_IN.legendCatchChance : STEP_IN.catchChance);
     if (fires) return { kind: 'catch', rivalId: rival.id, ...(legend ? { legend } : {}) };
   }
-  if (Number(run.story.flags[stepInFlag(run, 'ab')] ?? 0) >= STEP_IN.perStageDuelAssist) return null;
+  if (Number(run.story.flags[stepInFlag(run, 'ab')] ?? 0) >= scaledCap(STEP_IN.perStageDuelAssist, run)) return null;
   if (rollAB >= STEP_IN.assistChance + STEP_IN.duelChance) return null;
   const wantsAssist = rollKind < STEP_IN.assistChance / (STEP_IN.assistChance + STEP_IN.duelChance);
   if (wantsAssist) return b.doubles ? null : { kind: 'assist', rivalId: rival.id };

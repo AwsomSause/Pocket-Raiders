@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { scaledCap, stageLengthFactor } from './stageLength';
 import { lastReleased } from './co/familiesA';
 import { prisonOnLoss } from './greenneedle/prison';
 import { applyGnEffect, gnBattleStart, gnConditionMet, gnTokens, resolveCast } from './greenneedle';
@@ -47,7 +48,7 @@ import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
 import { applyMarket, marketWords, noteSpend } from './market';
 import { evolve } from './evolution';
-import { canBeDoubles, makeDoubles } from './battle/doubles';
+import { canBeDoubles, makeDoubles, makeGuestTriples } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
@@ -103,7 +104,7 @@ import { scheduleStage, spacedColumns } from './expansion/scheduler';
 import { fnv1a } from './expansion/hash';
 import { typeEffectiveness } from './battle/damage';
 import { getSpecies } from './pokemon';
-import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
+import { currentRegion, getCampaign, levelCap, runLevelCap, runCampaign } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
@@ -129,6 +130,7 @@ import type { MapNode, PokemonInstance, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
 import { emit } from './story/record';
+import { isGenerous, noteLostOpportunity, onEventChoice as promiseOnChoice } from './instrumentality/promises';
 import { calmDisturbance, hasDisturbance, noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
@@ -148,7 +150,7 @@ import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
 /** The stage number counted from the start of the run (1 = the first stage). */
 export function stageNumber(content: Content, run: RunState): number {
-  return run.regionIndex * getCampaign(content, run.campaignId).stagesPerRegion + (run.stage?.index ?? 0) + 1;
+  return run.regionIndex * runCampaign(content, run).stagesPerRegion + (run.stage?.index ?? 0) + 1;
 }
 
 export function conditionMet(content: Content, run: RunState, c: EventCondition): boolean {
@@ -180,7 +182,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'storyRaid':
       return raidOffered(run, c.n);
     case 'partyLevelOver':
-      return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
+      return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, runCampaign(content, run), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
       return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return mv?.type === c.type && mv.category !== 'status'; }));
     case 'leadType':
@@ -838,13 +840,18 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
   const theme = run.stage ? getTheme(content, run.stage.themeId) : null;
   const cfg = content.balance.events;
   const featured = featuredMapEvents(content, run);
-  const pool = eligibleEvents(content, run)
+  const open = eligibleEvents(content, run)
     // Story events (`xe.*`) are placed by the quiet-node scheduler, never drawn at random.
-    .filter((e) => !taken.has(e.id) && !e.forced && !e.id.startsWith('xe.'))
+    .filter((e) => !taken.has(e.id) && !e.forced && !e.id.startsWith('xe.'));
+  // Kice 2026-11-17: flatten the odds. A rarity's weight is shared out among the events of that rarity (halfway: / sqrt of
+  // how many there are), so a rarity with many events no longer buries each of them, and one with few no longer lifts them.
+  const perRarity: Record<string, number> = {};
+  for (const e of open) perRarity[e.rarity] = (perRarity[e.rarity] ?? 0) + 1;
+  const pool = open
     .map((e) => ({
       item: e,
       weight:
-        (cfg.rarityWeights[e.rarity] ?? 0) *
+        ((cfg.rarityWeights[e.rarity] ?? 0) / Math.sqrt(perRarity[e.rarity] ?? 1)) *
         (theme && e.types.some((t) => theme.types.includes(t)) ? cfg.themeWeight : 1) *
         (featured.has(e.id) || e.gameEvent || e.mode ? cfg.gameEventWeight : 1) *
         (regionOnly(e, run) ? cfg.regionEventWeight : 1) *
@@ -932,7 +939,7 @@ export function addEventStops(content: Content, run: RunState): void {
       node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: e.id, ...(quotaRng.chance(cfg.hiddenShare) ? { hidden: true } : {}) });
     }
   }
-  const wantedStops = Math.round(rng.int(cfg.perStage[0], cfg.perStage[1]) * eventChanceScale(run.rules)) + (focusIs(content, run, run.regionIndex, 'mystery') ? MYSTERY_EXTRA_STOPS : 0);
+  const wantedStops = Math.round(rng.int(cfg.perStage[0], cfg.perStage[1]) * eventChanceScale(run.rules) * stageLengthFactor(run)) + (focusIs(content, run, run.regionIndex, 'mystery') ? MYSTERY_EXTRA_STOPS : 0);
   for (let i = 0; i < wantedStops && candidates.length > 0; i++) {
     const e = pickEvent(content, run, rng, taken);
     if (!e) break;
@@ -987,8 +994,8 @@ export function scheduleExpansionStops(content: Content, run: RunState, open: Re
   if (candidates.length === 0) return [];
   const regionId = currentRegion(content, run).id;
   const sched = scheduleStage({
-    candidates, quota: content.balance.expansionEvents.density[density], placedInRegion: run.expansion?.xe?.[regionId] ?? 0,
-    stagesLeft: getCampaign(content, run.campaignId).stagesPerRegion - stage.index, seed: run.seed, stageKey: stageKey(run) ?? '',
+    candidates, quota: scaledCap(content.balance.expansionEvents.density[density], run), placedInRegion: run.expansion?.xe?.[regionId] ?? 0,
+    stagesLeft: runCampaign(content, run).stagesPerRegion - stage.index, seed: run.seed, stageKey: stageKey(run) ?? '',
   });
   if (sched.ids.length === 0) return [];
   const cols = spacedColumns(stage.map.nodes.filter((n) => n.column < stage.map.columns).map((n) => n.column), sched.ids.length, xeColumns(run), `${run.seed}::${stageKey(run)}`);
@@ -1195,6 +1202,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   if (noTrade) throw new Error(noTrade);
   if (tradeUid !== undefined && !tradePicksOf(content, current, choice)?.some((p) => p.uid === tradeUid)) throw new Error('That Pokémon does not fit the trade');
   const run = structuredClone(current);
+  const generousOffered = visibleChoices(content, current, event).some((v) => isGenerous(v.choice.label) && v.choice.requires.every((r) => conditionMet(content, current, r)));
+  for (const text of promiseOnChoice(content, run, choice.label, { generousOffered })) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
   const runSide = run.stage!.map.nodes.find((n) => n.id === node.id)!.sides.find((s) => s.id === sideId)!;
   runSide.used = true;
   delete runSide.hidden;
@@ -1225,6 +1234,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
   emit(content, run, 'storyMoment', { actors: [], data: { def: 'event-choice', suppressed: false }, importance: risky ? 55 : 40, text: `${event.name}: ${choice.label}${risky ? (success ? ' (the gamble paid off)' : ' (the gamble failed)') : ''}` });
   emit(content, run, 'eventChoice', { data: { event: event.id, choice: choiceIndex, risky, success } });
+  noteLostOpportunity(run, node.id, sideId, success, choice.label);
   // Kindness and cruelty are remembered by the event's Pokémon types (It Hasn't Forgotten…).
   noteEventMorality(content, run, event.types ?? [], outcome.effects);
   noteChoice(content, run, event.name, outcome.effects, risky);
@@ -2274,7 +2284,7 @@ type EventBattleRef = NonNullable<NonNullable<RunState['battle']>['event']>;
  */
 function pickSpecies(content: Content, run: RunState, species: string[], types: TypeName[], rng: Rng, source: EncounterSource = 'event', rarer = false): string {
   const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current);
-  const gate = node ? curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, node.column)) : 1;
+  const gate = node ? curveLevel(content, levelScale(content, runCampaign(content, run), run.regionIndex, run.stage!.index, node.column)) : 1;
   // Greenneedle: `@name` is a story Pokémon cast earlier in the run (gn op `cast`).
   const known = resolveCast(run, species).filter((id) => content.species.has(id));
   // Tidal Bell / Clear Bell: their legendary answers whenever it is one of the choices.
@@ -2294,7 +2304,7 @@ function pickSpecies(content: Content, run: RunState, species: string[], types: 
 /** `stageOffset`: a placed event's level line (A-2 to A+2): the game's own level for that many stages earlier or later. */
 export function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng, stageOffset = 0): number {
   const stage = run.stage!;
-  const scale = withPartyStrength(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, Math.max(0, stage.index + stageOffset), node.column), run.party.map((p) => p.level));
+  const scale = withPartyStrength(content, levelScale(content, runCampaign(content, run), run.regionIndex, Math.max(0, stage.index + stageOffset), node.column), run.party.map((p) => p.level));
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;
 }
 
@@ -2533,6 +2543,13 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.doubles!.player.index = run.party.length - 1;
       run.battle.participants = [run.party[activeIndex]!.uid, ally.uid];
       run.battle.loaner = ally.uid;
+    }
+    // Allies the game controls (gn.25): a triple battle, your lead on the left and the allies beside it. They go home when it ends.
+    const guestIds = (b.allies ?? []).filter((id) => content.species.has(id));
+    if (guestIds.length > 0 && team.length >= 2 && !run.battle.doubles) {
+      const guests = guestIds.map((id) => newMon(content, run, id, Math.max(1, base), 'p'));
+      run.party.push(...guests);
+      makeGuestTriples(run.battle, run.party, guests.map((m) => m.uid));
     }
   }
   if (event.eventId.startsWith('sky.')) shapeSkyFoe(content, run, event.eventId);

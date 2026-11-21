@@ -279,11 +279,11 @@ describe('rival outcomes and the Ultimate Rival', () => {
 
   it('climbs the ladder as potential grows; nemesis needs a grudge, contender needs ambition', () => {
     expect(stateFor({ rivalPotential: 10, traits: traits({}) })).toBe('recognized');
-    expect(stateFor({ rivalPotential: 30, traits: traits({}) })).toBe('recurring');
-    expect(stateFor({ rivalPotential: 45, traits: traits({}) })).toBe('active');
-    expect(stateFor({ rivalPotential: 65, traits: traits({ vindictiveness: 80 }) })).toBe('nemesis');
-    expect(stateFor({ rivalPotential: 65, traits: traits({ vindictiveness: 10 }) })).toBe('active');
-    expect(stateFor({ rivalPotential: 90, traits: traits({}) })).toBe('contender');
+    expect(stateFor({ rivalPotential: 27, traits: traits({}) })).toBe('recurring');
+    expect(stateFor({ rivalPotential: 33, traits: traits({}) })).toBe('active');
+    expect(stateFor({ rivalPotential: 45, traits: traits({ vindictiveness: 80 }) })).toBe('nemesis');
+    expect(stateFor({ rivalPotential: 45, traits: traits({ vindictiveness: 10 }) })).toBe('active');
+    expect(stateFor({ rivalPotential: 60, traits: traits({}) })).toBe('contender');
   });
 
   it('losing never deletes a rival: a gracious one becomes an ally, a fragile one is shaken then retires', () => {

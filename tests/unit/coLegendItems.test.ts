@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { LEGEND_ITEMS, legendItemIcon, legendItemName } from '../../src/core/legends/items';
 import { content } from './helpers';
 import blessings from '../../src/data/blessings.json';
+import { LEGEND_ITEM_IDS } from '../../src/assets/legendItemIds';
+import { FIXED_ASSETS } from '../../src/assets/catalog';
 
 const dims = (f: string) => {
   const b = readFileSync(f);
@@ -25,6 +27,11 @@ describe('legend signature items', () => {
     expect(legendItemIcon('mewtwo')).toBe('item.legend/mewtwo');
     expect(legendItemIcon('pikachu')).toBeNull();
     expect(legendItemName('mew')).toBe('Pink Wishing Charm');
+  });
+  it('every picture is in the asset catalog, so screens can load it (the Blessing opening\'s object)', () => {
+    expect([...LEGEND_ITEM_IDS].sort()).toEqual(Object.keys(LEGEND_ITEMS).sort());
+    const ids = new Set(FIXED_ASSETS.map((e) => e.id));
+    for (const b of blessings.blessings) expect(ids.has(b.item), b.item).toBe(true);
   });
   it('every Blessing object picture is its species signature item', () => {
     for (const b of blessings.blessings) expect(b.item).toBe(legendItemIcon(b.speciesId));

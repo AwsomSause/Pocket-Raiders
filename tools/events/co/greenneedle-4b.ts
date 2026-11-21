@@ -41,7 +41,8 @@ const WALK_IN: Json[] = [
     when('crowned-calf-calmed', { min: 1 }, [setTo('savanna-hippo', 1)]), when('alphas-second-channel', { min: 1 }, [setTo('savanna-hippo', 1)]),
     // The second channel dug at Two Alphas, One River sets `river-shared` (new-events-1.ts).
     when('river-shared', { min: 1 }, [setTo('savanna-hippo', 1)]),
-    scene('gn-19-thirsty'))),
+    // The savanna is walked (core/greenneedle/zone.ts): the first room, gn-19-thirsty, waits at its place on the grid.
+    gn('minigame', { key: 'gn-savanna', n: 1 }))),
   ch('Turn back.', leave('You turn back to the fence. The grass hisses behind you.')),
 ];
 /** Migrations: herds cross the map. 35% that one is on the way ahead (the stop's own seeded roll): the herd's scene opens, else the way on. */
@@ -250,7 +251,8 @@ const GO_IN: Json[] = [
     flag('jungle-entered'), stampStage('jungle-at'), setTo('jungle-unharmed', 1), setTo('jungle-harmed', 0),
     when('safari-quiet', { min: 8 }, [setTo('jungle-ladder-sent', 1)]),
     gn('check', { key: 'jungle-watched', if: [is('egg-taken'), not('egg-returned')] }),
-    scene('gn-20-wall'))),
+    // The jungle is walked (core/greenneedle/zone.ts): the first room, gn-20-wall, waits at its place on the grid.
+    gn('minigame', { key: 'gn-jungle', n: 1 }))),
   ch('Turn back.', leave('You let the leaves fall back. The dark stays where it is.')),
 ];
 const NODE6: Json[] = [

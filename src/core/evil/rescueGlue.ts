@@ -2,20 +2,20 @@
 // The "node" used by the rescue clock is the run's stage count: region * stages per region + stage index.
 
 import type { Content } from '../contentSchema';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import { overhaulOf } from '../rivals/overhaul';
 import type { RunState } from '../state';
 import { offerDue, rescueOf, RESCUE, type Archetype, type Offer, type RescueCtx } from './rescue';
 
 /** The node counter the rescue clock runs on. Impound and offers must use the same number. */
 export function rescueNode(content: Content, run: RunState): number {
-  const per = getCampaign(content, run.campaignId).stagesPerRegion;
+  const per = runCampaign(content, run).stagesPerRegion;
   return run.regionIndex * per + (run.stage?.index ?? 0);
 }
 
 /** The last stage of the current region (the quiet node before the climax is the one before it). */
 export function lastQuietNodeOfRegion(content: Content, run: RunState): number {
-  const per = getCampaign(content, run.campaignId).stagesPerRegion;
+  const per = runCampaign(content, run).stagesPerRegion;
   return run.regionIndex * per + Math.max(0, per - 2);
 }
 

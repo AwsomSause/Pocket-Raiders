@@ -44,9 +44,10 @@ async function shot(page: Page, suffix: string) {
   await cdp.detach();
   await page.waitForTimeout(300);
 }
+/** One key press, then long enough for its step's slide to finish (a press made during a slide waits for it). */
 const press = async (page: Page, key: string) => {
   await page.keyboard.press(key);
-  await page.waitForTimeout(60);
+  await page.waitForTimeout(260);
 };
 
 test.setTimeout(420_000);
@@ -73,6 +74,7 @@ test('Safari Land: walk the grid, borrow the camera, photograph a Pokémon, and 
   await expect(v.locator('.pk-photo')).toBeVisible();
   await v.locator('.pk-hit[data-arg="2,1"]').click();
   await v.locator('.pk-hit[data-arg="3,1"]').click();
+  await expect.poll(async () => (await park(page))!.mode, { timeout: 5000 }).toBe('spot');
   expect(await park(page)).toMatchObject({ x: 3, y: 1, mode: 'spot', spot: 'camera' });
   // The question opens on "Not now"; the camera is a click (or Left, Enter).
   await expect(v.locator('.btn.on')).toHaveText('Not now');

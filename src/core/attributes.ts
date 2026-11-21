@@ -153,6 +153,12 @@ export function luckWeights(weights: Partial<Record<Rarity, number>>, effects: A
 export function addRunAttribute(content: Content, run: RunState, key: AttributeKey, amount: number): number {
   if (key === 'luck' && amount > 0 && content.balance.itemRework.luckGainScale !== 1) amount = scaledLuckGain(content, run, amount);
   run.attributeModifiers[key] = (run.attributeModifiers[key] ?? 0) + amount;
+  // Kice 2026-11-17: every attribute stops at its cap (100, meters +-100) for good: gains past it are not stored, so a later loss bites from the cap.
+  const [lo, hi] = attributeRange(content, key);
+  const layers = attributeLayers(content, run);
+  const raw = layers.baseline[key] + layers.trainer[key] + layers.earned[key];
+  if (raw > hi) run.attributeModifiers[key] -= raw - hi;
+  else if (raw < lo) run.attributeModifiers[key] += lo - raw;
   return effectiveAttributes(content, run)[key];
 }
 

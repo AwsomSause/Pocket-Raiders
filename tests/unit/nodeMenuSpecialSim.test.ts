@@ -1,6 +1,7 @@
 // Node Event Menus P7: a small bot sim for the special entries. A bot plays seeded runs with menus on and always
 // takes a special card when one is offered. Checks the numbers stay in the plan's bounds (no flood, rivals capped).
 
+import { scaledCap } from '../../src/core/stageLength';
 import { describe, expect, it } from 'vitest';
 import { currentMenu, ensureNodeMenu } from '../../src/core/nodeMenu/flow';
 import { playSpecialEntry } from '../../src/core/nodeMenu/special/menu';
@@ -47,7 +48,7 @@ describe('special entries sim (P7)', () => {
       if (!st) continue;
       const byStage: Record<string, number> = {};
       for (const s of st.spoils) byStage[s.stage] = (byStage[s.stage] ?? 0) + 1;
-      for (const n of Object.values(byStage)) expect(n).toBeLessThanOrEqual(SPECIAL.rules.rivalTakes.maxPerStage);
+      for (const n of Object.values(byStage)) expect(n).toBeLessThanOrEqual(scaledCap(SPECIAL.rules.rivalTakes.maxPerStage, r));
       expect(new Set(st.done).size).toBe(st.done.length);
     }
   }, 600_000);

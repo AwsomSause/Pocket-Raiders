@@ -6,6 +6,7 @@
 // Every roll uses its own hash of the run seed ('::node-menu::special::...'), never a shared stream, so turning node
 // menus off leaves old seeds unchanged. Every payout is keyed in `done`, so nothing applies twice after a reload.
 
+import { scaledCap } from '../../stageLength';
 import type { Content, EventEffect } from '../../contentSchema';
 import { applyEffect } from '../../events';
 import { stageKey } from '../../mapItems';
@@ -241,7 +242,7 @@ export function onSkipped(ctx: SpecialCtx, skipped: readonly SkippedEntry[]): st
   const key = `rival:${stage}:${ctx.node.id}`;
   const st0 = peek(run);
   if (st0?.done.includes(key)) return [];
-  if ((st0?.spoils ?? []).filter((s) => s.stage === stage).length >= cfg.maxPerStage) return [];
+  if ((st0?.spoils ?? []).filter((s) => s.stage === stage).length >= scaledCap(cfg.maxPerStage, run)) return [];
   const rivals = run.story.rivals.filter((r) => cfg.rivalStates.includes(r.state)).sort((a, b) => a.id.localeCompare(b.id));
   if (!rivals.length) return [];
   const rng = rngFor(run, `rival::${stage}:${ctx.node.id}`);

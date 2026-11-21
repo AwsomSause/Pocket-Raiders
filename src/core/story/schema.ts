@@ -172,7 +172,7 @@ export const RelationshipRecordSchema = z.object({
   /** Domain event ids that moved it along (limit in story.json). */
   history: z.array(z.string()),
   /** A Pokémon rivalry's personality (left-out 5.4): bitter, one-sided, or one-sided turned mutual. */
-  tone: z.enum(['bitter', 'oneSided', 'mutual']).optional(),
+  tone: z.enum(['bitter', 'oneSided', 'mutual', 'grudge', 'respect']).optional(),
 });
 export type RelationshipRecord = z.infer<typeof RelationshipRecordSchema>;
 
@@ -777,6 +777,9 @@ export const StoryConfigSchema = z.object({
     perBattle: z.number().int().min(1),
     perBossBattle: z.number().int().min(1),
     cooldownBattles: z.number().int().min(0),
+    /** Kice 2026-11-17: the most times one story moment may happen in a run (`perRunCaps` names its own limit per trigger), so a few moments do not crowd out the long tail. */
+    perRunCap: z.number().int().min(1).default(5),
+    perRunCaps: z.record(z.string(), z.number().int().min(0)).default({}),
     hyperScale: z.number().gt(0).max(1),
     exempt: z.array(z.string()),
     /**

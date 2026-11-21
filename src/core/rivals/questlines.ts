@@ -11,7 +11,7 @@ import type { BattleState, PokemonInstance } from '../state';
 import { typeEffectiveness } from '../battle/damage';
 import { familyId } from '../mastery';
 import { abilityOf, maxHp } from '../pokemon';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import type { RunState } from '../state';
 import { fnv1a } from '../story/moments';
 import { stageFronts } from '../world';
@@ -150,7 +150,7 @@ export function lineOn(run: RunState, line: string): boolean {
   return def.managed ? runQuestlines(run).includes(line) : true;
 }
 
-const stagesPerRegion = (content: Content, run: RunState): number => getCampaign(content, run.campaignId).stagesPerRegion;
+const stagesPerRegion = (content: Content, run: RunState): number => runCampaign(content, run).stagesPerRegion;
 const stageNow = (content: Content, run: RunState): number => run.regionIndex * stagesPerRegion(content, run) + (run.stage?.index ?? 0) + 1;
 
 /** The stage a line started on (0: not started) and whether it is still running. */

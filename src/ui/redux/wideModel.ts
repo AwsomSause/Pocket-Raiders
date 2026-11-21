@@ -1,6 +1,7 @@
 // New UI: what a wide-format page shows, read from the running format (core/formats). FormatScene asks for it at
 // every draw; nothing here changes the run. Each format has its own mock-up page; anything else gets the plain one.
 
+import { isTempAlly } from '../../core/battle/guests';
 import type Phaser from 'phaser';
 import { beatenCount, SEAL_BREAKS_AT, type BlackoutState } from '../../core/formats/blackout';
 import type { BreatherState } from '../../core/formats/breather';
@@ -93,7 +94,7 @@ export function widePage(scene: Phaser.Scene, ctx: FormatCtx, index: number): Wi
   if (slot.id === 'front') {
     const s = state as FrontState;
     if (s.lanes.length && s.result !== 'none') {
-      const up = run.party.filter((m) => m.hp > 0 && m.uid !== run.battle?.loaner);
+      const up = run.party.filter((m) => m.hp > 0 && !isTempAlly(run.battle, m.uid));
       return page('arenas/power_plant_bg.png', '#0006', lines.length > 2 ? `${lines[0]} ${lines[lines.length - 1]}` : lines.join(' '), {
         kind: 'front',
         lanes: s.lanes.map((l, i) => {
