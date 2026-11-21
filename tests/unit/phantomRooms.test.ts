@@ -241,11 +241,37 @@ describe('the Phantom loading screen, memory entry and evolution scene', () => {
     const before = phEvolve({ from: null, to: null, done: false, sil: false, tap: true }, 'What? Pidove is evolving!');
     expect(pageOf(before)).toBe('evolve');
     expect(before).toContain('What? Pidove is evolving!');
-    expect(before).not.toContain('Evolved!');
+    expect(before).not.toContain('EVOLVED!');
     expect(before).toContain('data-act="next"');
     const after = phEvolve({ from: null, to: null, done: true, tap: true }, '');
-    expect(after).toContain('Evolved!');
+    expect(after).toContain('aria-label="EVOLVED!"');
     // The battle's own evolve page (no scene behind it) takes no click of its own.
     expect(phEvolve({ from: null, to: null, done: true }, '')).not.toContain('data-act="next"');
+  });
+
+  it('once out, the evolve page is the mock-up\'s: cut-out EVOLVED!, the old name, the gains card and the names in bold', () => {
+    const gain = { level: 36, types: ['fire', 'flying'], fresh: ['flying'], stats: [['HP', 12], ['Attack', 9], ['Speed', -1]] as const };
+    const html = phEvolve({ from: 'pokemon/5', to: 'pokemon/6', done: true, tap: true, names: { from: 'Charmeleon', to: 'Charizard' }, gain }, 'Your Charmeleon evolved into Charizard!');
+    expect(html).toContain('class="ev-t"><span class="rs');
+    expect(html).toContain('<span class="lab">Charmeleon</span>');
+    expect(html).toContain('Charizard · Lv.36');
+    expect(html).toContain('<em>New type</em>');
+    expect(html).toMatch(/<dt>HP<\/dt><dd style="--i:0">\+12<\/dd>/);
+    expect(html).toContain('<dd style="--i:2">-1</dd>');
+    expect(html).toContain('Your <b>Charmeleon</b> evolved into <b>Charizard</b>!');
+    expect(html).toContain('class="cine"');
+    // One thing moves it on (the whole page), so a click never lands on two.
+    expect(html.split('data-act="next"').length - 1).toBe(1);
+    // No new type, no mark; no gains (a foe), no card.
+    expect(phEvolve({ from: null, to: null, done: true, names: { from: 'A', to: 'B' }, gain: { ...gain, fresh: [] } }, '')).not.toContain('New type');
+    expect(phEvolve({ from: null, to: null, done: true, names: { from: 'A', to: 'B' }, gain: null }, '')).not.toContain('ev-up');
+    // The stop key shows only while it glows, and only when it can still be stopped.
+    expect(phEvolve({ from: null, to: null, done: false, tap: true, stop: true }, 'What?')).toContain('Stops it while it glows');
+    expect(phEvolve({ from: null, to: null, done: false, tap: true }, 'What?')).not.toContain('Stops it');
+    expect(phEvolve({ from: null, to: null, done: true, tap: true, stop: true }, '')).not.toContain('Stops it');
+    // Names are escaped like the rest of the words.
+    const odd = phEvolve({ from: null, to: null, done: true, names: { from: '<i>', to: 'B' } }, 'x <i> y');
+    expect(odd).not.toContain('x <i>');
+    expect(odd).toContain('x <b>&lt;i&gt;</b> y');
   });
 });

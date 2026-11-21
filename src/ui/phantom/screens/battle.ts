@@ -7,7 +7,7 @@ import type { PhantomVersion } from '../../../core/presentation/phantom';
 import { rxAtlas, rxUrl } from '../../redux/assets';
 import { BATTLE_LIST_ROWS, windowTitle, type BattleBox, type BattleEvolve, type BattleExp, type BattleGimmick, type BattleInfoView, type BattleLevel, type BattleListModel, type BattleModel, type BattleOption, type BattlePanel } from '../../redux/screens/battle';
 import { figure, scrollStart } from '../../redux/templates';
-import { act, esc, keys, mon, page, TYC, ty } from '../kit';
+import { act, esc, keys, mon, page, ransom, TYC, ty } from '../kit';
 import { phConfirm } from '../templates';
 
 /** The canvas is 960 wide and the Phantom page 1280: a place on the field, in page units. */
@@ -69,17 +69,40 @@ export function phLevel(d: BattleLevel): string {
   return `<div class="ph-shade" data-key="lv-shade"></div><div class="pn lt ph-bt-lv tilt" style="--r:-1.5deg" data-key="lv${d.to}"><span class="lab">Level up</span><div class="ph-bt-lvh">${d.file ? mon(d.file, 1.4, 'olk', '', true) : ''}<div><h3 class="tl1">${esc(d.name)}</h3><p class="ph-bt-lvn">Lv ${d.from}<i>▶</i><b>${d.to}</b></p></div></div>${rows}</div>`;
 }
 
+/** What the new form gained (mock-up `evolve`'s right card): its level, its types (the new ones marked) and each stat's rise. */
+export interface EvolveGain { level: number; types: readonly string[]; fresh: readonly string[]; stats: readonly (readonly [string, number])[] }
+
+const evBand = (): string => { const run = 'EVOLUTION · '.repeat(22); return `<div class="cine" aria-hidden="true"><i><u>${run}</u></i><i><u>${run}</u></i></div>`; };
+
 /**
- * An evolution (mock-up `evolve`): black page, the burst, the old form until the new one is out, the words under it.
- * `sil` false shows the form in colour before it changes (the evolution scene's first line); `tap`: a click anywhere moves on.
+ * An evolution (mock-up `evolve`). While it glows: black page, the burst, the old form (white while it changes), the
+ * words under it. Once the new form is out: the mock-up's page, the cut-out EVOLVED!, the old form's outline and its
+ * name, the chevrons, the new form large, and (with `gain`) a card of its level, types and stat rises.
+ * `sil` false shows the form in colour before it changes (the evolution scene's first line); `tap`: a click anywhere
+ * moves on; `names` bolds the two names in the words; `stop`: X (Esc) still stops it (only while it glows).
  */
-export function phEvolve(d: BattleEvolve & { sil?: boolean; tap?: boolean }, text: string): string {
-  const f = d.done ? d.to : d.from;
-  return page('evolve', '<div class="bgk"></div><div class="burst ph-bt-evb" style="--x:50%;--y:46%" aria-hidden="true"></div>'
-    + `<div class="ph-bt-ev${d.done ? ' done' : ''}" data-key="ev${d.done ? 1 : 0}">${f ? mon(f, 4.4, d.done || d.sil === false ? 'ol' : 'sil', '', true) : ''}</div>`
-    + (d.done ? '<div class="ph-bt-evt" aria-hidden="true">Evolved!</div>' : '')
-    + (text ? `<div class="say ph-bt-say" data-key="say">${lines(text)}</div>` : '')
-    + (d.tap ? `<div class="ph-ld-any" data-key="tap"${act('next')}></div>` : ''), false);
+export function phEvolve(d: BattleEvolve & { sil?: boolean; tap?: boolean; names?: { from: string; to: string } | null; gain?: EvolveGain | null; stop?: boolean }, text: string): string {
+  const tap = d.tap ? `<div class="ph-ld-any" data-key="tap"${act('next')}></div>` : '';
+  if (!d.done) {
+    const f = d.from;
+    return page('evolve', '<div class="bgk"></div><div class="burst ph-bt-evb" style="--x:50%;--y:46%" aria-hidden="true"></div>' + evBand()
+      + `<div class="ph-bt-ev" data-key="ev0">${f ? mon(f, 4.4, d.sil === false ? 'ol' : 'sil', '', true) : ''}</div>`
+      + (text ? `<div class="say ph-bt-say" data-key="say">${lines(text)}</div>` : '')
+      + tap + (d.tap ? keys(['Z', 'Next'], ...(d.stop ? [['Esc', 'Stops it while it glows'] as const] : [])) : ''), false);
+  }
+  const n = d.names;
+  let say = esc(text);
+  if (n) for (const w of [n.from, n.to]) if (w) say = say.split(esc(w)).join(`<b>${esc(w)}</b>`);
+  const g = d.gain;
+  const up = g && n ? `<div class="pn ev-up" data-key="evup"><span class="lab">${esc(n.to)} · Lv.${g.level}</span>`
+    + `<div class="ev-ty">${g.types.map((t) => ty(t)).join('')}${g.fresh.length ? '<em>New type</em>' : ''}</div>`
+    + `<dl>${g.stats.map(([s, v], k) => `<dt>${esc(s)}</dt><dd style="--i:${k}">${v >= 0 ? '+' : ''}${v}</dd>`).join('')}</dl></div>` : '';
+  return page('evolve', '<div class="bgr"></div><div class="burst" style="--x:58%;--y:46%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,34% 0,20% 100%,0 100%);inset:0" aria-hidden="true"></div>' + evBand()
+    + `<div class="ev-t">${ransom('EVOLVED!', 11)}</div>`
+    + (d.from ? `<div class="ev-old" data-key="evold">${mon(d.from, 3.2)}${n?.from ? `<span class="lab">${esc(n.from)}</span>` : ''}</div><div class="ev-arrow" aria-hidden="true"><i></i><i></i><i></i></div>` : '')
+    + `<div class="ev-new" data-key="ev1">${d.to ? mon(d.to, 5.4, 'ol', '', true) : ''}</div>` + up
+    + (text ? `<div class="pn ev-say" data-key="say"><p class="txt">${say.replace(/\n/g, '<br>')}</p><em aria-hidden="true">▼</em></div>` : '')
+    + tap + (d.tap ? keys(['Z', 'Next']) : ''), false);
 }
 
 const expRows = (rows: readonly BattleExp[]): string => {

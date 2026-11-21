@@ -183,9 +183,9 @@ describe('the Phantom battle screen', () => {
     expect(log).toContain('Overgrow');
     const evo = phBattle(ph, model({ evolve: { from: null, to: null, done: true } , text: 'Rowlet evolved into Dartrix!' }));
     expect(pageOf(evo)).toBe('evolve');
-    expect(evo).toContain('Evolved!');
+    expect(evo).toContain('aria-label="EVOLVED!"');
     expect(evo).toContain('Rowlet evolved into Dartrix!');
-    expect(phEvolve({ from: null, to: null, done: false }, '')).not.toContain('Evolved!');
+    expect(phEvolve({ from: null, to: null, done: false }, '')).not.toContain('EVOLVED!');
   });
 
   it('escapes what the game hands it', () => {
