@@ -132,3 +132,13 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   sweeps across the field, and the other Pokémon is pushed back 18 px, trembles and springs home; then "ATTACK ▼"
   plays. The glare is aimed at the other Pokémon (the mockup's 24 degree tilt is that line on its stage). Reduced: the
   flag only. Limits: only Intimidate is acted out (the mockup shows only it); doubles keep the old banner.
+- Weather (pass 8 "Rain", "Harsh Sunlight", "Sandstorm", "Snow", "Weather Clears"; `src/ui/battleFx/weatherLook.ts`,
+  numbers in `src/core/presentation/motionWeather.ts`): each weather has the mockup's entrance (rain: clouds slide in,
+  two lightning flashes and a shake; sun: a light sweep; sand: a wall of sand crosses with a shake; snow: one flake
+  lands with a ring), then its layer stays (streaks and puddle rings; sun rays; two scrolling sand bands and grit;
+  drifting flakes and a mist), the arena takes the mockup's colour grade, and a chip in the top corner counts the turns
+  left. A water move in rain or a fire move in sun stamps "RAIN BOOST ×1.5" / "SUN BOOST ×1.5" on its first hit and the
+  chip jumps. The sandstorm gusts once a turn: grit sweeps across and both Pokémon lean into it (`gustLeanClip`). When
+  it ends the chip counts to 0 and pops, the layer thins, a beam of light crosses and the colour comes back. It replaces
+  the pack's weather picture and the old mood tint for those four. Reduced: layer, grade and chip, no entrance or gust
+  motion. Off: the older layer. Limits: hail keeps the older layer (no mockup); doubles get no lean.

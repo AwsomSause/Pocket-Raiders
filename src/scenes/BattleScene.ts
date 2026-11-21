@@ -123,7 +123,7 @@ import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
 import { HIT_RUN, stand, standStill, twitch } from '../ui/battleFx/stance';
 import { bubblePicture, chevronPicture, ConditionLook, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, parCantClip, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, gustLeanClip, parCantClip, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -168,6 +168,7 @@ import { loadAssets, partySpecies, pokemonArtIds, preloadPokemon, queueAssets } 
 import { pickWipe, wipeAssetId } from '../ui/battleFx/ruleWipe';
 import { sosEntry } from '../core/battle/sos';
 import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
+import { WeatherLook, WX_KINDS, type WxKind } from '../ui/battleFx/weatherLook';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
 import { planCues, STAT_WORDS } from '../core/presentation/cues';
@@ -208,7 +209,7 @@ import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
-import type { Move, TypeName } from '../core/contentSchema';
+import type { Move, TypeName, Weather } from '../core/contentSchema';
 import { rivalBossFor } from '../core/rivals/major';
 
 const MESSAGE_AUTO_ADVANCE_MS = 1400;
@@ -255,6 +256,9 @@ const DUO_POS = {
   ],
 } as const;
 const DUO_SCALE = { player: 0.72, enemy: 0.85 } as const;
+/** A weather's turns for its chip: null when it lasts (a primal or a set field's weather). */
+const wxTurns = (turns: number): number | null => (turns >= 99 ? null : turns);
+
 const DUO_BOX = { scale: 0.6, enemy: [{ x: 4, y: 6 }, { x: 4, y: 72 }], player: [{ x: GAME_WIDTH - 236, y: 236 }, { x: GAME_WIDTH - 236, y: 316 }] } as const;
 /**
  * Triple battles (Kice's pick: Triple 2, the Essentials Kit with the long foe box): left, centre, right. Foe boxes stack down
@@ -335,6 +339,12 @@ export class BattleScene extends Phaser.Scene {
   private storyBar: StoryBar | null = null;
   /** Battle log (catalog #115): the last lines said, reopened with the H key. Presentation only. */
   private weatherLayer: WeatherLayer | null = null;
+  /** The redesign's rain, sun, sand and snow (pass 8); hail stays on the older layer. */
+  private wxLook: WeatherLook | null = null;
+  /** The sandstorm gusts once a turn, however many Pokémon it hurts. */
+  private gustShown = false;
+  /** A move's weather boost stamps once, on its first hit. */
+  private boostShown = false;
   private history: string[] = [];
   private historyView: Phaser.GameObjects.Container | null = null;
   private menu: Menu | null = null;
@@ -644,8 +654,20 @@ export class BattleScene extends Phaser.Scene {
     }), this.motion);
     if (boss?.role === 'champion') championGlow(this, this.field, this.motion);
     this.weatherLayer = new WeatherLayer(this, this.field, this.motion);
-    this.weatherLayer.set(run.battle?.weather?.id ?? null);
-    this.applyMood(run.battle?.weather?.id ?? null);
+    const groundCount = backLayers.length + groundLayers.length || 1;
+    this.wxLook = new WeatherLook({
+      scene: this,
+      field: this.field,
+      under: () => groundCount,
+      graded: () => [...backLayers, ...groundLayers],
+      level: () => this.clipLevel(),
+      shake: (px) => {
+        const st = services().session.settings;
+        if (st.battleScreenEffects) this.cameras.main.shake(300, (px / GAME_WIDTH) * capFlash(st.shakeIntensity, st.reducedFlash));
+      },
+      flash: (color, alpha, ms) => this.wxFlash(color, alpha, ms),
+    });
+    void this.setWeather(run.battle?.weather ?? null, false);
     this.arenaLight = new ArenaLight(this, this.field, this.field.length, this.motion);
     this.arenaPhase = 0;
     // A battle style's floor, tint or whole backdrop, under the Pokémon.
@@ -2367,6 +2389,83 @@ export class BattleScene extends Phaser.Scene {
   private moodTint: Phaser.GameObjects.Rectangle | null = null;
 
   /** Aero panel mood (M120): a faint weather tint over the battle UI. Cosmetic; off with animations off. */
+  /** Whether the redesign's weather look draws this weather (rain, sun, sand, snow, with animations on). */
+  private wxHandles(id: string | null | undefined): id is WxKind {
+    return !!id && (WX_KINDS as readonly string[]).includes(id) && this.clipLevel() !== 'off' && !!this.wxLook;
+  }
+
+  /** A water move in rain or a fire move in sun (the 1.5x the engine gives them). */
+  private wxBoosts(type: string): boolean {
+    const k = this.wxLook?.current;
+    return (k === 'rain' && type === 'water') || (k === 'sun' && type === 'fire');
+  }
+
+  /** The weather now: the redesign's look for rain, sun, sand and snow (with its entrance when `arrive`), the older layer for hail. */
+  private async setWeather(w: { id: Weather; turns: number } | null, arrive: boolean): Promise<void> {
+    const id = w?.id ?? null;
+    const own = this.wxHandles(id);
+    this.weatherLayer?.set(own ? null : id);
+    this.applyMood(own ? null : id);
+    if (!own || !w) {
+      if (this.wxLook?.current) this.wxLook.clearNow();
+      return;
+    }
+    const turns = wxTurns(w.turns);
+    if (arrive) await this.wxLook!.arrive(id, turns);
+    else this.wxLook!.show(id, turns);
+  }
+
+  /** How many turns the weather that just started has (the turn's end state; 5 when it has already moved on). */
+  private wxTurnsNow(id: string): number {
+    const w = this.run.battle?.weather;
+    return w && w.id === id ? w.turns : 5;
+  }
+
+  /** The lightning flash of rain arriving: a sheet over the arena (under the boxes), softened by the flash settings. */
+  private wxFlash(color: number, alpha: number, ms: number): void {
+    const st = services().session.settings;
+    const k = st.reducedFlash || !st.battleScreenEffects ? 0 : capFlash(st.effectIntensity, st.reducedFlash);
+    if (k <= 0) return;
+    const sheet = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, color, alpha * Math.min(1, k)).setOrigin(0).setDepth(860);
+    this.tweens.add({ targets: sheet, alpha: 0, duration: ms, onComplete: () => sheet.destroy() });
+  }
+
+  /** A stamp at a fixed spot (the weather boost): pops in, holds, floats off. */
+  private wxStamp(word: string, fill: string, ink: string, x: number, y: number): void {
+    const key = stampPicture(this, word, fill, ink);
+    if (!key) return;
+    const full = this.clipLevel() === 'full';
+    const st = this.add.image(x, y, key).setScale(full ? PICTURE_SCALE * 0.4 : PICTURE_SCALE).setAlpha(full ? 0 : 1).setDepth(4000);
+    this.tweens.chain({
+      targets: st,
+      tweens: [
+        { alpha: 1, duration: 1 },
+        { scale: PICTURE_SCALE, duration: full ? 140 : 1, ease: 'Back.easeOut' },
+        { y: y - 40, alpha: 0, duration: 300, delay: 900, ease: 'Quad.easeIn' },
+      ],
+      onComplete: () => st.destroy(),
+    });
+  }
+
+  /** The sandstorm's end-of-turn gust (pass 8): grit sweeps across and both Pokémon lean into it. */
+  private sandGust(): void {
+    if (this.wxLook?.current !== 'sand') return;
+    const level = this.clipLevel();
+    if (level === 'off') return;
+    this.wxLook.gust();
+    if (this.duo) return;
+    for (const side of ['player', 'enemy'] as const) {
+      const sprite = this.condSprite(side);
+      if (!sprite || !sprite.visible) continue;
+      const mon = this.shown[side];
+      this.condPlay(sprite, gustLeanClip(level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      });
+    }
+  }
+
   private applyMood(weather: string | null): void {
     const st = services().session.settings;
     const mood = aeroMood(weather, null);
@@ -6584,6 +6683,7 @@ export class BattleScene extends Phaser.Scene {
     this.rxPin = null;
 
     this.fellAt = null;
+    this.gustShown = false;
     for (const [index, e] of events.entries()) {
       // New UI: a Rally brace or a signature trait gets its callout for its own line and the stat lines that belong to it.
       if (this.rx) this.rxCall = this.calloutOf(events, index) ?? (keepsCallout(e) ? this.rxCall : null);
@@ -6595,6 +6695,18 @@ export class BattleScene extends Phaser.Scene {
         this.lastMoveType = content.moves.get(e.moveId)?.type ?? 'normal';
         this.phLast = { side: e.side, by: this.shown[e.side] ? this.speciesName(this.shown[e.side]!) : '', move: content.moves.get(e.moveId)?.name ?? '' };
         this.storyBar?.accent(this.lastMoveType);
+      }
+      // Pass 8 weather: the redesign's entrance replaces the pack's weather picture; a sandstorm gusts once a turn;
+      // a move the rain or sun powers up gets its stamp as it hits.
+      if (e.type === 'weather' && this.wxHandles(e.weather)) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
+      if (e.type === 'move') this.boostShown = false;
+      if (e.type === 'damage' && !this.boostShown && this.wxBoosts(this.lastMoveType)) {
+        this.boostShown = true;
+        this.wxLook!.boost((word, fill, ink, x, y) => this.wxStamp(word, fill, ink, x, y));
+      }
+      if (e.type === 'weatherDamage' && e.weather === 'sand' && !this.gustShown) {
+        this.gustShown = true;
+        this.sandGust();
       }
       await this.fx.play(cues[index] ?? []);
       this.reactPortrait(e);
@@ -6609,12 +6721,11 @@ export class BattleScene extends Phaser.Scene {
       else if (e.type === 'status') playSfxLazy(this, `se.${e.status}`, 0.7);
       switch (e.type) {
         case 'weather':
-          this.weatherLayer?.set(e.weather);
-          this.applyMood(e.weather);
+          await this.setWeather({ id: e.weather, turns: this.wxTurnsNow(e.weather) }, true);
           break;
         case 'weatherEnd':
-          this.weatherLayer?.set(null);
-          this.applyMood(null);
+          if (this.wxLook?.current) await this.wxLook.end();
+          this.setWeather(null, false);
           break;
         case 'focus':
           this.focusOn(e.side, e.uid);
@@ -7146,6 +7257,9 @@ export class BattleScene extends Phaser.Scene {
     }
     this.reskin();
     this.updateHeader();
+    // The weather chip counts down with the turns.
+    const wx = run.battle?.weather;
+    if (wx && this.wxLook?.current === wx.id) this.wxLook.chip(wxTurns(wx.turns));
   }
 
   /**

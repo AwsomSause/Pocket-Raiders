@@ -702,3 +702,60 @@ test('an ability: its flag unrolls from the owner side; Intimidate leans in, gla
   expect(mine).toEqual(['ability.flag.r.', true]);
   expect(errors).toEqual([]);
 });
+
+test('weather: rain, sun, sand and snow arrive with their layer, grade and chip; sand gusts and both lean; it clears and leaves nothing', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'weather-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const out: Record<string, { layer: number; chip: string; br: number; sat: number }> = {};
+    for (const k of ['rain', 'sun', 'sand', 'snow']) {
+      await b.setWeather({ id: k, turns: 5 }, true);
+      await new Promise((r) => setTimeout(r, 700));
+      const chip = b.children.list.find((o: any) => String(o.texture?.key).startsWith('wx.chip.'));
+      out[k] = { layer: b.wxLook.layer.length, chip: chip ? chip.texture.key.slice(8) : '', br: b.wxLook.grade.br, sat: b.wxLook.grade.sat };
+      if (k === 'sand') {
+        const at = b.spotXY('player');
+        let lean = 0;
+        const watch = () => (lean = Math.max(lean, at.x - b.playerSprite.x));
+        b.events.on('update', watch);
+        b.sandGust();
+        await new Promise((r) => setTimeout(r, 1300));
+        b.events.off('update', watch);
+        (out as any).lean = lean;
+      }
+      await b.wxLook.end();
+      await new Promise((r) => setTimeout(r, 2200));
+    }
+    return out;
+  });
+  expect(seen.rain).toMatchObject({ chip: '☂ RAIN · 5 turns' });
+  expect(seen.rain!.br).toBeCloseTo(0.68);
+  expect(seen.sun!.br).toBeCloseTo(1.2);
+  expect(seen.sand).toMatchObject({ chip: '≋ SANDSTORM · 5 turns' });
+  expect(seen.snow!.sat).toBeCloseTo(0.55);
+  for (const k of ['rain', 'sun', 'sand', 'snow']) expect(seen[k]!.layer).toBeGreaterThan(0);
+  expect((seen as any).lean).toBeGreaterThan(5);
+  // Cleared: no chip, no layer, no clouds, colour back, both home.
+  const after = await page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    return { left: b.children.list.concat(b.field.list).filter((o: any) => /^wx\./.test(String(o.texture?.key))).length, layer: b.wxLook.layer.length, br: b.wxLook.grade.br, kind: b.wxLook.current };
+  });
+  expect(after).toEqual({ left: 0, layer: 0, br: 1, kind: null });
+  for (const s of ['player', 'enemy'] as const) {
+    const l = await look(page, s);
+    expect({ x: l.x, solid: l.solid }).toEqual({ x: l.homeX, solid: 0 });
+  }
+  // Off: nothing draws.
+  const off = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    (window as any).__pkr.session.settings.battleAnimations = 'off';
+    await b.setWeather({ id: 'rain', turns: 5 }, true);
+    const n = b.children.list.filter((o: any) => /^wx\./.test(String(o.texture?.key))).length;
+    (window as any).__pkr.session.settings.battleAnimations = 'full';
+    return { n, kind: b.wxLook.current };
+  });
+  expect(off).toEqual({ n: 0, kind: null });
+  expect(errors).toEqual([]);
+});

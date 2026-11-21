@@ -78,8 +78,8 @@ export function shinyChipPicture(scene: Phaser.Scene): string | null {
   return pill(scene, 'cheer.shiny', '✦ SHINY', { fill: '#ffcb05', ink: '#16203f', ring: '#ffffff', size: 15 });
 }
 
-/** The mockup's `.pill`: round letters (M PLUS Rounded 1c, 800), 4 x 10 px padding, fully rounded, a 2 px ring. */
-function pill(scene: Phaser.Scene, key: string, word: string, look: { fill: string; ink: string; ring: string; size: number }): string | null {
+/** The mockup's `.pill`: round letters (M PLUS Rounded 1c, 800), 4 x 10 px padding (or `pad`), fully rounded, a 2 px ring. */
+export function pill(scene: Phaser.Scene, key: string, word: string, look: { fill: string; ink: string; ring: string; size: number; pad?: { x: number; y: number } }): string | null {
   if (scene.textures.exists(key)) return key;
   try {
     const font = `800 ${look.size * HI}px "M PLUS Rounded 1c", ${FONT_FAMILY}`;
@@ -87,8 +87,9 @@ function pill(scene: Phaser.Scene, key: string, word: string, look: { fill: stri
     if (!probe) return null;
     probe.font = font;
     const border = 2 * HI;
-    const w = Math.ceil(probe.measureText(word).width) + 20 * HI + border * 2;
-    const h = look.size * HI + 8 * HI + border * 2;
+    const pad = look.pad ?? { x: 10, y: 4 };
+    const w = Math.ceil(probe.measureText(word).width) + pad.x * 2 * HI + border * 2;
+    const h = look.size * HI + pad.y * 2 * HI + border * 2;
     const c = document.createElement('canvas');
     c.width = w;
     c.height = h;

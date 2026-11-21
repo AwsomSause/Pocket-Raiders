@@ -307,3 +307,21 @@ export function intimidateClip(owner: CondSpot, target: CondSpot, level: ClipLev
   b.beat(0, 'The ability flag unrolls').beat(T, 'It leans in').beat(T + 250, 'The glare crosses the field').beat(T + 450, 'The other shrinks back');
   return b.end(T + 450 + 100 + 500 + 300);
 }
+
+/** The sandstorm's end-of-turn lean (pass 8 "Sandstorm"): how far it leans into the wind (px, degrees). */
+export const GUST_LEAN = { dx: -8, rot: -4 } as const;
+
+/**
+ * The sandstorm gusts at the end of the turn (pass 8): both Pokémon lean into the wind (left, like the grit), hold
+ * it and spring back, with a quick white blink as the sand hits. Reduced: the blink only. Off: nothing.
+ */
+export function gustLeanClip(level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('gust-lean', level);
+  const m = b.part('mon', { dx: 0, rot: 0, white: 0 });
+  if (level === 'off') return b.end(0);
+  m.at(400).to(80, { white: 0.5 }).to(200, { white: 0 });
+  if (level === 'reduced') return b.end(680);
+  m.at(250).to(150, { dx: GUST_LEAN.dx, rot: GUST_LEAN.rot }, 'out').wait(400).to(300, { dx: 0, rot: 0 }, 'back');
+  b.beat(250, 'Both lean into the gust');
+  return b.end(1100);
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { chevronWaves, COND_TINT, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { chevronWaves, COND_TINT, GUST_LEAN, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -163,5 +163,22 @@ describe('conditions: Intimidate', () => {
   });
   it('Reduced and Off: nothing moves (the flag alone says it)', () => {
     for (const level of ['reduced', 'off'] as const) expect(intimidateClip(FOE, ME, level).length).toBe(0);
+  });
+});
+
+describe('conditions: the sandstorm gust', () => {
+  it('both lean into the wind (left), hold it, spring back, with a white blink as the sand hits', () => {
+    const c = gustLeanClip('full');
+    expect(sampleClip(c, 200).mon).toMatchObject({ dx: 0, rot: 0 });
+    expect(sampleClip(c, 500).mon).toMatchObject({ dx: GUST_LEAN.dx, rot: GUST_LEAN.rot });
+    expect(sampleClip(c, 480).mon!.white).toBeCloseTo(0.5);
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0, rot: 0, white: 0 });
+    expect(c.length).toBe(1100);
+  });
+  it('Reduced: the blink only; Off: nothing', () => {
+    const r = gustLeanClip('reduced');
+    expect(sampleClip(r, 500).mon).toMatchObject({ dx: 0, rot: 0 });
+    expect(sampleClip(r, 480).mon!.white).toBeCloseTo(0.5);
+    expect(gustLeanClip('off').length).toBe(0);
   });
 });
