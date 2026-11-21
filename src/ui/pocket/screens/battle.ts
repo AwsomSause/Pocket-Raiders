@@ -63,7 +63,50 @@ function commands(tabs: NonNullable<BattleModel['tabs']>, small: boolean): strin
 const panel = (p: BattlePanel, cls: string, extra = ''): string =>
   `<div class="pn gx-bt-pn ${cls}"${extra}><div class="gx-bt-ph"><b>${esc(p.head)}</b>${p.chips.map(tyChip).join('')}${p.tag ? `<u>${esc(p.tag)}</u>` : ''}</div>${(p.lead ?? []).map((t) => `<strong>${esc(t)}</strong>`).join('')}${p.facts.map(([l, v]) => `<p><span>${esc(l)}</span><em>${esc(v)}</em></p>`).join('')}${p.lines.map((t) => `<small>${esc(t)}</small>`).join('')}</div>`;
 
+/** A Battle Info side card (mock-up `b-info`): the Pokémon, its types, Ability, held item, status and stat stages. */
+function infoSide(x: NonNullable<NonNullable<BattleModel['pkInfo']>['foe']>, file: string | null, cls: 'foe' | 'me'): string {
+  const t = x.types.map(typeColour);
+  return `<div class="in-side ${cls}" style="--t:${t[0] ?? '#56627f'};--t2:${t[1] ?? t[0] ?? '#56627f'}" data-key="in-${cls}"><div class="in-h"><i>${file ? fitPic(monArt(file), 56, 52, '', 2) : ''}</i><div><b style="font-size:${fit(x.name, 180, 28, 16, 0.6)}px">${esc(x.name)}</b><span>${esc(x.sub)}</span></div></div><div class="in-ty">${x.types.map(tyChip).join('')}</div>`
+    + `<dl><dt>Ability</dt><dd>${esc(x.ability)}</dd><dt>Held item</dt><dd style="font-size:${fit(x.held, 160, 14, 10, 0.55)}px">${esc(x.held)}</dd><dt>Status</dt><dd>${esc(x.status)}</dd></dl>`
+    + `<div class="in-stg">${x.stages.map(([w, n]) => `<span class="stg${n > 0 ? ' up' : n < 0 ? ' dn' : ''}"><em>${esc(w)}</em><b>${n > 0 ? '+' : ''}${n}</b></span>`).join('')}</div>${x.note ? `<p style="font-size:${fit(x.note, 240, 13, 10, 0.55)}px">${esc(x.note)}</p>` : ''}</div>`;
+}
+
+/** Battle Info (mock-up `b-info`): the foe, the four field cards, your Pokémon, then Battle Log or Back. */
+function infoPage(d: NonNullable<BattleModel['pkInfo']>): string {
+  const hidden = '<div class="in-side foe gx-in-hid" data-key="in-foe"><div class="in-h"><i></i><div><b>???</b><span>Hidden until it moves</span></div></div></div>';
+  const mid = `<div class="in-mid" data-key="in-mid">${d.mid.map((c, k) => `<div class="in-c${k === 0 && c.b !== 'Clear' ? ' w' : ''}"><em>${esc(c.em)}</em><b style="font-size:${fit(c.b, 110, 26, 14, 0.6)}px">${esc(c.b)}</b><span style="font-size:${fitBody(c.span, 170, 48, [12, 11, 10], 1.3)}px">${esc(c.span)}</span></div>`).join('')}</div>`;
+  const foot = `<div class="in-foot" data-key="in-foot"><div class="btn on"${act('pkLog')}><b>Battle Log</b></div><div class="btn"${act('info')}><b>Back</b></div></div>`;
+  return `<i class="gx-bt-dim" data-nocheck${act('info')}></i><div class="gp-h gx-gp" data-key="in-head"><b>Battle Info</b><span>Everything in play this turn. Looking here does not use your turn.</span></div>${d.foe ? infoSide(d.foe, d.foeFile, 'foe') : hidden}${mid}${d.me ? infoSide(d.me, d.meFile, 'me') : ''}${foot}${keys2([['Esc', 'back', 'info']])}`;
+}
+
+/** The move card (mock-up `moveinfo`): the move's numbers on its type colour and how it fares against the foe. */
+function movePage(m: NonNullable<BattleModel['pkMove']>): string {
+  const t = typeColour(m.type);
+  const card = `<div class="mi-card" style="--t:${t}" data-key="mi-card"><i class="gx-mi-badge">${fitPic(badgeArt(m.type), 96, 96, '', 3)}</i><small>Move</small><b style="font-size:${fit(m.name, 420, 60, 30, 0.6)}px">${esc(m.name)}</b><div class="mi-row">${tyChip(m.type)}<span>${esc(m.category)}</span><span>${m.contact ? 'Contact' : 'No contact'}</span></div><div class="mi-nums"><div><span>Power</span><b>${esc(m.power)}</b></div><div><span>Accuracy</span><b>${esc(m.accuracy)}</b></div><div><span>PP</span><b>${esc(m.pp)}</b></div></div><p style="font-size:${fitBody(m.text, 330, 110, [16, 15, 14, 13, 12], 1.35)}px">${esc(m.text)}</p></div>`;
+  const v = m.vs;
+  const mult = (n: number): string => `× ${Number.isInteger(n) ? n : n.toFixed(2).replace(/0$/, '')}`;
+  const vs = v
+    ? `<b style="font-size:${fit(`Against ${v.foe}`, 350, 30, 18, 0.6)}px">Against ${esc(v.foe)}</b><div class="mult"><span>${tyChip(m.type)} into ${v.foeTypes.map(tyChip).join('')}</span><b class="${v.mult > 1 ? 'good' : v.mult < 1 ? 'bad' : ''}">${mult(v.mult)}</b></div>${v.stab ? `<div class="mult"><span>Same type as ${esc(v.user)}</span><b class="good">× 1.5</b></div>` : ''}<p>${esc(v.word)}</p>`
+    : `<b>No damage</b><p>${m.category === 'Status' ? 'A status move: it does not hit for damage.' : 'The foe is hidden until it moves.'}</p>`;
+  return `<i class="gx-bt-dim" data-nocheck${act('info')}></i>${card}<div class="mi-vs pn" data-key="mi-vs">${vs}<div class="row"><div class="btn on"${act('pkUse')}><b>Use it</b></div><div class="btn"${act('info')}><b>Back</b></div></div></div>`;
+}
+
+/** The Battle Log (mock-up `b-log`): what was said, newest at the bottom, the filter tabs and the turn so far. */
+function logPage(l: NonNullable<BattleModel['log']>, turn: number): string {
+  const rows = l.lines.length ? l.lines.map((x) => `<div class="lg-r gx-lg-row"><b>${esc(x)}</b></div>`).join('') : '<div class="lg-r gx-lg-row"><b>Nothing here yet.</b></div>';
+  const list = `<div class="lg-list" data-key="lg-list"><div class="lg-t now"><em>Turn ${Math.max(1, turn)}</em>${rows}</div></div>`;
+  const sum = `<div class="lg-sum" data-key="lg-sum"><b>Show</b><span class="gx-lg-seg">${l.tabs.map((t, k) => `<i class="${k === l.index ? 'on' : ''}"${act('log', k)}><kbd>${k + 1}</kbd>${esc(t)}</i>`).join('')}</span><dl><dt>Turn</dt><dd>${Math.max(1, turn)}</dd><dt>Lines</dt><dd>${l.lines.length}</dd></dl><div class="btn on"${act('logClose')}><b>Back to battle</b></div></div>`;
+  return `<i class="gx-bt-dim" data-nocheck${act('logClose')}></i><div class="gp-h gx-gp" data-key="lg-head"><b>Battle Log</b><span>What happened so far, newest at the bottom.</span></div>${list}${sum}${keys2([['1-5', 'filter'], ['H', 'close', 'logClose']])}`;
+}
+
+/** A keys bar for the battle pages. */
+const keys2 = (ks: readonly (readonly [string, string, string?])[]): string => `<div class="keys k20 gx-bt-keys">${ks.map(([k, w, a]) => `<span${a ? act(a) : ''}><kbd>${esc(k)}</kbd>${esc(w)}</span>`).join('')}</div>`;
+
 export function pkBattle(d: BattleModel): string {
+  // Pocket pages over the battle: Battle Info, a move's card, the Battle Log (the arena stays drawn underneath).
+  if (d.pkInfo && !d.evolve) return page('b-info', 26, `<div class="scr battle b6 ov16 inf gx-bt gx-bt-page" data-key="b-info">${infoPage(d.pkInfo)}</div>`, true);
+  if (d.pkMove && !d.evolve) return page('moveinfo', 26, `<div class="scr battle b2 minfo gx-bt gx-bt-page" data-key="moveinfo">${movePage(d.pkMove)}</div>`, true);
+  if (d.log && !d.evolve) return page('b-log', 26, `<div class="scr battle b6 ov16 lg gx-bt gx-bt-page" data-key="b-log">${logPage(d.log, d.turn ?? 0)}</div>`, true);
   if (d.evolve) {
     const pic = (f: string | null, sil: boolean): string => (f ? `<span class="${sil ? 'gx-sil' : ''}">${fitPic(monArt(f), 200, 200, '', 4)}</span>` : '');
     return page('battle', 26, `<div class="scr battle gx-bt gx-bt-evo" data-key="battle"><i class="gx-bt-burst"></i><div class="gx-bt-evo-pics">${pic(d.evolve.from, d.evolve.done)}<b>→</b>${pic(d.evolve.to, !d.evolve.done)}</div>${d.text ? `<div class="say17 gx-bt-say"><i>${spr(frontRotom, 1)}</i><p>${esc(d.text)}</p></div>` : ''}</div>`, true);

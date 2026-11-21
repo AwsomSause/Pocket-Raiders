@@ -143,6 +143,7 @@ import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { pkHall } from '../ui/pocket/screens/hall';
+import { battleInfo, moveInfo } from '../core/presentation/battleInfo';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
 import { phTravel } from '../ui/phantom/screens/travel';
@@ -361,6 +362,9 @@ export class BattleScene extends Phaser.Scene {
   private rxInfo = '';
   /** New UI: the open info panel's sections, and whether it shows as a move's tooltip. */
   private rxPanels: BattlePanel[] = [];
+  /** Pocket look: the Battle Info page (mock-up `b-info`) or the move card (`moveinfo`) behind the open info panel. */
+  private rxPkInfo: BattleModel['pkInfo'] = null;
+  private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
@@ -1866,6 +1870,10 @@ export class BattleScene extends Phaser.Scene {
           this.showMoveMenu();
         },
         log: (i) => this.setLogTab(LOG_TABS[Number(i)]?.id),
+        // Pocket look: Battle Info's Battle Log button, the move card's Use it, the log page's Back.
+        pkLog: () => { if (this.infoPanel) this.closePanel(); if (!this.historyView) this.toggleHistory(); },
+        pkUse: () => { if (!this.infoPanel || !this.rxPkMove) return; const k = this.focusedMove; this.closePanel(); if (!this.picker && !this.autoRunning) this.menu?.press(k); },
+        logClose: () => { if (this.historyView) this.toggleHistory(); },
         // A click on a data box pins its card; a second click (or one on the card) lets it go.
         pin: (key) => { this.rxPin = !key || this.rxPin === key ? null : key; },
       },
@@ -1948,6 +1956,9 @@ export class BattleScene extends Phaser.Scene {
       level: this.rxLevel && !menu && !list ? this.rxLevel : null,
       evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
+      pkInfo: this.infoPanel ? this.rxPkInfo : null,
+      pkMove: this.infoPanel ? this.rxPkMove : null,
+      turn: this.run.battle?.turn ?? 0,
       panelAt: this.rxPanelAt,
       tip,
       card,
@@ -4401,6 +4412,8 @@ export class BattleScene extends Phaser.Scene {
         const hint = move.category === 'status' ? null : effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, foeTypes));
         const flags = moveFlagLabels(move);
         const power = move.power ? (slot!.hyper ? `${move.power + content.balance.hyperMove.powerBonus} (Hyper +${content.balance.hyperMove.powerBonus})` : move.power) : fixedDamageLabel(move.effects.fixedDamage);
+        this.rxPkInfo = null;
+        this.rxPkMove = pocketOn() ? moveInfo(content, this.run, this.focusedMove, (id) => moveFullDescription(content.moves.get(id)!)) : null;
         this.openPanel([
           { head: move.name, text: `${move.type.toUpperCase()} · ${move.category}\nPower ${power} · Accuracy ${move.accuracy ?? '—'} · PP ${slot!.pp}/${maxPp(content, slot!)}\nPriority ${move.priority > 0 ? '+' : ''}${move.priority}${hint ? `\nAgainst ${this.speciesName(this.shown.enemy)}: ${hint.text}` : ''}` },
           { head: 'What it does', text: moveFullDescription(move) },
@@ -4410,6 +4423,11 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     const c = battleConditions(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
+    this.rxPkMove = null;
+    if (pocketOn()) {
+      const info = battleInfo(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
+      this.rxPkInfo = { ...info, foeFile: info.foe ? monFile(this, info.foe.speciesId, 'front', info.foe.shiny) : null, meFile: info.me ? monFile(this, info.me.speciesId, 'front', info.me.shiny) : null };
+    } else this.rxPkInfo = null;
     this.openPanel([
       { head: 'Battlefield', text: c.field.join('\n') },
       { head: 'Your Pokémon', text: c.yours.join('\n') },

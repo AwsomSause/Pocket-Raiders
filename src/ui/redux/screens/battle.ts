@@ -2,6 +2,7 @@
 // the choices), the page tabs and the small lines over the field. It is drawn over the canvas, which keeps the arena,
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
+import type { BattleInfo, MoveInfo } from '../../../core/presentation/battleInfo';
 import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
@@ -76,6 +77,10 @@ export interface BattleModel {
   card?: (BattlePanel & { pinned?: boolean }) | null;
   /** The battle log (H): its filter tabs and the lines of the open one. */
   log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
+  /** Pocket look: the Battle Info page and the move card (structured), and the turn for the Battle Log. */
+  pkInfo?: (BattleInfo & { foeFile: string | null; meFile: string | null }) | null;
+  pkMove?: MoveInfo | null;
+  turn?: number;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;
   /** A notice over the field that waits for an input (the Extended Cut's Second Shot): the mock-ups' confirm box with one button. */

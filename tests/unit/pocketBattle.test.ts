@@ -103,3 +103,39 @@ describe('the Pocket battle Party and Bag windows', () => {
     expect(html).toContain('Turtwig<br>Lv 5');
   });
 });
+
+describe('the Pocket battle pages: Battle Info, a move card, the Battle Log', () => {
+  const side = (name: string, stages: [string, number][]) => ({ speciesId: name.toLowerCase(), shiny: false, name, sub: 'Lv 4 · Wild', types: ['normal', 'flying'], ability: 'Not shown yet', held: 'Not seen yet', status: 'Healthy', stages, note: '' });
+  const ST: [string, number][] = [['Atk', 1], ['Def', 0], ['Sp. Atk', 0], ['Sp. Def', 0], ['Speed', -2]];
+  const info = { foe: side('Starly', ST), me: { ...side('Turtwig', ST.map(([w]) => [w, 0] as [string, number])), note: 'HP 25 of 25' }, mid: [{ em: 'Weather', b: 'Rain', span: '3 turns left.' }, { em: 'Field', b: 'None', span: 'No terrain is up.' }, { em: 'Your side', b: 'Clear', span: 'No traps.' }, { em: 'Catch odds', b: '44%', span: 'Plain ball.' }], foeFile: null, meFile: null };
+  it('Battle Info: both sides, stat stages up and down, four field cards, Battle Log and Back', () => {
+    const html = pkBattle(model({ pkInfo: info, panels: [{ head: 'x', chips: [], facts: [], lines: [] }] }));
+    expect(pkPageOf(html)).toEqual({ id: 'b-info', tier: 26, hud: true });
+    expect(count(html, 'class="in-side')).toBe(2);
+    expect(count(html, 'stg up')).toBe(1);
+    expect(count(html, 'stg dn')).toBe(1);
+    expect(count(html, 'class="in-c')).toBe(4);
+    expect(html).toContain('in-c w');
+    expect(html).toContain('data-act="pkLog"');
+    expect(pkBattle(model({ pkInfo: { ...info, foe: null } }))).toContain('???');
+  });
+  it('a move card: numbers, type into type, same-type bonus, Use it; a status move says it does no damage', () => {
+    const m = { name: 'Tackle', type: 'normal', category: 'Physical', contact: true, power: '40', accuracy: '100', pp: '35/35', text: 'Slams into the foe.', vs: { foe: 'Starly', foeTypes: ['normal', 'flying'], mult: 0.5, stab: true, user: 'Turtwig', word: 'Not very effective.' } };
+    const html = pkBattle(model({ pkMove: m }));
+    expect(pkPageOf(html)?.id).toBe('moveinfo');
+    expect(html).toContain('Against Starly');
+    expect(html).toContain('× 0.5');
+    expect(html).toContain('Same type as Turtwig');
+    expect(html).toContain('data-act="pkUse"');
+    expect(pkBattle(model({ pkMove: { ...m, category: 'Status', vs: null } }))).toContain('status move');
+  });
+  it('the Battle Log: the lines newest last, the filter tabs, the turn, Back to battle', () => {
+    const html = pkBattle(model({ log: { tabs: ['All', 'Damage'], index: 1, lines: ['A wild Starly appeared!', 'Go! Turtwig!'] }, turn: 3 }));
+    expect(pkPageOf(html)?.id).toBe('b-log');
+    expect(count(html, 'gx-lg-row')).toBe(2);
+    expect(html).toContain('Turn 3');
+    expect(html).toMatch(/class="on" data-act="log" data-arg="1"/);
+    expect(html).toContain('data-act="logClose"');
+    expect(pkBattle(model({ log: { tabs: ['All'], index: 0, lines: [] } }))).toContain('Nothing here yet.');
+  });
+});

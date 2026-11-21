@@ -576,6 +576,32 @@ test('Pocket look: a battle is the mock-up HUD; Party and Bag open as pills and 
   await expect(bag.locator('.bb-use')).toContainText('Use');
   await fits(page, 'Battle', 'b-bag');
   await step(page, 'Escape');
+  // I on a move: the move card; Back closes it. H: the Battle Log page; Back to battle closes it.
+  await hud.locator('[data-act="tab"]').first().click();
+  await step(page, 'i');
+  await onPkPage(page, 'Battle', 'moveinfo');
+  const mi = pkView(page, 'Battle', 'moveinfo');
+  await expect(mi.locator('.mi-card b').first()).toBeVisible();
+  await expect(mi.locator('[data-act="pkUse"]')).toHaveText('Use it');
+  await fits(page, 'Battle', 'moveinfo');
+  await mi.locator('.mi-vs [data-act="info"]').click();
+  await onPkPage(page, 'Battle', 'battle');
+  await step(page, 'h');
+  await onPkPage(page, 'Battle', 'b-log');
+  const lg = pkView(page, 'Battle', 'b-log');
+  await expect(lg.locator('.gx-lg-row').first()).toBeVisible();
+  await fits(page, 'Battle', 'b-log');
+  await lg.locator('.lg-sum [data-act="logClose"]').click();
+  await onPkPage(page, 'Battle', 'battle');
+  // Battle Info (I away from the moves): both sides and the four field cards; Battle Log goes to the log.
+  await page.evaluate(() => { const s = (window as any).__pkr.game.scene.getScene('Battle'); s.menu = null; s.toggleInfo(); });
+  await onPkPage(page, 'Battle', 'b-info');
+  const inf = pkView(page, 'Battle', 'b-info');
+  await expect(inf.locator('.in-side')).toHaveCount(2);
+  await expect(inf.locator('.in-c')).toHaveCount(4);
+  await fits(page, 'Battle', 'b-info');
+  await inf.locator('.in-foot [data-act="pkLog"]').click();
+  await onPkPage(page, 'Battle', 'b-log');
   expect(await runNow(page)).toBe(before);
   expect(errors).toEqual([]);
 });
