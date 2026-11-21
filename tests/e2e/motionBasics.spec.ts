@@ -311,6 +311,68 @@ test('HP bar and danger: a drop jolts the plate; under a fifth the plate glows, 
   expect(errors).toEqual([]);
 });
 
+test('light and heavy landings: a heavy one jolts the plates and bounces the foe, a light one bounces; every entrance cries', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await startBattle(page, 'motion-weight');
+  const rest = await look(page, 'player');
+  const foeRest = await look(page, 'enemy');
+  // Every frame: the cry's round rings (the send-out's own ring is flat), how far the foe was bounced, the plates' tilt
+  // and how far your Pokémon leaned.
+  const watch = () =>
+    page.evaluate(() => {
+      const w = window as any;
+      const b = w.__pkr.game.scene.getScene('Battle');
+      w.__land = { rings: 0, foeUp: 0, plate: 0, lean: 0 };
+      // Only ever off() with the function itself: off('update') with none takes the scene's own listeners too.
+      if (w.__landWatch) b.events.off('update', w.__landWatch);
+      w.__landWatch = () => {
+        const rings = b.children.list.filter((o: any) => o.type === 'Ellipse' && o.isStroked && Math.abs(o.width - o.height) < 1).length;
+        w.__land.rings = Math.max(w.__land.rings, rings);
+        // Lifted off its feet, not its own standing loop (which rises too, and keeps a resting place while it runs).
+        if (!b.enemySprite.getData('standBase')) w.__land.foeUp = Math.max(w.__land.foeUp, b.spotXY('enemy').y - b.enemySprite.y);
+        w.__land.plate = Math.max(w.__land.plate, Math.abs(b.enemyBox.container.angle), Math.abs(b.playerBox.container.angle));
+        if (b.playerSprite?.visible) w.__land.lean = Math.max(w.__land.lean, Math.abs(b.playerSprite.angle));
+      };
+      b.events.on('update', w.__landWatch);
+    });
+  const seen = () => page.evaluate(() => (window as any).__land);
+
+  // A heavy one (Snorlax): the screen jolts, the plates rattle, the foe is bounced off its feet; three wide rings.
+  await start(page, `b.recallMoment('player', b.playerSprite, null)`);
+  await expect.poll(() => over(page), { timeout: 5000 }).toBe(true);
+  await page.evaluate(() => { (window as any).__pkr.game.scene.getScene('Battle').shown.player.speciesId = 'snorlax'; });
+  await watch();
+  await start(page, `b.sendMoment('player', b.shown.player, null)`);
+  await expect.poll(() => over(page), { timeout: 8000 }).toBe(true);
+  const heavy = await seen();
+  expect(heavy.rings).toBe(3);
+  expect(heavy.foeUp).toBeGreaterThan(10);
+  expect(heavy.plate).toBeGreaterThan(0.3);
+  expect(heavy.lean).toBeGreaterThan(3);
+
+  // A light one (Pikachu): two small rings, and nobody else is shaken.
+  await start(page, `b.recallMoment('player', b.playerSprite, null)`);
+  await expect.poll(() => over(page), { timeout: 5000 }).toBe(true);
+  await page.evaluate(() => { (window as any).__pkr.game.scene.getScene('Battle').shown.player.speciesId = 'pikachu'; });
+  await watch();
+  await start(page, `b.sendMoment('player', b.shown.player, null)`);
+  await expect.poll(() => over(page), { timeout: 8000 }).toBe(true);
+  const light = await seen();
+  expect(light.rings).toBe(2);
+  expect(light.foeUp).toBeLessThan(2);
+  expect(light.plate).toBe(0);
+  await page.evaluate(() => { const w = window as any; w.__pkr.game.scene.getScene('Battle').events.off('update', w.__landWatch); });
+
+  // Both end where the battle expects them, whole and upright, with nothing left over (a swapped-in species may still
+  // be drawn with its stand-in picture, so cropping is not asked of it).
+  await page.waitForTimeout(300);
+  expect(await look(page, 'player')).toMatchObject({ x: rest.homeX, y: rest.homeY, alpha: 1, angle: 0, solid: 0 });
+  expect(await look(page, 'enemy')).toMatchObject({ x: foeRest.x, y: foeRest.y, alpha: 1, angle: 0, solid: 0 });
+  expect(errors).toEqual([]);
+});
+
 test('a shiny entrance: stars circle in and go, the SHINY chip pins itself to the plate, and leaves with the shiny', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));

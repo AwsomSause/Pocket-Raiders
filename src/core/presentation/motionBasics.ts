@@ -104,10 +104,10 @@ export const sendOpenAt = (level: ClipLevel): number => (level === 'full' ? 900 
  * Send-out, from the moment the ball leaves the hand at `from`: 1500 ms at Full, 550 ms Reduced, nothing
  * at Off. The cue "open" is when the Pokémon appears (its cry, the ball's own opening effect).
  */
-export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionClip {
+export function sendClip(mon: MonSpot, from: Point, level: ClipLevel, weight: SendWeight = 'normal'): MotionClip {
   const b = new ClipBuilder('send', level);
   const open = sendOpenAt(level);
-  const m = b.part('mon', { dy: 0, sx: 0, sy: 0, white: 0, shadow: 0 });
+  const m = b.part('mon', { dy: 0, sx: 0, sy: 0, white: 0, shadow: 0, rot: 0 });
   b.fx({ kind: 'cue', at: open, name: 'open' });
   if (level === 'off') {
     m.at(0).set({ sx: 1, sy: 1, shadow: 1 });
@@ -123,7 +123,8 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
     m.at(open).to(200, { s: 1 }, 'out');
     m.at(open).to(200, { shadow: 1 });
     b.fx({ kind: 'cue', at: open, name: 'plate' });
-    b.beat(0, 'Ball thrown').beat(open, 'Appears');
+    b.fx({ kind: 'cue', at: open + 200, name: 'cry' });
+    b.beat(0, 'Ball thrown').beat(open, 'Appears').beat(open + 200, 'Its cry');
     return b.end(open + 250);
   }
   const land = 500;
@@ -142,7 +143,74 @@ export function sendClip(mon: MonSpot, from: Point, level: ClipLevel): MotionCli
   // The info bar comes back with the new name while it is still settling (pass 2, Switch).
   b.fx({ kind: 'cue', at: open + 100, name: 'plate' });
   b.beat(0, 'Ball thrown').beat(land, 'Ball lands and bounces').beat(open, 'Bursts open').beat(open + 100, 'The info bar comes back').beat(open + 240, 'Lands');
-  return b.end(open + 600);
+  // Pass 11 (Light and Heavy): weight is a character trait. A light one bounces twice before its cry; a heavy one
+  // comes down like a dropped piano: the screen jolts, dust goes both ways, the plates rattle, the other side is
+  // bounced off its feet ("thud"). Every entrance ends with a cry sized to the Pokémon ("cry", see cryClip).
+  const L = open + 240;
+  const w = SEND_WEIGHT[weight];
+  if (weight === 'light') m.at(L + 200).to(100, { dy: -18 }, 'out').to(100, { dy: 0 }, 'in').to(80, { dy: -9 }, 'out').to(80, { dy: 0 }, 'in');
+  if (weight === 'heavy') {
+    b.fx({ kind: 'cue', at: L, name: 'thud' });
+    b.fx({ kind: 'dust', at: L, x: mon.x - 50, y: mon.y, n: 8, big: 1.4 });
+    b.fx({ kind: 'dust', at: L, x: mon.x + 50, y: mon.y, n: 8, big: 1.4 });
+    b.beat(L, 'Comes down hard: the screen jolts');
+  }
+  if (weight === 'light') b.beat(L + 200, 'Bounces twice');
+  // The cry: it leans back and thrusts forward (the player's faces right, toward the foe; the foe's faces left) while
+  // the rings leave its mouth ("cry": the screen draws them from its real size, see cryClip).
+  const d = mon.side === 'player' ? 1 : -1;
+  const c = L + w.cry;
+  m.at(c).to(120, { rot: -6 * d, sx: 0.96 }, 'out').to(80, { rot: 5 * d, sx: 1.05 }, 'in3').wait(200).to(300, { rot: 0, sx: 1 }, 'el');
+  b.fx({ kind: 'cue', at: c, name: 'cry' });
+  b.beat(c, 'Leans back for its cry').beat(c + 120, 'Thrusts forward');
+  return b.end(open + 600 + w.tail);
+}
+
+/** How a Pokémon lands when it is sent out (pass 11, Light and Heavy). */
+export type SendWeight = 'light' | 'normal' | 'heavy';
+
+/**
+ * The mockup's landings: when the cry comes after the landing and how much longer the entrance runs (ms), and the
+ * weights (kg) that make a Pokémon light or heavy. The mockup's light ones (Pikachu, Eevee, Pidgey, Hoothoot,
+ * Charmander) weigh 22 kg or less; its heavy ones stand heavy, and anything 300 kg or more lands heavy too.
+ */
+export const SEND_WEIGHT = {
+  light: { cry: 600, tail: 500 },
+  // 260, not the mockup's 250: the landing's settle ends then, so the lean starts from a Pokémon standing still.
+  normal: { cry: 260, tail: 300 },
+  heavy: { cry: 300, tail: 400 },
+  lightKg: 22,
+  heavyKg: 300,
+} as const;
+
+/** How a Pokémon lands: heavy if it stands heavy or weighs 300 kg or more, light at 22 kg or less. */
+export function sendWeight(dex: number, types: readonly string[], kg: number | undefined, dynamaxed = false): SendWeight {
+  if (standKind(dex, types, dynamaxed) === 'heavy' || (kg ?? 0) >= SEND_WEIGHT.heavyKg) return 'heavy';
+  return kg !== undefined && kg > 0 && kg <= SEND_WEIGHT.lightKg ? 'light' : 'normal';
+}
+
+/** A cry is big for a heavy Pokémon or one drawn taller than 230 px (pass 11). */
+export const CRY = { bigH: 230, rings: 2, bigRings: 3, r: 80, bigR: 150, step: 40, gap: 90, w: 4, bigW: 6, d: 450, shakeMs: 300, shake: 5 } as const;
+
+/**
+ * Its cry's rings (pass 11), from the "cry" cue of the send-out (which leans the Pokémon back and forward): rings leave
+ * its mouth sized to it, two small ones, or three wide ones and a shake ("shake") for a big one. `mon.x`/`mon.y` are
+ * its feet, `width` how wide it is drawn, `color` its type's colour (the first ring). Off: nothing.
+ */
+export function cryClip(mon: MonSpot, width: number, color: number, big: boolean, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('cry', level);
+  if (level === 'off') return b.end(0);
+  // The player's Pokémon faces right (toward the foe), the foe's faces left.
+  const d = mon.side === 'player' ? 1 : -1;
+  const mouth = { x: mon.x + d * width * 0.3, y: mon.y - mon.h * 0.68 };
+  const n = big ? CRY.bigRings : CRY.rings;
+  const t0 = level === 'full' ? 200 : 0;
+  // The rings come out on the thrust (200 ms into the lean).
+  for (let i = 0; i < n; i++) b.fx({ kind: 'ring', at: t0 + i * CRY.gap, x: mouth.x, y: mouth.y, r0: 14, r1: (big ? CRY.bigR : CRY.r) + i * CRY.step, flat: 1, d: CRY.d, color: i ? 0xffffff : color, w: big ? CRY.bigW : CRY.w });
+  const end = t0 + (n - 1) * CRY.gap + CRY.d;
+  if (big && level === 'full') b.fx({ kind: 'cue', at: t0, name: 'shake' });
+  b.beat(t0, big ? 'Wide rings and a shake' : 'Rings from its mouth');
+  return b.end(end);
 }
 
 /**

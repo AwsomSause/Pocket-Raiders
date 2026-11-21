@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -1267,18 +1267,78 @@ export class BattleScene extends Phaser.Scene {
       visual = this.showSprite(side, mon, true, false);
       ballOpenEffect(this, ballId, at.x, at.y - 50, this.motion);
     };
-    const run = playClip(this, sendClip({ x: at.x, y: at.y, h: 0, side }, start, level), this.clipHost({ mon: { kind: 'mon', get: () => visual }, ball: { kind: 'free', get: () => ball } }, {
+    const sp = getSpecies(services().session.content, mon.speciesId);
+    const weight = sendWeight(sp.dex, sp.types, sp.weight, !!mon.dynamaxed);
+    let cry: Promise<void> | null = null;
+    const run = playClip(this, sendClip({ x: at.x, y: at.y, h: 0, side }, start, level, weight), this.clipHost({ mon: { kind: 'mon', get: () => visual }, ball: { kind: 'free', get: () => ball } }, {
       cue: (name) => {
         if (name === 'throw') playSfx(this, 'se.ball_throw');
         if (name === 'open') show();
         if (name === 'plate') onPlate?.();
+        if (name === 'thud') this.thudMoment(side);
+        if (name === 'cry' && visual) cry = this.cryMoment(side, visual, mon, weight === 'heavy');
       },
     }));
     await run.done;
     ball?.destroy();
     show();
+    if (cry) await cry;
     const shown = visual as Visual | null;
     if (shown?.active) this.standUp(shown, mon);
+  }
+
+  /**
+   * A heavy Pokémon lands (redesign pass 11, Light and Heavy): the screen jolts, both plates rattle, and the Pokémon
+   * across the field is bounced off its feet. Presentation only.
+   */
+  private thudMoment(side: Side): void {
+    if (this.clipLevel() !== 'full') return;
+    this.wxShake(11, 350);
+    const rate = animationTimeScale(services().session.settings);
+    for (const box of [this.playerBox, this.enemyBox]) {
+      const c = box?.container;
+      if (!c?.visible) continue;
+      const a0 = c.angle;
+      this.tweens.chain({ targets: c, tweens: [{ angle: a0 + 0.8, duration: 40 * rate }, { angle: a0 - 0.8, duration: 40 * rate }, { angle: a0, duration: 200 * rate, ease: 'Elastic.easeOut' }] });
+    }
+    if (this.duo) return;
+    const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+    const other = this.condSprite(otherSide);
+    const otherMon = this.shown[otherSide];
+    if (!other?.visible || !otherMon || !(other instanceof Phaser.GameObjects.Sprite)) return;
+    standStill(this, other);
+    const y0 = this.spotXY(otherSide).y;
+    this.tweens.chain({
+      targets: other,
+      tweens: [{ y: y0 - 16, delay: 40 * rate, duration: 100 * rate, ease: 'Quad.easeOut' }, { y: y0, duration: 160 * rate, ease: 'Bounce.easeOut' }],
+      onComplete: () => other.active && other.visible && this.standUp(other, otherMon),
+    });
+  }
+
+  /**
+   * Its cry (redesign pass 11): as the send-out leans it back and forward, rings leave its mouth sized to it (wide
+   * rings and a shake for a heavy or very tall one). Resolves when the rings are gone.
+   */
+  private cryMoment(side: Side, visual: Visual, mon: PokemonInstance, heavy: boolean): Promise<void> {
+    const level = this.clipLevel();
+    if (level === 'off' || !visual.active) return Promise.resolve();
+    try {
+      // Its drawn body, not the padded frame: the top of its head above its feet, and about how wide it is.
+      const h = visual instanceof Phaser.GameObjects.Sprite ? this.headHeight(visual) : 120;
+      const w = visual instanceof Phaser.GameObjects.Sprite ? Math.max(60, visual.displayWidth * 0.6) : 120;
+      const big = heavy || h > CRY.bigH;
+      const sp = getSpecies(services().session.content, mon.speciesId);
+      const color = TYPE_COLORS[sp.types[0] ?? 'normal'] ?? 0xffffff;
+      const at = this.spotXY(side);
+      const run = playClip(this, cryClip({ x: at.x, y: at.y, h, side }, w, color, big, level), this.clipHost({}, {
+        cue: (name) => {
+          if (name === 'shake') this.wxShake(CRY.shake, CRY.shakeMs);
+        },
+      }));
+      return run.done;
+    } catch {
+      return Promise.resolve();
+    }
   }
 
   /**

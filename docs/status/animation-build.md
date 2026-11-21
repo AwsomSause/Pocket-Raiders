@@ -76,6 +76,12 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   the arena brightens for a beat and three rings go out; a yellow "SHINY" chip springs up over it and flies to the top
   of its name plate, where it stays until a plain Pokémon takes the plate (`shinyClip`). Reduced/Off: just the chip.
   Limit: the mockup's slow shimmer on the shiny afterwards is not in.
+- Light and heavy landings, and the cry (pass 11): a sent-out Pokémon of 22 kg or less bounces twice (18 px, then
+  9) before its cry; one that stands heavy or weighs 300 kg or more comes down hard: an 11 px jolt, dust both ways,
+  both plates rattle and the Pokémon across the field is bounced 16 px off its feet (`sendWeight`, `sendClip`). Every
+  entrance ends with its cry: it leans back and thrusts forward while rings leave its mouth in its type's colour, two
+  small ones, or three wide ones and a shake for a heavy or very tall one (`cryClip`). Reduced: the rings only.
+  Limit: a Pokémon whose art is still loading is measured as a 120 px stand-in for the rings.
 - Wild encounter (pass 5): a lone wild Pokémon (not doubles, raids, totems or the Phantom look's own card) opens with
   two white flashes; the screen is nine dark bars that pull apart left and right in turn; the Pokémon slides in from
   the right as a black shape; its colour floods in with its cry, three white rings and a hop; then its plate flies in

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, FIRST_TAG, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, sendWeight, SEND_WEIGHT, CRY, cryClip, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -76,9 +76,9 @@ describe('battle basics match the redesign mockups', () => {
     expect(c.fx.map((f) => [f.kind, f.at])).toEqual([['dim', 300], ['dust', 920]]);
   });
 
-  it('send-out: the ball lands at 500 ms, bounces, bursts at 900 ms; the Pokémon stretches, lands and settles (1500 ms)', () => {
+  it('send-out: the ball lands at 500 ms, bounces, bursts at 900 ms; the Pokémon stretches, lands, settles and cries (1800 ms)', () => {
     const c = sendClip(ME, { x: 100, y: 300 }, 'full');
-    expect(c.length).toBe(1500);
+    expect(c.length).toBe(1800);
     expect(sendOpenAt('full')).toBe(900);
     expect(sampleClip(c, 500).ball).toMatchObject({ x: 312, y: 420 });
     // The bounce: 26 px up at its top.
@@ -90,7 +90,7 @@ describe('battle basics match the redesign mockups', () => {
     expect(sampleClip(c, 1140).mon).toMatchObject({ sx: 1.22, sy: 0.8, dy: 0 });
     expect(clipEnd(c).mon).toMatchObject({ sx: 1, sy: 1, dy: 0, white: 0, shadow: 1 });
     expect(c.fx.filter((f) => f.kind !== 'cue').map((f) => [f.kind, f.at])).toEqual([['dust', 500], ['flash', 900], ['ring', 900], ['dust', 1140]]);
-    expect(c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && f.name)).toEqual(['throw', 'bounce', 'open', 'plate']);
+    expect(c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && f.name)).toEqual(['throw', 'bounce', 'open', 'plate', 'cry']);
     // The foe's ball spins the other way.
     expect(clipEnd(sendClip(FOE, throwFromSpot('enemy'), 'full')).ball!.rot).toBe(-540);
   });
@@ -297,6 +297,75 @@ describe('standing (pass 11)', () => {
     expect(standLook('twitch')).toMatchObject({ ms: 1100, hop: 9, hopEvery: 2600 });
     expect(standLook('sway')).toMatchObject({ ms: 1900, tilt: 2.5, tiltMs: 2300 });
     for (const k of ['steady', 'hover', 'float', 'heavy', 'twitch', 'sway'] as const) expect(Object.keys(standLook(k))).not.toContain('x');
+  });
+});
+
+describe('light and heavy landings, and the cry (pass 11)', () => {
+  const cues = (c: MotionClip) => c.fx.filter((f) => f.kind === 'cue').map((f) => f.kind === 'cue' && [f.name, f.at]);
+  it('weighs Pokémon as the mockup does: its small ones land light, its heavy ones heavy', () => {
+    for (const [dex, kg] of [[25, 6], [133, 6.5], [16, 1.8], [163, 21.2], [4, 8.5]] as const) expect(sendWeight(dex, ['normal'], kg)).toBe('light');
+    expect(sendWeight(143, ['normal'], 460)).toBe('heavy');
+    expect(sendWeight(9, ['water'], 85.5)).toBe('heavy');
+    expect(sendWeight(76, ['rock', 'ground'], 300)).toBe('heavy');
+    expect(sendWeight(6, ['fire', 'flying'], 90.5)).toBe('normal');
+    expect(sendWeight(448, ['fighting', 'steel'], 54)).toBe('normal');
+    // The boundaries: 22 kg is still light, a giant always lands heavy, and no weight known is normal.
+    expect(sendWeight(19, ['normal'], 22)).toBe('light');
+    expect(sendWeight(19, ['normal'], 22.1)).toBe('normal');
+    expect(sendWeight(25, ['electric'], 6, true)).toBe('heavy');
+    expect(sendWeight(19, ['normal'], undefined)).toBe('normal');
+    expect(sendWeight(19, ['normal'], 0)).toBe('normal');
+  });
+  it('a light one bounces twice after landing (18 px, then 9) and cries 600 ms after it lands', () => {
+    const c = sendClip(ME, throwFromSpot('player'), 'full', 'light');
+    const L = 1140;
+    expect(sampleClip(c, L + 300).mon!.dy).toBeCloseTo(-18);
+    expect(sampleClip(c, L + 400).mon!.dy).toBeCloseTo(0);
+    expect(sampleClip(c, L + 480).mon!.dy).toBeCloseTo(-9);
+    expect(clipEnd(c).mon!.dy).toBe(0);
+    expect(cues(c)).toContainEqual(['cry', L + SEND_WEIGHT.light.cry]);
+    expect(c.length).toBe(1500 + 500);
+  });
+  it('a heavy one thuds as it lands, with dust both ways, and cries 300 ms later', () => {
+    const c = sendClip(ME, throwFromSpot('player'), 'full', 'heavy');
+    expect(cues(c)).toContainEqual(['thud', 1140]);
+    expect(cues(c)).toContainEqual(['cry', 1440]);
+    const dust = c.fx.filter((f) => f.kind === 'dust' && f.at === 1140).map((f) => f.kind === 'dust' && f.x);
+    expect(dust).toEqual([ME.x, ME.x - 50, ME.x + 50]);
+    expect(c.length).toBe(1900);
+    // Nobody but the heavy one thuds.
+    expect(cues(sendClip(ME, throwFromSpot('player'), 'full', 'light')).map((x) => x && x[0])).not.toContain('thud');
+    expect(cues(sendClip(ME, throwFromSpot('player'), 'reduced', 'heavy')).map((x) => x && x[0])).not.toContain('thud');
+  });
+  it('the cry leans it back and thrusts it forward (the foe the other way), and rings leave the mouth', () => {
+    const c = sendClip(ME, throwFromSpot('player'), 'full');
+    const t = 1140 + SEND_WEIGHT.normal.cry;
+    expect(sampleClip(c, t + 120).mon).toMatchObject({ rot: -6, sx: 0.96 });
+    expect(sampleClip(c, t + 200).mon!.rot).toBeCloseTo(5);
+    expect(clipEnd(c).mon).toMatchObject({ rot: 0, sx: 1 });
+    expect(sampleClip(sendClip(FOE, throwFromSpot('enemy'), 'full'), t + 120).mon!.rot).toBe(6);
+    // The lean starts once the landing has settled.
+    expect(sampleClip(c, t).mon).toMatchObject({ sx: 1, sy: 1, dy: 0 });
+  });
+  it('the rings: two small from the mouth, or three wide and a shake when it is big', () => {
+    const spot: MonSpot = { x: 300, y: 420, h: 200, side: 'player' };
+    const c = cryClip(spot, 100, 0xff0000, false, 'full');
+    const rings = c.fx.filter((f) => f.kind === 'ring');
+    expect(rings.map((f) => f.kind === 'ring' && [f.at, f.r1, f.color, f.w])).toEqual([[200, 80, 0xff0000, 4], [290, 120, 0xffffff, 4]]);
+    expect(rings[0]).toMatchObject({ x: 330, y: 420 - 136, r0: 14, flat: 1 });
+    expect(cues(c)).toEqual([]);
+    expect(c.length).toBe(290 + 450);
+    const big = cryClip({ ...spot, side: 'enemy' }, 100, 0xff0000, true, 'full');
+    expect(big.fx.filter((f) => f.kind === 'ring').map((f) => f.kind === 'ring' && f.r1)).toEqual([150, 190, 230]);
+    expect(big.fx.find((f) => f.kind === 'ring')).toMatchObject({ x: 270, w: CRY.bigW });
+    expect(cues(big)).toEqual([['shake', 200]]);
+  });
+  it('Reduced: rings only (no lean, no shake); Off does nothing', () => {
+    const spot: MonSpot = { x: 300, y: 420, h: 200, side: 'player' };
+    const r = cryClip(spot, 100, 0xff0000, true, 'reduced');
+    expect(r.fx.map((f) => f.kind)).toEqual(['ring', 'ring', 'ring']);
+    expect(sendClip(ME, throwFromSpot('player'), 'reduced').segs.some((g) => g.prop === 'rot')).toBe(false);
+    expect(cryClip(spot, 100, 0xff0000, true, 'off').length).toBe(0);
   });
 });
 
