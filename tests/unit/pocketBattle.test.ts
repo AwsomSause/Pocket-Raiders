@@ -119,6 +119,19 @@ describe('the Pocket battle pages: Battle Info, a move card, the Battle Log', ()
     expect(html).toContain('data-act="pkLog"');
     expect(pkBattle(model({ pkInfo: { ...info, foe: null } }))).toContain('???');
   });
+  it('the Status page: turn order, weather, money, the event goal, the bench with HP, the foe team and how many are unseen', () => {
+    const mon = (name: string, hp: number) => ({ speciesId: name.toLowerCase(), shiny: false, name, hp, ko: hp <= 0, file: null });
+    const st = { turn: 3, order: [{ name: 'Blastoise', speed: 78 }, { name: 'Charizard', speed: 71 }], trickRoom: false, weather: { em: 'Weather', b: 'Rain', span: '3 turns left.' }, bench: [mon('Pikachu', 1), mon('Gengar', 0)], foeName: "Blue's team", foes: [mon('Arcanine', 0), mon('Blastoise', 0.7)], unseen: 2, money: '₽ 2,280', event: { name: 'Homeland Week', goal: 'Defeat 3 Gym Leaders', left: '2 of 3 · 3 days left' } };
+    const html = pkBattle(model({ pkStatus: st, panels: [{ head: 'x', chips: [], facts: [], lines: [] }] }));
+    expect(pkPageOf(html)?.id).toBe('b-status');
+    expect(html).toContain('Speed 78');
+    expect(html).toContain('wxi rain');
+    expect(html).toContain('Homeland Week');
+    expect(html).toContain('2 more not seen yet');
+    expect(count(html, '<s><u')).toBe(2);
+    expect(html).toContain('data-act="pkInfoOpen"');
+    expect(pkBattle(model({ pkStatus: { ...st, event: null, bench: [] } }))).toContain('No one else in your party');
+  });
   it('a move card: numbers, type into type, same-type bonus, Use it; a status move says it does no damage', () => {
     const m = { name: 'Tackle', type: 'normal', category: 'Physical', contact: true, power: '40', accuracy: '100', pp: '35/35', text: 'Slams into the foe.', vs: { foe: 'Starly', foeTypes: ['normal', 'flying'], mult: 0.5, stab: true, user: 'Turtwig', word: 'Not very effective.' } };
     const html = pkBattle(model({ pkMove: m }));

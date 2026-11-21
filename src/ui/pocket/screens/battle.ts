@@ -100,12 +100,31 @@ function logPage(l: NonNullable<BattleModel['log']>, turn: number): string {
   return `<i class="gx-bt-dim" data-nocheck${act('logClose')}></i><div class="gp-h gx-gp" data-key="lg-head"><b>Battle Log</b><span>What happened so far, newest at the bottom.</span></div>${list}${sum}${keys2([['1-5', 'filter'], ['H', 'close', 'logClose']])}`;
 }
 
+const WXI: Record<string, string> = { Rain: 'rain', Sun: 'sun', Sand: 'sand', Hail: 'snow', Snow: 'snow', Clear: 'clear' };
+/** The battle Status page (mock-up `b-status`): turn order, weather, money, the event's goal, your bench, the foe's team so far. */
+function statusPage(d: NonNullable<BattleModel['pkStatus']>): string {
+  const mons = (ms: NonNullable<BattleModel['pkStatus']>['bench'], bars: boolean): string => ms.map((m) => `<i class="${m.ko ? 'ko' : ''}" title="${esc(m.name)}">${m.file ? fitPic(monArt(m.file), 38, 34, '', 1) : '<b>?</b>'}${bars ? `<s><u style="width:${Math.round(Math.max(0, Math.min(1, m.hp)) * 100)}%"></u></s>` : ''}</i>`).join('');
+  const order = d.order.map((o, k) => `<p><i>${k + 1}</i>${esc(o.name)} <u>Speed ${o.speed}</u></p>`).join('') || '<p>Hidden until it moves</p>';
+  const w = d.weather;
+  const cards = [
+    `<div><b>Turn order</b>${order}${d.trickRoom ? '<p>Trick Room: the slower one goes first.</p>' : ''}</div>`,
+    `<div><b>Weather</b><p>${WXI[w.b] ? `<i class="wxi ${WXI[w.b]}"></i>` : ''}${esc(w.b)}</p><p style="font-size:${fitBody(w.span, 180, 40, [13, 12, 11], 1.35)}px">${esc(w.span)}</p></div>`,
+    `<div><b>This battle</b><p>Turn ${d.turn}</p>${d.money ? `<p>${spr(itemArt('amulet_coin'), 0.5)}${esc(d.money)} in your pocket</p>` : ''}</div>`,
+    d.event ? `<div><b style="font-size:${fit(d.event.name, 180, 20, 13, 0.6)}px">${esc(d.event.name)}</b><p>${esc(d.event.goal)}</p><p>${esc(d.event.left)}</p></div>` : '<div><b>Events</b><p>No event on right now.</p></div>',
+    `<div class="wide"><b>Your bench</b><span>${mons(d.bench, true) || '<em>No one else in your party</em>'}</span></div>`,
+    `<div class="wide"><b style="font-size:${fit(d.foeName, 360, 20, 13, 0.6)}px">${esc(d.foeName)}</b><span>${mons(d.foes, false) || '<em>Hidden until it moves</em>'}${d.unseen ? `<em>${d.unseen} more not seen yet</em>` : ''}</span></div>`,
+  ].join('');
+  const foot = `<div class="in-foot" data-key="st-foot"><div class="btn on"${act('pkInfoOpen')}><b>Battle Info</b></div><div class="btn"${act('pkLog')}><b>Battle Log</b></div><div class="btn"${act('info')}><b>Back</b></div></div>`;
+  return `<i class="gx-bt-dim" data-nocheck${act('info')}></i><div class="gp-h gx-gp" data-key="st-head"><b>Status</b><span>Everything the one-line bar folds away. Looking here does not use your turn.</span></div><div class="stg23" data-key="st-grid">${cards}</div>${foot}${keys2([['I', 'battle info', 'pkInfoOpen'], ['H', 'battle log', 'pkLog'], ['Esc', 'back', 'info']])}`;
+}
+
 /** A keys bar for the battle pages. */
 const keys2 = (ks: readonly (readonly [string, string, string?])[]): string => `<div class="keys k20 gx-bt-keys">${ks.map(([k, w, a]) => `<span${a ? act(a) : ''}><kbd>${esc(k)}</kbd>${esc(w)}</span>`).join('')}</div>`;
 
 export function pkBattle(d: BattleModel): string {
   // Pocket pages over the battle: Battle Info, a move's card, the Battle Log (the arena stays drawn underneath).
   if (d.pkInfo && !d.evolve) return page('b-info', 26, `<div class="scr battle b6 ov16 inf gx-bt gx-bt-page" data-key="b-info">${infoPage(d.pkInfo)}</div>`, true);
+  if (d.pkStatus && !d.evolve) return page('b-status', 26, `<div class="scr battle b6 ov16 st23p gx-bt gx-bt-page" data-key="b-status">${statusPage(d.pkStatus)}</div>`, true);
   if (d.pkMove && !d.evolve) return page('moveinfo', 26, `<div class="scr battle b2 minfo gx-bt gx-bt-page" data-key="moveinfo">${movePage(d.pkMove)}</div>`, true);
   if (d.log && !d.evolve) return page('b-log', 26, `<div class="scr battle b6 ov16 lg gx-bt gx-bt-page" data-key="b-log">${logPage(d.log, d.turn ?? 0)}</div>`, true);
   if (d.level && !d.evolve && !d.menu) return pkLevel({ ...d.level, types: d.level.types ?? [], say: d.text, go: 'say' });
@@ -132,7 +151,7 @@ export function pkBattle(d: BattleModel): string {
   // The run header as the status strip under the foe's plate: "Stage 1 · Candlelit Wishes · Level 1/30 · ₽0".
   const parts = d.header.split(/\s*·\s*|\n/).map((x) => x.trim()).filter(Boolean);
   const money = parts.find((x) => /^₽/.test(x)), rest = parts.filter((x) => x !== money);
-  const strip = parts.length ? `<div class="bar23 gx-bt-bar" ${d.foes.length > 1 ? ` style="top:${d.foes.length * 60 + 36}px"` : ''} data-key="bt-bar"><b>${esc(rest[0] ?? '')}</b><span>${esc(rest.slice(1).join(' · '))}</span>${money ? `<i>${esc(money)}</i>` : ''}</div>` : '';
+  const strip = parts.length ? `<div class="bar23 gx-bt-bar" ${d.foes.length > 1 ? ` style="top:${d.foes.length * 60 + 36}px"` : ''} data-key="bt-bar"${act('pkStatus')}><b>${esc(rest[0] ?? '')}</b><span>${esc(rest.slice(1).join(' · '))}</span>${money ? `<i>${esc(money)}</i>` : ''}<em>More</em></div>` : '';
   const lines = [d.status, d.momentum].filter(Boolean).map((t) => `<p>${esc(t)}</p>`).join('');
   const side = lines ? `<div class="gx-bt-lines" style="top:${Math.max(1, d.foes.length) * 60 + 70 + (d.pkBoss ? 160 : 0)}px">${lines}</div>` : '';
   const say = d.text ? `<div class="say17 gx-bt-say${row ? ' gx-up' : ''}" data-key="bt-say"><i>${me?.file ? fitPic(monArt(me.file), 42, 42, '', 1) : spr(frontRotom, 1)}</i><p style="font-size:${fitBody(d.text, 520, 76, [20, 18, 16, 15, 14], 1.25)}px">${esc(d.text).replace(/\n/g, '<br>')}</p></div>` : '';

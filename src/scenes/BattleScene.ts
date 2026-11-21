@@ -149,7 +149,8 @@ import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { pkHall } from '../ui/pocket/screens/hall';
 import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
-import { battleInfo, moveInfo } from '../core/presentation/battleInfo';
+import { battleInfo, battleStatus, moveInfo } from '../core/presentation/battleInfo';
+import { activeGameEvents, objectiveViews } from '../core/gameEvents';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
 import { phTravel } from '../ui/phantom/screens/travel';
@@ -370,6 +371,7 @@ export class BattleScene extends Phaser.Scene {
   private rxPanels: BattlePanel[] = [];
   /** Pocket look: the Battle Info page (mock-up `b-info`) or the move card (`moveinfo`) behind the open info panel. */
   private rxPkInfo: BattleModel['pkInfo'] = null;
+  private rxPkStatus: BattleModel['pkStatus'] = null;
   private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
@@ -743,6 +745,8 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-Q', () => (this.phWildKey ? this.phWildKey() : this.gotoPage(this.tabs.neighbour(-1))));
     this.input.keyboard?.on('keydown-E', () => this.gotoPage(this.tabs.neighbour(1)));
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
+    // Pocket look: O opens the battle Status page (or closes it).
+    this.input.keyboard?.on('keydown-O', () => { if (pocketOn() && this.rx) this.toggleStatus(); });
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
     this.input.keyboard?.on('keydown-G', () => this.phOpenGimmicks());
     onInputAction(this, (a) => this.handleInput(a));
@@ -1909,6 +1913,9 @@ export class BattleScene extends Phaser.Scene {
         log: (i) => this.setLogTab(LOG_TABS[Number(i)]?.id),
         // Pocket look: Battle Info's Battle Log button, the move card's Use it, the log page's Back.
         pkLog: () => { if (this.infoPanel) this.closePanel(); if (!this.historyView) this.toggleHistory(); },
+        // Pocket look: the status bar opens the Status page; its Battle Info button opens Battle Info.
+        pkStatus: () => { if (!this.infoPanel) this.toggleStatus(); },
+        pkInfoOpen: () => { if (this.infoPanel) this.closePanel(); this.toggleInfo(true); },
         pkUse: () => { if (!this.infoPanel || !this.rxPkMove) return; const k = this.focusedMove; this.closePanel(); if (!this.picker && !this.autoRunning) this.menu?.press(k); },
         logClose: () => { if (this.historyView) this.toggleHistory(); },
         // Pocket look: the Level Up page's Next moves the battle's words on.
@@ -1996,6 +2003,7 @@ export class BattleScene extends Phaser.Scene {
       evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
       pkInfo: this.infoPanel ? this.rxPkInfo : null,
+      pkStatus: this.infoPanel ? this.rxPkStatus : null,
       pkMove: this.infoPanel ? this.rxPkMove : null,
       pkCatch: this.rxPkCatch,
       pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
@@ -4821,15 +4829,43 @@ export class BattleScene extends Phaser.Scene {
     return { head: ability ? ability.name : 'Ability not seen yet', ...(who ? { tag: who } : {}), chips: [], facts: [seenFact(mon.speciesId)], lines: [ability ? ability.description : 'It shows here once it comes into play.'] };
   }
 
-  /** I key / the ⓘ tab: details of the focused move on the Attack page, otherwise what is going on in the battle. */
-  private toggleInfo(): void {
+  /** Pocket look: the battle Status page (O, or a click on the status bar): turn order, weather, money, the event's
+   *  goal, your bench and the foe's team so far. Looking never uses the turn. */
+  private toggleStatus(): void {
     if (this.infoPanel) {
       this.closePanel();
       return;
     }
     if (this.busy || this.autoRunning || !this.tabs.root.visible || this.advance) return;
     const content = services().session.content;
-    if (this.tabs.current === 'attack' && this.menu) {
+    const s = battleStatus(content, this.run);
+    if (!s) return;
+    const now = new Date();
+    const on = activeGameEvents(content, now)[0];
+    const goals = on ? objectiveViews(services().session.profile, on.event, on.edition) : [];
+    const goal = goals.find((g) => !g.done) ?? goals[0];
+    const days = on ? Math.max(0, Math.floor(on.endsIn / 86_400_000)) : 0;
+    const file = (m: { speciesId: string; shiny: boolean }) => monFile(this, m.speciesId, 'front', m.shiny);
+    this.rxPkInfo = null;
+    this.rxPkMove = null;
+    this.rxPkStatus = {
+      ...s, bench: s.bench.map((m) => ({ ...m, file: file(m) })), foes: s.foes.map((m) => ({ ...m, file: file(m) })),
+      money: `₽ ${this.run.money.toLocaleString('en-US')}`,
+      event: on && goal ? { name: on.event.name, goal: goal.objective.text, left: `${goals.filter((g) => g.done).length} of ${goals.length} · ${days} ${days === 1 ? 'day' : 'days'} left` } : null,
+    };
+    this.openPanel([{ head: 'Status', text: [`Turn ${s.turn}`, ...s.order.map((o, k) => `${k + 1}. ${o.name} (Speed ${o.speed})`), `${s.weather.b}: ${s.weather.span}`].join('\n') }]);
+  }
+
+  /** I key / the ⓘ tab: details of the focused move on the Attack page, otherwise what is going on in the battle. */
+  private toggleInfo(field = false): void {
+    if (this.infoPanel) {
+      this.closePanel();
+      return;
+    }
+    if (this.busy || this.autoRunning || !this.tabs.root.visible || this.advance) return;
+    const content = services().session.content;
+    this.rxPkStatus = null;
+    if (!field && this.tabs.current === 'attack' && this.menu) {
       const mon = this.activeMon();
       const slot = mon.moves[this.focusedMove];
       const move = slot ? content.moves.get(slot.id) : undefined;
