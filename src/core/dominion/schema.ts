@@ -2803,5 +2803,5 @@ export type DomChartersFile = z.infer<typeof DomChartersFileSchema>;
 // ---------- D17: the ending (ending.json, block `annals`) ----------
 
 /** The Ledger across all days (Part 5 §7): funds after each night, from run day `from`, one point per `step` days. */
-export const AnnalsSchema = z.object({ from: I.min(1), step: I.min(1), funds: z.array(I).max(720) }).strict();
+export const AnnalsSchema = z.object({ from: I.min(1), step: I.min(1), funds: z.array(I).max(720), /** Collapses (Part 5 §8). */ falls: N0.optional() }).strict();
 export type Annals = z.infer<typeof AnnalsSchema>;

@@ -43,8 +43,8 @@ function graph(m: EndingModel): string {
       <circle cx="${x(n - 1)}" cy="${y(g.points[n - 1]!)}" r="5" fill="${g.points[n - 1]! >= 0 ? GREEN : RED}"/>
       <g font-family="Pixelify Sans" font-size="12" fill="${SOFT}"><text x="0" y="${H + 13}">Run day ${g.from}</text><text x="${W - 70}" y="${H + 13}">Run day ${g.to}</text></g>
     </svg>`;
-  return `<div class="a" style="left:16px;top:186px;width:452px;height:212px;padding:12px 18px;border-radius:10px;z-index:5;${PAGE}" data-testid="dom-end-ledger">
-    <div class="row sp" style="border-bottom:2px solid #8a6a3a;padding-bottom:3px"><b style="font:700 18px var(--regal);letter-spacing:.06em;color:${HEAD}">THE LEDGER · EVERY DAY</b><span style="font-size:13px;color:${SOFT}">${esc(g.peak)}</span></div>
+  return `<div class="a" style="left:16px;top:186px;width:452px;height:204px;padding:10px 18px;border-radius:10px;z-index:5;${PAGE}" data-testid="dom-end-ledger">
+    <div class="row sp" style="border-bottom:2px solid #8a6a3a;padding-bottom:3px;white-space:nowrap"><b style="font:700 15px var(--regal);letter-spacing:.04em;color:${HEAD}">THE LEDGER · EVERY DAY</b><span style="font-size:12px;color:${SOFT}">${esc(g.peak)}</span></div>
     ${body}
   </div>`;
 }
@@ -69,12 +69,12 @@ export function endingView(m: EndingModel, notice: string | null): string {
   <div class="keys">${WHEEL_KEY}${m.pages > 1 ? `<span class="key"${act('endPage', -1)}>◀▶</span><span>${esc(`page ${m.page + 1}/${m.pages}`)}</span>` : ''}<span class="key" style="color:#8fffb0"${act('endClose')}>Enter</span><span${act('endClose')} data-testid="dom-end-close">Close the books</span><span class="key"${act('back')}>Esc</span><span>back</span></div>
   ${m.map.map((r, i) => region(r, i, m.map.length)).join('')}
   ${graph(m)}
-  <div class="pnl" style="left:484px;top:186px;width:460px;height:212px;padding:10px 14px;overflow:hidden" data-testid="dom-end-crew">
+  <div class="pnl" style="left:484px;top:186px;width:460px;height:204px;padding:10px 14px;overflow:hidden" data-testid="dom-end-crew">
     <div class="hd y" style="font-size:15px">WHO WAS IN IT</div>
     <div class="col">${crew}</div>
   </div>
-  <div class="a row" style="left:16px;top:404px;width:928px;gap:22px;font-size:14px;z-index:5" data-testid="dom-end-pay"><b class="y">HOW FAR IT GOT</b>${pay}</div>
-  <div class="tbox" style="left:16px;top:428px;width:928px;height:98px;font-size:17px;line-height:1.45" data-testid="dom-end-tbox"><span class="who">${esc(m.tbox.who)}</span>${esc(m.line)} ${esc(m.note ?? m.tbox.text)} <span class="mu" style="font-size:14px">${esc(m.charters)}</span><span class="more blink">▼</span></div>
+  <div class="a row" style="left:16px;top:398px;width:928px;gap:22px;font-size:14px;z-index:5" data-testid="dom-end-pay"><b class="y">HOW FAR IT GOT</b>${pay}</div>
+  <div class="tbox" style="left:16px;top:434px;width:928px;height:92px;font-size:16px;line-height:1.4" data-testid="dom-end-tbox"><span class="who">${esc(m.tbox.who)}</span>${esc(m.line)} ${esc(m.note ?? m.tbox.text)} <span class="mu" style="font-size:14px">${esc(m.charters)}</span><span class="more blink">▼</span></div>
   ${notice ? `<div class="a pnl" style="left:180px;top:200px;width:600px;padding:14px 18px;z-index:40;font-size:16px"${act('dismiss')} data-testid="dom-notice">${esc(notice)} <span class="kc">Enter</span></div>` : ''}
   `);
 }

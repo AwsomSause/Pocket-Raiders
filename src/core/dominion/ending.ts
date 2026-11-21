@@ -9,9 +9,10 @@
 import { z } from 'zod';
 import raw from '../../data/dominion/ending.json';
 import type { RunState } from '../state';
-import { crewOf } from './crew';
 import { DOMINION_DATA } from './data';
+import { crewOf, leave } from './crew';
 import { statusOf } from './field';
+import { recompute } from './hq';
 import { heroDefOf } from './hero';
 import { cardFor, cardLine, lineKind } from './personality';
 import { nextRegion, regionName, regionsInRun, runDay } from './regions';
@@ -29,7 +30,8 @@ export const EndingFileSchema = z.object({
   screen: z.object({ boxLines: z.array(S).min(1) }).catchall(S),
   states: z.object({ held: Pill, here: Pill, seceded: Pill, sellout: Pill, lost: Pill, ahead: Pill }).strict(),
   heroLine: S, noHero: S,
-  pay: z.array(z.object({ id: z.enum(['regions', 'days', 'towns', 'crew']), label: S }).strict()).min(1),
+  pay: z.array(z.object({ id: z.enum(['regions', 'days', 'towns', 'crew', 'falls']), label: S }).strict()).min(1),
+  collapse: z.object({ _rule: S, funds: z.number().int().min(0), hqLevel: z.number().int().min(1).max(6), lines: z.array(S).length(3), alone: S, kept: S }).strict(),
 }).strict();
 export type EndingFile = z.infer<typeof EndingFileSchema>;
 export const ENDING: EndingFile = EndingFileSchema.parse(raw);
@@ -53,8 +55,37 @@ export function noteBooks(b: DominionBlock): void {
 }
 addWorldEnd((b) => {
   noteBooks(b);
-  return [];
+  return collapse(b);
 });
+
+// ---------- losing: Collapse (Part 5 §8) ----------
+
+/** The HQ destroyed (every room inside ruined), ₽ below 0, and no district held. */
+export function collapsed(b: DominionBlock): boolean {
+  const inside = (b.hq?.rooms ?? []).filter((r) => !r.at);
+  const down = inside.length > 0 && inside.every((r) => r.ruined);
+  const held = Object.values(b.field.districts).some((d) => statusOf(d) === 'held' || statusOf(d) === 'owned');
+  return down && b.funds < 0 && !held;
+}
+
+/** Collapse, never a game over: a new warehouse in the same region, one member (the most loyal; ties: the highest
+ * level, then the longest served) and ₽1,000. Held regions stay held; the days keep counting. Changes `b` in place. */
+export function collapse(b: DominionBlock): string[] {
+  if (!collapsed(b)) return [];
+  const C = ENDING.collapse, lines: string[] = [];
+  const keep = [...b.members].sort((x, y) => y.loyalty - x.loyalty || y.level - x.level || x.joinedDay - y.joinedDay)[0];
+  for (const m of [...b.members]) if (m !== keep) leave(b, m, 'collapse', null, '', lines);
+  if (b.crew) b.crew.talks = [];
+  const hq = b.hq!;
+  hq.rooms = hq.rooms.filter((r) => r.at && !r.ruined);
+  hq.broke = false;
+  b.hqLevel = C.hqLevel;
+  b.funds = C.funds;
+  recompute(b);
+  annalsOf(b).falls = (annalsOf(b).falls ?? 0) + 1;
+  const team = b.teamName ?? 'the crew';
+  return [fill(C.lines[0]!, { team }), keep ? fill(C.lines[1]!, { name: keep.name }) : C.alone, C.lines[2]!, ...(b.realm?.held.length ? [C.kept] : []), ...lines];
+}
 
 /** D15's leave() makes a fresh block: the books come along. */
 export function carryBooks(from: DominionBlock, to: DominionBlock): void {
@@ -119,7 +150,7 @@ export interface EndingModel {
 const money = (n: number): string => `${n < 0 ? '−' : ''}₽${Math.abs(n).toLocaleString('en-US')}`;
 const rankWord = (id: string): string => DOMINION_DATA.crew.ranks.find((r) => r.id === id)?.word ?? id;
 const pathName = (id: string): string => DOMINION_DATA.takeover.paths.find((p) => p.id === id)?.name ?? id;
-export const PER_PAGE = 4;
+export const PER_PAGE = 2;
 
 function journey(m: Member, seed: string, day: number, here: string, where: string | null): Journey {
   const card = cardFor(seed, m);
@@ -155,7 +186,7 @@ export function endingModel(b: DominionBlock, run: Pick<RunState, 'seed'>, page 
   const peakAt = pts.reduce((best, v, i) => (v > pts[best]! ? i : best), 0);
   const graph = {
     points: pts, min: Math.min(0, ...pts), max: Math.max(1, ...pts),
-    from: a?.from ?? runDay(b), to: runDay(b),
+    from: a?.from ?? runDay(b), to: a && pts.length ? a.from + (pts.length - 1) * a.step : runDay(b),
     peak: pts.length ? fill(W('graphPeak'), { peak: money(pts[peakAt]!), day: (a!.from + peakAt * a!.step) }) : '',
     empty: pts.length < 2 ? fill(W('graphEmpty'), { day: a?.from ?? runDay(b) }) : null,
   };
@@ -168,11 +199,11 @@ export function endingModel(b: DominionBlock, run: Pick<RunState, 'seed'>, page 
   const { title, goal } = endingTitle(b);
   const towns = Object.values(b.field.districts).filter((d) => statusOf(d) === 'held' || statusOf(d) === 'owned').length
     + (b.realm?.held ?? []).reduce((n, h) => n + (h.status === 'held' ? h.towns : 0), 0);
-  const val: Record<string, string> = { regions: `${takenRegions(b).length} / ${inRun.length}`, days: `${runDay(b)}`, towns: `${towns}`, crew: `${crew.length}` };
+  const val: Record<string, string> = { regions: `${takenRegions(b).length} / ${inRun.length}`, days: `${runDay(b)}`, towns: `${towns}`, crew: `${crew.length}`, falls: `${b.annals?.falls ?? 0}` };
   return {
     top: topModel(b, 'THE BOOKS'),
     title,
-    sub: fill(W('sub'), { team, day: runDay(b), n: takenRegions(b).length, of: inRun.length }),
+    sub: fill(W('sub'), { team, day: runDay(b) }),
     line: goal ? fill(W('goal'), { goal: goal.name, ending: goal.ending }) : fill(W('every'), { team }),
     note: goal ? `${W('goalWhy')} ${goal.others.length ? fill(W('otherEndings'), { list: goal.others.join(', ') }) : ''}`.trim() : null,
     map, graph,

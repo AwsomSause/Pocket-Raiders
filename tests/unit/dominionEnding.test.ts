@@ -2,10 +2,11 @@
 // is owned (none lost at that moment) or a run-ending Goal is done; the books across every day; the ending page (Empire
 // Map, Ledger graph, crew journeys, Heroes); the run stamped for the main game's finishRun, which pays it in full.
 import { describe, expect, it } from 'vitest';
-import { freshChair } from '../../src/core/dominion/chair';
+import { cardStatus, freshChair } from '../../src/core/dominion/chair';
 import { withCrew } from '../../src/core/dominion/crew';
-import { setActiveRegion } from '../../src/core/dominion/data';
-import { annalsOf, completion, ENDING, endingModel, endingTitle, finishDominion, noteBooks, PER_PAGE, takenRegions } from '../../src/core/dominion/ending';
+import { DOMINION_DATA, setActiveRegion } from '../../src/core/dominion/data';
+import { actionStatus } from '../../src/core/dominion/field';
+import { annalsOf, collapse, collapsed, completion, ENDING, endingModel, endingTitle, finishDominion, noteBooks, PER_PAGE, takenRegions } from '../../src/core/dominion/ending';
 import { dominionFinished } from '../../src/core/dominion/charters';
 import { defaultOrders, runDay } from '../../src/core/dominion/regions';
 import { DominionBlockSchema, type DominionAction, type DominionBlock } from '../../src/core/dominion/schema';
@@ -18,6 +19,7 @@ import type { RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { endingView } from '../../src/ui/redux/screens/dominion/ending';
+import { simRun } from '../../src/core/dominion/autoplay';
 import { content } from './helpers';
 
 type Path = 'wipe' | 'shadow' | 'monarch' | 'goal';
@@ -73,7 +75,7 @@ describe('D17 ending data', () => {
     expect(ENDING.goalEnds).toEqual(['everlasting', 'clean-slate']);
     const text = JSON.stringify(ENDING);
     expect(text).not.toMatch(/\bClaude\b|\bAI\b/);
-    expect(ENDING.pay.map((p) => p.id)).toEqual(['regions', 'days', 'towns', 'crew']);
+    expect(ENDING.pay.map((p) => p.id)).toEqual(['regions', 'days', 'towns', 'crew', 'falls']);
   });
 });
 
@@ -138,6 +140,45 @@ describe('D17 the books across every day', () => {
     const old = structuredClone(blk(started()));
     delete old.annals;
     expect(annalsOf(old).from).toBe(runDay(old));
+  });
+});
+
+describe('D17 losing: Collapse (Part 5 §8)', () => {
+  /** HQ rooms all ruined, ₽ below 0, nothing held; three members of different loyalty. */
+  const fallen = (): DominionBlock => {
+    const b = structuredClone(blk(take(started())));
+    b.takeover = undefined;
+    const room = { uid: 'r1', id: DOMINION_DATA.buildings[0]!.id, tier: 1, cond: 0, spent: 500, building: false, up: false, ready: 1, shut: false, ruined: true, at: null };
+    b.hq = { ...b.hq!, rooms: [room, { ...room, uid: 'r2' }] };
+    b.funds = -800;
+    for (const d of Object.values(b.field.districts)) d.control = 0;
+    b.members[0]!.loyalty = 40;
+    b.members.find((m) => m.id === 'rosa')!.loyalty = 95;
+    return b;
+  };
+  it('only when all three hold: HQ destroyed, ₽ below 0, no district held', () => {
+    expect(collapsed(fallen())).toBe(true);
+    const rich = fallen(); rich.funds = 5;
+    const standing = fallen(); standing.hq!.rooms[1]!.ruined = false;
+    const holding = fallen(); Object.values(holding.field.districts)[0]!.control = 95;
+    const bare = fallen(); bare.hq!.rooms = [];
+    for (const b of [rich, standing, holding, bare]) {
+      expect(collapsed(b)).toBe(false);
+      expect(collapse(b)).toEqual([]);
+    }
+  });
+  it('a new warehouse in the same region, the most loyal member, ₽1,000; never the end of the run', () => {
+    const b = fallen();
+    const lines = collapse(b);
+    expect(lines.join(' ')).toContain('Humble beginnings, again.');
+    expect(b.members.map((m) => m.name)).toEqual(['Rosa']);
+    expect(b.funds).toBe(ENDING.collapse.funds);
+    expect(b.hqLevel).toBe(1);
+    expect(b.hq!.rooms).toEqual([]);
+    expect(b.annals!.falls).toBe(1);
+    expect(b.crew!.gone.some((g) => g.why === 'collapse')).toBe(true);
+    expect(DominionBlockSchema.safeParse(b).success).toBe(true);
+    expect(collapsed(b)).toBe(false);
   });
 });
 
@@ -206,4 +247,39 @@ describe('D17 saves', () => {
     expect(DominionBlockSchema.parse(old).annals).toBeUndefined();
     setActiveRegion('kanto');
   });
+});
+
+describe('D17 the audit: every Boss action, crew task, rival action, street meeting and Chair card has a status', () => {
+  it('nothing is left without one, and nothing waits for D17', () => {
+    const D = DOMINION_DATA;
+    const actions = D.actions.actions.map((a) => actionStatus(a));
+    expect(actions).toHaveLength(600);
+    for (const s of actions) if (!s.play) expect(s.slice).toMatch(/^D\d+$/);
+    expect(actions.some((s) => s.slice === 'D17')).toBe(false);
+    for (const t of D.tasks) {
+      expect(['supported', 'limited', 'disabled']).toContain(t.status);
+      if (t.status === 'disabled') expect(t.needs).toMatch(/^D\d+[a-z]?$/);
+      expect(t.needs).not.toBe('D17');
+    }
+    for (const a of D.rivalActions.actions) expect(['supported', 'limited', 'disabled']).toContain(a.status);
+    for (const o of D.outside) {
+      expect(['supported', 'limited', 'disabled']).toContain(o.status);
+      if (o.status === 'disabled') expect((o as { waits?: string }).waits).toMatch(/^D\d+$/);
+    }
+    // The Chair: a card still waiting names the follow-up building it (D8's cards 8-9, D10's follow-up with D5's six and
+    // the quiz). Once those land, none waits.
+    const waiting = D.court.filter((c) => cardStatus(c) === 'disabled');
+    for (const c of waiting) expect(['D5', 'D8', 'D10', 'quiz']).toContain(c.wait);
+  });
+});
+
+describe('D17 the balance sim (npm run sim:evil)', () => {
+  it('plays days through the real steps without getting stuck, and the same seed plays the same', () => {
+    const a = simRun(content, 'sim-test', 'mix', 10);
+    expect(a.stuck).toBeNull();
+    expect(a.days.length).toBeGreaterThanOrEqual(9);
+    expect(a.acts).toBeGreaterThan(0);
+    expect(simRun(content, 'sim-test', 'mix', 10)).toEqual(a);
+    setActiveRegion('kanto');
+  }, 60_000);
 });
