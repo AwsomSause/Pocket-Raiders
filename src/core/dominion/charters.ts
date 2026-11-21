@@ -10,7 +10,8 @@ import { EVIL_MODE_ID } from '../evilMode/session';
 import type { RunState } from '../state';
 import { DOMINION_DATA } from './data';
 import { charterGrunt } from './recruit';
-import { nextRegion, preEvolve } from './regions';
+import { completion } from './ending';
+import { preEvolve } from './regions';
 import type { DomCharter, DominionBlock } from './schema';
 
 const C = () => DOMINION_DATA.charters;
@@ -51,8 +52,8 @@ export function applyCharter(content: Content, run: RunState, b: DominionBlock, 
   b.origin = { kind: 'charter', id: c.id };
 }
 
-/** A Dominion run is finished when its last region is Taken (it counts toward the Charters' unlock). */
-export const dominionFinished = (b: DominionBlock): boolean => !!b.takeover?.taken && !nextRegion(b);
+/** A Dominion run is finished when it is complete (D17, Part 5 §7: every region owned, or a run-ending Goal done). */
+export const dominionFinished = (b: DominionBlock): boolean => completion(b) !== null;
 
 // ---------- the Turn ----------
 

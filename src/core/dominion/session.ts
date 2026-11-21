@@ -37,6 +37,7 @@ import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debat
 import { argueTyped, voiceTurn } from './debateTyped';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
+import './ending';
 import { settleCourt } from './growthCourt';
 import './growthOutside';
 import { endS, goalS, inRoom, sayS, stopS, type SOut } from './snatch';

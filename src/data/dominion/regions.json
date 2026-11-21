@@ -674,7 +674,7 @@
   "reclaimWon": "{region} is back. {traitor} is finished; Stability resets to 60.",
   "letGo": "You let {region} go. It stays lost.",
   "leaveNotYet": "You can leave once {region} is Taken (the Hero beaten).",
-  "lastRegion": "Every region in the run is yours. The ending waits (D17).",
+  "lastRegion": "Every region in the run is yours. L opens the books: the ending.",
   "tribute": "Tribute from held regions: ₽{n}.",
   "boonSpread": "Radio Tower: Spread the Word is free this week.",
   "boonWalk": "Plasma's network: {name} walked in, sent by an old friend.",

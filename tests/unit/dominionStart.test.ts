@@ -43,7 +43,8 @@ describe('DOMINION D1: the mode', () => {
   it('is offered only with the Evil Mode setting on, and routes to its own screen', () => {
     expect(offeredModes({ evilMode: false }).some((m) => m.id === DOMINION_MODE_ID)).toBe(false);
     expect(offeredModes({ evilMode: true }).some((m) => m.id === DOMINION_MODE_ID)).toBe(true);
-    expect(getMode(DOMINION_MODE_ID)?.progressionEligible).toBe(false);
+    // D17: account rewards pay in full, by how far the run got (Kice answer 9).
+    expect(getMode(DOMINION_MODE_ID)?.progressionEligible).toBe(true);
     expect(sceneForRun(domRun())).toBe('Dominion');
   });
 });

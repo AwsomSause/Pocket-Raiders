@@ -54,7 +54,8 @@ const memberById = (b: DominionBlock, id: string | null): Member | undefined => 
 /** The member(s) a card names, or null when nobody fits (the card isn't drawn). */
 function named(b: DominionBlock, c: CourtCard, r: Roll): [string | null, string | null] | null {
   if (!c.named) return [null, null];
-  const pick = (list: Member[]): Member | undefined => list[r.int(0, list.length - 1)];
+  // D17: an empty list (nobody jailed, nobody free) is "nobody fits", never a roll (the sim found the Chair crashing here).
+  const pick = (list: Member[]): Member | undefined => (list.length ? list[r.int(0, list.length - 1)] : undefined);
   const ms = b.members;
   const by = (f: (m: Member) => boolean) => ms.filter(f);
   switch (c.named) {

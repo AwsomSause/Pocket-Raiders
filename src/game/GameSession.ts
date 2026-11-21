@@ -10,7 +10,7 @@ import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import { charterInRun, ensureEvil, finishEvil, foundInRun, stepInRun } from '../core/evilMode/session';
-import { DOMINION_MODE_ID, fightInRun as dominionFightInRun, settleStaleFight as dominionSettleStale, startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
+import { DOMINION_MODE_ID, isDominionRun, fightInRun as dominionFightInRun, settleStaleFight as dominionSettleStale, startInRun as dominionStartInRun, stepInRun as dominionStepInRun } from '../core/dominion/session';
 import { charterProblem, chartersOpen, dominionFinished, domTurnOffer, domTurnRun, type DomTurnOffer } from '../core/dominion/charters';
 import type { DominionAction, DominionSetup } from '../core/dominion/schema';
 import { rulesFromPrefs } from '../core/dominion/rules';
@@ -38,6 +38,7 @@ import { careEmote } from '../core/presentation/storyMusic';
 import { interactionLog } from '../core/presentation/uiPrefs';
 import type { Achievement, Content } from '../core/contentSchema';
 import { finalizeRun, recordRunStarted } from '../core/profile';
+import { finishDominion } from '../core/dominion/ending';
 import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { finishRivalScene, rivalStoryScene } from '../core/story2/rivalStory';
 import { fieldTrialDue, finishFieldTrial } from '../core/story2/fieldTrial';
@@ -474,7 +475,8 @@ export class GameSession {
 
   /** NE100 The Road Home: true when the run end should open it first (the run ended at its final battle). Reads state only. */
   roadHomeDue(): boolean {
-    return this.run ? roadHomeDue(this.content, this.run) : false;
+    // D17: a Dominion run ends on its own ending page; the main game's Road Home isn't its road.
+    return this.run && !isDominionRun(this.run) ? roadHomeDue(this.content, this.run) : false;
   }
 
   /** NE100: puts The Road Home on the node the run ended on and returns its stop's id. Not saved: the finished run's save is gone. */
@@ -1109,6 +1111,18 @@ export class GameSession {
     if (!run || !b || !dominionFinished(b) || this.profile.dominionDone.includes(run.runId)) return;
     this.profile = { ...this.profile, dominionDone: [...this.profile.dominionDone, run.runId] };
     this.checkSave(this.saves.saveProfile(this.profile));
+  }
+
+  /** DOMINION D17: the ending's "Close the books": the run ends (complete, a victory, the regions Taken counted) and
+   *  the main game's finishRun pays its ordinary rewards in full (Kice answer 9). False when the run isn't complete. */
+  dominionFinish(): boolean {
+    const out = finishDominion(this.requireRun());
+    if (!out) return false;
+    this.run = out;
+    this.noteDominionDone();
+    this.persistRun();
+    this.finishRun();
+    return true;
   }
 
   /** DOMINION D16: the Turn's offer on the Game Over screen (a main-game run that won; Evil Mode shown in Settings). */

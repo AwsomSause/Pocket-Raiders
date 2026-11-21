@@ -604,10 +604,10 @@
       "id": "dominion",
       "name": "Dominion",
       "status": "supported",
-      "progressionEligible": false,
+      "progressionEligible": true,
       "checkpoints": false,
       "gate": "evilMode",
-      "blurb": "Evil Mode, reworked: one Grunt, one leaking warehouse, and a whole world to take. Early build: set up, then live day by day (Morning, Day, Evening, Night)."
+      "blurb": "Evil Mode, reworked: one Grunt, one leaking warehouse, and a whole world to take. Live day by day (Morning, Day, Evening, Night) until every region is yours. Account rewards pay in full, by how far the run got."
     }
   ],
   "duplicateCompensation": {
