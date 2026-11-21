@@ -194,5 +194,73 @@
   "q3": "Yes, three. The Day dial shows the four phases and what is planned in each, the Forecast shows a week of weather and what it does to jobs, and Night falls shows what the night shift did before you sleep.",
   "q4": "The clock in the top bar opens The Day from any page, and the Rotom Phone has the forecast. Weather effects follow the Effects settings, with a Weather on screen switch for anyone who wants it still.",
   "q5": "Yes. Time of day and weather are core Pokémon ideas (day and night from Gold and Silver, weather from Ruby and Sapphire), and rain helping some types and hurting Fire types is exactly how the games work."
+ },
+ "16": {
+  "name": "Heat & the Law",
+  "big": "Heat becomes something you feel. The edges of every page glow red as it climbs, the Heat chip in the top bar is a thermometer that opens the Heat board, police sirens sweep red and blue over every police page, and the police get faces: Officer Jenny’s men, Looker’s notes and a wanted poster.",
+  "pages": [
+   "Heat",
+   "Wanted poster",
+   "Police raid"
+  ],
+  "q1": "Yes. Red and blue sirens sweep across every police page, the screen edges pulse red with Heat, a wanted poster slaps onto the board with pins, and a police raid flashes the whole HQ with a countdown and three officers at the door.",
+  "q2": "Pass 15 added time and weather; this pass adds danger to every page. Heat used to be a number in a chip. Now it is a red glow round every screen, a thermometer in the top bar, and a whole police side with its own faces, notes and raids.",
+  "q3": "Yes, three. The Heat board explains each level and where the Heat comes from, the Wanted poster gives a hunted crew member ways to cool down, and Police raid is its own big moment instead of a line in the morning report.",
+  "q4": "Tapping the Heat thermometer in the top bar opens the Heat board from any page. Flashing sirens and the red edge glow follow the Effects settings (Flashing lights off turns them into a calm red border).",
+  "q5": "Yes. Officer Jenny, policemen and Looker are all Pokémon characters, and evil teams being chased by the police and the International Police comes straight from the games."
+ },
+ "17": {
+  "name": "Rivals & Heroes",
+  "big": "You are never alone on screen now. Giovanni and Red watch from the key strip on every page with their Tension and Threat, every name plate in a scene is a slanted VS banner on halftone, and battle intros split the screen down the middle like a fight poster.",
+  "pages": [
+   "Rivals",
+   "Hero tracker"
+  ],
+  "q1": "Yes. Battle intros now tear open down a white split line with comic halftone, name plates are slanted VS banners, the Rivals board stands three enemies side by side under their colours, and Red’s route lights up across the board day by day.",
+  "q2": "Pass 16 brought the police; this pass brings your enemies onto every page. Giovanni and Red now sit in the key strip everywhere with their numbers, so you always feel watched, and every scene’s name plates and battle intros got a fight-poster look.",
+  "q3": "Yes, two. The Rivals board compares Rocket, the Hero and the Gym Leaders in one place, and the Hero tracker shows Red’s path and when he reaches you, with a plan to pick. The rival and hero files stay for the details.",
+  "q4": "Pressing the two faces in the key strip opens the Rivals board from any page, and the Rotom Phone sends a notification when a rival moves. The halftone and split effects follow the Effects settings.",
+  "q5": "Yes. Rivals, the Hero and Gym Leaders are the heart of every Pokémon game, and the split VS intro with name banners is how the games open a big trainer battle."
+ },
+ "18": {
+  "name": "Headlines",
+  "big": "Kanto talks about you now. A news ticker crawls under the top bar of every page, every result comes with a torn newspaper clipping about what you just did, and how the papers spin a job decides whether you gain Dread or Regard.",
+  "pages": [
+   "Newsstand",
+   "Scrapbook",
+   "Press interview"
+  ],
+  "q1": "Yes. A red news ticker crawls under every top bar, torn clippings slam onto every result, three newspapers drop onto the stand with different headlines, and the scrapbook pins six clippings to a cork board tied together with red string.",
+  "q2": "Pass 17 put your enemies on screen; this pass puts Kanto’s opinion on screen. Every page now carries the news, every result shows how the papers told it, and Dread and Regard are explained by real headlines instead of plain numbers.",
+  "q3": "Yes, three. The Newsstand compares how three papers spin the same job, the Scrapbook keeps the run’s story in one place, and the Press interview lets you choose your public face. Clicking the ticker or any clipping opens the Newsstand.",
+  "q4": "The ticker is one click from the Newsstand on any page, and the Rotom Phone’s notifications include big headlines. The ticker can be slowed or turned off in Effects for anyone who finds moving text hard to read.",
+  "q5": "Yes. Kanto newspapers and TV news are everywhere in the Pokémon games (Lilycove TV, the Celadon reporter, Team Rocket taking the Radio Tower), and evil teams always want the region to know their name."
+ },
+ "19": {
+  "name": "The Chair",
+  "big": "The Boss’s authority runs through the whole UI: every panel gets gold corner brackets like a framed decree, and every main button is a gold plate pressed with a crimson wax seal. The Chair becomes a first-person view across the Boss’s desk, with the visitor under the lamp, Persian on the desk and Dale at your shoulder.",
+  "pages": [
+   "Waiting room",
+   "Favour ledger"
+  ],
+  "q1": "Yes. The Chair is now a lamp-lit first-person scene across a desk with a gold nameplate, Persian sitting on the desk and Dale at your shoulder, and every main button in the game is stamped with a wax seal that presses in with a bounce.",
+  "q2": "Pass 18 was about what Kanto says; this pass is about the Boss’s power on every page. Gold corner brackets frame every panel, the main button everywhere is a sealed gold plate, and the Chair moved from a talk scene to the Boss’s own point of view.",
+  "q3": "Yes, two. The Waiting room lines up today’s visitors with what each wants and their mood, and the Favour ledger tracks who owes you and whom you owe, so the Chair screen only holds one visitor and three answers.",
+  "q4": "The Waiting room opens from the Chair with Q, and Favours sit in the Rotom Phone’s Ledger app. The wax-seal press follows the Motion setting.",
+  "q5": "Yes, in a villain way. It feels like walking into Giovanni’s office in Silph Co. or the Game Corner, with the Boss’s Persian at the desk, and every answer is a clear Pokémon-style choice with its result shown."
+ },
+ "20": {
+  "name": "Every Player",
+  "big": "Dominion is built for any player and any screen. The key strip shows the controller button next to every key, whatever you have picked wears a bright white focus ring you can always find, and Settings gains Access (text size, colour shapes, motion, one-button play) and Controls.",
+  "pages": [
+   "Settings · Access",
+   "Controls",
+   "On a phone"
+  ],
+  "q1": "It is the quietest pass on purpose, but it still shows off: a full controller drawing with a bouncing A button, coloured pad buttons beside every key on every page, and a phone in your hand showing the whole HQ on a tall screen.",
+  "q2": "Pass 19 added the Boss’s power; this pass makes every page easier to use. The key strip now speaks keyboard and controller at once, the thing you picked always has a bright white ring, and Settings gained an Access page with live previews and a Controls page.",
+  "q3": "Yes, three. Access holds text size, colour shapes, motion and one-button play, Controls shows every action for keys, pad and touch, and On a phone shows how the HQ rearranges on a tall screen. They sit in the Settings home with the others.",
+  "q4": "Access and Controls are two of the eight tiles on the Settings home, and the Access page keeps the same category list as the Dominion settings, so Settings stays one level deep.",
+  "q5": "Yes. Pokémon games always show which button does what (A to choose, B to go back), and playing the same game on a TV or in your hands is the Switch way."
  }
 }
