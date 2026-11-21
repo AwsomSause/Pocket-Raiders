@@ -29,6 +29,8 @@ export interface BattleBox {
   tip?: string;
   /** A shiny foe (the Pocket look tags its plate ★ Shiny). */
   shiny?: boolean;
+  /** Pocket look: the battle power this Pokémon has used, as a tag on its bar (Mega, Tera Dragon, Max with turn pips, Z spent). */
+  power?: { kind: 'mega' | 'tera' | 'dmax' | 'z'; text: string; turns?: number } | null;
   /** The Pokémon's types (none while it is hidden): the Pocket look colours its plate by them. */
   types?: readonly string[];
   /** Its picture (front sprite file), for the speech panel's face. */

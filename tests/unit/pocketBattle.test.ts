@@ -17,6 +17,22 @@ const model = (over: Partial<BattleModel> = {}): BattleModel => ({
 });
 const MOVES = [{ label: 'Tackle', sub: 'PP 35/35', type: 'normal', tip: 'move:0' }, { label: 'Absorb', sub: 'PP 25/25', type: 'grass', tip: 'move:1' }, { label: 'Withdraw', sub: 'PP 0/40', type: 'water', off: true, tip: 'move:2' }];
 
+describe('the Pocket battle bars: power tags (b-power)', () => {
+  it('Mega, Tera with its type (the old Tera word dropped), Max with turns left as pips, Z spent; none without a power', () => {
+    const h = pkBattle(model({ foes: [box('Blastoise', { power: { kind: 'dmax', text: 'Max', turns: 2 } })], mine: [box('Charizard', { power: { kind: 'tera', text: 'Tera Dragon' }, tags: ['TERA DRAGON', 'Burned'] })] }));
+    expect(h).toContain('class="gtag dmax"');
+    expect(count(h, '<u class=""></u>')).toBe(2);
+    expect(count(h, '<u class="off"></u>')).toBe(1);
+    expect(h).toContain('class="gtag tera"');
+    expect(count(h, 'Tera Dragon')).toBe(1);
+    expect(h).not.toContain('TERA DRAGON');
+    expect(h).toContain('Burned');
+    expect(pkBattle(model({ mine: [box('Charizard', { power: { kind: 'mega', text: 'Mega' } })] }))).toContain('class="gtag mega"');
+    expect(pkBattle(model({ mine: [box('Pikachu', { power: { kind: 'z', text: 'Z' } })] }))).toContain('Z-Move spent');
+    expect(pkBattle(model())).not.toContain('gtag');
+  });
+});
+
 describe('the Pocket battle screen', () => {
   it('is a see-through page with both plates, the words and the command pills', () => {
     const html = pkBattle(model());

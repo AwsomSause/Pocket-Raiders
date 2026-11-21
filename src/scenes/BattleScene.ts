@@ -1884,6 +1884,7 @@ export class BattleScene extends Phaser.Scene {
         types: this.foeHidden(mon) ? [] : getSpecies(content, mon.speciesId).types,
         file: box.isPlayer ? monFile(this, mon.speciesId, 'front', !!mon.shiny) : null,
         shiny: !box.isPlayer && !!mon.shiny && !this.foeHidden(mon),
+        power: this.powerTag(mon.uid),
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
@@ -4827,6 +4828,18 @@ export class BattleScene extends Phaser.Scene {
     const id = this.foeReveals.get(mon.uid)?.ability;
     const ability = id ? services().session.content.abilities.get(id) : undefined;
     return { head: ability ? ability.name : 'Ability not seen yet', ...(who ? { tag: who } : {}), chips: [], facts: [seenFact(mon.speciesId)], lines: [ability ? ability.description : 'It shows here once it comes into play.'] };
+  }
+
+  /** Pocket look: the battle power a Pokémon has used, for the tag on its bar (mock-up `b-power`). */
+  private powerTag(uid: string): BattleBox['power'] {
+    const t = this.run.battle?.transform;
+    if (!t) return null;
+    const form = t.forms[uid]?.kind;
+    if (t.dynamax[uid]) return { kind: 'dmax', text: form === 'gigantamax' ? 'G-Max' : 'Max', turns: t.dynamax[uid] };
+    if (t.teraTypes[uid]) return { kind: 'tera', text: `Tera ${t.teraTypes[uid]![0]!.toUpperCase()}${t.teraTypes[uid]!.slice(1)}` };
+    if (form === 'mega' || form === 'primal') return { kind: 'mega', text: form === 'primal' ? 'Primal' : 'Mega' };
+    if (t.mechanics[uid] === 'zmove') return { kind: 'z', text: 'Z' };
+    return null;
   }
 
   /** Pocket look: the battle Status page (O, or a click on the status bar): turn order, weather, money, the event's

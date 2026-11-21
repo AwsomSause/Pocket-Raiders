@@ -21,7 +21,14 @@ const plateStyle = (b: BattleBox, side: string): string => {
   return `--sc:${side};--t:${t[0] ? typeColour(t[0]) : side};--t2:${t[1] ? typeColour(t[1]) : t[0] ? typeColour(t[0]) : side}`;
 };
 const balls = (n: number, out: number): string => `<span class="balls">${Array.from({ length: Math.max(0, Math.min(6, n)) }, (_, k) => spr(ballArt(k >= n - out ? 'premier' : 'pb'), 1, k >= n - out ? 'gx-bt-out' : '')).join('')}</span>`;
-const nameRow = (b: BattleBox, big: number, tag = ''): string => `<span class="lb-n">${(b.types ?? []).map((t) => fitPic(badgeArt(t), 20, 20, '', 1)).join('')}<b style="font-size:${fit(b.name, 180, big, 16, 0.55)}px">${esc(b.name)}</b><span class="lv">${esc(b.level)}</span>${b.shiny ? '<em class="shtag">★ Shiny</em>' : ''}${tag ? `<em class="gymtag">${esc(tag)}</em>` : ''}${b.tags.map((t) => `<u class="gx-bt-tag">${esc(t)}</u>`).join('')}</span>`;
+const nameRow = (b: BattleBox, big: number, tag = ''): string => `<span class="lb-n">${(b.types ?? []).map((t) => fitPic(badgeArt(t), 20, 20, '', 1)).join('')}<b style="font-size:${fit(b.name, 180, big, 16, 0.55)}px">${esc(b.name)}</b><span class="lv">${esc(b.level)}</span>${b.shiny ? '<em class="shtag">★ Shiny</em>' : ''}${tag ? `<em class="gymtag">${esc(tag)}</em>` : ''}${powerTag(b)}${b.tags.filter((t) => !(b.power?.kind === 'tera' && /^tera /i.test(t))).map((t) => `<u class="gx-bt-tag">${esc(t)}</u>`).join('')}</span>`;
+/** The power a Pokémon has used, as the mock-up's tag (`b-power`): Mega, Tera with its type, Max with turns left as pips, Z. */
+const powerTag = (b: BattleBox): string => {
+  const p = b.power;
+  if (!p) return '';
+  const pips = p.kind === 'dmax' && p.turns ? `<i class="pips">${Array.from({ length: 3 }, (_, i) => `<u class="${i < p.turns! ? '' : 'off'}"></u>`).join('')}</i>` : '';
+  return `<em class="gtag ${p.kind}" title="${p.kind === 'dmax' ? `${p.turns} ${p.turns === 1 ? 'turn' : 'turns'} left` : p.kind === 'z' ? 'Z-Move spent' : 'All battle'}">${esc(p.text)}</em>${pips}`;
+};
 const tipAttr = (b: BattleBox): string => (b.tip ? `${act('pin', b.tip)} data-tip="${esc(b.tip)}"` : '');
 
 /** A foe's plate (the first one along the top; more stand under it in a duo or a trio). */
