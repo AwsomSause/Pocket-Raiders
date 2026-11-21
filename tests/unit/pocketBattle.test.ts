@@ -190,7 +190,8 @@ describe('the Pocket Galar Match Info', () => {
     expect(h).toContain('Back to the battle');
     const strip = pkBattle({ ...model(), pkArea: { key: 'ga', word: 'Gym match 1', bar: 50, chips: [], flow: ['a', 'b', 'c'], step: 1 } });
     expect(strip).toContain('data-act="gaInfo"');
-    expect(pkBattle({ ...model(), pkArea: { key: 'tm', word: 'Totem', chips: [], flow: ['a', 'b'], step: 0 } })).toContain('data-act="pkInfoOpen"');
+    expect(pkBattle({ ...model(), pkArea: { key: 'tm', word: 'Totem', chips: [], flow: ['a', 'b'], step: 0 } })).toContain('data-act="tmAura"');
+    expect(pkBattle({ ...model(), pkArea: { key: 'rd', word: 'Raid', chips: [], flow: ['a', 'b'], step: 0 } })).toContain('data-act="pkInfoOpen"');
   });
 });
 
@@ -213,5 +214,17 @@ describe('the Pocket Galar stadium strip', () => {
     expect(h).toContain('<b>Round of 32</b><i class="fav37" data-act="gaCrowd" data-arg=""><s style="width:62%"></s></i>');
     expect(h).toContain('<b>3</b>foes left');
     expect(pkBattle({ ...model(), pkArea: { key: 'tm', word: 'Totem', chips: [], flow: ['a', 'b'], step: 0 } })).not.toContain('fav37');
+  });
+});
+
+describe('the Pocket Totem aura page', () => {
+  it('shows phase 1 against the next phase, with an arrow and Back to the battle', async () => {
+    const { pkTmAura } = await import('../../src/ui/pocket/screens/galar');
+    const h = pkTmAura({ a: { tag: 'Phase 1', title: 'From the start', rows: [{ art: null, title: 'Sp. Def +1', sub: 'A bubble shell', tag: 'Now', cls: 'me' }] }, b: { tag: 'Phase 2', title: 'At half HP', rows: [{ art: null, title: 'Sp. Atk +1', sub: 'The bubbles burst', tag: 'Next', cls: 'boss' }] } });
+    expect(h.startsWith('<!--pk:tm-aura:51-->')).toBe(true);
+    expect(h).toContain('a-tm pg28');
+    expect(h).toContain('▶');
+    expect(h).toContain('At half HP');
+    expect(h).toContain('data-act="tmAura"');
   });
 });

@@ -1929,6 +1929,8 @@ export class BattleScene extends Phaser.Scene {
         pkInfoOpen: () => { if (this.infoPanel) this.closePanel(); this.toggleInfo(true); },
         // Pocket look: the Galar strip's Info opens Match Info (the foe's side and the crowd).
         gaInfo: () => this.toggleGaInfo(),
+        // Pocket look: the Totem strip's "The aura" opens the aura page (phase 1 against the next phase).
+        tmAura: () => this.toggleTmAura(),
         // Pocket look: the favour bar (or C on Match info) opens the crowd page; Back closes it.
         gaCrowd: () => this.gaCrowd(),
         // Pocket look: the weather card opens the Weather guide (the one in play marked Now); a card click lights it.
@@ -5301,6 +5303,47 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Pocket look: Galar's Match Info (mock-up `ga-info`): the foe's Pokémon left, a boss power in play, who is out; the crowd's rules with the one in play marked Now. */
+  /** Pocket look: a Totem battle's aura page (mock-up `tm-aura`), from the Totem's data and the fight so far. */
+  private toggleTmAura(): void {
+    if (this.infoPanel) {
+      this.closePanel();
+      return;
+    }
+    if (this.busy || this.autoRunning || !this.tabs.root.visible || this.advance) return;
+    const battle = this.run.battle;
+    const totem = battle?.totem;
+    const { content } = services().session;
+    const tdef = totem ? content.totems.totems.find((x) => x.id === totem.id) : undefined;
+    if (!battle || !totem || !tdef) return;
+    const t = battle.enemyTeam.find((m) => m.uid === totem.uid) ?? battle.enemyTeam[0];
+    const art = (id: string, shiny = false): PkArt | null => { const f = monFile(this, id, 'front', shiny); return f ? monArt(f) : null; };
+    const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'Accuracy', eva: 'Evasion' };
+    const boosts = (b: Partial<Record<string, number>> | undefined) => Object.entries(b ?? {}).map(([k, v]) => `${STAT[k] ?? k} ${v! > 0 ? '+' : ''}${v}`).join(', ');
+    const hp = (f: number) => { const p = Math.round(f * 100); return p === 50 ? 'half HP' : `${p}% HP`; };
+    const first = (x: string) => x.split(/(?<=\.)\s/)[0]!.replace(/\.$/, '');
+    const ally = tdef.ally ? content.species.get(tdef.ally.species)?.name ?? tdef.ally.species : null;
+    const now = totem.phasesDone.length;
+    const counter = tdef.aura.thorns ? 'Special moves get past its thorns' : tdef.aura.regen ? 'A burn, poison, sleep or paralysis stops it mending' : tdef.aura.sap?.immune.length ? `A ${tdef.aura.sap.immune.map((x) => x.charAt(0).toUpperCase() + x.slice(1)).join(' or ')} type resists its sap` : null;
+    const a: PkSideRow[] = [{ art: t ? art(t.speciesId, !!t.shiny) : null, title: boosts(tdef.aura.boost) || first(tdef.aura.text), sub: first(tdef.aura.text), tag: now === 0 ? 'Now' : '', cls: now === 0 ? 'me' : '' }];
+    if (tdef.ally && ally) a.push({ art: art(tdef.ally.species), title: `Calls ${ally}`, sub: tdef.twoVsOne ? 'Beside it from the first turn' : `At ${hp(tdef.ally.triggerHp)}, ${tdef.ally.maxCalls - totem.callsUsed} of ${tdef.ally.maxCalls} left` });
+    if (counter) a.push({ art: null, title: 'How to answer', sub: counter });
+    else if (tdef.environment) a.push({ art: null, title: 'Its ground', sub: first(tdef.environment.text) });
+    else if (tdef.fieldEffect) a.push({ art: null, title: 'Its territory', sub: first(tdef.fieldEffect.text) });
+    const next = tdef.phases[Math.min(now, Math.max(0, tdef.phases.length - 1))];
+    const b: { tag: string; title: string; rows: PkSideRow[] } = next
+      ? { tag: `Phase ${tdef.phases.indexOf(next) + 2}`, title: `At ${hp(next.atHp)}`, rows: [
+          { art: t ? art(t.speciesId, !!t.shiny) : null, title: boosts(next.boost) || 'Its aura flares again', sub: first(next.text), tag: now > tdef.phases.indexOf(next) ? 'Now' : 'Next', cls: 'boss' },
+          ...(next.shield ? [{ art: null, title: 'A shield rises', sub: 'Break it before the HP moves' }] : []),
+          ...(next.clearPlayerStages ? [{ art: null, title: 'Your boosts are wiped', sub: 'Every stat change you made is undone' }] : []),
+          ...(next.cleanse ? [{ art: null, title: 'It shakes off its status', sub: 'Its lowered stats come back too' }] : []),
+          ...(next.weather ? [{ art: null, title: 'The weather turns', sub: next.weather }] : []),
+        ].slice(0, 3) }
+      : { tag: 'No phase 2', title: 'It stays the same', rows: [{ art: t ? art(t.speciesId, !!t.shiny) : null, title: 'One aura all fight', sub: 'It does not change at low HP', cls: 'boss' }] };
+    this.rxPkInfo = null; this.rxPkMove = null; this.rxPkWeather = null; this.rxPkStatus = null;
+    this.rxPkGaInfo = { aura: { a: { tag: 'Phase 1', title: 'From the start', rows: a }, b }, foeTag: '', foeTitle: '', foe: [], crowdTitle: '', crowd: [] };
+    this.openPanel([{ head: 'The aura', text: tdef.aura.text }]);
+  }
+
   private toggleGaInfo(): void {
     if (this.infoPanel) {
       this.closePanel();

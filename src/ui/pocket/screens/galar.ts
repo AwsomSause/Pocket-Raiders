@@ -125,6 +125,13 @@ export function pkGaInfo(d: { foeTag: string; foeTitle: string; foe: readonly Pk
     + `<div class="btn on nx go32" data-key="ga-info-back"${act('info')}><b>Back to the battle</b></div>${keys([['Enter', 'back', 'info'], ['C', 'the crowd', 'gaCrowd'], ['Esc', 'back', 'info']])}</div>`);
 }
 
+/** A Totem battle's aura (mock-up `tm-aura`): what it does from the start against what its next phase adds. */
+export function pkTmAura(d: { a: { tag: string; title: string; rows: readonly PkSideRow[] }; b: { tag: string; title: string; rows: readonly PkSideRow[] } }): string {
+  return page('tm-aura', 51, `<div class="scr sz20 ar28 a-tm pg28 gx-bt-page" data-key="tm-aura"><div class="sz-h" data-m="hdr"><i class="emb28 tm hd" data-nocheck></i><b>The aura</b><span>A Totem starts every battle with a boost. It grows when the Totem is hurt.</span></div>`
+    + `<div class="vs32">${pkSide32('a', d.a.tag, d.a.title, d.a.rows)}<i class="vsb32" data-nocheck>▶</i>${pkSide32('b', d.b.tag, d.b.title, d.b.rows)}</div>`
+    + `<div class="btn on nx go32" data-key="tm-aura-back"${act('tmAura')}><b>Back to the battle</b></div>${keys([['Enter', 'back', 'tmAura'], ['Esc', 'back', 'tmAura']])}</div>`);
+}
+
 export interface PkGaRoadModel {
   gyms: readonly { name: string | null; type: string; state: 'got' | 'next' | 'later'; art: PkArt | null; n: number }[];
   index: number;
