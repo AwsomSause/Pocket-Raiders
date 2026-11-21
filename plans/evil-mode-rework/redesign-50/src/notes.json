@@ -126,5 +126,73 @@
   "q3": "Yes, three. Choose and Result each get their own page so the talk screen stays clean, and the Text log page lets you read everything said in the event without crowding the box.",
   "q4": "The Log and Auto keys sit on every text box, and Auto has a matching switch in Settings > Dominion. The Boss Menu stays one key away and does not interrupt the beats.",
   "q5": "Yes. It reads like a Pokémon game event: a speaker name plate, a blinking arrow, the text stays until you press a key, and the reward only shows after the text is closed, then waits for your key press."
+ },
+ "11": {
+  "name": "Living HQ",
+  "big": "The HQ becomes a building you live in. The tab bar is now a lit lift console on every page (a lamp, a count and a you-are-here arrow), every panel opens like lift doors and its ceiling light flickers on, and the Compound is cut open at night with a lift riding between floors and people working in lit rooms.",
+  "pages": [
+   "Ground Floor · G",
+   "The Cellar · B1",
+   "New floor",
+   "Staff gear"
+  ],
+  "q1": "Yes. The HQ is now a lit building at night under a moon, with a lift car riding up the shaft, people bobbing in warm rooms, scaffolding for the next floor, and a New floor reveal where the storey drops in with dust.",
+  "q2": "Pass 10 changed events; this pass changes every page. The tab bar became a lift console with lamps, counts and a you-are-here arrow, every panel opens like lift doors and its light flickers on, and the HQ went from a grid of boxes to a real building with floors you can ride to.",
+  "q3": "Yes, four. Each floor has its own page (lift buttons on the left, the rooms across the top, the picked room below), plus New floor and Staff gear, so the HQ screen only shows the building and tonight’s jobs.",
+  "q4": "The lift console is the main menu bar now, and the Boss Menu still opens on Q. The new floor reveal and the light flicker follow the Effects settings (they shorten when motion is turned down).",
+  "q5": "Yes. It feels like a Pokémon building interior, like Silph Co. or the Game Corner hideout: a lift with floor buttons, rooms with people at work, and floor names like 2F and B1."
+ },
+ "12": {
+  "name": "The Board",
+  "big": "Kanto becomes a tabletop board on a wooden table, with land, sea, the real routes and district tokens in their owner’s colour. Pieces stand on it: your crew, Rocket chips and the Hero with a blue ping. The whole UI turns into pieces too: money, Heat and the day are icons in the top bar, and the place chip is now a map pin that opens the board from any page.",
+  "pages": [
+   "Place your crew",
+   "Travel"
+  ],
+  "q1": "Yes. The map is now a board that tilts down onto a wooden table, tokens pop up in their colours, pieces drop onto the cities, dotted routes march between them, and the picked city lifts and glows.",
+  "q2": "Pass 11 was the HQ; this pass moves the rest of the world. The map stopped being a grid of boxes and became Kanto with real routes, the crew and the Hero are pieces you can see, and every page’s top bar now uses icons and a map pin that jumps to the board.",
+  "q3": "Yes, two. Place your crew keeps the board on screen while you put each crew member on a city, and Travel shows the road and its ambush odds, so the map page itself stays clean.",
+  "q4": "The map pin in the top bar is a shortcut to the board from any page, and the Boss Menu’s Region Map row opens the same board. A Board motion switch in Effects can stop the tilt and the dotted routes moving.",
+  "q5": "Yes. It reads like the Town Map in the Pokémon games, with Kanto’s real cities and routes (Route 3 by Mt. Moon, Cycling Road, the sea routes to Cinnabar), turned into a board game for the villains."
+ },
+ "13": {
+  "name": "Rotom Phone",
+  "big": "The Boss Menu is now a Rotom Phone you hold: Rotom’s eyes on top, nine apps with counts, and notifications sliding in beside it. The phone peeks out of the key strip on every page with a buzz and a count. Every speech line in the game is a chat bubble with a tail, and the buttons under it are reply chips.",
+  "pages": [
+   "Messages",
+   "Incoming call"
+  ],
+  "q1": "Yes. The phone rises into your hand with a tilt, Rotom’s eyes blink on top, apps pop in one by one, notifications drop in beside it, and a full-screen incoming call from Giovanni rings with red waves while Rotom buzzes.",
+  "q2": "Pass 12 changed the top bar; this pass changes the bottom of every page. The speech box became a chat bubble with a tail and the buttons became reply chips, and a buzzing Rotom Phone tab with a count now sits in the key strip everywhere. The Boss Menu went from a dial to a phone with apps.",
+  "q3": "Yes, two. Messages holds the crew’s texts with reply chips, and Incoming call gives big moments (Giovanni ringing) their own screen, so the HQ page does not have to show them.",
+  "q4": "The phone is the Menu now: P opens it from any page and its apps hold Settings, Save and Rotom. Notifications point straight to the page that needs you, so nothing feels like a maze.",
+  "q5": "Yes. The Rotom Phone is straight from Sword and Shield and Scarlet and Violet, and the chat bubbles and calls feel like the games’ phone calls from rivals and gym leaders."
+ },
+ "14": {
+  "name": "Card Collection",
+  "big": "Every person in Dominion is now a collectable card: a coloured frame, a name bar with their level, a foil that sweeps across, a role stripe and rarity stars. Every grid of people turns into cards with stars, every picked row shines like foil, and the roster becomes a hand of six cards dealt onto the table.",
+  "pages": [
+   "Card binder",
+   "New card"
+  ],
+  "q1": "Yes. Cards deal in from below with a spin, a rainbow foil sweeps across every card and every picked row, and a hire rips open like a booster pack before the new card flips over in a burst of light.",
+  "q2": "Pass 13 changed how people talk; this pass changes how people look everywhere. Every grid of people became framed cards with rarity stars, the roster went from a lineup to a hand of six cards with stats under them, and foil now marks whatever you have picked on any list.",
+  "q3": "Yes, two. The Card binder keeps everyone you have met (crew, Rocket, Heroes, Gyms, town) with set bonuses, and New card gives each hire its own moment, so the roster only shows your crew.",
+  "q4": "The Rotom Phone’s Crew app opens the hand of cards, and the binder is one key (B) from there. A Foil shine switch in Effects turns the sweep off for anyone who finds it busy.",
+  "q5": "Yes. It borrows the Pokémon Trading Card Game look (name bar, level, art window, rarity stars, holo foil), and a pack opening is one of the most Pokémon things there is."
+ },
+ "15": {
+  "name": "Day & Night",
+  "big": "Every page now happens at a time of day. The light changes (gold morning, bright noon, orange evening, blue night), weather drifts over the place (sun rays, rain, warm haze, fireflies), and a clock in the top bar shows the phase and opens The Day dial.",
+  "pages": [
+   "The Day",
+   "Forecast",
+   "Night falls"
+  ],
+  "q1": "Yes. Rain streaks over Saffron at night, fireflies drift over the jobs, sun rays sweep across mornings, the day dial’s hand swings round to Morning, and on Night falls the city’s windows switch on one by one under a rising moon.",
+  "q2": "Pass 14 changed people; this pass changes the air on every page. Each place now has a time and weather laid over it, the top bar has a clock that opens the day, and the day itself is a dial you can see and plan around instead of a number.",
+  "q3": "Yes, three. The Day dial shows the four phases and what is planned in each, the Forecast shows a week of weather and what it does to jobs, and Night falls shows what the night shift did before you sleep.",
+  "q4": "The clock in the top bar opens The Day from any page, and the Rotom Phone has the forecast. Weather effects follow the Effects settings, with a Weather on screen switch for anyone who wants it still.",
+  "q5": "Yes. Time of day and weather are core Pokémon ideas (day and night from Gold and Silver, weather from Ruby and Sapphire), and rain helping some types and hurting Fire types is exactly how the games work."
  }
 }
