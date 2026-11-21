@@ -241,7 +241,8 @@ type MapPop =
   | { kind: 'forecast'; pick: number }
   | { kind: 'time'; pick: number }
   | { kind: 'weather'; pick: number; from?: 'time' }
-  | { kind: 'xpgate'; side: string; pick: number };
+  | { kind: 'xpgate'; side: string; pick: number }
+  | { kind: 'totem'; side: string; pick: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -342,7 +343,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'weather') pop = pocketOn() ? { kind, pick: weatherCard(this.stageWeather()) } : null;
     else if (kind === 'time') pop = pocketOn() ? { kind, pick: Math.max(0, ['day', 'eve', 'night'].indexOf(this.stageTime() ?? 'day')) } : null;
     else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
-    else if (kind === 'xpgate') pop = null;
+    else if (kind === 'xpgate' || kind === 'totem') pop = null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -693,8 +694,8 @@ export class MapScene extends Phaser.Scene {
       return;
     }
     // Pocket look: the Expedition Gate. Set out or Not now; Esc leaves.
-    if (p.kind === 'xpgate') {
-      if (action === 'confirm') return p.pick === 0 ? this.xpGateGo(p.side) : this.popClose();
+    if (p.kind === 'xpgate' || p.kind === 'totem') {
+      if (action === 'confirm') return p.pick !== 0 ? this.popClose() : p.kind === 'xpgate' ? this.xpGateGo(p.side) : this.totemGo(p.side);
       if (action === 'up' || action === 'down') { p.pick = 1 - p.pick; this.rxView?.refresh(); return; }
     }
     if (action === 'back' || action === 'confirm') return this.popClose();
@@ -753,7 +754,7 @@ export class MapScene extends Phaser.Scene {
   private popPick(what: 'tab' | 'pick', i: number): void {
     const p = this.rxPop;
     if (!p || !Number.isFinite(i)) return;
-    if (p.kind === 'xpgate' && what === 'pick') {
+    if ((p.kind === 'xpgate' || p.kind === 'totem') && what === 'pick') {
       if (p.pick === i) return void this.popInput('confirm');
       p.pick = i;
       this.rxView?.refresh();
@@ -892,6 +893,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'league') return c.pk ? this.leaguePocket(p.pick) : '';
     if (p.kind === 'forecast') return c.pk ? this.forecastPocket(p.pick) : '';
     if (p.kind === 'xpgate') return c.pk ? this.xpGatePocket(p) : '';
+    if (p.kind === 'totem') return c.pk ? this.totemPocket(p) : '';
     if (p.kind === 'time' || p.kind === 'weather') return c.pk ? this.skyPocket(p) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
@@ -2785,6 +2787,43 @@ export class MapScene extends Phaser.Scene {
     this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
   }
 
+  /** Pocket look: face the Totem. */
+  private totemGo(sideId: string): void {
+    const { session } = services();
+    let run: ReturnType<typeof session.enterTotem>;
+    try {
+      run = session.enterTotem(sideId);
+    } catch (err) {
+      this.scene.restart({ notice: String(err instanceof Error ? err.message : err), focus: 0 });
+      return;
+    }
+    playSfx(this, 'ui.select');
+    this.rxPop = null;
+    this.cameras.main.fadeOut(250);
+    this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+  }
+
+  /** Pocket look: Totem territory (mock-up `tm-stop`): the Totem, its aura, allies and tier, Face it or Walk around it. */
+  private totemPocket(p: Extract<MapPop, { kind: 'totem' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const content = session.content;
+    const pv = totemPreview(content, run, p.side);
+    const sp = content.species.get(pv.speciesId);
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+    const stop = run.stage?.current ? findNode(run.stage.map, run.stage.current)?.column ?? 1 : 1;
+    const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+    const types = (sp?.types ?? []).map(cap).join(' / ');
+    return pkXpDoor({
+      kind: 'stop', where: 'Totem Territory', sub: [region, `Stop ${stop}`, pv.name].filter(Boolean).join(' · '), kicker: 'Totem', name: pv.name,
+      text: pv.blurb,
+      rows: [['Totem', `${sp?.name ?? pv.speciesId} · Lv ${pv.level}${types ? ` · ${types}` : ''}`], ['Aura', `${pv.aura}${pv.environment ? ` ${pv.environment}` : ''}`], ['Allies', cap(pv.ally ?? 'It fights alone')], ['Tier', `${cap(pv.tier)}${pv.phases ? ` · ${pv.phases} ${pv.phases === 1 ? 'phase' : 'phases'}` : ''}`], ['Prize', cap(pv.rewards.join(', '))]],
+      options: [{ label: 'Face the Totem', detail: 'Losing never ends your run' }, { label: 'Walk around it', detail: 'Skipping costs nothing' }], index: p.pick,
+      say: 'Claw marks ring the clearing. Something has been watching the path for a long time.', esc: 'leave',
+      area: { key: 'tm', tag: 'Totem', page: 'tm-stop', cls: 'tms27', bg: 'packs/memories/eventbg/forest.png' },
+    }, { pick: 'popPick', over: '' });
+  }
+
   /** Pocket look: the Expedition Gate (mock-up `xp-gate`): the briefing card, Set out or Not now, the ranger's line. */
   private xpGatePocket(p: Extract<MapPop, { kind: 'xpgate' }>): string {
     const { session } = services();
@@ -2808,6 +2847,15 @@ export class MapScene extends Phaser.Scene {
   private openTotem(sideId: string): void {
     const { session } = services();
     const content = session.content;
+    // Pocket look: Totem territory is the mock-up's door page.
+    if (pocketOn() && this.rxView) {
+      this.rxPop = { kind: 'totem', side: sideId, pick: 0 };
+      this.rxPopAt = this.time.now;
+      this.rxCard = null;
+      this.busy = true;
+      this.rxView.refresh();
+      return;
+    }
     const pv = totemPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
     // Screens redesign: the Ink Ruler look draws the totem card like its mock-up.

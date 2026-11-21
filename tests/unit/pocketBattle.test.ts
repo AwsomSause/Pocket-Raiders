@@ -168,3 +168,15 @@ describe('the Pocket battle pages: Battle Info, a move card, the Battle Log', ()
     expect(pkBattle(model({ log: { tabs: ['All'], index: 0, lines: [] } }))).toContain('Nothing here yet.');
   });
 });
+
+describe('the Pocket Totem strip', () => {
+  it('shows the Totem word, its numbers and the area steps, and nothing without one', () => {
+    const plain = model();
+    const h = pkBattle({ ...plain, pkArea: { key: 'tm', word: 'Totem', chips: [['+1', 'Defense'], ['1', 'of 2']], flow: ['Territory', 'Totem', 'The Gift'], step: 1 } });
+    expect(h).toContain('gx-bt-area ar28 a-tm ms39');
+    expect(h).toContain('<b>+1</b>Defense');
+    expect(h).toMatch(/<i class="on">Totem<\/i>/);
+    expect(h).toMatch(/<i class="past">Territory<\/i>/);
+    expect(pkBattle(plain)).not.toContain('gx-bt-area');
+  });
+});

@@ -191,10 +191,13 @@ export function pkBattle(d: BattleModel): string {
     + (bp.power ? `<p><em>Boss power</em><i class="bp">${fitPic(itemArt(POWER[bp.power.kind] ?? 'mega_bracelet'), 24, 22, '', 1)}</i><span>${bp.power.ready ? 'Ready' : 'Used'}</span></p>` : '')
     + `<p><em>Heals left</em><i class="hl">${Array.from({ length: Math.min(8, bp.heals[1]) }, (_, k) => `<u class="${k < bp.heals[0] ? 'on' : ''}"></u>`).join('')}</i><span>${bp.heals[0]} of ${bp.heals[1]}</span></p>`
     + (bp.badge ? `<p><em>Badge</em><i class="bp">${fitPic(badgeArt(bp.badge), 32, 32, '', 1)}</i><span>${esc(cap(bp.badge))}</span></p>` : '') + '</div>' : '';
+  const ar = d.pkArea;
+  const area = ar ? `<div class="gx-bt-area ar28 a-${ar.key} ms39" data-key="bt-area"><div class="st38 k-${ar.key}"><i class="emb28 ${ar.key} hud" data-nocheck></i><b>${esc(ar.word)}</b>${ar.chips.map(([b, t]) => `<span class="n40"><b>${esc(b)}</b>${esc(t)}</span>`).join('')}<u${act('info')}><kbd>I</kbd> Info</u></div>`
+    + `<div class="fw50" data-m="flow">${ar.flow.map((t, k) => `<i class="${k < ar.step ? 'past' : k === ar.step ? 'on' : ''}">${esc(t)}</i>`).join('')}</div></div>` : '';
   const notice = d.notice ? pkConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
   const quiet = !!(d.exp?.length || d.level || f.budget || f.variant);
   return page(bp ? 'boss-battle' : 'battle', 26, `<div class="scr b20 battle b6 b7 b16 b17 gx-bt${bp ? ' bb18' : ''}${d.pkCatch ? ' capp' : ''}${d.pkBand ? ' evs' : ''}${d.shadow ? ' gx-bt-shadow' : ''}${d.foes.length > 1 ? ' gx-bt-duo' : ''}" data-key="battle">`
-    + d.foes.map((b, k) => foePlate(b, k, k === 0 && bp ? bp.tag : '')).join('') + (quiet ? '' : strip) + (quiet ? '' : boss) + (d.exp?.length || d.level ? '' : side) + bot + cmd + say + note + pin + marks
+    + d.foes.map((b, k) => foePlate(b, k, k === 0 && bp ? bp.tag : '')).join('') + (quiet ? '' : strip) + (quiet ? '' : boss) + (quiet ? '' : area) + (d.exp?.length || d.level ? '' : side) + bot + cmd + say + note + pin + marks
     + (d.level ? '' : fx + exp) + level + panels + tip + card + log + notice + (d.pkCatch ? pkCatchParts(d.pkCatch) : '') + (d.pkBand ? `<div class="evs-band" data-key="evs-band"><em>${esc(d.pkBand.em)}</em><b style="font-size:${fit(d.pkBand.b, 380, 36, 22, 0.5)}px">${esc(d.pkBand.b)}</b><span>${esc(d.pkBand.span)}</span></div>` : '') + '</div>', true);
 }
 

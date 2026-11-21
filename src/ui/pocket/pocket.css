@@ -698,3 +698,25 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 
 /* Expedition draft and recruit: the lit card on offer (the taken ones are the mock-up's yellow "on"). */
 .pkx .pks .dk35 p.gx-lit { box-shadow: 0 0 0 4px var(--blu, #2a75bb), 0 6px 0 rgba(13, 21, 48, .25); translate: 0 -4px; }
+
+/* Totem and raid battles: the area strip and its steps over the battle (mock-up `tm-battle`); the wrapper only carries the area's colours. */
+.pkx .pks .gx-bt-area { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.pkx .pks .gx-bt-area .st38, .pkx .pks .gx-bt-area .fw50 { pointer-events: auto; }
+/* The tier-51 rules (pocket.gen.css) do not reach a tier-26 battle page, so the strip's own rules are copied here. */
+.pkx .pks .gx-bt-area.a-tm { --ac: #e8891a; --ad: #5a3004; }
+.pkx .pks .gx-bt-area.a-rd { --ac: #d9267d; --ad: #4a0c33; }
+.pkx .pks .gx-bt-area .st38 { position: absolute; left: 14px; top: 158px; display: flex; align-items: center; gap: 8px; height: 54px; padding: 8px 8px 0 10px; color: #fff; background: #7b4e23; border: 2px solid #4a2a0c; border-top: 0; border-radius: 0 0 10px 10px; white-space: nowrap; box-shadow: 0 3px 0 rgba(0, 0, 0, .4); }
+.pkx .pks .gx-bt-area.a-rd .st38 { background: #3b1257; border-color: #ff7ac0; border-radius: 0 0 2px 18px; }
+.pkx .pks .gx-bt-area .st38 > b { font: 400 13px/18px var(--fd); text-transform: uppercase; color: var(--ink); background: #fff; border-radius: 999px; padding: 0 10px; }
+.pkx .pks .gx-bt-area .st38 .n40 { display: grid; justify-items: center; gap: 1px; min-width: 60px; padding: 3px 9px 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; background: rgba(0, 0, 0, .4); border-radius: 6px; }
+.pkx .pks .gx-bt-area .st38 .n40 b { font: 400 28px/1 var(--fd); color: var(--yel); }
+.pkx .pks .gx-bt-area .st38 > u { text-decoration: none; display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; line-height: 18px; color: var(--ink); background: var(--yel); border-radius: 999px; padding: 0 10px 0 3px; cursor: pointer; }
+.pkx .pks .gx-bt-area .st38 > u kbd { font-size: 11px; }
+.pkx .pks .gx-bt-area .emb28 { flex: none; display: grid; width: 24px; height: 24px; margin-right: -4px; background: var(--ac); }
+.pkx .pks .gx-bt-area .emb28.tm { background: radial-gradient(circle 2px at 34% 44%, #fff 0 99%, transparent), radial-gradient(circle 2px at 66% 44%, #fff 0 99%, transparent), linear-gradient(180deg, transparent 0 66%, #fff 66% 74%, transparent 74%), var(--ac); clip-path: polygon(50% 0, 100% 30%, 86% 100%, 14% 100%, 0 30%); }
+.pkx .pks .gx-bt-area .emb28.rd { border-radius: 50%; border: 2px solid #fff; }
+.pkx .pks .gx-bt-area .fw50 { position: absolute; left: 14px; top: 218px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.pkx .pks .gx-bt-area .fw50 i { font: 400 12px/18px var(--fd); font-style: normal; text-transform: uppercase; letter-spacing: .06em; color: #c9d3ee; background: rgba(13, 21, 48, .88); padding: 0 12px 0 16px; clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%, 7px 50%); }
+.pkx .pks .gx-bt-area .fw50 i:first-child { clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%); padding-left: 10px; }
+.pkx .pks .gx-bt-area .fw50 i.past { color: #8a93b4; }
+.pkx .pks .gx-bt-area .fw50 i.on { color: var(--ink); background: var(--yel); }

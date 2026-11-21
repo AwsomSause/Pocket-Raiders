@@ -246,6 +246,14 @@ describe('the Pocket Expedition pages', () => {
     expect(h).toContain('A ranger lifts the gate.');
     expect(h).toContain('leave');
   });
+  it('Totem Territory uses the same door in the Totem colours, with its own page id', async () => {
+    const { pkXpDoor } = await import('../../src/ui/pocket/screens/expedition');
+    const h = pkXpDoor({ kind: 'stop', where: 'Totem Territory', sub: 'Stop 4', kicker: 'Totem', name: 'Totem Lurantis', text: 't', rows: [['Aura', 'Grassy']], options: [{ label: 'Face the Totem', detail: '' }, { label: 'Walk around it', detail: '' }], index: 1, say: '', esc: 'leave', area: { key: 'tm', tag: 'Totem', page: 'tm-stop', cls: 'tms27', bg: 'x.png' } });
+    expect(pkPageOf(h)?.id).toBe('tm-stop');
+    expect(h).toContain('a-tm');
+    expect(h).toContain('emb28 tm card');
+    expect(h).toMatch(/class="btn on"[^>]*data-key="xp-ch-1"/);
+  });
   it('the route: stops placed up the ridge, the lit stop and the walked trail, Extract now as a choice', async () => {
     const { pkXpRoute, xpPlace } = await import('../../src/ui/pocket/screens/expedition');
     const nodes = [

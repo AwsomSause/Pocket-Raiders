@@ -11,15 +11,15 @@ export interface PkXpOpt { label: string; detail: string; off?: boolean }
 export interface PkXpActs { pick: string; over: string }
 const ROUTE_ACTS: PkXpActs = { pick: 'pick', over: 'over' };
 
-const EMB = '<i class="emb28 xp card" data-nocheck></i>';
+const EMB = (area = 'xp'): string => `<i class="emb28 ${area} card" data-nocheck></i>`;
 const BG = 'packs/memories/eventbg/mountain.png';
 const beats = (at: number): string => `<div class="beats">${['Talk', 'Choose', 'Result', 'Reward'].map((t, k) => `<i class="${k < at ? 'past' : k === at ? 'on' : ''}">${k + 1} ${t}</i>`).join('')}</div>`;
 const where = (tag: string, name: string, sub: string): string =>
   `<div class="ev-where" data-m="hdr" data-key="xp-where"><em>${esc(tag)}</em><b style="font-size:${fit(name, 420, 30, 20, 0.55)}px">${esc(name)}</b><span>${esc(sub)}</span></div>`;
 const choices = (opts: readonly PkXpOpt[], index: number, a: PkXpActs): string =>
   `<div class="dr-ch" data-key="xp-ch">${opts.map((o, k) => `<div class="btn${k === index ? ' on' : ''}${o.off ? ' off' : ''}" data-key="xp-ch-${k}"${act(a.pick, k, a.over)}><b style="font-size:${fit(o.label, 340, 28, 18, 0.55)}px">${esc(o.label)}</b>${o.detail ? `<span>${esc(o.detail)}</span>` : ''}</div>`).join('')}</div>`;
-const card = (kicker: string, name: string, text: string, rows: readonly (readonly [string, string])[]): string =>
-  `<div class="dr-card" data-key="xp-card">${EMB}<em>${esc(kicker)}</em><b style="font-size:${fit(name, 330, 46, 24, 0.55)}px">${esc(name)}</b><span style="font-size:${fitBody(text, 390, 40, [13, 12, 11], 1.35)}px">${esc(text)}</span>${rows.slice(0, 5).map(([k, v]) => `<p><i>${esc(k)}</i><span style="font-size:${fit(v, 300, 13, 10, 0.5)}px">${esc(v)}</span></p>`).join('')}</div>`;
+const card = (kicker: string, name: string, text: string, rows: readonly (readonly [string, string])[], area = 'xp'): string =>
+  `<div class="dr-card" data-key="xp-card">${EMB(area)}<em>${esc(kicker)}</em><b style="font-size:${fit(name, 330, 46, 24, 0.55)}px">${esc(name)}</b><span style="font-size:${fitBody(text, 390, 40, [13, 12, 11], 1.35)}px">${esc(text)}</span>${rows.slice(0, 5).map(([k, v]) => `<p><i>${esc(k)}</i><span style="font-size:${fit(v, 300, 13, 10, 0.5)}px">${esc(v)}</span></p>`).join('')}</div>`;
 const say = (t: string): string => (t ? `<div class="tb" data-m="tb" data-key="xp-tb"><p style="font-size:${fitBody(t, 880, 52, [18, 16, 15, 14, 13], 1.4)}px">${esc(t)}</p></div>` : '');
 
 export interface PkXpDoorModel {
@@ -38,15 +38,18 @@ export interface PkXpDoorModel {
   esc: string;
   /** A Pokémon standing by the card (a recruit). */
   mon?: PkArt | null;
+  /** Another area's door in the same frame: Totem territory (`tm`) or a raid den (`rd`), its page id and backdrop. */
+  area?: { key: 'tm' | 'rd'; tag: string; page: string; cls: string; bg: string };
 }
 
 /** The gate's briefing and a stop's question: the card at the left, the choices at the right, the line at the bottom. */
 export function pkXpDoor(d: PkXpDoorModel, a: PkXpActs = ROUTE_ACTS): string {
-  const cls = d.kind === 'gate' ? 'hg33 ar28 a-xp event e9 dr22 st27 xpg27' : `event e9 dr22 st27 ar28 a-xp xps30${d.mon ? ' hg33 rc35' : ''}`;
+  const ar = d.area;
+  const cls = ar ? `hg33 ar28 a-${ar.key} event e9 dr22 st27 ${ar.cls}` : d.kind === 'gate' ? 'hg33 ar28 a-xp event e9 dr22 st27 xpg27' : `event e9 dr22 st27 ar28 a-xp xps30${d.mon ? ' hg33 rc35' : ''}`;
   const mon = d.mon ? `<i class="rec35" data-nocheck data-key="xp-mon">${fitPic(d.mon, 160, 160, '', 3)}</i>` : '';
   const ks: PkKey[] = [['↑↓', 'choose'], ['Enter', 'confirm'], ...(d.esc ? [['Esc', d.esc] as const] : [])];
-  const frame = d.kind === 'gate' || d.mon ? '<i class="fr33 l" data-nocheck></i><i class="fr33 r" data-nocheck></i>' : '';
-  return page(d.kind === 'gate' ? 'xp-gate' : d.mon ? 'xp-recruit' : 'xp-stop', 51, `<div class="scr ${cls}" data-key="xp-door">${back(BG, 'ar-bg dim')}<i class="ev-vig"></i>${where('Expedition', d.where, d.sub)}${beats(1)}${card(d.kicker, d.name, d.text, d.rows)}${mon}${choices(d.options, d.index, a)}${say(d.say)}${keys(ks)}${frame}</div>`);
+  const frame = d.kind === 'gate' || d.mon || ar ? '<i class="fr33 l" data-nocheck></i><i class="fr33 r" data-nocheck></i>' : '';
+  return page(ar ? ar.page : d.kind === 'gate' ? 'xp-gate' : d.mon ? 'xp-recruit' : 'xp-stop', 51, `<div class="scr ${cls}" data-key="xp-door">${back(ar?.bg ?? BG, 'ar-bg dim')}<i class="ev-vig"></i>${where(ar?.tag ?? 'Expedition', d.where, d.sub)}${beats(1)}${card(d.kicker, d.name, d.text, d.rows, ar?.key)}${mon}${choices(d.options, d.index, a)}${say(d.say)}${keys(ks)}${frame}</div>`);
 }
 
 export interface PkXpNode {

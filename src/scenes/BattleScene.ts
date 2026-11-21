@@ -2021,6 +2021,7 @@ export class BattleScene extends Phaser.Scene {
       pkCatch: this.rxPkCatch,
       pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
       pkBoss: this.pkBossPanel(),
+      pkArea: this.pkAreaStrip(),
       turn: this.run.battle?.turn ?? 0,
       panelAt: this.rxPanelAt,
       tip,
@@ -3576,6 +3577,21 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Pocket look: the boss battle's panel (mock-up `boss-battle`): its boss power, the healing items it has left, the badge at stake. */
+  /** Pocket look: the Totem's strip (aura, phase, ally calls) at the top of its battle (mock-up `tm-battle`). */
+  private pkAreaStrip(): BattleModel['pkArea'] {
+    const battle = this.run.battle;
+    const totem = battle?.totem;
+    if (!battle || !totem || !pocketOn()) return null;
+    const tdef = services().session.content.totems.totems.find((x) => x.id === totem.id);
+    if (!tdef) return null;
+    const NAME: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'Accuracy', eva: 'Evasion' };
+    const boosts = Object.entries(tdef.aura.boost ?? {}).map(([k, n]) => [`+${n}`, NAME[k] ?? k] as const);
+    const chips: (readonly [string, string])[] = [...(boosts.length ? boosts : [['On', 'aura'] as const])];
+    if (tdef.phases.length) chips.push([String(Math.min(tdef.phases.length, totem.phasesDone.length + 1)), `of ${tdef.phases.length}`]);
+    if (tdef.ally) chips.push([`${Math.max(0, tdef.ally.maxCalls - totem.callsUsed)}`, tdef.ally.maxCalls - totem.callsUsed === 1 ? 'call left' : 'calls left']);
+    return { key: 'tm', word: 'Totem', chips: chips.slice(0, 3), flow: ['Territory', 'Totem', 'The Gift'], step: 1 };
+  }
+
   private pkBossPanel(): BattleModel['pkBoss'] {
     const battle = this.run.battle;
     const boss = battle && pocketOn() ? this.boss() : null;
