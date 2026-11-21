@@ -50,11 +50,32 @@ export interface PkGaWonModel {
 
 /** A Champion's Tournament round won (mock-up `ga-won`): who went out, the heal, the prize, the shop, what comes next. */
 export function pkGaWon(d: PkGaWonModel): string {
-  const title = d.champ?.title ?? `${d.round} Won`;
+  return pkRes31({ page: d.champ ? 'ga-champ' : 'ga-won', area: 'ga', cls: d.champ ? 'champ34' : '', tag: "Champion's Tournament", title: d.champ?.title ?? `${d.round} Won`, text: d.text, rows: d.rows, side: d.side, lines: d.lines, button: d.champ?.button ?? 'Back to the map', party: d.party, counts: d.counts });
+}
+
+/** An area's ending page (mock-ups' `res31`: `ga-won`, `rd-clear`): the header, up to four prize tiles, a side note with the button, the team walking out and three counts. */
+export interface PkRes31 {
+  page: string;
+  area: 'ga' | 'rd' | 'tm' | 'xp' | 'et';
+  cls?: string;
+  tag: string;
+  title: string;
+  text: string;
+  rows: readonly { art: PkArt | null; title: string; sub: string; on?: boolean }[];
+  side: string;
+  lines: readonly (readonly [string, string])[];
+  button: string;
+  party: readonly (PkArt | null)[];
+  counts: readonly (readonly [string, string])[];
+  /** The area's emblem picture inside the round badge (raids: the Max Raid mark). */
+  emblem?: string;
+}
+
+export function pkRes31(d: PkRes31): string {
   const rows = d.rows.slice(0, 4).map((r) => `<p class="${r.on ? 'on' : ''}"><span>${r.art ? fitPic(r.art, 60, 76, '', 3) : ''}</span><b style="font-size:${fit(r.title, 170, 18, 12, 0.55)}px">${esc(r.title)}</b><em>${esc(r.sub)}</em></p>`).join('');
   const walk = d.party.slice(0, 6).map((p, k) => `<span style="animation-delay:${(k * 0.12).toFixed(2)}s">${fitPic(p, 80, 80, '', 2)}</span>`).join('');
-  return page(d.champ ? 'ga-champ' : 'ga-won', 51, `<div class="scr sz20 ar28 a-ga res31${d.champ ? ' champ34' : ''}" data-key="ga-won"><i class="rays25 f" data-nocheck></i><div class="rz-h" data-m="hdr"><i class="emb28 ga hd" data-nocheck></i><em>Champion's Tournament</em><b style="font-size:${fit(title, 340, 40, 26, 0.6)}px">${esc(title)}</b><span style="font-size:${fitBody(d.text, 460, 40, [15, 14, 13, 12], 1.3)}px">${esc(d.text)}</span></div>`
-    + `<div class="rz-t" data-key="ga-won-rows">${rows}</div><div class="rz-s" data-key="ga-won-side"><b>${esc(d.side)}</b>${d.lines.slice(0, 2).map(([k, l]) => `<p style="font-size:${fitBody(l, 260, 60, [13, 12, 11], 1.3)}px">${k ? `<i>${esc(k)}</i>` : ''}${esc(l)}</p>`).join('')}<div class="btn on nx"${act('next')}><b>${esc(d.champ?.button ?? 'Back to the map')}</b></div></div>`
+  return page(d.page, 51, `<div class="scr sz20 ar28 a-${d.area} res31${d.cls ? ` ${d.cls}` : ''}" data-key="ga-won"><i class="rays25 f" data-nocheck></i><div class="rz-h" data-m="hdr"><i class="emb28 ${d.area} hd" data-nocheck>${d.emblem ? `<img src="${esc(d.emblem)}" alt="">` : ''}</i><em>${esc(d.tag)}</em><b style="font-size:${fit(d.title, 340, 40, 26, 0.6)}px">${esc(d.title)}</b><span style="font-size:${fitBody(d.text, 460, 40, [15, 14, 13, 12], 1.3)}px">${esc(d.text)}</span></div>`
+    + `<div class="rz-t" data-key="ga-won-rows">${rows}</div><div class="rz-s" data-key="ga-won-side"><b>${esc(d.side)}</b>${d.lines.slice(0, 2).map(([k, l]) => `<p style="font-size:${fitBody(l, 260, 60, [13, 12, 11], 1.3)}px">${k ? `<i>${esc(k)}</i>` : ''}${esc(l)}</p>`).join('')}<div class="btn on nx"${act('next')}><b>${esc(d.button)}</b></div></div>`
     + `<div class="rz-p" data-m="party"><i class="rz-g" data-nocheck></i><div class="rz-w">${walk}</div><div class="rz-n">${d.counts.map(([b, e]) => `<p><b>${esc(b)}</b><em>${esc(e)}</em></p>`).join('')}</div></div>${keys([['Enter', 'continue']])}</div>`);
 }
 

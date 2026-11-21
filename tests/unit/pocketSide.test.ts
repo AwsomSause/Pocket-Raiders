@@ -401,3 +401,17 @@ describe('the Pocket Raid Lobby', () => {
     expect(h).toContain('data-act="popPick"');
   });
 });
+
+describe('the Pocket Raid Clear page', () => {
+  it('uses the shared ending page in raid colours', async () => {
+    const { pkRes31 } = await import('../../src/ui/pocket/screens/galar');
+    const h = pkRes31({ page: 'rd-clear', area: 'rd', emblem: 'icon.png', tag: 'Advanced den', title: 'Raid Clear', text: 'Beaten in 4 turns. All 3 shields broken.',
+      rows: [{ art: null, title: '₽ 4,281', sub: 'Den prize' }, { art: null, title: 'Tentacool', sub: 'It wants to join you', on: true }],
+      side: 'The den is quiet', lines: [['', 'You choose next.']], button: 'See who wants to join', party: [null], counts: [['4', 'turns used'], ['3 of 3', 'shields broken'], ['0', 'fainted']] });
+    expect(h.startsWith('<!--pk:rd-clear:51-->')).toBe(true);
+    expect(h).toContain('a-rd res31');
+    expect(h).toContain('emb28 rd hd');
+    expect(h).toContain('It wants to join you');
+    expect(h).toContain('3 of 3');
+  });
+});

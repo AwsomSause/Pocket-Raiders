@@ -152,7 +152,7 @@ import { pkHall } from '../ui/pocket/screens/hall';
 import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
 import { battleInfo, battleStatus, moveInfo } from '../core/presentation/battleInfo';
 import { weatherCard } from '../ui/pocket/screens/sky';
-import { pkGaLineup, pkGaWon, type PkGaLineupModel, type PkGaWonModel, type PkSideRow } from '../ui/pocket/screens/galar';
+import { pkGaLineup, pkGaWon, pkRes31, type PkGaLineupModel, type PkGaWonModel, type PkSideRow } from '../ui/pocket/screens/galar';
 import { itemArt, monArt, type PkArt } from '../ui/pocket/art';
 import { pkArtOf } from '../ui/pocket/templates';
 import { activeGameEvents, objectiveViews } from '../core/gameEvents';
@@ -169,7 +169,7 @@ import { versusView, type VersusModel } from '../ui/redux/screens/versus';
 import { shortestSentence, type CutModel } from '../ui/redux/screens/cut';
 import type { Art } from '../ui/redux/templates';
 import { playCutMoment } from '../ui/redux/moment';
-import { rxFileOf } from '../ui/redux/assets';
+import { rxFileOf, rxUrl } from '../ui/redux/assets';
 import type { AssetManifest } from '../assets/catalog';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
@@ -218,6 +218,7 @@ import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/sp
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
 import type { Move, TypeName } from '../core/contentSchema';
+import { catalogIconId } from '../core/contentSchema';
 import { rivalBossFor } from '../core/rivals/major';
 
 const MESSAGE_AUTO_ADVANCE_MS = 1400;
@@ -3943,6 +3944,42 @@ export class BattleScene extends Phaser.Scene {
         const won = this.pkGaWonModel(before, result.run, art, trainer, money);
         await this.pkPage((c) => (c.pk ? (won ? pkGaWon(won) : pkVictory(model)) : ''));
         shown = true;
+      }
+      // A raid won (mock-up `rd-clear`): the prize, what was found, whether the boss wants to join, the clock and the shields.
+      const raid = before?.battle?.raid;
+      if (end.outcome === 'win' && raid && !raid.practice) {
+        const base = content.raids.raids.find((r) => r.id === raid.id);
+        if (base) {
+          const def = scaledRaid(content, base, raid.badges);
+          const joined = result.run.pending.find((p) => p.kind === 'caught' && p.raidTier !== undefined);
+          const joins = !!joined;
+          const boss = joined?.kind === 'caught' ? joined.mon : before!.battle!.enemyTeam.find((m) => m.uid === raid.bossUid) ?? before!.battle!.enemyTeam[0];
+          const total = def.shield?.at.length ?? 0, broken = total - raid.pendingShields.length - (raid.shieldHp > 0 ? 1 : 0);
+          const turns = before!.battle!.turn ?? 1;
+          const item = (id: string) => pkArtOf(artOf(this, content.items.get(id)?.iconAssetId ?? (content.catalog.get(id) ? catalogIconId(content.catalog.get(id)!.icon) : undefined)));
+          const itemName = (id: string) => content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id;
+          const prizes = [
+            ...(end.moneyGained > 0 ? [{ art: itemArt('amulet_coin'), title: `₽ ${end.moneyGained.toLocaleString('en-US')}`, sub: 'Den prize' }] : []),
+            ...end.itemsFound.map((id) => ({ art: item(id), title: itemName(id), sub: 'Found in the den' })),
+          ].slice(0, joins ? 3 : 4);
+          const bossArt = boss ? ((f) => (f ? monArt(f) : null))(monFile(this, boss.speciesId, 'front', !!boss.shiny)) : null;
+          const bot = raid.bot ? content.raids.bots.find((b) => b.id === raid.bot)?.label.replace(/\s*\(.*\)$/, '') : undefined;
+          const lines: [string, string][] = [];
+          if (bot) lines.push(['Ally', `${bot} fought beside you.`]);
+          if (raid.timerLeft) lines.push(['Clock', `${raid.timerLeft} turn${raid.timerLeft === 1 ? '' : 's'} to spare.`]);
+          const shieldLine = total ? ` ${broken >= total ? (total === 1 ? 'The shield' : `All ${total} shields`) : `${broken} of ${total} shields`} broken.` : '';
+          await this.pkPage((c) => (c.pk ? pkRes31({
+            page: 'rd-clear', area: 'rd', emblem: rxUrl('packs/raid/max/icon.png'), tag: `${raidTierName(content.raids.badgeScaling, def)} den`, title: 'Raid Clear',
+            text: `Beaten in ${turns} turn${turns === 1 ? '' : 's'}.${shieldLine}`,
+            rows: [...prizes, ...(joins && boss ? [{ art: bossArt, title: this.speciesName(boss), sub: 'It wants to join you', on: true }] : [])],
+            side: joins ? 'The den is quiet' : 'The storm is over',
+            lines: [...(joins ? [['', 'The boss is worn out and wants to come with you. You choose next.'] as [string, string]] : []), ...lines].slice(0, 2),
+            button: joins ? 'See who wants to join' : 'Back to the map',
+            party: party.map((m) => ((f) => (f ? monArt(f) : null))(monFile(this, m.speciesId, 'front', !!m.shiny))),
+            counts: [[String(turns), 'turns used'], ...(total ? [[`${Math.max(0, broken)} of ${total}`, 'shields broken'] as [string, string]] : []), [String(down), 'fainted']],
+          }) : ''));
+          shown = true;
+        }
       }
       if (end.outcome === 'win' || end.outcome === 'caught') {
         const rows: PkExpRow[] = party.map((m) => {
