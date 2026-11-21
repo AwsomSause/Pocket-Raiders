@@ -1,0 +1,96 @@
+{
+  "_source": "Pass 50 of plans/evil-mode-rework/redesign-50 (pages jobs, live, calling, market, cargo, gymplan, gymtalk, gear, power, snap, phase, teamup, crewin, legend). Director 2026-11-21: give the mockups' pages simple real rules. Numbers are balance: tune here.",
+  "board": {
+    "size": 3,
+    "lines": [
+      "“{target} has one night guard. He naps at two.”",
+      "“I've watched {target} for a week, Boss. We can do it.”",
+      "“Easy money at {target}. Say the word.”"
+    ],
+    "empty": "Nothing on the board right now. Try the Region Map."
+  },
+  "live": {
+    "chance": 35,
+    "watch": [2, 6],
+    "per": 9,
+    "runOdds": -7,
+    "runHeat": 4,
+    "steps": ["Case it", "Slip in", "Grab", "Get out"],
+    "events": [
+      "A staff member looks up from the desk. {who} freezes behind the shelves.",
+      "A Growlithe on a chain lifts its head. {who} holds their breath.",
+      "Footsteps on the stairs. {who} is caught between two doors.",
+      "A light comes on in the back room. {who} drops flat."
+    ],
+    "still": "Stay still",
+    "smoke": "Throw a Smoke Ball",
+    "smokeSub": "Clean escape · lose the grab",
+    "run": "Grab it and run",
+    "smokeLine": "A puff of smoke and {who} is gone. Nothing taken, nobody saw a face.",
+    "noSmoke": "You have no Smoke Ball."
+  },
+  "calling": {
+    "dread": 4,
+    "regard": -2,
+    "heat": 3,
+    "tension": 3,
+    "motto": "We took what we came for. We will be back.",
+    "lines": [
+      "“Leave a card? Feels like bragging, Boss. I like it.”",
+      "“Let them know who it was.”"
+    ],
+    "left": "The card goes on the counter. {district} will talk about {team} tomorrow.",
+    "notNow": "There's no job to sign right now."
+  },
+  "market": {
+    "stock": 6,
+    "seller": "Gentleman",
+    "line": "“Dirty money spends just fine in here, friend.”",
+    "closed": "The Black Market opens in the evening, and you need a Fence or a Black Market contact.",
+    "noMoney": "Not enough money for that.",
+    "bought": "Bought {item} for ₽{price}.",
+    "items": [
+      { "id": "focus-sash", "name": "Focus Sash", "about": "Survives one hit", "price": 1800, "pic": "i-focus_sash" },
+      { "id": "smoke-ball", "name": "Smoke Ball", "about": "A clean escape from the Hero", "price": 700, "pic": "g-smoke-ball" },
+      { "id": "rare-candy", "name": "Rare Candy", "about": "One level, no questions", "price": 900, "pic": "i-rare_candy" },
+      { "id": "revive", "name": "Revive", "about": "Back on its feet", "price": 1200, "pic": "i-revive" },
+      { "id": "blackglasses", "name": "Black Glasses", "about": "Dark moves hit harder", "price": 2400, "pic": "i-black_glasses" },
+      { "id": "full-restore", "name": "Full Restore", "about": "All HP, no status", "price": 2000, "pic": "i-full_restore" },
+      { "id": "quick-claw", "name": "Quick Claw", "about": "Sometimes moves first", "price": 1600, "pic": "i-quick_claw" },
+      { "id": "kings-rock", "name": "King's Rock", "about": "Hits can make them flinch", "price": 2200, "pic": "i-kings_rock" },
+      { "id": "shell-bell", "name": "Shell Bell", "about": "Heals a bit on each hit", "price": 2000, "pic": "i-shell_bell" }
+    ]
+  },
+  "cargo": {
+    "riskOdds": 4,
+    "items": [
+      { "id": "balls", "name": "Stolen Poké Balls", "where": "Crate · under the seats", "risk": 2, "pay": 300, "pic": "g-ball" },
+      { "id": "candy", "name": "Rare Candy", "where": "Lunch boxes", "risk": 1, "pay": 150, "pic": "i-rare_candy" },
+      { "id": "gems", "name": "Dark Gems", "where": "Luggage rack", "risk": 3, "pay": 400, "pic": "g-dark-gem" },
+      { "id": "pup", "name": "A Houndour", "where": "Pet carrier · it barks", "risk": 4, "pay": 500, "pic": "p-houndour" }
+    ],
+    "lines": [
+      "“Not the Houndour, Boss. It'll bark at the first conductor it sees.”",
+      "“Light load, easy ride. Heavy load, heavy pay.”"
+    ],
+    "check": ["the conductor is bored", "the conductor is awake", "the conductor is looking at every bag"]
+  },
+  "gym": {
+    "plan": "“{way}: {text}”",
+    "talk": {
+      "beat": "You want my Gym? Then show me you can hold it.",
+      "buy": "Money. Of course it's money. Name your price, then.",
+      "break": "I hear your people outside. You'd tear this place apart?",
+      "blackmail": "You've been asking questions about me. What do you want?",
+      "convert": "You fight well. Why would someone like you work in the shadows?"
+    },
+    "ask": {
+      "beat": "Battle for the Gym",
+      "buy": "Take the money and step aside",
+      "break": "We're taking it tonight",
+      "blackmail": "Step aside, or the town hears your secret",
+      "convert": "Join us, and keep your title"
+    },
+    "walk": "Walk away"
+  }
+}

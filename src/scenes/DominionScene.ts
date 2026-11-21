@@ -65,6 +65,8 @@ import { heroView, type MonFiles } from '../ui/redux/screens/dominion/heroViews'
 import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController';
 import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
+import { JobsX } from './dominion/r4Jobs';
+import type { LiveAnswer } from '../core/dominion/schema';
 import { TutorialController } from './dominion/tutorialController';
 import type { TutWhere } from '../core/dominion/tutorial';
 
@@ -151,7 +153,11 @@ export class DominionScene extends Phaser.Scene {
     toMap: (next, notice) => this.afterJob(next, notice),
     onMorningHq: () => this.screen === 'hq' && !this.police.owns() && !this.voices.on,
     r5: () => this.r4People(),
+    callingDue: () => this.jx.callingDue(),
+    openCalling: () => this.jx.openCalling(),
   });
+  /** Redesign R4: the Job board, the live question, the calling card, the Black Market, the cargo and Gym pages. */
+  private jx = this.newJx();
   /** Redesign R4: Pick the crew over the Card (mockup `crewpick`). */
   private cp = new CrewPick();
   /** Redesign R4: the Boss card is up (mockup `tcard`, from the Start menu). */
@@ -196,6 +202,7 @@ export class DominionScene extends Phaser.Scene {
     this.start = new R5StartMenu((id) => this.r5go(id), () => this.view?.refresh());
     this.cp = new CrewPick();
     this.bcard = false;
+    this.jx = this.newJx();
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -281,6 +288,7 @@ export class DominionScene extends Phaser.Scene {
         crewPick: (i) => this.crewPick(Number(i)),
         crewBack: () => { this.cp.close(); this.view?.refresh(); },
         tcardBack: () => { this.bcard = false; this.view?.refresh(); },
+        ...this.jx.acts(),
         opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
         townMeet: (i) => this.answerMeet(Number(i)),
@@ -334,6 +342,7 @@ export class DominionScene extends Phaser.Scene {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
         charterOver: (i) => { this.setup = { ...this.setup, cAt: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
+        ...this.jx.overs(),
         ...this.crew.overs(),
         ...this.chair.overs(),
         ...this.res.overs(),
@@ -377,6 +386,8 @@ export class DominionScene extends Phaser.Scene {
       }
       // Redesign R0: the Start menu over the HQ keeps every key (its moves come through key()).
       if (this.start.on || this.bcard) return;
+      // Redesign R4: the Job board, the live question, the calling card and the Black Market keep their keys.
+      if (this.inRun() && this.jx.raw(e.code)) return;
       // D24: the interview room and the release page read their keys first (typing included).
       // D30: a job moment or the morning paper keeps every key while it is up (N is Next action on a result page).
       if (this.inRun() && this.job.raw(e.code)) return;
@@ -430,6 +441,7 @@ export class DominionScene extends Phaser.Scene {
       if (this.screen === 'card') {
         // Redesign R4: B opens Pick the crew (and closes it again).
         if (e.code === 'KeyB') return this.cp.on ? (this.cp.close(), void this.view?.refresh()) : this.openCrewPick();
+        if (!this.cp.on && this.jx.cardRaw(e.code)) return;
         return;
       }
       if (this.screen === 'base') {
@@ -615,6 +627,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.menu.owns()) return this.menu.render();
     if (this.tut.ownsPage()) return this.tut.renderPage();
     const b = this.block();
+    if (b && this.inRun() && this.jx.owns()) return this.jx.render();
     if (b && this.inRun() && this.job.owns()) return this.job.render();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
     if (b && this.inRun() && this.snatch.owns()) return this.snatch.render();
@@ -648,7 +661,7 @@ export class DominionScene extends Phaser.Scene {
       case 'card': {
         const c = b && this.cursor ? this.cardOf() : null;
         if (!b || !c) return '';
-        return this.cp.on ? this.crewPickPage(b) : this.cardPage(b, c);
+        return this.cp.on ? this.crewPickPage(b) : this.jx.cardPage(b, r5Run(this, b)) ?? this.cardPage(b, c);
       }
       case 'crew':
       case 'assign':
@@ -859,6 +872,7 @@ export class DominionScene extends Phaser.Scene {
       if (a === 'back' || a === 'confirm') this.bcard = false;
       return void this.view?.refresh();
     }
+    if (this.inRun() && this.jx.key(a)) return;
     if (this.end.key(a)) return;
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
@@ -879,6 +893,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.em.key(a)) return void this.view?.refresh();
     if (this.pt.key(a)) return void this.view?.refresh();
     if (this.screen === 'card' && this.cp.on) return this.crewPickKey(a);
+    if (this.screen === 'card' && this.jx.cardKey(a)) return;
     if (this.screen === 'interrupt') {
       if (a === 'left' || a === 'up') this.intAt = (this.intAt + 2) % 3;
       else if (a === 'right' || a === 'down') this.intAt = (this.intAt + 1) % 3;
@@ -1265,6 +1280,11 @@ export class DominionScene extends Phaser.Scene {
       this.screen = 'map';
       this.cursor = this.cursor ?? newCursor(b);
       this.cursor = { ...this.cursor, page: pageFor(b), at: 0 };
+    } else if (i === 4 && b) {
+      // Redesign R4: the Jobs tab is the Job board (mockup `jobs`).
+      this.screen = 'map';
+      this.cursor = this.cursor ?? newCursor(b);
+      return this.jx.openBoard();
     } else this.notice = DOMINION_DATA.start.lockedTab;
     this.view?.refresh();
   }
@@ -1513,6 +1533,37 @@ export class DominionScene extends Phaser.Scene {
   }
 
   /** People for the job moments (order, done, botched): the Boss and the member who went. */
+  private newJx(): JobsX {
+    return new JobsX({
+      block: () => this.block() ?? null,
+      refresh: () => this.view?.refresh(),
+      people: () => this.r4People(),
+      input: () => {
+        const b = this.block(), c = this.cursor;
+        const id = b && c ? gridPages(b)[c.page]?.[c.at] : undefined;
+        const d = c ? DOMINION_DATA.field.districts.find((x) => x.id === c.district) : undefined;
+        return id && c && d ? { action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring, opt: c.opt } : null;
+      },
+      setOpt: (opt) => { if (this.cursor) this.cursor = { ...this.cursor, opt }; this.view?.refresh(); },
+      take: (j) => {
+        const b = this.block();
+        if (!b) return;
+        const pages = gridPages(b);
+        const page = pages.findIndex((p) => p.includes(j.action));
+        const d = DOMINION_DATA.field.districts.find((x) => x.id === j.district);
+        if (page < 0 || !d) return;
+        this.screen = 'map';
+        this.cursor = { ...(this.cursor ?? newCursor(b)), district: d.id, target: Math.max(0, d.targets.findIndex((t) => t.id === j.target)), page, at: pages[page]!.indexOf(j.action), focus: 'grid', bring: [], opt: null };
+        this.openCard('map');
+      },
+      doIt: (live) => this.doIt(live),
+      toMap: () => { const b = this.block(); this.screen = 'map'; if (b) this.cursor = this.cursor ?? newCursor(b); this.view?.refresh(); },
+      monPic: (sp, h) => monPic(this, sp, h),
+      bossPic: (h) => bossPic(this.files?.boss.file ?? null, h),
+      say: (line) => this.job.say(line),
+    });
+  }
+
   private r4People(): { run: R5Run; boss: R5Person; member: (id: string | null, name?: string) => R5Person | null } | null {
     const b = this.block();
     if (!b) return null;
@@ -1543,17 +1594,24 @@ export class DominionScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
-  private doIt(): void {
+  private doIt(live?: LiveAnswer): void {
     const b = this.block(), c = this.cursor, card = this.cardOf();
     if (!b || !c || !card) return;
     if (card.blocked) return this.view?.refresh();
     const id = gridPages(b)[c.page]![c.at]!;
     const d = DOMINION_DATA.field.districts.find((x) => x.id === c.district)!;
     const input = { action: id, target: d.targets[c.target]?.id ?? null, district: d.id, bring: c.bring, opt: card.opt };
+    // Redesign R4 (mockup `live`): on a stealth job something may happen first; the answer comes back here.
+    if (!live && this.jx.maybeLive(input)) return;
     const before = structuredClone(b);
-    const out = services().session.dominionStep({ t: 'act', ...input });
+    const out = services().session.dominionStep({ t: 'act', ...input, ...(live ? { live } : {}) });
     this.screen = this.cardFrom;
     this.notice = out.notice;
+    // A Smoke Ball: a clean escape, nothing rolled; the line shows on the Map.
+    if (live === 'smoke' && out.ok && !out.roll) {
+      this.autoEnd();
+      return void this.view?.refresh();
+    }
     // D30: the act is played and saved; the Boss order cut-in and the result page only show it.
     if (out.ok && this.job.start(before, input, out.roll, out.notice, out.fight ? 'fight' : this.heroPending() ? 'hero' : 'result')) {
       this.notice = null;

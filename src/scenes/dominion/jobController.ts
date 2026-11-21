@@ -34,6 +34,9 @@ interface Host {
   onMorningHq(): boolean;
   /** Redesign R4: the chrome's run data and the people the pages draw (the Boss, a member by name). */
   r5(): { run: R5Run; boss: R5Person; member: (id: string | null, name?: string) => R5Person | null } | null;
+  /** Redesign R4: a calling card can be left for the job just done; open its page (C on Job done). */
+  callingDue?(): boolean;
+  openCalling?(): boolean;
 }
 
 /** The cut-in's length: under two seconds (m8). */
@@ -164,7 +167,7 @@ export class JobController {
       const place = (j.title.split(' · ')[1] ?? '').trim() || (r.run.place ?? '');
       const x = {
         member: j.member ? r.member(null, j.member.name) : null, day: b.day, place, at: this.at, note: this.note,
-        held: j.held === 'member' ? this.pending()?.choices ?? null : null, texts: MOMENTS.botched,
+        held: j.held === 'member' ? this.pending()?.choices ?? null : null, texts: MOMENTS.botched, calling: j.kind === 'done' && !!this.host.callingDue?.(),
       };
       return j.kind === 'done' ? r5Done(j, x, r.run) : r5Botched(j, x, r.run);
     }
@@ -209,6 +212,7 @@ export class JobController {
 
   /** N is Next action on the result page; other letters do nothing while a moment or the paper is up. */
   raw(code: string): boolean {
+    if (this.stage === 'result' && code === 'KeyC' && this.job?.kind === 'done' && this.host.openCalling?.()) return true;
     if (this.stage === 'result' && code === 'KeyN' && !this.job?.caught) {
       this.close(true);
       return true;
@@ -220,6 +224,11 @@ export class JobController {
       return true;
     }
     return this.owns() || this.paperOwns();
+  }
+
+  /** Redesign R4: a line for the result page (the calling card left). */
+  say(line: string | null): void {
+    if (this.stage === 'result') this.note = line;
   }
 
   fold(): void {

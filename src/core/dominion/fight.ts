@@ -84,5 +84,6 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
   if (trainer && snagsThisFight(b, fight.foe, trainer.classId)) run.battle.snagAny = true;
   run.phase = 'battle';
   fight.begun = true;
+  fight.lead = team[0]!.speciesId;
   return run;
 }

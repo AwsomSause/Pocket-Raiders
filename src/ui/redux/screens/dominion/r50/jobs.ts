@@ -175,7 +175,7 @@ const chgRow = (c: { label: string; from: string; d: string; cls: string }, i: n
   return `<div class="chg ${up ? 'up' : 'dn'}" style="--i:${i};--d:${i * 110}ms"><i>${up ? '▲' : '▼'}</i><b>${esc(c.label)}</b><em>${esc([c.d, c.from].filter(Boolean).join(' · '))}</em></div>`;
 };
 
-export interface R5JobExtras { member: R5Person | null; day: number; place: string; at: number; note: string | null; held: readonly CaughtChoice[] | null; texts: { police: string; policeSub: string; map: string; mapSub: string; next: string; nextSub: string } }
+export interface R5JobExtras { member: R5Person | null; day: number; place: string; at: number; note: string | null; /** A calling card can be left (C). */ calling?: boolean; held: readonly CaughtChoice[] | null; texts: { police: string; policeSub: string; map: string; mapSub: string; next: string; nextSub: string } }
 
 export function r5Done(m: JobModel, x: R5JobExtras, run: R5Run): string {
   const big = m.take > 0 ? `<b class="r-big" data-m="funds" data-testid="dom-job-take">+${money(m.take)}</b>` : `<b class="r-big" data-m="funds">DONE</b>`;
@@ -188,9 +188,10 @@ export function r5Done(m: JobModel, x: R5JobExtras, run: R5Run): string {
     id: 'done', g: 'Jobs', kind: 'res', bg: 'gold', run: { ...run, place: x.place },
     top: { title: 'Job done', sub: '' },
     body: `${rail()}${left}\n  ${panel}`,
-    who, line: m.quote ? `“${m.quote}”` : `“Another good day for ${run.side && run.side !== 'Your crew' ? run.side : 'the crew'}.”`,
+    who: x.note ? null : who, line: x.note ?? (m.quote ? `“${m.quote}”` : `“Another good day for ${run.side && run.side !== 'Your crew' ? run.side : 'the crew'}.”`),
+    footOpts: x.note ? { testid: 'dom-job-note' } : {},
     ctas: [['Next action', 'jobNext', '', 'dom-job-next'], ['To the Map', 'jobMap', '', 'dom-job-map']],
-    keys: [['N', 'next action', 'jobNext'], ['Enter', 'to the Map', 'jobMap']], noTabs: true, over: clip,
+    keys: [...(x.calling ? [['C', 'calling card', 'callingOpen', 'dom-job-calling'] as const] : []), ['N', 'next action', 'jobNext'], ['Enter', 'to the Map', 'jobMap']], noTabs: true, over: clip,
   });
 }
 

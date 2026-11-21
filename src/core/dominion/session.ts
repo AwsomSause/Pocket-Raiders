@@ -38,6 +38,7 @@ import { argue, chooseDeal, closeDebate, walkOut, type DebateOut } from './debat
 import { argueTyped, voiceTurn } from './debateTyped';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
+import { jobxStep } from './jobs';
 import './ending';
 import { settleCourt } from './growthCourt';
 import './growthOutside';
@@ -226,6 +227,13 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     const out = answerCaught(block, action.choice, run.seed);
     return { ok: out.ok, block: out.ok ? out.block : block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
   }
+  // Redesign R4 (jobs.ts): the calling card, the Black Market, the battle album.
+  if (action.t === 'calling' || action.t === 'market' || action.t === 'snap') {
+    const work = structuredClone(run);
+    const out = jobxStep(work, action);
+    if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    return { ok: true, block: out.block, notice: out.notice, heal: false, run: withBlock(work, DominionBlockSchema.parse(out.block)) };
+  }
   if (action.t === 'act') {
     // D2: a Boss action (field.ts). A Pokémon lifted in a Ball (Thieve, a big success) joins the team or the box.
     const work = structuredClone(run);
@@ -235,9 +243,11 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     // D24: someone may have seen it (the police's evidence log).
     noteAct(out.block, run.seed, action.district, action.target, (out.block.field.districts[action.district]?.heat ?? 0) - heatWas, run.party[0]?.speciesId ?? null);
     // D30: a note for tomorrow's morning paper.
-    noteJob(out.block, block, action, out.roll ?? null, out.fight);
+    // Redesign R4: a Smoke Ball on "something happens" is a clean miss (the paper says botched; nobody is grabbed).
+    const clean = action.live === 'smoke' && !out.roll && !out.fight;
+    noteJob(out.block, block, action, clean ? { r: 100, chance: 0, rolled: true } : out.roll ?? null, out.fight);
     // D30 (m10): a member brought along may be grabbed on a botched job (Bail / Break out / Leave on the result page).
-    const grabbed = collar(out.block, block, action, out.roll ?? null, out.fight, run.seed);
+    const grabbed = clean ? [] : collar(out.block, block, action, out.roll ?? null, out.fight, run.seed);
     if (grabbed.length) out.notice = [out.notice, ...grabbed].filter(Boolean).join(' ');
     if (out.mon && out.mon.trust !== undefined) {
       // D4: a rescued or tamed Pokémon joins the Reserve, not the Boss's team.

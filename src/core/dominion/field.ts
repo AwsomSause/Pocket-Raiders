@@ -11,7 +11,7 @@ import { hashSeed, Rng } from '../rng';
 import type { RunState } from '../state';
 import trainersRaw from '../../data/trainers.json';
 import { DOMINION_DATA } from './data';
-import type { ActionDef, District, DistrictState, DominionBlock, Field, FieldFight, Play, StatId, Target } from './schema';
+import type { ActionDef, District, DistrictState, DominionBlock, Field, FieldFight, LiveAnswer, Play, StatId, Target } from './schema';
 import { book, empireOf } from './book';
 import { addWorldStep, fill } from './worldTurn';
 import { addLoyalty, addMorale, addXp, monName } from './crew';
@@ -804,13 +804,35 @@ function ctxOf(b: DominionBlock, run: Pick<RunState, 'party'>, action: string, t
  * Does a Boss action (the Card's numbers, rolled on `dominion-act`). Spends the slot and the travel, rolls the odds,
  * and either settles it now or leaves the battle it's waiting on in `field.fight`. Changes `run` (a private copy).
  */
-export function act(content: Content | null, run: RunState, a: { action: string; target: string | null; district: string; bring: string[]; opt?: string | null }): ActOut {
+/**
+ * Redesign R4 (jobs.ts): "something happens" on a stealth job. `check` may refuse the answer before anything is spent (no
+ * Smoke Ball); `apply` changes the Card (odds, Heat) or ends the job cleanly (lines). Kept on a hoisted function (jobs.ts
+ * registers while this file may still be loading).
+ */
+export interface LiveHook {
+  check(b: DominionBlock, run: RunState, c: Card, ans: LiveAnswer): string | null;
+  apply(b: DominionBlock, run: RunState, c: Card, ans: LiveAnswer): string[] | null;
+}
+function liveHook(): { h?: LiveHook } {
+  const box = liveHook as unknown as { v?: { h?: LiveHook } };
+  return (box.v ??= {});
+}
+export function setLiveHook(h: LiveHook): void {
+  liveHook().h = h;
+}
+
+export function act(content: Content | null, run: RunState, a: { action: string; target: string | null; district: string; bring: string[]; opt?: string | null; live?: LiveAnswer }): ActOut {
   const block = run.expansion?.dominion;
   const no = (notice: string | null = null): ActOut => ({ ok: false, block: block!, notice, fight: false, mon: null });
   if (!block) return no();
   const got = ctxOf(block, run, a.action, a.target, a.district, a.bring, a.opt ?? null);
   if (!got) return no();
   if (got.c.blocked) return no(got.c.blocked);
+  const live = a.live ? liveHook().h ?? null : null;
+  if (live && a.live) {
+    const why = live.check(block, run, got.c, a.live);
+    if (why) return no(why);
+  }
   const b = structuredClone(block);
   const { c } = got;
   const f = b.field;
@@ -829,6 +851,14 @@ export function act(content: Content | null, run: RunState, a: { action: string;
       // D10: a forged paper gets the Boss through a checkpoint (and is used up).
       if (f.closed === c.district.id && b.growth && b.growth.papers > 0) b.growth.papers -= 1;
       goTo(b, run, c.district.id);
+    }
+  }
+  // Redesign R4: the answer to "something happens" (a Smoke Ball ends it here, cleanly).
+  if (live && a.live) {
+    const out = live.apply(b, run, c, a.live);
+    if (out) {
+      syncHeat(b);
+      return { ok: true, block: b, notice: out.join(' '), fight: false, mon: null, roll: null };
     }
   }
   const used = f.disguise && c.def.slot !== 'evening' && (c.heat > 0 || c.failHeat > 0);
