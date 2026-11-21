@@ -96,7 +96,7 @@ export interface BattleModel {
   /** Pocket look: a boss battle's panel (mock-up `boss-battle`): its boss power, the healing items it has left, the badge at stake. */
   pkBoss?: { name: string; tag: string; power: { kind: string; ready: boolean } | null; heals: readonly [number, number]; badge: string | null } | null;
   /** Pocket look: a Totem's or a raid's strip at the top (its word, its numbers, the area's steps). */
-  pkArea?: { key: 'tm' | 'rd'; word: string; chips: readonly (readonly [string, string])[]; flow: readonly string[]; step: number } | null;
+  pkArea?: { key: 'tm' | 'rd' | 'ga'; word: string; chips: readonly (readonly [string, string])[]; flow: readonly string[]; step: number; /** Galar: the crowd's share for you, 0-100. */ bar?: number } | null;
   turn?: number;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;

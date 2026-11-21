@@ -52,6 +52,8 @@ export interface StadiumHooks {
     scope: GalarScope;
     /** Crowd favour 5-95 (50 even, above 50 favours the player), read from the battle state. */
     favor: () => number | null;
+    /** True when the page draws the favour bar itself (the Pocket look's stadium strip). */
+    hideBar?: () => boolean;
     /** Names for the lines: player, foe, foeMon, myMon, host, rival, leader. */
     facts: () => Record<string, string>;
     /** Who can speak right now (a rival only when one is watching, ...). */
@@ -300,6 +302,7 @@ export class StadiumDirector {
       const hy = this.h.hype;
       const favor = hy?.favor();
       if (!hy || favor === null || favor === undefined) return;
+      if (hy.hideBar?.()) { this.favorNow = favor; return; }
       const w = 340;
       if (!this.favorBar) {
         const c = this.scene.add.container(GAME_WIDTH / 2 - w / 2, 10).setDepth(1650).setScrollFactor(0);

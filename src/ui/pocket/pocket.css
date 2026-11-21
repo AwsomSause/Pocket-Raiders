@@ -705,8 +705,12 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 /* The tier-51 rules (pocket.gen.css) do not reach a tier-26 battle page, so the strip's own rules are copied here. */
 .pkx .pks .gx-bt-area.a-tm { --ac: #e8891a; --ad: #5a3004; }
 .pkx .pks .gx-bt-area.a-rd { --ac: #d9267d; --ad: #4a0c33; }
+.pkx .pks .gx-bt-area.a-ga { --ac: #2456c8; --ad: #0c2a66; }
 .pkx .pks .gx-bt-area .st38 { position: absolute; left: 14px; top: 170px; display: flex; align-items: center; gap: 8px; height: 54px; padding: 8px 8px 0 10px; color: #fff; background: #7b4e23; border: 2px solid #4a2a0c; border-top: 0; border-radius: 0 0 10px 10px; white-space: nowrap; box-shadow: 0 3px 0 rgba(0, 0, 0, .4); }
 .pkx .pks .gx-bt-area.a-rd .st38 { background: #3b1257; border-color: #ff7ac0; border-radius: 0 0 2px 18px; }
+.pkx .pks .gx-bt-area.a-ga .st38 { background: #0a1026; border-color: #59b7ff; border-radius: 0 0 4px 4px; }
+.pkx .pks .gx-bt-area .fav37 { flex: none; width: 90px; height: 10px; border-radius: 5px; background: #c1121f; border: 2px solid #fff; overflow: hidden; }
+.pkx .pks .gx-bt-area .fav37 s { display: block; height: 100%; background: #3ddc6c; }
 .pkx .pks .gx-bt-area .st38 > b { font: 400 13px/18px var(--fd); text-transform: uppercase; color: var(--ink); background: #fff; border-radius: 999px; padding: 0 10px; }
 .pkx .pks .gx-bt-area .st38 .n40 { display: grid; justify-items: center; gap: 1px; min-width: 60px; padding: 3px 9px 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; background: rgba(0, 0, 0, .4); border-radius: 6px; }
 .pkx .pks .gx-bt-area .st38 .n40 b { font: 400 28px/1 var(--fd); color: var(--yel); }
@@ -715,6 +719,7 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-bt-area .emb28 { flex: none; display: grid; width: 24px; height: 24px; margin-right: -4px; background: var(--ac); }
 .pkx .pks .gx-bt-area .emb28.tm { background: radial-gradient(circle 2px at 34% 44%, #fff 0 99%, transparent), radial-gradient(circle 2px at 66% 44%, #fff 0 99%, transparent), linear-gradient(180deg, transparent 0 66%, #fff 66% 74%, transparent 74%), var(--ac); clip-path: polygon(50% 0, 100% 30%, 86% 100%, 14% 100%, 0 30%); }
 .pkx .pks .gx-bt-area .emb28.rd { border-radius: 50%; border: 2px solid #fff; }
+.pkx .pks .gx-bt-area .emb28.ga { background: linear-gradient(90deg, transparent 0 44%, #fff 44% 56%, transparent 56%), linear-gradient(180deg, #e3350d 0 50%, var(--ac) 50%); clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%); border-radius: 0; }
 .pkx .pks .gx-bt-area .fw50 { position: absolute; left: 14px; top: 230px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
 .pkx .pks .gx-bt-area .fw50 i { font: 400 12px/18px var(--fd); font-style: normal; text-transform: uppercase; letter-spacing: .06em; color: #c9d3ee; background: rgba(13, 21, 48, .88); padding: 0 12px 0 16px; clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%, 7px 50%); }
 .pkx .pks .gx-bt-area .fw50 i:first-child { clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%); padding-left: 10px; }

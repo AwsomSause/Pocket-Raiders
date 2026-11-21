@@ -180,3 +180,13 @@ describe('the Pocket Totem strip', () => {
     expect(pkBattle(plain)).not.toContain('gx-bt-area');
   });
 });
+
+describe('the Pocket Galar stadium strip', () => {
+  it('shows the round, the crowd favour bar and the foes left', () => {
+    const h = pkBattle({ ...model(), pkArea: { key: 'ga', word: 'Round of 32', bar: 62, chips: [['62', 'with you'], ['3', 'foes left']], flow: ['Bracket', 'Match', 'Next round'], step: 1 } });
+    expect(h).toContain('gx-bt-area ar28 a-ga ms39');
+    expect(h).toContain('<b>Round of 32</b><i class="fav37"><s style="width:62%"></s></i>');
+    expect(h).toContain('<b>3</b>foes left');
+    expect(pkBattle({ ...model(), pkArea: { key: 'tm', word: 'Totem', chips: [], flow: ['a', 'b'], step: 0 } })).not.toContain('fav37');
+  });
+});

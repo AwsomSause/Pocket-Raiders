@@ -3413,6 +3413,7 @@ export class BattleScene extends Phaser.Scene {
           return {
             scope,
             favor: () => crowdFavor(content, this.run),
+            hideBar: () => pocketOn(),
             facts: () => this.hypeFacts(),
             flags: () => this.hypeFlags(),
             available: () => this.hypeSpeakers(),
@@ -3591,6 +3592,15 @@ export class BattleScene extends Phaser.Scene {
       if (rdef && rdef.phases.length) chips.push([String(Math.min(rdef.phases.length, raid.phasesDone.length + 1)), `of ${rdef.phases.length}`]);
       else if (raid.charging) chips.push(['!', 'charging']);
       return { key: 'rd', word: 'Raid', chips: chips.slice(0, 3), flow: ['Den', 'Raid', 'The Catch'], step: 1 };
+    }
+    // Galar's Gym Challenge and Champion's Tournament: the crowd's share, the foe's Pokémon left, the match's steps.
+    const scope = battle && pocketOn() ? galarScope(services().session.content, this.run) : null;
+    if (battle && scope) {
+      const favor = crowdFavor(services().session.content, this.run) ?? 50;
+      const left = battle.enemyTeam.filter((m) => m.hp > 0).length;
+      const round = scope === 'gym' ? null : currentTournamentRound(services().session.content, this.run);
+      const word = scope === 'gym' ? `Gym match ${this.run.badges.length + 1}` : round ? round.name : 'Champion match';
+      return { key: 'ga', word, bar: favor, chips: [[String(favor), 'with you'], [String(left), left === 1 ? 'foe left' : 'foes left']], flow: scope === 'gym' ? ['Line-up', 'Match', 'Badge'] : ['Bracket', 'Match', 'Next round'], step: 1 };
     }
     if (!battle || !totem || !pocketOn()) return null;
     const tdef = services().session.content.totems.totems.find((x) => x.id === totem.id);

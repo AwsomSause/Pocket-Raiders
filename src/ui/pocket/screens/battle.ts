@@ -192,7 +192,7 @@ export function pkBattle(d: BattleModel): string {
     + `<p><em>Heals left</em><i class="hl">${Array.from({ length: Math.min(8, bp.heals[1]) }, (_, k) => `<u class="${k < bp.heals[0] ? 'on' : ''}"></u>`).join('')}</i><span>${bp.heals[0]} of ${bp.heals[1]}</span></p>`
     + (bp.badge ? `<p><em>Badge</em><i class="bp">${fitPic(badgeArt(bp.badge), 32, 32, '', 1)}</i><span>${esc(cap(bp.badge))}</span></p>` : '') + '</div>' : '';
   const ar = d.pkArea;
-  const area = ar ? `<div class="gx-bt-area ar28 a-${ar.key} ms39" data-key="bt-area"><div class="st38 k-${ar.key}"><i class="emb28 ${ar.key} hud" data-nocheck></i><b>${esc(ar.word)}</b>${ar.chips.map(([b, t]) => `<span class="n40"><b>${esc(b)}</b>${esc(t)}</span>`).join('')}<u${act('info')}><kbd>I</kbd> Info</u></div>`
+  const area = ar ? `<div class="gx-bt-area ar28 a-${ar.key} ms39" data-key="bt-area"><div class="st38 k-${ar.key}"><i class="emb28 ${ar.key} hud" data-nocheck></i><b>${esc(ar.word)}</b>${ar.bar !== undefined ? `<i class="fav37"><s style="width:${Math.max(0, Math.min(100, ar.bar))}%"></s></i>` : ''}${ar.chips.map(([b, t]) => `<span class="n40"><b>${esc(b)}</b>${esc(t)}</span>`).join('')}<u${act('info')}><kbd>I</kbd> Info</u></div>`
     + `<div class="fw50" data-m="flow">${ar.flow.map((t, k) => `<i class="${k < ar.step ? 'past' : k === ar.step ? 'on' : ''}">${esc(t)}</i>`).join('')}</div></div>` : '';
   const notice = d.notice ? pkConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
   const quiet = !!(d.exp?.length || d.level || f.budget || f.variant);
