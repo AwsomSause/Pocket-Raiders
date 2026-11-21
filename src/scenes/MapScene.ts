@@ -138,7 +138,9 @@ import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
 import { pkXpDoor } from '../ui/pocket/screens/expedition';
-import { pkBracket, pkGaRoad } from '../ui/pocket/screens/galar';
+import { pkBracket, pkGaRoad, type PkSideRow } from '../ui/pocket/screens/galar';
+import { pkRdLobby } from '../ui/pocket/screens/raid';
+import { monArt } from '../ui/pocket/art';
 import { pkArtOf } from '../ui/pocket/templates';
 import { pkForecast } from '../ui/pocket/screens/forecast';
 import { pkTime, pkWeather, weatherCard, WEATHERS } from '../ui/pocket/screens/sky';
@@ -245,7 +247,9 @@ type MapPop =
   | { kind: 'weather'; pick: number; from?: 'time' }
   | { kind: 'xpgate'; side: string; pick: number }
   | { kind: 'totem'; side: string; pick: number }
-  | { kind: 'raid'; side: string; pick: number };
+  | { kind: 'raid'; side: string; pick: number }
+  /** Pocket look: the Raid Lobby after the den (mock-up `rd-lobby`): go in as you are, hire a helper, add a boss card, talk, co-op. */
+  | { kind: 'raidprep'; side: string; approach?: string; pick: number; card: number; coop: boolean };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -346,7 +350,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'weather') pop = pocketOn() ? { kind, pick: weatherCard(this.stageWeather()) } : null;
     else if (kind === 'time') pop = pocketOn() ? { kind, pick: Math.max(0, ['day', 'eve', 'night'].indexOf(this.stageTime() ?? 'day')) } : null;
     else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
-    else if (kind === 'xpgate' || kind === 'totem' || kind === 'raid') pop = null;
+    else if (kind === 'xpgate' || kind === 'totem' || kind === 'raid' || kind === 'raidprep') pop = null;
     // Pocket look: the bracket opens on the round you play next.
     else pop = { kind, page: pocketOn() ? Math.min(4, bracketView(session.content, run).wins) : galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
@@ -698,6 +702,18 @@ export class MapScene extends Phaser.Scene {
       return;
     }
     // Pocket look: the Expedition Gate. Set out or Not now; Esc leaves.
+    if (p.kind === 'raidprep') {
+      const rows = this.raidPrepRows(p);
+      if (action === 'confirm') return this.raidPrepGo(p);
+      if (action === 'back') return this.popClose();
+      if (action === 'up' || action === 'down') { p.pick = (p.pick + (action === 'down' ? 1 : rows.length - 1)) % rows.length; this.rxView?.refresh(); return; }
+      if ((action === 'left' || action === 'right') && rows[p.pick]?.kind === 'card') {
+        const n = raidPreview(session.content, run, p.side).cards.length;
+        p.card = (p.card + (action === 'right' ? 1 : n - 1)) % n;
+        this.rxView?.refresh();
+      }
+      return;
+    }
     if (p.kind === 'raid') {
       const n = this.raidChoices(p.side).length + 1;
       if (action === 'confirm') return this.raidGo(p);
@@ -763,6 +779,12 @@ export class MapScene extends Phaser.Scene {
   private popPick(what: 'tab' | 'pick', i: number): void {
     const p = this.rxPop;
     if (!p || !Number.isFinite(i)) return;
+    if (p.kind === 'raidprep' && what === 'pick') {
+      if (i === -1 || p.pick === i) return this.raidPrepGo(p);
+      p.pick = i;
+      this.rxView?.refresh();
+      return;
+    }
     if ((p.kind === 'xpgate' || p.kind === 'totem' || p.kind === 'raid') && what === 'pick') {
       if (p.pick === i) return void this.popInput('confirm');
       p.pick = i;
@@ -904,6 +926,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'xpgate') return c.pk ? this.xpGatePocket(p) : '';
     if (p.kind === 'totem') return c.pk ? this.totemPocket(p) : '';
     if (p.kind === 'raid') return c.pk ? this.raidPocket(p) : '';
+    if (p.kind === 'raidprep') return c.pk ? this.raidPrepPocket(p) : '';
     if (p.kind === 'time' || p.kind === 'weather') return c.pk ? this.skyPocket(p) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
@@ -3107,7 +3130,12 @@ export class MapScene extends Phaser.Scene {
   private startRaid(sideId: string, choice: { id: string; leave: boolean }, pv: ReturnType<typeof raidPreview>): void {
     const prepable = !choice.leave && choice.id !== 'practice' && (pv.cards.length > 0 || pv.bots.length > 0 || pv.talk !== null);
     if (!prepable) this.enterRaidNow(sideId, choice.id || undefined);
-    else this.openRaidPrep(sideId, choice.id || undefined, pv);
+    else if (pocketOn() && this.rxView) {
+      this.rxPop = { kind: 'raidprep', side: sideId, approach: choice.id || undefined, pick: 0, card: 0, coop: false };
+      this.rxPopAt = this.time.now;
+      this.busy = true;
+      this.rxView.refresh();
+    } else this.openRaidPrep(sideId, choice.id || undefined, pv);
   }
 
   private enterRaidNow(sideId: string, approachId: string | undefined, prep?: string): void {
@@ -3117,6 +3145,65 @@ export class MapScene extends Phaser.Scene {
     const run = session.enterRaid(sideId, approachId, prep);
     this.cameras.main.fadeOut(250);
     this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+  }
+
+  /** The Raid Lobby's rows, in order: as you are, each helper, the boss card, the talk, co-op. */
+  private raidPrepRows(p: Extract<MapPop, { kind: 'raidprep' }>): ({ kind: 'asis' } | { kind: 'bot'; id: string; cost: number } | { kind: 'card' } | { kind: 'talk' } | { kind: 'coop' })[] {
+    const pv = raidPreview(services().session.content, services().session.run!, p.side);
+    return [{ kind: 'asis' }, ...pv.bots.map((b) => ({ kind: 'bot' as const, id: b.id, cost: b.cost })), ...(pv.cards.length ? [{ kind: 'card' as const }] : []), ...(pv.talk ? [{ kind: 'talk' as const }] : []), { kind: 'coop' }];
+  }
+
+  /** The Raid Lobby's lit row: start the raid that way, open the talk, or turn co-op on or off. */
+  private raidPrepGo(p: Extract<MapPop, { kind: 'raidprep' }>): void {
+    const { session } = services();
+    const pv = raidPreview(session.content, session.run!, p.side);
+    const row = this.raidPrepRows(p)[p.pick];
+    if (!row) return;
+    const withCoop = (x?: string): string | undefined => (p.coop ? (x ? `coop+${x}` : 'coop') : x);
+    const base = pv.entryCost + (p.approach ? pv.approaches.find((a) => a.id === p.approach)?.cost ?? 0 : pv.approaches[0]?.cost ?? 0);
+    if (row.kind === 'coop') { p.coop = !p.coop; this.rxView?.refresh(); return; }
+    if (session.run!.money < base + (row.kind === 'bot' ? row.cost : 0)) return;
+    if (row.kind === 'talk') { this.popClose(); return this.openRaidTalk(p.side, p.approach, pv.talk!.prompt, pv.talk!.choices, [], p.coop); }
+    const prep = row.kind === 'bot' ? `bot:${row.id}` : row.kind === 'card' ? `card:${pv.cards[p.card]?.id}` : undefined;
+    this.rxPop = null;
+    this.enterRaidNow(p.side, p.approach, withCoop(prep));
+  }
+
+  /** Pocket look: the Raid Lobby (mock-up `rd-lobby`). */
+  private raidPrepPocket(p: Extract<MapPop, { kind: 'raidprep' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const content = session.content;
+    const pv = raidPreview(content, run, p.side);
+    const rows = this.raidPrepRows(p);
+    const base = pv.entryCost + (p.approach ? pv.approaches.find((a) => a.id === p.approach)?.cost ?? 0 : pv.approaches[0]?.cost ?? 0);
+    const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+    const art = (id: string) => ((f) => (f ? monArt(f) : null))(monFile(this, id, 'front'));
+    const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
+    const leadName = lead ? content.species.get(lead.speciesId)?.name || '' : '';
+    const sp = content.species.get(pv.speciesId);
+    const cls = (i: number, off = false) => [i === p.pick ? 'me' : '', off ? 'out' : ''].filter(Boolean).join(' ');
+    const at = (k: string) => rows.findIndex((r) => r.kind === k);
+    const me: PkSideRow[] = [{ art: lead ? art(lead.speciesId) : null, title: `You${leadName ? ` · ${leadName}` : ''}`, sub: 'Go in as you are · no extra rules', tag: 'Ready', cls: cls(0, run.money < base), pick: 0 }];
+    rows.forEach((r, i) => {
+      if (r.kind !== 'bot') return;
+      const b = pv.bots.find((x) => x.id === r.id)!;
+      me.push({ art: null, title: b.label.replace(/\s*\(.*\)$/, ''), sub: b.text, tag: `₽${b.cost}`, cls: cls(i, run.money < base + b.cost), pick: i });
+    });
+    const card = pv.cards[p.card];
+    const foe: PkSideRow[] = [{ art: art(pv.speciesId), title: sp?.types.length ? sp.types.map(cap).join(' / ') : pv.name, sub: `Level ${pv.level}`, tag: 'Boss', cls: 'boss' }];
+    if (card) foe.push({ art: null, title: `Boss card: ${card.label}`, sub: card.text, tag: `${p.card + 1} of ${pv.cards.length}`, cls: cls(at('card')), pick: at('card') });
+    if (pv.talk) foe.push({ art: null, title: 'Talk to it first', sub: 'What you say changes how both sides start', tag: 'Talk', cls: cls(at('talk')), pick: at('talk') });
+    foe.push({ art: null, title: p.coop ? 'Co-op is on' : 'Co-op is off', sub: 'A friend plays half your team, one device', tag: p.coop ? 'On' : 'Off', cls: cls(at('coop')), pick: at('coop') });
+    const lit = rows[p.pick];
+    const cost = base + (lit?.kind === 'bot' ? lit.cost : 0);
+    return pkRdLobby({
+      tag: `Tier ${pv.tier} raid`, boss: sp?.name ?? pv.name, me, foe,
+      meFoot: `Pick one: a helper, a boss card or a talk. You have ₽${run.money}.`,
+      foeFoot: pv.mechanics.slice(0, 2).join(' · '),
+      button: lit?.kind === 'talk' ? 'Talk to it' : lit?.kind === 'coop' ? (p.coop ? 'Turn co-op off' : 'Turn co-op on') : cost > 0 ? `Start the raid · ₽${cost}` : 'Start the raid',
+      sub: `${pv.name}: everyone picks how the raid starts. Losing never ends your run.`,
+    });
   }
 
   /** "Before you go in": a gimmick card, a lobby bot, or a talk with the boss (one of them), or none. */

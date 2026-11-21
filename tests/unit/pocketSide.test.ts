@@ -383,3 +383,21 @@ describe('the Pocket Galar round won', () => {
     expect(h).toContain('<b>Hall of Fame</b>');
   });
 });
+
+describe('the Pocket Raid Lobby', () => {
+  it('draws both sides, the lit row and the button', async () => {
+    const { pkRdLobby } = await import('../../src/ui/pocket/screens/raid');
+    const h = pkRdLobby({
+      tag: 'Tier 1 raid', boss: 'Venusaur', sub: 'Garden Guardian', button: 'Start the raid · ₽150',
+      me: [{ art: null, title: 'You · Popplio', sub: 'Go in as you are', tag: 'Ready', pick: 0 }, { art: null, title: 'Rex the Bruiser', sub: 'Hits the boss', tag: '₽150', cls: 'me', pick: 1 }],
+      foe: [{ art: null, title: 'Grass / Poison', sub: 'Level 45', tag: 'Boss', cls: 'boss' }, { art: null, title: 'Co-op is off', sub: 'A friend', tag: 'Off', pick: 2 }],
+      meFoot: 'Pick one', foeFoot: 'HP pool ×2.5',
+    });
+    expect(h.startsWith('<!--pk:rd-lobby:51-->')).toBe(true);
+    expect(h).toContain('a-rd pg28');
+    expect(h).toContain('Rex the Bruiser');
+    expect(h).toContain('class="me"');
+    expect(h).toContain('Start the raid · ₽150');
+    expect(h).toContain('data-act="popPick"');
+  });
+});
