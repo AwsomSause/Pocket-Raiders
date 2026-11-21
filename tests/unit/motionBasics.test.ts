@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ClipBuilder, clipEnd, EASES, fxAllowed, sampleClip, type ClipLevel, type MotionClip } from '../../src/core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, HIT_KNOCK, HIT_KNOCK_BIG, hitClip, hitPower, HIT_THROW, COMBO, comboPlan, comboScale, CRIT_FREEZE, critFreezeClip, HIT_STAMPS, hitStampSpot, levelUpClip, WILD_BARS, WILD_CRY, WILD_PLATE, wildEntranceClip, SHINY_CHIP, SHINY_GLINT, shinyClip, standKind, standLook, missClip, FOE_RELEASE, FOE_TRAINER_OFF, foeHand, foeThrowClip, bigHit, CHEER_GAP, cheerClip, cheerWord, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendOpenAt, throwFromSpot, type MonSpot } from '../../src/core/presentation/motionBasics';
 
 const ME: MonSpot = { x: 312, y: 428, h: 180, side: 'player' };
 const FOE: MonSpot = { x: 648, y: 240, h: 150, side: 'enemy' };
@@ -475,6 +475,37 @@ describe('the critical hit freeze (pass 12) and the hit stamps (pass 5)', () => 
     expect(HIT_STAMPS.super!.at).toBeGreaterThan(HIT_STAMPS.crit!.at);
     expect(hitStampSpot('enemy', { x: 648, y: 180 })).toEqual({ x: 478, y: 134 });
     expect(hitStampSpot('player', { x: 312, y: 370 })).toEqual({ x: 522, y: 300 });
+  });
+});
+
+describe('multi-hit (pass 12)', () => {
+  const hit = (side: string, amount: number) => ({ type: 'damage', side, amount, hpAfter: 0, effectiveness: 1, crit: false });
+  it('each hit gets its count and the hits line the total; the attacker\'s recoil and other moves are left out', () => {
+    const events = [
+      { type: 'move', side: 'player', moveId: 'fury-swipes' },
+      hit('enemy', 9), hit('enemy', 9), hit('enemy', 10), hit('player', 3),
+      { type: 'hits', side: 'enemy', count: 3 },
+      { type: 'move', side: 'enemy', moveId: 'tackle' },
+      hit('player', 12),
+    ];
+    const plan = comboPlan(events);
+    expect([...plan.entries()]).toEqual([
+      [1, { k: 1, side: 'enemy' }],
+      [2, { k: 2, side: 'enemy' }],
+      [3, { k: 3, side: 'enemy' }],
+      [5, { count: 3, total: 28, side: 'enemy' }],
+    ]);
+  });
+  it('a multi-hit move that lands once, or a single hit, gets no counter', () => {
+    expect(comboPlan([{ type: 'move', side: 'player' }, hit('enemy', 5), { type: 'hits', side: 'enemy', count: 1 }]).size).toBe(0);
+    expect(comboPlan([{ type: 'move', side: 'player' }, hit('enemy', 5)]).size).toBe(0);
+    expect(comboPlan([{ type: 'move', side: 'player' }, { type: 'hits', side: 'enemy', count: 2 }]).size).toBe(0);
+  });
+  it('the counter pops bigger and settles bigger with every hit', () => {
+    expect(comboScale(1)).toEqual({ pop: 1.5, rest: 1 });
+    expect(comboScale(4).pop).toBeCloseTo(1.95);
+    expect(comboScale(4).rest).toBeCloseTo(1.36);
+    expect(COMBO).toMatchObject({ size: 60, shake: 3, stampDx: -112, stampY: 134 });
   });
 });
 

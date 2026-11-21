@@ -547,6 +547,45 @@ export function hitStampSpot(side: 'player' | 'enemy', mon: Point): Point {
   return side === 'enemy' ? { x: mon.x - 170, y: 134 } : { x: mon.x + 210, y: mon.y - 70 };
 }
 
+/**
+ * Multi-hit (pass 12): a combo counter beside the target ticks up with every hit and grows (×1 at 1.5 then 1, each
+ * next one 0.15 and 0.12 bigger), the screen shakes 3 px more each hit, and at the end the counter lifts away, a
+ * yellow HIT N TIMES! stamp slams on and the total slams in as one big number (the per-hit numbers stay away).
+ * `dx`/`dy` place the counter against the target's feet (the mockup's 700,120 by a foe standing at 752,232); the stamp sits `stampDx` from the foe, at `stampY`.
+ */
+export const COMBO = { dx: -52, dy: -112, size: 60, pop: 1.5, popPer: 0.15, rest: 1, restPer: 0.12, upMs: 40, downMs: 140, shake: 3, outMs: 150, lift: 20, stampDx: -112, stampY: 134 } as const;
+
+/** The counter's size for hit `k` (1-based): how big it pops and where it settles. */
+export function comboScale(k: number): { pop: number; rest: number } {
+  const i = Math.max(0, k - 1);
+  return { pop: COMBO.pop + COMBO.popPer * i, rest: COMBO.rest + COMBO.restPer * i };
+}
+
+/** What the turn's multi-hit moves show: each hit's damage event gets its count, the `hits` line gets the total. */
+export type ComboStep = { k: number; side: 'player' | 'enemy' } | { count: number; total: number; side: 'player' | 'enemy' };
+
+export function comboPlan(events: readonly ({ type: string } & Record<string, unknown>)[]): Map<number, ComboStep> {
+  const plan = new Map<number, ComboStep>();
+  let start = 0;
+  events.forEach((e, i) => {
+    if (e.type === 'move') start = i + 1;
+    if (e.type !== 'hits' || typeof e.count !== 'number' || e.count < 2) return;
+    const side = e.side as 'player' | 'enemy';
+    let k = 0;
+    let total = 0;
+    for (let j = start; j < i; j++) {
+      const d = events[j]!;
+      if (d.type !== 'damage' || d.side !== side) continue;
+      k += 1;
+      total += Number(d.amount) || 0;
+      plan.set(j, { k, side });
+    }
+    if (k >= 2) plan.set(i, { count: e.count, total, side });
+    else for (let j = start; j < i; j++) plan.delete(j);
+  });
+  return plan;
+}
+
 /** Pass 12 power tiers: how far a hit throws (px: base + per x power) and how hard it shakes the field. */
 export const HIT_THROW = { base: 34, per: 60, shake: 5, shakePer: 8, heavyAt: 0.8, strong: 1.3 } as const;
 

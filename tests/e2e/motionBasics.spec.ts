@@ -919,6 +919,45 @@ test('confusion: three stars circle its head while it sways; hurting itself swin
   expect(errors).toEqual([]);
 });
 
+test('multi-hit: a combo counter ticks up with every hit, then HIT 3 TIMES! and the total slam in; no per-hit numbers', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'combo-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    b.say = async () => {};
+    b.sayTrainer = async () => {};
+    const s = { counts: [] as string[], stamps: [] as string[], numbers: [] as string[] };
+    const watch = () => {
+      for (const o of b.children.list) {
+        if (o.type === 'Text' && /^×\d$/.test(o.text) && o.alpha > 0.5 && !s.counts.includes(o.text)) s.counts.push(o.text);
+        if (o.type === 'Text' && /^-\d+$/.test(o.text) && !s.numbers.includes(o.text)) s.numbers.push(o.text);
+        if (String(o.texture?.key).startsWith('stamp.HIT') && !s.stamps.includes(o.texture.key)) s.stamps.push(o.texture.key);
+      }
+    };
+    b.events.on('update', watch);
+    const before = structuredClone((window as any).__pkr.session.run);
+    const hp = b.shown.enemy.hp + 100;
+    b.shown.enemy.hp = hp;
+    await b.playEvents([
+      { type: 'move', side: 'player', moveId: 'tackle' },
+      { type: 'damage', side: 'enemy', amount: 1, hpAfter: hp - 1, effectiveness: 1, crit: false },
+      { type: 'damage', side: 'enemy', amount: 2, hpAfter: hp - 3, effectiveness: 1, crit: false },
+      { type: 'damage', side: 'enemy', amount: 3, hpAfter: hp - 6, effectiveness: 1, crit: false },
+      { type: 'hits', side: 'enemy', count: 3 },
+    ], before, null);
+    await new Promise((r) => setTimeout(r, 1500));
+    b.events.off('update', watch);
+    return s;
+  });
+  expect(seen.counts).toEqual(['×1', '×2', '×3']);
+  expect(seen.stamps).toEqual(['stamp.HIT 3 TIMES!.#ffcb05']);
+  expect(seen.numbers).toEqual(['-6']);
+  // The counter has lifted away.
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.filter((o: any) => o.type === 'Text' && /^×/.test(o.text)).length), { timeout: 5000 }).toBe(0);
+  expect(errors).toEqual([]);
+});
+
 test('end of turn: the chips line up, each lights as its effect plays, a line sweeps and the turn counter flips; nothing left after', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));

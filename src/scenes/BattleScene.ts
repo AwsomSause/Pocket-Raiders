@@ -131,7 +131,7 @@ import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
-import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
 import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
@@ -139,7 +139,7 @@ import type { PlayerTrainerActor } from '../ui/playerTrainer';
 import { addMarks } from '../ui/battleFx/markAura';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
-import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
+import { COLORS, FONT_FAMILY, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
@@ -480,6 +480,8 @@ export class BattleScene extends Phaser.Scene {
   private conds: Record<Side, ConditionLook | null> = { player: null, enemy: null };
   /** Confusion's circling stars, by side (pass 8). */
   private dizzy: Record<Side, DizzyStars | null> = { player: null, enemy: null };
+  /** The multi-hit combo counter on screen (pass 12). */
+  private comboText: Phaser.GameObjects.Text | null = null;
   /** The first drawn row of each sprite frame (for where a head is). */
   private readonly bodyTops = new Map<string, number>();
   /** Each side's stat stages as the screen has shown them (for the pips; reset when a Pokémon comes in or Haze). */
@@ -4318,6 +4320,56 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
+  /** The target's middle, for things drawn beside it. */
+  private midOf(side: Side): Point {
+    const at = this.spotXY(side);
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    const h = sprite?.active ? sprite.displayHeight * sprite.originY : 100;
+    return { x: at.x, y: at.y - h / 2 };
+  }
+
+  /** Multi-hit (pass 12): hit `k` lands; the combo counter beside the target ticks up, pops and grows. */
+  private comboTick(side: Side, k: number): void {
+    const level = this.clipLevel();
+    const feet = this.spotXY(side);
+    const x = Phaser.Math.Clamp(feet.x + COMBO.dx, 50, GAME_WIDTH - 50);
+    const y = Phaser.Math.Clamp(feet.y + COMBO.dy, 50, GAME_HEIGHT - 50);
+    if (k === 1 || !this.comboText?.active) {
+      this.comboText?.destroy();
+      this.comboText = this.add
+        .text(x, y, '', { fontFamily: `"Jersey 15", ${FONT_FAMILY}`, fontSize: `${COMBO.size}px`, color: '#ffcb05', stroke: '#131c36', strokeThickness: 6, shadow: { offsetX: 3, offsetY: 3, color: '#131c36', fill: true, stroke: true, blur: 0 } })
+        .setOrigin(0.5)
+        .setDepth(3000)
+        .setAlpha(0);
+      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => (this.comboText = null));
+    }
+    const t = this.comboText;
+    const size = comboScale(k);
+    this.time.delayedCall(level === 'full' ? 60 : 0, () => {
+      if (!t.active) return;
+      this.tweens.killTweensOf(t);
+      t.setText(`×${k}`).setAlpha(1).setPosition(x, y);
+      if (level !== 'full') return void t.setScale(size.rest);
+      t.setScale(size.rest);
+      this.tweens.chain({ targets: t, tweens: [{ scale: size.pop, duration: COMBO.upMs }, { scale: size.rest, duration: COMBO.downMs, ease: 'Quad.easeOut' }] });
+      this.wxShake(COMBO.shake + k - 1, 80);
+    });
+  }
+
+  /** The multi-hit ends: the counter lifts away, HIT N TIMES! slams on and the total slams in as one number. */
+  private comboEnd(side: Side, count: number, total: number): void {
+    const t = this.comboText;
+    this.comboText = null;
+    if (t?.active) {
+      this.tweens.killTweensOf(t);
+      this.tweens.add({ targets: t, alpha: 0, y: t.y - COMBO.lift, duration: COMBO.outMs, onComplete: () => t.destroy() });
+    }
+    const mid = this.midOf(side);
+    const spot = side === 'enemy' ? { x: mid.x + COMBO.stampDx, y: COMBO.stampY } : hitStampSpot(side, mid);
+    this.wxStamp(`HIT ${count} TIMES!`, '#ffcb05', '#131c36', spot.x, spot.y, false);
+    if (total > 0) void this.fx.play([{ kind: 'number', side, amount: total, tone: 'crit', motion: this.clipLevel() === 'full' }]);
+  }
+
   /** A hit's word stamp (pass 5): CRITICAL HIT!, SUPER EFFECTIVE!, Not very effective… or NO EFFECT beside the target. */
   private hitStamp(side: Side, kind: string): boolean {
     const look = HIT_STAMPS[kind];
@@ -6950,6 +7002,8 @@ export class BattleScene extends Phaser.Scene {
     const eotFirst = eotAt.length ? Math.min(...eotAt) : -1;
     const eotLast = eotAt.length ? Math.max(...eotAt) : -1;
     let eot: EndTurnParade | null = null;
+    // Pass 12 "Multi-Hit": a combo counter for each multi-hit move, the total slammed in at the end.
+    const combo = this.clipLevel() !== 'off' ? comboPlan(events as unknown as ({ type: string } & Record<string, unknown>)[]) : new Map<number, ComboStep>();
     for (const [index, e] of events.entries()) {
       if (index === eotFirst && parade) {
         try {
@@ -6985,6 +7039,11 @@ export class BattleScene extends Phaser.Scene {
         this.gustShown = true;
         this.sandGust();
       }
+      const step = combo.get(index);
+      if (step && 'k' in step) {
+        cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'number');
+        this.comboTick(step.side, step.k);
+      } else if (step) this.comboEnd(step.side, step.count, step.total);
       await this.fx.play(cues[index] ?? []);
       this.reactPortrait(e);
       await this.stadium?.onEvent(e);
@@ -7540,6 +7599,8 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     eot?.destroy();
+    this.comboText?.destroy();
+    this.comboText = null;
     // Make sure the boxes match the real state at the end of the turn.
     const run = this.run;
     if (run.battle?.doubles && this.duo) await this.syncDuo();

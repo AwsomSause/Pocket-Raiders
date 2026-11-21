@@ -182,3 +182,7 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   CRITICAL HIT! slams on, a red SUPER EFFECTIVE! slams on just under it, and a blue "Not very effective…" or a dark
   NO EFFECT settles in softly. The old Crit letterbox and the Battle camera's crit push stay away while the freeze
   plays. Reduced: no freeze, the stamps without the slam.
+- **Multi-hit (pass 12).** A move that hits two or more times gets a yellow combo counter beside the target (×1, ×2,
+  ...) that pops and grows a little with every hit while the screen shakes a little harder. The per-hit numbers stay
+  away; at the end the counter lifts off, a yellow HIT N TIMES! stamp slams on and the total slams in as one big
+  number. Reduced: the counter without the pop or shake. Off: the plain numbers.
