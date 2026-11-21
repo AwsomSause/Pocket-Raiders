@@ -3,9 +3,11 @@
 import type { ReduxCtx } from '../stage';
 import { act, B, esc, H, mini, TX, W } from '../kit';
 import { phSaves } from '../../phantom/templates';
+import { pkSaves } from '../../pocket/templates';
+import type { Art } from '../templates';
 
 export interface SavesModel {
-  slots: { tag: string; name: string; where: string; time: string; party: string[]; empty: boolean }[];
+  slots: { tag: string; name: string; where: string; time: string; party: string[]; empty: boolean; /** The slot's Trainer (the Pocket page stands them on the card). */ art?: Art | null }[];
   focus: number;
   /** The cursor is on Delete rather than on the slot. */
   onDelete: boolean;
@@ -21,6 +23,7 @@ export const confirmBox = (d: ConfirmModel): string =>
 
 export function savesView(c: ReduxCtx, d: SavesModel): string {
   if (c.ph) return phSaves(c.ph, d);
+  if (c.pk) return pkSaves(d);
   const v = c.v(2);
   const rows = d.slots.map((s, k) => {
     const on = k === d.focus;

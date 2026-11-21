@@ -96,3 +96,37 @@ describe('battle Info: your side', () => {
     expect(JSON.stringify(run)).toBe(before);
   });
 });
+
+describe('Pocket Battle Info page and move card (structured)', () => {
+  it('both sides with stat stages, four field cards, the foe Ability hidden until shown; looking changes nothing', async () => {
+    const { battleInfo } = await import('../../src/core/presentation/battleInfo');
+    const run = battleRun();
+    withFoe(run, 'bulbasaur');
+    run.battle!.enemyStages.atk = 2;
+    run.battle!.weather = { id: 'rain', turns: 3 } as NonNullable<RunState['battle']>['weather'];
+    const before = JSON.stringify(run);
+    const info = battleInfo(content, run);
+    expect(info.foe?.name).toBe('Bulbasaur');
+    expect(info.foe?.ability).toBe('Not shown yet');
+    expect(info.foe?.stages[0]).toEqual(['Atk', 2]);
+    expect(info.me?.name).toBe('Charmander');
+    expect(info.mid).toHaveLength(4);
+    expect(info.mid[0]).toMatchObject({ em: 'Weather', b: 'Rain' });
+    expect(info.mid[0]!.span).toContain('3 turns left');
+    expect(battleInfo(content, run, { ability: 'overgrow' }).foe?.ability).toBe('Overgrow');
+    expect(JSON.stringify(run)).toBe(before);
+  });
+  it('the move card: numbers, the type multiplier, same-type bonus; a status move or a hidden foe has no matchup', async () => {
+    const { moveInfo } = await import('../../src/core/presentation/battleInfo');
+    const run = battleRun();
+    withFoe(run, 'bulbasaur');
+    const ember = moveInfo(content, run, 0, () => 'text')!;
+    expect(ember.name).toBe('Ember');
+    expect(ember.vs).toMatchObject({ foe: 'Bulbasaur', mult: 2, stab: true });
+    expect(moveInfo(content, run, 1, () => '')!.vs).toBeNull();
+    expect(moveInfo(content, run, 9, () => '')).toBeNull();
+    run.battle!.eventRule = { ...(run.battle!.eventRule ?? {}), hiddenFoe: true } as NonNullable<RunState['battle']>['eventRule'];
+    expect(moveInfo(content, run, 0, () => '')!.vs).toBeNull();
+    expect((await import('../../src/core/presentation/battleInfo')).battleInfo(content, run).foe).toBeNull();
+  });
+});

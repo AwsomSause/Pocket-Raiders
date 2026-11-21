@@ -7,6 +7,7 @@ import { act, AREA, bg, esc, foot } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, figure } from '../templates';
 import { phCut } from '../../phantom/screens/cutin';
+import { pkAce } from '../../pocket/screens/cards';
 
 export const CUT_BEATS = ['Situation', 'Anticipation', 'Moment', 'Reaction', 'Transition'] as const;
 
@@ -39,6 +40,11 @@ export interface CutModel {
   where?: string;
   /** What a boss brings: how many Pokémon, and true lines about the fight. */
   brings?: { team: number; notes: readonly string[] } | null;
+  /** The ace's types and short facts ("Lv 38", "Holds Blastoisinite"), for the Pocket look's ace band. */
+  types?: readonly string[];
+  facts?: readonly string[];
+  /** Pocket look: the card's playback state, set by the battle's playback (in, hold, out). Leave it out: it plays in. */
+  cue?: 'in' | 'hold' | 'out';
 }
 
 const letter = (h: string): string => `<div class="bars" style="top:0"></div><div class="bars" style="bottom:0"></div>${h}`;
@@ -51,6 +57,8 @@ const size = (len: number, base: number): number => (len > 260 ? base - 6 : len 
 
 export function cutView(c: ReduxCtx, d: CutModel): string {
   if (c.ph) return phCut(c.ph, d);
+  // Pocket look: the ace has the mock-ups' Ace Announcement; the other moments keep this card until their pages are built.
+  if (c.pk && d.kind === 'aceEntrance') return pkAce(d, d.cue);
   const v = c.v(3), on = Math.max(0, Math.min(4, Math.floor(d.beat)));
   const hint = d.skip === null ? null : d.skip ?? (['Esc', 'skip'] as const);
   const tag = `<div class="abs" style="left:60px;bottom:22px;z-index:6"><div class="beat">${CUT_BEATS.map((_, k) => `<i class="${k <= on ? 'on' : ''}"></i>`).join('')}<span>${CUT_BEATS[on]}</span></div></div>${hint ? `<div class="abs sm" style="right:60px;bottom:22px;z-index:6;color:#fff"><kbd>${esc(hint[0])}</kbd>${esc(hint[1])}</div>` : ''}`;

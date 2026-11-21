@@ -8,6 +8,7 @@ import type { ReduxCtx } from '../stage';
 import { type Art } from '../templates';
 import { partyStrip, type PartyChip } from '../game';
 import { phDecision } from '../../phantom/screens/decide';
+import { pkLearn, type PkLearnModel } from '../../pocket/screens/after';
 
 export interface DecisionOption { label: string; small: string; /** A move's type: the button gets that type's stripe. */ type: string | null; off: boolean; art?: Art | null }
 export interface DecisionCard {
@@ -41,6 +42,8 @@ export interface DecisionModel {
   /** The result line once the choice is made; it stays until the next input. */
   result: string | null;
   hints: readonly (readonly [string, string])[];
+  /** Pocket look: "wants to learn a move" as the mock-ups' New Move page. */
+  pkLearn?: Omit<PkLearnModel, 'index' | 'result'> | null;
 }
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
@@ -48,6 +51,7 @@ const small = (lines: readonly string[], st = ''): string => lines.filter(Boolea
 
 export function decisionView(c: ReduxCtx, d: DecisionModel): string {
   if (c.ph) return phDecision(c.ph, d);
+  if (c.pk && d.pkLearn) return pkLearn({ ...d.pkLearn, index: d.index, result: d.result });
   const k = d.card, n = d.options.length;
   const pick = (i: number): string => `${act('pick', i)} data-over="over"`;
   const dim = (o: DecisionOption): string => (o.off ? 'opacity:.5;' : '');

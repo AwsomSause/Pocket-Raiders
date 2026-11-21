@@ -3,7 +3,7 @@
 // Care actions run on the map (phase map/reward/decision/shop) and are limited per stop; a "stop" is
 // `run.encountersCompleted`. Numbers live in data/care.json.
 
-import { adjustBond, bondOf } from '../bond';
+import { adjustBond, bondOf, peekBond } from '../bond';
 import { embraceUnlocked, heartbondCare } from '../story2/heartbond';
 import { markKeepsake } from '../story2/keepsakes';
 import type { Content } from '../contentSchema';
@@ -116,7 +116,7 @@ export function careProblem(content: Content, run: RunState, partyIndex: number,
     case 'whistle': {
       if (!arg || !CARE.whistle.commands[arg]) return 'Pick a command.';
       if (n('whistle') >= 1) return 'Already whistled at this stop.';
-      return bondOf(run, mon.uid).trust < CARE.whistle.minTrust ? 'It does not trust you enough to listen.' : null;
+      return peekBond(run, mon.uid).trust < CARE.whistle.minTrust ? 'It does not trust you enough to listen.' : null;
     }
     case 'showoff': return n('showoff') >= 1 ? 'Already showed off at this stop.' : null;
     case 'wake': return n('wake') >= 1 ? 'Already woken at this stop.' : care.fatigue <= 0 ? 'It is not tired.' : null;

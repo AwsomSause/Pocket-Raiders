@@ -3,7 +3,7 @@
 // grudges, revenge pacts, gifts, debriefs and the scrapbook. Pure and deterministic: every roll comes from
 // a generator seeded by the run seed and the transition, so reloading shows the same scene.
 
-import { adjustBond, bondOf } from '../bond';
+import { adjustBond, bondOf, peekBond } from '../bond';
 import type { BattleEvent } from '../battle/engine';
 import type { Content } from '../contentSchema';
 import { layEgg } from '../eggs';
@@ -49,12 +49,12 @@ export const personalityData = (trait: string): Personality => PARTY_LIFE.person
 
 /** Who this Pokémon is: a trait (the Bond Engine's, from its id) and a quirk, so two of one species differ. */
 export function personalityOf(run: RunState, mon: PokemonInstance): PersonalityView {
-  const trait = bondOf(run, mon.uid).trait;
+  const trait = peekBond(run, mon.uid).trait;
   const p = personalityData(trait);
   return { trait, label: p.label, blurb: p.blurb, quirk: PARTY_LIFE.quirks[fnv(`${mon.uid}:quirk`) % PARTY_LIFE.quirks.length]!, sulk: p.sulk, identity: `${identityLine(mon)}${mon.growthPath ? ` ${growthLine(mon, DEFAULT_GROWTH_CONFIG) ?? ''}` : ''}`.trim() };
 }
 
-const traitOf = (run: RunState, uid: string): string => bondOf(run, uid).trait;
+const traitOf = (run: RunState, uid: string): string => peekBond(run, uid).trait;
 
 // ---------- pairs and relationship stages ----------
 

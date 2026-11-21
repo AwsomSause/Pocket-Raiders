@@ -1,15 +1,17 @@
 // New UI screens for the stops of a run (reward draft, shop, decision, trade), ported from the mock-up templates.
 
+import { pkTrade } from '../../pocket/screens/town';
 import { act, B, esc, H, mon, TX, ty, W } from '../kit';
 import { partyStrip, type PartyChip } from '../game';
 import type { ReduxCtx } from '../stage';
 import { figure, pic, type Art } from '../templates';
 import { phReward } from '../../phantom/screens/stops';
+import { pkReward } from '../../pocket/screens/reward';
 import { phHonest, phTrade } from '../../phantom/screens/trade';
 
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
 
-export interface RewardCard { name: string; kind: string; text: string; art: Art | null; notes: string[] }
+export interface RewardCard { name: string; kind: string; text: string; art: Art | null; notes: string[]; /** The reward's rarity and category ids (the Pocket look's stars and label). */ rarity?: string; category?: string }
 export interface RewardModel {
   title: string;
   cards: RewardCard[];
@@ -20,11 +22,14 @@ export interface RewardModel {
   text: string;
   /** After the pick: the result lines, shown until an input. */
   result: string[] | null;
+  /** A pick mode's instruction (Re-roll, Lock, Wish), or '' (the Pocket look asks "Take the X?" then). */
+  notice?: string;
 }
 
 /** The mock-ups' `reward` template: A a row of cards, B a fanned hand, C a list with a detail window. */
 export function rewardView(c: ReduxCtx, d: RewardModel): string {
   if (c.ph) return phReward(c.ph, d);
+  if (c.pk) return pkReward(d);
   const v = c.v(3), R = d.cards, n = R.length, on = Math.min(d.index, n - 1), cur = R[on]!;
   const inCards = d.index < n;
   const strip = partyStrip(d.party, 'left:24px;right:24px;bottom:66px');
@@ -70,6 +75,7 @@ export interface TradeModel {
 
 export function tradeView(c: ReduxCtx, d: TradeModel): string {
   if (c.ph) return phTrade(c.ph, d);
+  if (c.pk) return pkTrade(d);
   const v = c.v(2), swapped = d.done !== null;
   const side = (name: string, art: Art | null, m: TradeMon | null, empty: string, attr = ''): string =>
     W(`<div class="row">${figure(art, 104)}<b>${esc(name)}</b></div><div class="cell" style="height:150px;aspect-ratio:auto;align-self:stretch">${m?.file ? mon(m.file, 2.4, swapped ? 'rx-pop' : '', true) : `<span class="sm" style="padding:0 16px;text-align:center">${esc(m ? m.name : empty)}</span>`}</div>${m ? `<b style="font-size:20px">${esc(m.name)} <span class="sm">Lv ${m.level}</span></b><div class="row" style="gap:4px">${m.types.map(ty).join('')}</div>` : ''}`, 'flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0', '', attr);

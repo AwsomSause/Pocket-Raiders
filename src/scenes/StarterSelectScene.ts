@@ -86,11 +86,11 @@ export class StarterSelectScene extends Phaser.Scene {
       const picks: StarterPick[] = run.starterChoices.map((speciesId) => {
         const species = getSpecies(content, speciesId), b = species.baseStats;
         const preview = createPokemon(content, speciesId, content.balance.starterLevel, 'preview');
-        return { name: species.name, file: rxFileOf(manifest, pokemonAssetIds(species.assets).front)?.file ?? null, types: species.types, stats: `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}  SpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, moves: `Lv ${preview.level}: ${preview.moves.map((m) => content.moves.get(m.id)!.name).join(', ')}` };
+        return { name: species.name, file: rxFileOf(manifest, pokemonAssetIds(species.assets).front)?.file ?? null, types: species.types, stats: `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}  SpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, moves: `Lv ${preview.level}: ${preview.moves.map((m) => content.moves.get(m.id)!.name).join(', ')}`, gen: species.generation };
       });
       this.view = mountRedux(this, {
         render: (c) => starterView(c, { title: 'Starter Select', picks, on: this.index, sub: `Trainer ${archetype.name}, seed ${run.seed}` }),
-        acts: { pick: (i) => (Number(i) === this.index ? this.choose(this.index) : this.focus(Number(i))), yes: () => this.choose(this.index), no: () => this.focus((this.index + 1) % 3) },
+        acts: { pick: (i) => (Number(i) === this.index ? this.choose(this.index) : this.focus(Number(i))), yes: () => this.choose(this.index), no: () => this.focus((this.index + 1) % 3), back: () => this.scene.start('MainMenu') },
         overs: { over: (i) => this.focus(Number(i)) },
       });
     }

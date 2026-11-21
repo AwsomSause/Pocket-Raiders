@@ -20,6 +20,7 @@ import { honestView, type HonestModel } from './stops';
 import { teamView, type TeamModel } from './team';
 import { phEvent } from '../../phantom/screens/event';
 import { phStore } from '../../phantom/screens/stops';
+import { pkEvent } from '../../pocket/screens/event';
 
 export interface EventChoice { label: string; sub: string; chance: string; locked: boolean }
 /** What the event director decided for this event, and how the page on show reacts (EventScene fills it in). */
@@ -96,6 +97,8 @@ export interface EventModel {
   place?: { no: string; of: string; region: string; sub: string } | null;
   /** Phantom UI: the player's own figure, shown listening while someone else speaks. */
   me?: Art | null;
+  /** Pocket look: the player's lead Pokémon (its front sprite), standing with them. */
+  lead?: string | null;
 }
 
 const pickAttr = (k: number): string => `${act('pick', k)} data-over="over"`;
@@ -218,6 +221,7 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
   if (d.team) return teamView(c, d.team);
   // Phantom UI: a store floor is the shop page while choosing; its talk and its outcome are the event's own pages.
   if (c.ph) return d.store && !d.outcome && !d.pick && d.page.at >= d.page.of - 1 ? phStore(c.ph, d) : phEvent(c.ph, d);
+  if (c.pk) return pkEvent(d);
   const out = d.outcome, more = d.page.at < d.page.of - 1, ch = out || more ? [] : d.choices;
   const L = d.look ?? plainLook(d);
   const pageKey = `${out ? out.step : 'intro'}${d.page.at}`;

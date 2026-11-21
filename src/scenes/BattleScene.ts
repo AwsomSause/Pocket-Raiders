@@ -143,7 +143,10 @@ import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, t
 import { fallbackFoeArt } from '../core/presentation/foeArt';
 import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
-import { mountRedux, phantomOn, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { pkHall } from '../ui/pocket/screens/hall';
+import { pkExp, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
+import { battleInfo, moveInfo } from '../core/presentation/battleInfo';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
 import { phTravel } from '../ui/phantom/screens/travel';
@@ -362,6 +365,9 @@ export class BattleScene extends Phaser.Scene {
   private rxInfo = '';
   /** New UI: the open info panel's sections, and whether it shows as a move's tooltip. */
   private rxPanels: BattlePanel[] = [];
+  /** Pocket look: the Battle Info page (mock-up `b-info`) or the move card (`moveinfo`) behind the open info panel. */
+  private rxPkInfo: BattleModel['pkInfo'] = null;
+  private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
@@ -397,6 +403,14 @@ export class BattleScene extends Phaser.Scene {
   private phLast: { side: Side; by: string; move: string } | null = null;
   private phHits = 0;
   private phTallyKey = '';
+  /** Pocket look: damage each of your Pokémon dealt this battle (the Victory page's MVP), the biggest hit and who the foe Trainer is drawn as. */
+  private pkDealt = new Map<string, number>();
+  private pkBest: { dmg: number; move: string } | null = null;
+  private pkFoeArt: { assetId: string; label: string } | null = null;
+  /** Pocket look: the catch card once a ball holds (mock-up `capture`). */
+  private rxPkCatch: PkCatch | null = null;
+  /** Pocket look: the event stage band while a pseudo-stage's battle opens (mock-up `ev-stage`). */
+  private rxPkBand: { em: string; b: string; span: string } | null = null;
   private rxLevels = new Map<string, number>();
   private rxEvolve: BattleEvolve | null = null;
   /** New UI: a notice box over the field that waits for an input (the Second Shot). */
@@ -1860,6 +1874,9 @@ export class BattleScene extends Phaser.Scene {
         xp: box.isPlayer ? xpShown : null,
         tags: [mon.status ? STATUS_LABELS[mon.status.id]?.label ?? '' : '', word(box.teraBadge), word(box.roleBadge), word(box.rageBadge)].filter(Boolean),
         team: !box.isPlayer && battle?.trainer ? { n: battle.enemyTeam.length, out: battle.enemyTeam.filter((m) => m.hp <= 0).length } : null,
+        types: this.foeHidden(mon) ? [] : getSpecies(content, mon.speciesId).types,
+        file: box.isPlayer ? monFile(this, mon.speciesId, 'front', !!mon.shiny) : null,
+        shiny: !box.isPlayer && !!mon.shiny && !this.foeHidden(mon),
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
@@ -1887,6 +1904,12 @@ export class BattleScene extends Phaser.Scene {
           this.showMoveMenu();
         },
         log: (i) => this.setLogTab(LOG_TABS[Number(i)]?.id),
+        // Pocket look: Battle Info's Battle Log button, the move card's Use it, the log page's Back.
+        pkLog: () => { if (this.infoPanel) this.closePanel(); if (!this.historyView) this.toggleHistory(); },
+        pkUse: () => { if (!this.infoPanel || !this.rxPkMove) return; const k = this.focusedMove; this.closePanel(); if (!this.picker && !this.autoRunning) this.menu?.press(k); },
+        logClose: () => { if (this.historyView) this.toggleHistory(); },
+        // Pocket look: the Level Up page's Next moves the battle's words on.
+        say: () => this.advance?.(),
         // A click on a data box pins its card; a second click (or one on the card) lets it go.
         pin: (key) => { this.rxPin = !key || this.rxPin === key ? null : key; },
       },
@@ -1969,6 +1992,11 @@ export class BattleScene extends Phaser.Scene {
       level: this.rxLevel && !menu && !list ? this.rxLevel : null,
       evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
+      pkInfo: this.infoPanel ? this.rxPkInfo : null,
+      pkMove: this.infoPanel ? this.rxPkMove : null,
+      pkCatch: this.rxPkCatch,
+      pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
+      turn: this.run.battle?.turn ?? 0,
       panelAt: this.rxPanelAt,
       tip,
       card,
@@ -2860,6 +2888,11 @@ export class BattleScene extends Phaser.Scene {
       this.phTallyKey = battle.enemyTeam[0]?.uid ?? '';
       this.phHits = 0;
       this.phLast = null;
+      this.pkDealt.clear();
+      this.pkBest = null;
+      this.pkFoeArt = this.trainerArt();
+      this.rxPkCatch = null;
+      this.rxPkBand = this.pkBand();
       interactionLog.tell('stage', battle.trainer ? (title ?? battle.trainer.name) : `Wild ${this.speciesName(battle.enemyTeam[0]!)}`, 'Battle');
       await this.playIntro();
       // The foe trainer waits on the platform (a black shape at first) while the camera sweeps over the arena.
@@ -3023,7 +3056,7 @@ export class BattleScene extends Phaser.Scene {
     if (!real) return null;
     const now = calcStats(content, { ...real, level }), was = calcStats(content, { ...real, level: Math.max(1, from) });
     const names: [keyof typeof now, string][] = [['hp', 'HP'], ['atk', 'Attack'], ['def', 'Defense'], ['spa', 'Sp. Atk'], ['spd', 'Sp. Def'], ['spe', 'Speed']];
-    return { name: this.speciesName(real), file: monFile(this, real.speciesId, 'front', !!real.shiny), from: Math.max(1, from), to: level, stats: names.map(([k, label]) => [label, now[k], now[k] - was[k]] as const) };
+    return { name: this.speciesName(real), file: monFile(this, real.speciesId, 'front', !!real.shiny), types: getSpecies(content, real.speciesId).types, from: Math.max(1, from), to: level, stats: names.map(([k, label]) => [label, now[k], now[k] - was[k]] as const) };
   }
 
   /** New UI: the versus card as a beat (a key or a click moves on). Null when motion is off for an ordinary Trainer. */
@@ -3060,6 +3093,7 @@ export class BattleScene extends Phaser.Scene {
       where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
       // Kice's rule: a loss to a rival never ends the run.
       stake: battle.rivalId || battle.rival ? 'Win and the rivalry grows. Lose and the run goes on: a loss to a rival never ends it.' : '',
+      pkBoss: boss && !standIn && pocketOn() ? this.pkBossFacts(boss) : null,
     };
     let over = false;
     let finish!: () => void;
@@ -3072,7 +3106,7 @@ export class BattleScene extends Phaser.Scene {
     };
     const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
     // The Phantom card has more on it to read (the line, the stake), so it stays a little longer.
-    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() ? 3400 : 2600, end);
+    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() || model.pkBoss ? 3400 : 2600, end);
     return { done, skip: end };
   }
 
@@ -3473,6 +3507,160 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: a region's Champion fell and another region waits. The mock-ups' Next region page: the ticket the run
    * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
    */
+  /** Pocket look: the Boss Intro's heading and chips (what the battle already holds: type, team, powers, heals, the stake). */
+  private pkBossFacts(boss: BossInfo): { where: string; type: string; chips: string[] } {
+    const battle = this.run.battle!;
+    const { content } = services().session;
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const n = battle.enemyTeam.length;
+    const held = n > 0 && battle.enemyTeam.every((m) => Object.keys(m.held ?? {}).length > 0);
+    const powers = battle.transform.enemyMechanics.length;
+    const heals = content.balance.trainerAi.maxHealItems;
+    const role = boss.title.replace(boss.name, '').trim();
+    const stake = boss.role === 'gym' ? `At stake: **${boss.name}'s badge**` : boss.role === 'champion' ? 'At stake: the **Champion** title' : 'At stake: your road to the **Champion**';
+    return {
+      where: [this.phWhere().split(' · ')[1] ?? '', role].filter(Boolean).join(' · '),
+      type: boss.types[0] ?? 'normal',
+      chips: [
+        boss.types.length ? `${boss.types.map((t) => `**${cap(t)}**`).join(' and ')} type` : '',
+        `${n} Pokémon${held ? ', each with a held item' : ''}`,
+        `${powers ? `${powers} boss ${powers === 1 ? 'power' : 'powers'} · ` : ''}up to ${heals} healing items`,
+        stake,
+      ].filter(Boolean),
+    };
+  }
+
+  /** Pocket look: the band that names a pseudo-stage's battle (it is part of a stop, not a stage of its own). */
+  private pkBand(): { em: string; b: string; span: string } | null {
+    const battle = this.run.battle;
+    if (!battle?.event || !pocketOn()) return null;
+    const { content } = services().session;
+    try {
+      if (!isPseudoBattle(content, battle.event)) return null;
+    } catch {
+      return null;
+    }
+    const stage = this.run.stage;
+    const name = content.events.get(battle.event.eventId)?.name ?? stage?.pseudo?.name ?? 'This event';
+    return { em: 'Event stage', b: name, span: `${stage ? `Part of stage ${stage.index + 1}. ` : ''}It does not count as a new stage.` };
+  }
+
+  /** Pocket look: the catch card's facts (presentation only: what the battle already shows). */
+  private pkCatchCard(itemId: string, before: RunState): PkCatch | null {
+    const { content } = services().session;
+    const foe = before.battle ? currentEnemy(before.battle) : null;
+    if (!foe) return null;
+    const sp = getSpecies(content, foe.speciesId);
+    const ab = abilityOf(content, foe);
+    const nature = foe.nature ? `${foe.nature.charAt(0).toUpperCase()}${foe.nature.slice(1)} nature` : '';
+    const item = content.items.get(itemId);
+    const where = this.phWhere().split(' · ').reverse().join(', ');
+    return {
+      file: monFile(this, foe.speciesId, 'front', !!foe.shiny), name: this.speciesName(foe), level: foe.level, types: sp.types,
+      about: [nature, ab ? content.abilities.get(ab)?.name ?? '' : ''].filter(Boolean).join(' · '),
+      ball: (item?.iconAssetId ?? 'ball.pb').replace(/^ball\./, ''), where: `Caught in a ${item?.name ?? 'Poké Ball'}${where ? ` · ${where}` : ''}`,
+      fresh: !before.log.speciesCaught.includes(foe.speciesId),
+    };
+  }
+
+  /** Pocket look: one page over the battle (a card view) that waits for its button, a key or a click. */
+  private async pkPage(render: (c: ReduxCtx) => string, acts: Record<string, (arg: string) => void> = {}): Promise<void> {
+    let finish!: () => void;
+    const done = new Promise<void>((r) => (finish = r));
+    let over = false;
+    const end = (): void => {
+      if (over) return;
+      over = true;
+      try {
+        view.destroy();
+      } catch {
+        // the scene may already be gone
+      }
+      finish();
+    };
+    const view = mountRedux(this, { render, acts: { ...acts, next: () => end() }, card: true });
+    this.events.once('shutdown', end);
+    await this.playBeat({ done, skip: end });
+  }
+
+  /**
+   * Pocket look: the pages after a win (mock-ups `victory` and `exp`). A Trainer's defeat gets the Victory page (the MVP,
+   * the prize, the turns, the biggest hit); every win and catch then gets the Team EXP page. Returns whether the Victory
+   * page showed (its prize and finds need not be said again).
+   */
+  private async pkResultCard(result: TurnResult, before: RunState | undefined, trainer: string | null): Promise<boolean> {
+    const end = result.end;
+    if (!end || !this.rx || !pocketOn()) return false;
+    const { content } = services().session;
+    let shown = false;
+    try {
+      if ((before?.battle?.enemyTeam[0]?.uid ?? '') !== this.phTallyKey) this.phTally.clear();
+      const party = result.run.party.slice(0, 6);
+      const down = party.filter((m) => m.hp <= 0).length;
+      if (end.outcome === 'win' && trainer && before?.battle?.trainer) {
+        const foeTeam = before.battle.enemyTeam;
+        const ace = foeTeam[foeTeam.length - 1];
+        const rival = !!(before.battle.rivalId || before.battle.rival);
+        const line = rival ? '' : content.trainers.get(before.battle.trainer.classId)?.lines?.lose ?? '';
+        const mvpId = [...this.pkDealt].sort((a, b) => b[1] - a[1])[0]?.[0] ?? this.shown.player.uid;
+        const mvp = party.find((m) => m.uid === mvpId) ?? party.find((m) => m.hp > 0) ?? null;
+        const money = end.moneyGained > 0 ? `₽ ${end.moneyGained.toLocaleString('en-US')}` : null;
+        const turns = before.battle.turn ?? 1;
+        const rows: [string, string, string?][] = [];
+        if (money) rows.push(['Prize money', money]);
+        rows.push([down ? 'Fainted' : 'Nobody fainted', down ? `${down}` : '✓']);
+        rows.push(['Turns taken', `${turns}`]);
+        if (this.pkBest) rows.push(['Biggest hit', `${this.pkBest.dmg}`, this.pkBest.move]);
+        if (end.itemsFound.length) rows.push(['Found', end.itemsFound.map((id) => content.items.get(id)?.name ?? id).join(', ')]);
+        const rating = down === 0 ? 3 : down * 2 < party.length ? 2 : 1;
+        const art = this.pkFoeArt ? artOf(this, this.pkFoeArt.assetId) : null;
+        const say = `You defeated **${trainer}**!${money ? ` You got **${money}** for winning.` : ''}`;
+        const model = {
+          backdrop: this.phBackdrop(),
+          mvp: mvp ? { file: monFile(this, mvp.speciesId, 'front', !!mvp.shiny), name: this.speciesName(mvp), type: getSpecies(content, mvp.speciesId).types[0] ?? '' } : null,
+          foe: { trainer: art, mon: art ? null : ace ? monFile(this, ace.speciesId, 'front', !!ace.shiny) : null, name: trainer, line, type: ace ? getSpecies(content, ace.speciesId).types[0] ?? '' : '' },
+          rows, total: money, stars: rating, rate: rating === 3 ? 'Flawless win' : rating === 2 ? 'Solid win' : 'Close call', say,
+        };
+        await this.pkPage((c) => (c.pk ? pkVictory(model) : ''));
+        shown = true;
+      }
+      if (end.outcome === 'win' || end.outcome === 'caught') {
+        const rows: PkExpRow[] = party.map((m) => {
+          const t = this.phTally.get(m.uid);
+          return { file: monFile(this, m.speciesId, 'front', !!m.shiny), name: this.speciesName(m), types: getSpecies(content, m.speciesId).types, level: t ? t.fromLevel : m.level, to: t && t.toLevel > t.fromLevel ? t.toLevel : null, from: t ? t.from : this.xpPct(m), now: this.xpPct(m), gain: t && t.gain > 0 ? t.gain : null, fainted: m.hp <= 0 };
+        });
+        const ups = rows.filter((r) => r.to !== null).map((r) => `**${r.name}**`);
+        const grew = ups.length > 1 ? `${ups.slice(0, -1).join(', ')} and ${ups[ups.length - 1]} grew a level!` : ups.length ? `${ups[0]} grew a level!` : '';
+        const say = rows.some((r) => r.gain) ? `The team gained EXP.${grew ? ` ${grew}` : ''}` : 'No EXP this time.';
+        if (rows.length) await this.pkPage((c) => (c.pk ? pkExp({ rows, say }) : ''));
+      }
+    } catch (e) {
+      console.warn('Pocket result pages failed', e);
+    }
+    return shown;
+  }
+
+  /**
+   * Pocket look: a region's Champion fell, so the team stands in the Hall of Fame (mock-up `hof`) with what comes next
+   * and one button. Waits for an input. Returns whether it showed.
+   */
+  private async pkHallCard(run: RunState, cleared: string, won: boolean): Promise<boolean> {
+    if (!this.rx || !pocketOn()) return false;
+    const { content, profile } = services().session;
+    try {
+      const at = run.regionOrder.indexOf(cleared), nextId = at < 0 ? undefined : run.regionOrder[at + 1];
+      const here = content.regions.get(cleared)?.name ?? cleared, next = nextId ? content.regions.get(nextId)?.name ?? nextId : null;
+      const arch = content.archetypes.get(run.archetypeId);
+      const mons = run.party.slice(0, 6).map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), name: getSpecies(content, m.speciesId).name, type: getSpecies(content, m.speciesId).types[0] ?? '' }));
+      const say = won || !next ? 'Your team is recorded in the Hall of Fame. You have conquered every region!' : `Your team is recorded in the Hall of Fame. **${next}** is next, with a higher level cap and tougher bosses.`;
+      await this.pkPage((c) => (c.pk ? pkHall({ where: `${here} cleared · Run ${profile.runHistory.length + 1} · ${run.badges.length} badges`, mons, trainer: { art: artOf(this, arch?.spriteAssetId), name: `Champion ${arch?.name ?? run.archetypeId}` }, say, button: won || !next ? 'See the ending' : `On to ${next}` }) : ''));
+      return true;
+    } catch (e) {
+      console.warn('Pocket Hall of Fame card failed', e);
+      return false;
+    }
+  }
+
   private async phTravelCard(run: RunState, cleared: string): Promise<boolean> {
     if (!this.phCards()) return false;
     const { content } = services().session;
@@ -4560,6 +4748,8 @@ export class BattleScene extends Phaser.Scene {
         const hint = move.category === 'status' ? null : effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, foeTypes));
         const flags = moveFlagLabels(move);
         const power = move.power ? (slot!.hyper ? `${move.power + content.balance.hyperMove.powerBonus} (Hyper +${content.balance.hyperMove.powerBonus})` : move.power) : fixedDamageLabel(move.effects.fixedDamage);
+        this.rxPkInfo = null;
+        this.rxPkMove = pocketOn() ? moveInfo(content, this.run, this.focusedMove, (id) => moveFullDescription(content.moves.get(id)!)) : null;
         this.openPanel([
           { head: move.name, text: `${move.type.toUpperCase()} · ${move.category}\nPower ${power} · Accuracy ${move.accuracy ?? '—'} · PP ${slot!.pp}/${maxPp(content, slot!)}\nPriority ${move.priority > 0 ? '+' : ''}${move.priority}${hint ? `\nAgainst ${this.speciesName(this.shown.enemy)}: ${hint.text}` : ''}` },
           { head: 'What it does', text: moveFullDescription(move) },
@@ -4569,6 +4759,11 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     const c = battleConditions(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
+    this.rxPkMove = null;
+    if (pocketOn()) {
+      const info = battleInfo(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
+      this.rxPkInfo = { ...info, foeFile: info.foe ? monFile(this, info.foe.speciesId, 'front', info.foe.shiny) : null, meFile: info.me ? monFile(this, info.me.speciesId, 'front', info.me.shiny) : null };
+    } else this.rxPkInfo = null;
     this.openPanel([
       { head: 'Battlefield', text: c.field.join('\n') },
       { head: 'Your Pokémon', text: c.yours.join('\n') },
@@ -5511,7 +5706,7 @@ export class BattleScene extends Phaser.Scene {
     // Galar: a reporter interviews a different random character about how the match went.
     if (this.stadium && end.outcome === 'win') await this.stadium.interview('post', true);
     // Phantom UI: the result page carries the Exp, the prize money and what was found; the Old and New looks say them.
-    const tallied = await this.phResultCard(result, before, !!bossWin);
+    const tallied = (await this.pkResultCard(result, before, trainer)) || (await this.phResultCard(result, before, !!bossWin));
     if (end.moneyGained > 0 && !tallied) await this.say(`You got ₽${end.moneyGained}!`);
     if (!tallied) for (const id of end.itemsFound) await this.say(`You found a ${content.items.get(id)?.name ?? id}!`);
     interactionLog.tell('gain', `${end.outcome === 'caught' ? 'Caught it' : trainer ? `Beat ${trainer}` : 'Won the battle'}${end.moneyGained > 0 ? ` · +₽${end.moneyGained}` : ''}${end.itemsFound.length ? ` · ${end.itemsFound.map((id) => content.items.get(id)?.name ?? id).join(', ')}` : ''}`);
@@ -5543,7 +5738,7 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(stamp(this, 'CHAMPION!', region, ROLE_RIMS.champion, this.motion));
       await this.say(end.regionCleared === 'grand' ? `You beat the final boss and are the ${region} Champion!` : `You are the ${region} Champion!`);
       if (end.victory) for (const line of buildEpilogue(content, result.run)) await this.say(line);
-      if (end.victory || !(await this.phTravelCard(result.run, end.regionCleared))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
+      if (!(await this.pkHallCard(result.run, end.regionCleared, !!end.victory)) && (end.victory || !(await this.phTravelCard(result.run, end.regionCleared)))) await this.say(end.victory ? 'You have conquered every region!' : 'A new region awaits…');
     }
     this.updateHeader();
     // Evolutions this battle earned wait as decisions: the evolution scene plays on the next screen (B can stop it).
@@ -5907,6 +6102,9 @@ export class BattleScene extends Phaser.Scene {
         case 'seaOfFireDamage':
           if (e.type === 'damage' && e.side === 'enemy' && e.hpAfter < mon!.hp) {
             this.phHits++;
+            const dealt = mon!.hp - e.hpAfter, by = this.shown.player.uid;
+            this.pkDealt.set(by, (this.pkDealt.get(by) ?? 0) + dealt);
+            if (this.phLast?.side === 'player' && this.phLast.move && dealt > (this.pkBest?.dmg ?? 0)) this.pkBest = { dmg: dealt, move: this.phLast.move };
             // Phantom UI: a hit that lands hard gets its splash (the knock-out card speaks for a hit that ends it).
             if ((e.effectiveness >= 2 || e.crit) && e.hpAfter > 0 && this.phTurnCards()) await this.phHitCard(mon!, e.hpAfter, e.effectiveness >= 2, !!e.crit);
           }
@@ -6313,6 +6511,7 @@ export class BattleScene extends Phaser.Scene {
         case 'ball':
           await this.say(`You threw a ${content.items.get(e.itemId)?.name ?? 'ball'}!`);
           await this.animateBall(e.itemId, e.shakes, e.caught);
+          if (e.caught && this.rx && pocketOn()) this.rxPkCatch = this.pkCatchCard(e.itemId, before);
           if (e.caught) await this.fx.flourish('enemy', 'interaction.catch', ENEMY_POS);
           break;
         case 'xp':
