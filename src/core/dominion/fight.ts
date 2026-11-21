@@ -1,6 +1,5 @@
-// DOMINION D2: starting the battle an action (or the police) waits on, through the battle engine as it is (the old
-// Evil Mode's fight bridge, core/evilMode/fight.ts, does the same). The Boss fights with their own team; teams are
-// built from the field data at levels around the Boss's team. A wild foe is drawn by the main game's own wild picker
+// DOMINION D2: starting the battle an action (or the police) waits on, through the battle engine as it is. The Boss
+// fights with their own team; teams are built from the field data at levels around the Boss's team. A wild foe is drawn by the main game's own wild picker
 // (themes) on a derived generator, so no gameplay stream moves.
 
 import type { Content } from '../contentSchema';
