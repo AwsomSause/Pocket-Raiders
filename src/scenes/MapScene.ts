@@ -138,6 +138,8 @@ import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
 import { pkXpDoor } from '../ui/pocket/screens/expedition';
+import { pkBracket } from '../ui/pocket/screens/galar';
+import { pkArtOf } from '../ui/pocket/templates';
 import { pkForecast } from '../ui/pocket/screens/forecast';
 import { pkTime, pkWeather, weatherCard, WEATHERS } from '../ui/pocket/screens/sky';
 import { timeOfDay } from '../core/arenaStyle';
@@ -345,7 +347,8 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'time') pop = pocketOn() ? { kind, pick: Math.max(0, ['day', 'eve', 'night'].indexOf(this.stageTime() ?? 'day')) } : null;
     else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
     else if (kind === 'xpgate' || kind === 'totem' || kind === 'raid') pop = null;
-    else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
+    // Pocket look: the bracket opens on the round you play next.
+    else pop = { kind, page: pocketOn() ? Math.min(4, bracketView(session.content, run).wins) : galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
     this.rxPopAt = this.time.now;
@@ -988,6 +991,7 @@ export class MapScene extends Phaser.Scene {
         next: page.nextLine,
       });
     }
+    if (c.pk && p.kind === 'bracket') return this.bracketPocket(p.page);
     const view = bracketView(content, run);
     const next = view.rounds.find((r) => r.state === 'next');
     const watch = view.rounds.filter((r) => r.state === 'won').length;
@@ -2879,6 +2883,35 @@ export class MapScene extends Phaser.Scene {
     }, { pick: 'popPick', over: '' });
   }
 
+  /** Pocket look: the Champion's Tournament bracket (mock-up `ga-bracket`): the five rounds, the field still in, Heal and Shop. */
+  private bracketPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content;
+    const run = session.run!;
+    const view = bracketView(content, run);
+    const tree = bracketTree(content, run);
+    const boss = (id: string) => pkArtOf(artOf(this, content.bosses.get(id)?.sprites.default));
+    const me = pkArtOf(artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId));
+    const myName = content.archetypes.get(run.archetypeId)?.name ?? 'You';
+    const next = view.rounds.find((r) => r.state === 'next');
+    const rounds = view.rounds.map((r) => ({
+      name: r.name, state: r.state,
+      you: r.state === 'later' ? { art: null, name: 'Winner' } : { art: me, name: myName, won: r.state === 'won' },
+      // The final's Champion is known from the start; other later rounds are not decided yet.
+      foe: r.state === 'later' && r.round < view.rounds.length ? { art: null, name: 'Not decided' } : { art: boss(r.opponent.id), name: r.opponent.name },
+      note: r.state === 'won' ? r.headline ?? `${r.others} other matches` : r.state === 'next' ? `${r.opponent.style || 'Next match'}${r.levelBonus ? ` · +${r.levelBonus} levels` : ''}` : r.round === view.rounds.length ? r.opponent.style || 'The Champion' : `${r.others} other ${r.others === 1 ? 'match' : 'matches'}`,
+      after: r.shopAfter ? 'shop' as const : r.round < view.rounds.length ? 'heal' as const : null,
+    }));
+    const stillIn = tree.lines[Math.min(tree.wins, tree.lines.length - 1)] ?? [];
+    const before = tree.wins > 0 ? tree.lines[tree.wins - 1] ?? [] : [];
+    const out = before.filter((x) => !stillIn.some((y) => y.id === x.id) && !x.you).slice(-2);
+    return pkBracket({
+      rounds, still: view.standing.length, pool: stillIn.filter((x) => !x.you).slice(0, 10).map((x) => boss(x.id)), out: out.map((x) => boss(x.id)), index: pick,
+      button: 'Back to the map',
+      line: next ? `Next: ${next.name} against ${next.opponent.name}. Lose once and it is over.` : 'The whole bracket is decided.',
+    });
+  }
+
   /** Pocket look: the Expedition Gate (mock-up `xp-gate`): the briefing card, Set out or Not now, the ranger's line. */
   private xpGatePocket(p: Extract<MapPop, { kind: 'xpgate' }>): string {
     const { session } = services();
@@ -3350,6 +3383,8 @@ export class MapScene extends Phaser.Scene {
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
   private toggleBracket(): void {
+    // Pocket look: the bracket is the mock-up's page (B again, Esc or Enter closes it).
+    if (pocketOn() && this.rxView && !this.bracket) return this.popToggle('bracket');
     if (this.bracket) {
       this.bracket.destroy();
       this.bracket = null;

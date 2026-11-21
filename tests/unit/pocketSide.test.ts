@@ -297,3 +297,20 @@ describe('the Pocket Expedition pages', () => {
     expect(pkXpResult({ ...base, outcome: 'extracted' })).toContain('Extracted');
   });
 });
+
+describe('the Pocket Galar bracket', () => {
+  it('five round cards (won, next, later, final), Heal and Shop between them, the field still in and who went out', async () => {
+    const { pkBracket } = await import('../../src/ui/pocket/screens/galar');
+    const r = (name: string, state: 'won' | 'next' | 'later', after: 'heal' | 'shop' | null) => ({ name, state, you: { art: null, name: state === 'later' ? 'Winner' : 'Red', won: state === 'won' }, foe: { art: null, name: 'Bede' }, note: 'n', after });
+    const h = pkBracket({ rounds: [r('Round of 32', 'won', 'heal'), r('Round of 16', 'next', 'shop'), r('Quarterfinal', 'later', 'heal'), r('Semifinal', 'later', 'shop'), r('Final', 'later', null)], still: 16, pool: Array(10).fill(null), out: [null, null], index: 2, button: 'Back to the map', line: 'Next: Round of 16' });
+    expect(pkPageOf(h)?.id).toBe('ga-bracket');
+    expect(h).toContain('mt34 won');
+    expect(h).toContain('mt34 now');
+    expect(h).toContain('mt34  fin');
+    expect(h).toMatch(/mt34 [^"]*gx-lit" data-key="ga-r-2"/);
+    expect((h.match(/<i class="heal">/g) ?? []).length).toBe(2);
+    expect((h.match(/<i class="shop">/g) ?? []).length).toBe(2);
+    expect(h).toContain('and 8 more');
+    expect(h).toContain('<u>Out</u>');
+  });
+});

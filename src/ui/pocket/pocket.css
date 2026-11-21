@@ -726,3 +726,6 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .dr-ch.gx-dr-many .btn { padding: 6px 18px; }
 .pkx .pks .dr-ch.gx-dr-many .btn b { font-size: 20px !important; }
 .pkx .pks .dr-ch.gx-dr-many .btn span { font-size: 11px; max-width: 340px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Galar bracket: the round looked at with ←→ (the round you play next keeps the mock-up's gold frame). */
+.pkx .pks .br34 .mt34.gx-lit { outline: 3px dashed var(--yel); outline-offset: 4px; }
