@@ -212,9 +212,9 @@ export class BossMenuController {
       this.seg('Betrayals', 'Holders may turn on you', RUN_OPTS.betrayals, p.run.betrayals, (v) => setRun('betrayals', v)),
       this.toggle('Show odds on the Card', 'The chance dial before every action', p.showOdds, (v) => this.setPrefs({ ...p, showOdds: v })),
       this.toggle('End the day when no actions are left', undefined, p.autoEndDay, (v) => this.setPrefs({ ...p, autoEndDay: v })),
-      this.seg('Tutorial', 'Rotom\'s lessons: this run, and every new one', TUT.replay.modes as unknown as readonly (readonly [TutMode, string])[], this.tutNow(), (v) => this.setTut(v)),
       { view: { label: 'Charters 🔒', sub: 'Unlocks after you finish one run', kind: 'seg', opts: [{ label: 'Off', on: true }], lock: true }, press: () => { this.setNotice = 'Charters open once you finish one Dominion run.'; } },
       ...this.chairRows(),
+      this.seg('Tutorial', 'Rotom\'s lessons: this run, and every new one', TUT.replay.modes as unknown as readonly (readonly [TutMode, string])[], this.tutNow(), (v) => this.setTut(v)),
     ];
   }
 
