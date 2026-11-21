@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Catalog Overhaul, families-c (STORY_FAMILIES 9 and 10 and their Part 0 pointers), played in the New UI: the Oracle's
 // prophecy is remembered after a reload, and the Tower of Legends opens its first floor as a room beside the node.
@@ -25,7 +26,7 @@ async function toMap(page: Page, seed: string) {
   await page.goto(`/?ui=new&seed=${seed}`);
   await waitForScene(page, 'MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);

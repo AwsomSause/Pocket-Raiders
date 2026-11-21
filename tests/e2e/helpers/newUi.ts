@@ -1,5 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 import { confirmToMenu } from '../battleInput';
+import { pressUntil } from './pressUntil';
 
 // Shared steps for the New UI browser specs (newUi.spec.ts and the *NewUi.spec.ts files). The New UI is an HTML layer over the canvas, so these
 // specs drive the game by clicking that layer and open the game with `?ui=new` (an automated browser gets Old otherwise).
@@ -30,7 +31,7 @@ export async function start(page: Page, query: string) {
 export async function toMap(page: Page) {
   await expect(view(page, 'MainMenu')).toBeVisible();
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await scene(page)) === next);
     await waitForScene(page, next);
     if (next !== 'Hub') await expect(view(page, next)).toBeVisible();
   }

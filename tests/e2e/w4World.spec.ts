@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Ideas W4: traversal obstacles show on the map and are crossed on the way to a node, the map legend opens
 // with L, a skill-prompt event choice plays its prompt (Esc skips it), and nothing logs an error.
@@ -12,7 +13,7 @@ async function waitForScene(page: Page, key: string, timeout = 20_000) {
 
 async function toMap(page: Page) {
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);

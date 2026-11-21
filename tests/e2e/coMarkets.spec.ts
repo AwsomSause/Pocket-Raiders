@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Catalog Overhaul, markets (stalls, the bank, tolls, trades), played in the New UI: the Bank takes the stated half of
 // your money and the deposit is still there after a reload; the Toll Bridge takes exactly the posted toll. No console errors.
@@ -24,7 +25,7 @@ async function toMap(page: Page, seed: string) {
   await page.goto(`/?ui=new&seed=${seed}`);
   await waitForScene(page, 'MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);

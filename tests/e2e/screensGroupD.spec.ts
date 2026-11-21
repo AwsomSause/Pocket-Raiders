@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 import { SCREEN_STYLES_READY } from '../../src/core/presentation/screenStyles';
 
 // Screens redesign, Group D: every built Bag, Camp and run-end look opens with no console errors,
@@ -12,7 +13,7 @@ async function toMap(page: Page, seed: string) {
   await page.goto(`/?seed=${seed}&campaign=dev&debug=1`);
   await expect.poll(() => scene(page), { timeout: 60_000 }).toBe('MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await expect.poll(() => scene(page), { timeout: 40_000 }).toBe(next);
     await page.waitForTimeout(250);
   }

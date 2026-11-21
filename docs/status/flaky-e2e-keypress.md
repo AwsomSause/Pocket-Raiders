@@ -4,4 +4,4 @@
 
 **Fix.** `tests/e2e/helpers/pressUntil.ts`: press, check the result, press again if nothing changed. Used in `events.spec.ts` for the choice, reward and battle steps (replaces fixed sleeps + single press). 4 runs under 4 CPU hogs passed with no retries.
 
-**Left.** ~33 specs still copy the same `toMap` (Enter then `waitForScene`). Convert them to `pressUntil` if they start flaking; the shared `helpers/newUi.ts` `toMap` already polls each scene.
+**Also converted.** The 23 specs with their own `toMap` and the shared `helpers/newUi.ts` `toMap` now use `pressUntil` for each Enter on the way to the map. Other sleep-then-press spots inside tests are unchanged.

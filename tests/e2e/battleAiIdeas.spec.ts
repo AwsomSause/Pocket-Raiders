@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Battle/AI ideas batch 1: the Map shows a region's own type rules (S156); the Settings list has the Auto-Battle rules (S43).
 
@@ -10,7 +11,7 @@ async function toMap(page: Page, seed: string) {
   await page.goto(`/?seed=${seed}&campaign=dev&debug=1`);
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await expect.poll(() => scene(page), { timeout: 20_000 }).toBe(next);
     await page.waitForTimeout(250);
   }

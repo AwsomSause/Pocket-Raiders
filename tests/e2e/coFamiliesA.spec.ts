@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Catalog Overhaul, families-a (STORY_FAMILIES 1-4 and 7), played in the New UI: a hazard's "push on" is remembered
 // after a reload, and Hettie's ledger pays by the Kindness total. No console errors.
@@ -24,7 +25,7 @@ async function toMap(page: Page, seed: string) {
   await page.goto(`/?ui=new&seed=${seed}`);
   await waitForScene(page, 'MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);

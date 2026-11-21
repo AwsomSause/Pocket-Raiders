@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Catalog Overhaul, people (mentors, past Champions and Leaders, the Road Roster), played in the New UI:
 // a Road Roster crossover pays its reward and remembers it after a reload, and the Trivia Mentor's first answer opens her
@@ -25,7 +26,7 @@ async function toMap(page: Page, seed: string) {
   await page.goto(`/?ui=new&seed=${seed}`);
   await waitForScene(page, 'MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);

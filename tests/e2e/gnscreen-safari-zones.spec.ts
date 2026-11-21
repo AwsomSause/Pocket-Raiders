@@ -1,4 +1,5 @@
 import { writeFileSync } from 'node:fs';
+import { pressUntil } from './helpers/pressUntil';
 import { expect, test, type Page } from '@playwright/test';
 import { addSide, open, scene, view, waitForScene, watch } from './helpers/newUi';
 
@@ -19,7 +20,7 @@ async function toMapSlow(page: Page, seed: string) {
   await page.goto(`/?ui=new&seed=${seed}`);
   await waitForScene(page, 'MainMenu', 150_000);
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next, 60_000);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 60_000 }).toBe(false);

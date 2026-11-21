@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Catalog Overhaul new events (row 17): three of the hundred new scenes open in the New UI event screen with every {token}
 // filled: the Alpha who lost its voice (NE1), the Museum of You (NE41, fills {player}) and the Shop With No Shopkeeper (NE91).
@@ -12,7 +13,7 @@ async function waitForScene(page: Page, key: string, timeout = 20_000) {
 
 async function toMap(page: Page) {
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);

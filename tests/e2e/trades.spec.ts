@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Trade Stops redesign: every built style draws the Trade Post, trades, plays its moment and returns to the map;
 // the Plaza's specialist traders open the same screen and return to the Plaza. No console errors.
@@ -14,7 +15,7 @@ async function waitForScene(page: Page, key: string, timeout = 20_000) {
 
 async function toMap(page: Page) {
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);

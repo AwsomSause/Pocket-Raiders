@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // W3: the Camp menu opens from the map, crafts a gadget, shows it in the list, and the run saves and reloads with it.
 
@@ -10,7 +11,7 @@ async function toMap(page: Page, seed: string): Promise<void> {
   await page.goto(`/?seed=${seed}&campaign=dev&debug=1`);
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await expect.poll(() => scene(page), { timeout: 20_000 }).toBe(next);
     await page.waitForTimeout(250);
   }
