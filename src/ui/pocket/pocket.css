@@ -674,3 +674,7 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .rs-box>b{flex:none}
 .pkx .pks .rs-box>div{align-content:start}
 .pkx .pks .rs-swap .pkm{background:#fff;border-radius:6px}
+/* Quick Wheel: a click outside the wheel shuts it; a slot that is off is grey; the glance's line for slots without a list. */
+.pkx .pks .gx-wh-dim{position:absolute;inset:0;z-index:0}
+.pkx .pks .wheel .app.gx-off{filter:grayscale(1);opacity:.55}
+.pkx .pks .glance .gx-gl-note{margin:4px 0 0;width:100%;font-size:16px;line-height:1.35}

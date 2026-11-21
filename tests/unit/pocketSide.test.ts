@@ -3,6 +3,7 @@ import { pkPageOf } from '../../src/ui/pocket/kit';
 import { pkRivals, type PkRival } from '../../src/ui/pocket/screens/rivals';
 import { pkLeague } from '../../src/ui/pocket/screens/world';
 import { pkReserve } from '../../src/ui/pocket/screens/reserve';
+import { pkQuick } from '../../src/ui/pocket/screens/pause';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -52,5 +53,21 @@ describe('the Pocket Reserve page', () => {
     const empty = pkReserve({ party: [m('Pikachu')], box: [m('Eevee'), null], index: 1, used: 1, room: 2, say: 'An empty slot.', back: false });
     expect(empty).toContain('>Send<');
     expect(empty).toContain('fill this slot');
+  });
+});
+
+describe('the Pocket Quick Wheel', () => {
+  it('the slots round the Trainer, the lit one ringed, Party glances at the team, other slots say their note', () => {
+    const base = { when: '', where: '', money: '', saved: '', road: null, next: '', apps: [], index: 0, rotom: '', hero: { art: null, name: 'Red', chips: ['Kanto'] }, party: [{ art: null, name: 'Pikachu', level: 5, hp: 80, type: 'electric' }], run: [], ask: null };
+    const items = [{ label: 'Party', note: '1 Pokémon' }, { label: 'Bag', note: '₽500 in your wallet' }, { label: 'Rivals', note: 'none', off: true }];
+    const h = pkQuick({ ...base, items, at: 0, held: false });
+    expect(pkPageOf(h)?.id).toBe('quick');
+    expect((h.match(/class="app/g) ?? []).length).toBe(3);
+    expect(h).toContain('class="app on"');
+    expect(h).toContain('app gx-off');
+    expect(h).toContain('Pikachu');
+    const bag = pkQuick({ ...base, items, at: 1, held: true });
+    expect(bag).toContain('₽500 in your wallet');
+    expect(bag).toContain('Let go of Tab to open');
   });
 });

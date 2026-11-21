@@ -138,7 +138,7 @@ import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
 import { pkRivals } from '../ui/pocket/screens/rivals';
-import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
+import { PK_PAUSE_COLS, pkPause, pkQuick } from '../ui/pocket/screens/pause';
 import { pkCard } from '../ui/pocket/screens/card';
 import type { RunCardModel } from '../ui/redux/screens/over';
 import { trainerId as trainerCardId } from '../core/presentation/pocket';
@@ -358,8 +358,8 @@ export class MapScene extends Phaser.Scene {
       { label: 'Party', note: `${run.party.length} Pokémon${down ? ` · ${down} fainted` : ''}`, go: () => openPokemonMenu(this.fieldHost()) },
       { label: 'Bag', note: `₽${run.money.toLocaleString('en-US')} in your wallet`, go: () => openBagMenu(this.fieldHost()) },
       { label: 'Rivals', note: rivals.length ? `${rivals[0]!.name}: ${rivals[0]!.leadText}` : 'No rival has found you yet', off: rivals.length === 0, go: () => this.toggleRivalReport() },
-      { label: 'Phone', note: unread ? `${unread} new ${unread === 1 ? 'line' : 'lines'}` : lines ? `${lines} ${lines === 1 ? 'line' : 'lines'} of this run` : 'Rotom is on the line', go: () => this.popToggle('phone') },
-      { label: 'Pokédex', note: `${dex} met in this run`, go: () => { this.pauseOpen(); this.pausePick(MapScene.PAUSE_PH.indexOf('Pokédex')); } },
+      ...(pocketOn() ? [{ label: 'Trainer Card', note: 'Who you are and this run', go: () => { this.pauseOpen(); this.pausePick(this.pauseRows().indexOf('Trainer Card')); } }] : [{ label: 'Phone', note: unread ? `${unread} new ${unread === 1 ? 'line' : 'lines'}` : lines ? `${lines} ${lines === 1 ? 'line' : 'lines'} of this run` : 'Rotom is on the line', go: () => this.popToggle('phone') }]),
+      { label: 'Pokédex', note: `${dex} met in this run`, go: () => { this.pauseOpen(); this.pausePick(this.pauseRows().indexOf('Pokédex')); } },
       { label: 'Reserve', note: pc > 0 ? `${run.box.length} of ${pc} in the PC` : 'This run has no PC', off: pc <= 0, go: () => openBoxMenu(this.fieldHost()) },
       { label: 'Save', note: 'Save, then stay or leave', go: () => openSaveMenu(this.fieldHost(), (to) => { this.busy = true; this.scene.start(to); }) },
       { label: 'Settings', note: 'Sound, text and the look', go: () => this.scene.start('Settings', { from: 'Map' }) },
@@ -368,7 +368,7 @@ export class MapScene extends Phaser.Scene {
 
   /** Opens the wheel. `held`: TAB is down (letting go opens the lit slot); otherwise it stays until Enter, a click or Esc. */
   private wheelOpen(held: boolean, at = performance.now()): void {
-    if (!this.rxView || !phantomOn() || this.rxWheel || this.rxPause || this.rxPop || this.rxMenu || this.rxHeal || this.busy || this.picker || this.legend) return;
+    if (!this.rxView || !(phantomOn() || pocketOn()) || this.rxWheel || this.rxPause || this.rxPop || this.rxMenu || this.rxHeal || this.busy || this.picker || this.legend) return;
     this.rxWheel = { index: 0, spin: 0, held, since: at };
     this.rxCard = null;
     this.busy = true;
@@ -563,6 +563,13 @@ export class MapScene extends Phaser.Scene {
 
   /** The Phantom pause menu: the mock-up's Pause page, with the "End this run?" card over it while that is asked. */
   /** Pocket look: the pause menu is the Rotom Phone, a page of its own. */
+  /** Pocket look: the Quick Wheel (mock-up `quick`). */
+  private quickPocket(model: MapModel): string {
+    const w = this.rxWheel!, { session } = services(), run = session.run!;
+    const base = pkPauseModel(this, run, { apps: [], index: 0, next: model.title, names: run.party.map((m) => displayName(session.content, m)), ask: null });
+    return pkQuick({ ...base, items: this.wheelItems(), at: w.index, held: w.held });
+  }
+
   private pausePocket(model: MapModel): string {
     const p = this.rxPause!, { session } = services(), run = session.run!;
     if (p.dex) return p.dex.htmlPocket();
@@ -1675,6 +1682,7 @@ export class MapScene extends Phaser.Scene {
           const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
           if (c.pk && (this.rxRegion || this.rxForm)) return this.regionPocket();
           if (c.pk && this.rxPause) return this.pausePocket(model);
+          if (c.pk && this.rxWheel) return this.quickPocket(model);
           if (c.pk) return pkMap(model, this.rxMenu);
           if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
           // Phantom: the pause menu is a page of its own; the node menu stands over the map.
@@ -1716,8 +1724,8 @@ export class MapScene extends Phaser.Scene {
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
-      // Phantom UI: the quick wheel. TAB down opens it, TAB up opens the lit slot; the key never moves the browser's focus.
-      if (phantomOn()) {
+      // Phantom and Pocket looks: the quick wheel. TAB down opens it, TAB up opens the lit slot; the key never moves the browser's focus.
+      if (phantomOn() || pocketOn()) {
         this.rxModel.keys = [...this.rxModel.keys, ['Tab', 'wheel']];
         const kb = this.input.keyboard;
         const tabDown = (e: KeyboardEvent): void => { if (!e.repeat && !runLogOpen()) this.wheelOpen(true, e.timeStamp); };
