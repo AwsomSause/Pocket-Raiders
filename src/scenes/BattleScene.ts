@@ -93,7 +93,7 @@ import { barkLine } from '../core/evil/barks';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { GALAR_STADIUM, galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
-import { bracketView, currentTournamentRound } from '../core/galarTournament';
+import { GALAR_TOURNAMENT, bracketView, currentTournamentRound, shopOpenAfter } from '../core/galarTournament';
 import { StadiumDirector, type StadiumHooks } from '../ui/galar/stadiumDirector';
 import { INTERVIEWERS_SPRITE, CROWD_SPRITES } from '../ui/galar/cutArt';
 import { crowdFavor, galarScope, type HypeSpeaker } from '../core/galarCrowd';
@@ -151,6 +151,9 @@ import { pkHall } from '../ui/pocket/screens/hall';
 import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
 import { battleInfo, battleStatus, moveInfo } from '../core/presentation/battleInfo';
 import { weatherCard } from '../ui/pocket/screens/sky';
+import { pkGaWon, type PkGaWonModel } from '../ui/pocket/screens/galar';
+import { itemArt, monArt } from '../ui/pocket/art';
+import { pkArtOf } from '../ui/pocket/templates';
 import { activeGameEvents, objectiveViews } from '../core/gameEvents';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
 import { gimmickSlots } from '../core/battle/bossGimmicks';
@@ -3555,7 +3558,7 @@ export class BattleScene extends Phaser.Scene {
    * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
    */
   /** Pocket look: the Boss Intro's heading and chips (what the battle already holds: type, team, powers, heals, the stake). */
-  private pkBossFacts(boss: BossInfo): { where: string; type: string; chips: string[] } {
+  private pkBossFacts(boss: BossInfo): { where: string; type: string; chips: string[]; area?: 'ga' } {
     const battle = this.run.battle!;
     const { content } = services().session;
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
@@ -3565,11 +3568,34 @@ export class BattleScene extends Phaser.Scene {
     const heals = content.balance.trainerAi.maxHealItems;
     const role = boss.title.replace(boss.name, '').trim();
     const stake = boss.role === 'gym' ? `At stake: **${boss.name}'s badge**` : boss.role === 'champion' ? 'At stake: the **Champion** title' : 'At stake: your road to the **Champion**';
+    const typeChip = boss.types.length ? `${boss.types.map((t) => `**${cap(t)}**`).join(' and ')} type` : '';
+    const place = this.phWhere().split(' · ')[1] ?? '';
+    // Galar (mock-ups `ga-intro`, `ga-round`): the Gym Challenge match or the Champion's Tournament round, and the crowd.
+    const scope = galarScope(content, this.run);
+    if (scope === 'gym') {
+      return {
+        where: `Gym Challenge · Match ${galarGymNumber(this.run)}`,
+        area: 'ga',
+        type: boss.types[0] ?? 'normal',
+        chips: [[place, typeChip].filter(Boolean).join(' · '), 'The crowd picks a side as you fight', battle.transform.enemyMechanics.includes('dynamax') ? 'Leaders here can **Dynamax**' : `${n} Pokémon${held ? ', each with a held item' : ''}`, stake].filter(Boolean),
+      };
+    }
+    const round = scope ? currentTournamentRound(content, this.run) : null;
+    if (round) {
+      const ace = battle.enemyTeam[n - 1];
+      const aceName = ace ? content.species.get(ace.speciesId)?.name : undefined;
+      return {
+        where: `Champion's Tournament · ${round.name}`,
+        area: 'ga',
+        type: boss.types[0] ?? 'normal',
+        chips: [typeChip, aceName ? `Ace: **${aceName}**` : '', round.via ? `Beat ${round.via} to get here` : `${n} Pokémon${held ? ', each with a held item' : ''}`, `Crowd starts at **${crowdFavor(content, this.run) ?? 50}**`].filter(Boolean),
+      };
+    }
     return {
       where: [this.phWhere().split(' · ')[1] ?? '', role].filter(Boolean).join(' · '),
       type: boss.types[0] ?? 'normal',
       chips: [
-        boss.types.length ? `${boss.types.map((t) => `**${cap(t)}**`).join(' and ')} type` : '',
+        typeChip,
         `${n} Pokémon${held ? ', each with a held item' : ''}`,
         `${powers ? `${powers} boss ${powers === 1 ? 'power' : 'powers'} · ` : ''}up to ${heals} healing items`,
         stake,
@@ -3577,7 +3603,6 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
-  /** Pocket look: the boss battle's panel (mock-up `boss-battle`): its boss power, the healing items it has left, the badge at stake. */
   /** Pocket look: the Totem's strip (aura, phase, ally calls) or a raid's (shields, clock, phase) at the top of its battle (mock-ups `tm-battle`, `rd-battle`). */
   private pkAreaStrip(): BattleModel['pkArea'] {
     const battle = this.run.battle;
@@ -3721,6 +3746,33 @@ export class BattleScene extends Phaser.Scene {
     await this.playBeat({ done, skip: end });
   }
 
+  /** Pocket look: a Champion's Tournament round won (mock-up `ga-won`) in place of the Victory page; null outside the tournament or after the last round. */
+  private pkGaWonModel(before: RunState, after: RunState, art: Art | null, trainer: string, money: string | null): PkGaWonModel | null {
+    const { content } = services().session;
+    const round = currentTournamentRound(content, before);
+    if (!round || round.final) return null;
+    const view = bracketView(content, after);
+    const next = view.rounds.find((r) => r.state === 'next');
+    if (!next) return null;
+    const party = after.party.slice(0, 6);
+    const alive = party.filter((m) => m.hp > 0).length;
+    const favor = crowdFavor(content, before) ?? 50;
+    const shop = shopOpenAfter(round.round);
+    const rows: PkGaWonModel['rows'][number][] = [{ art: pkArtOf(art), title: trainer, sub: `Beaten ${alive} to 0` }];
+    if (GALAR_TOURNAMENT.healBetweenRounds) rows.push({ art: itemArt('full_restore'), title: 'Team healed', sub: 'Free after every round' });
+    rows.push({ art: itemArt('amulet_coin'), title: money ?? 'No prize', sub: 'Round prize' });
+    rows.push(shop ? { art: itemArt('potion'), title: 'Shop is open', sub: `After rounds ${GALAR_TOURNAMENT.shopEvery} and ${GALAR_TOURNAMENT.shopEvery * 2}`, on: true } : { art: itemArt('potion'), title: 'No shop this time', sub: `Opens after rounds ${GALAR_TOURNAMENT.shopEvery} and ${GALAR_TOURNAMENT.shopEvery * 2}` });
+    return {
+      round: round.name,
+      text: `${trainer} is out. The crowd finished at ${favor} with you.`,
+      rows,
+      side: `Next: ${next.name}`,
+      lines: [['', next.round === GALAR_TOURNAMENT.rounds ? `${next.opponent.name} waits in the final.` : `You meet ${next.opponent.name} next.`], ['Left', `${view.standing.length} of 32 trainers`]],
+      party: party.map((m) => { const f = monFile(this, m.speciesId, 'front', !!m.shiny); return f ? monArt(f) : null; }),
+      counts: [[`${alive} to 0`, 'final score'], [String(favor), 'crowd with you'], [String(before.battle?.turn ?? 1), 'turns taken']],
+    };
+  }
+
   /**
    * Pocket look: the pages after a win (mock-ups `victory` and `exp`). A Trainer's defeat gets the Victory page (the MVP,
    * the prize, the turns, the biggest hit); every win and catch then gets the Team EXP page. Returns whether the Victory
@@ -3759,7 +3811,8 @@ export class BattleScene extends Phaser.Scene {
           foe: { trainer: art, mon: art ? null : ace ? monFile(this, ace.speciesId, 'front', !!ace.shiny) : null, name: trainer, line, type: ace ? getSpecies(content, ace.speciesId).types[0] ?? '' : '' },
           rows, total: money, stars: rating, rate: rating === 3 ? 'Flawless win' : rating === 2 ? 'Solid win' : 'Close call', say,
         };
-        await this.pkPage((c) => (c.pk ? pkVictory(model) : ''));
+        const won = this.pkGaWonModel(before, result.run, art, trainer, money);
+        await this.pkPage((c) => (c.pk ? (won ? pkGaWon(won) : pkVictory(model)) : ''));
         shown = true;
       }
       if (end.outcome === 'win' || end.outcome === 'caught') {

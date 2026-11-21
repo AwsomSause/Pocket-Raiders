@@ -314,3 +314,17 @@ describe('the Pocket Galar bracket', () => {
     expect(h).toContain('<u>Out</u>');
   });
 });
+
+describe('the Pocket Galar round won', () => {
+  it('the round in the title, four cards with the shop lit, the next round and the counts', async () => {
+    const { pkGaWon } = await import('../../src/ui/pocket/screens/galar');
+    const h = pkGaWon({ round: 'Round of 16', text: 'Marnie is out. The crowd finished at 78 with you.', rows: [{ art: null, title: 'Marnie', sub: 'Beaten 4 to 0' }, { art: null, title: 'Team healed', sub: 'Free after every round' }, { art: null, title: '₽ 3,200', sub: 'Round prize' }, { art: null, title: 'Shop is open', sub: 'After rounds 2 and 4', on: true }, { art: null, title: 'extra', sub: 'cut' }], side: 'Next: Quarterfinal', lines: [['', 'You meet Bede next.'], ['Left', '8 of 32 trainers']], party: [null, null], counts: [['4 to 0', 'final score'], ['78', 'crowd with you']] });
+    expect(pkPageOf(h)?.id).toBe('ga-won');
+    expect(h).toContain('Round of 16 Won');
+    expect((h.match(/<p class="(on)?"><span>/g) ?? []).length).toBe(4);
+    expect(h).toContain('<p class="on"><span></span><b');
+    expect(h).toContain('<i>Left</i>8 of 32 trainers');
+    expect(h).toContain('<b>78</b><em>crowd with you</em>');
+    expect(h).not.toContain('extra');
+  });
+});
