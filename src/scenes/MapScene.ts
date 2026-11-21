@@ -137,6 +137,7 @@ import { pkPauseModel } from '../ui/pocket/models';
 import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
+import { pkRivals } from '../ui/pocket/screens/rivals';
 import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
 import { pkCard } from '../ui/pocket/screens/card';
 import type { RunCardModel } from '../ui/redux/screens/over';
@@ -161,7 +162,7 @@ import { dockFact } from '../ui/phantom/screens/town';
 import { phConfirm } from '../ui/phantom/templates';
 import { bestMedalWord } from '../ui/redux/screens/minigame';
 import { confirmBox } from '../ui/redux/screens/saves';
-import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, leadLine, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -223,7 +224,7 @@ const ROLL_KIND: Record<string, string> = { PS: 'Pseudo-stage', MC: 'Challenge',
 /** Something the cursor can land on. */
 /** A New UI pop-up over the map and where its cursor is. */
 type MapPop =
-  | { kind: 'report'; pick: number }
+  | { kind: 'report'; pick: number; /** Pocket look: the lit rival's full report over the board. */ full?: boolean }
   | { kind: 'dossier'; tab: number; pick: number }
   | { kind: 'notes'; tab: number; sel: number[] }
   | { kind: 'track' }
@@ -648,6 +649,12 @@ export class MapScene extends Phaser.Scene {
     const run = session.run;
     if (!p || !run) return;
     if (p.kind === 'phone') return this.phoneInput(p, action);
+    // Pocket look: Enter on the Rival Board opens the lit rival's full report; Esc there goes back to the board.
+    if (p.kind === 'report' && pocketOn() && (action === 'confirm' || action === 'back') && !!p.full !== (action === 'confirm')) {
+      p.full = action === 'confirm';
+      this.rxView?.refresh();
+      return;
+    }
     if (action === 'back' || action === 'confirm') return this.popClose();
     const d = action === 'right' || action === 'down' ? 1 : -1;
     const side = action === 'left' || action === 'right';
@@ -659,6 +666,7 @@ export class MapScene extends Phaser.Scene {
       const n = runCampaign(session.content, run).stagesPerRegion;
       p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'report') {
+      if (p.full) return;
       const n = rivalReport(run).length;
       p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'dossier') {
@@ -703,7 +711,11 @@ export class MapScene extends Phaser.Scene {
       if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
       else p.sel[p.tab] = i;
     } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges') && what === 'pick') {
-      if (p.pick === i) return;
+      if (p.pick === i) {
+        if (p.kind !== 'report' || !pocketOn() || p.full) return;
+        p.full = true;
+      }
+      p.pick = i;
       p.pick = i;
     }
     this.rxView?.refresh();
@@ -820,6 +832,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'world') return c.pk ? this.worldPocket(p.pick) : '';
     if (p.kind === 'badges') return c.pk ? this.badgesPocket(p.pick) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
     if (p.kind === 'report') {
       const rows = rivalReport(run);
       const r = rows[Math.min(p.pick, rows.length - 1)]!;
@@ -1905,6 +1918,30 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** Pocket look: the World Tour (mock-up `world`): this run's regions in order. */
+  /** Pocket look: the Rival Board (mock-up `rivals`), a card per rival on your trail. */
+  private rivalsPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!;
+    const rows = rivalReport(run);
+    return pkRivals({
+      index: Math.max(0, Math.min(rows.length - 1, pick)),
+      road: pocketRoad(run.stage),
+      rivals: rows.map((r) => {
+        const story = run.story.rivals.find((x) => x.id === r.id);
+        const ace = story?.ace ? content.species.get(story.ace) : undefined;
+        return {
+          name: r.name,
+          role: r.role === 'friend' ? 'Friend' : 'Rival',
+          art: rivalArt(this, story),
+          ace: ace ? { name: ace.name, file: monFile(this, ace.id, 'front', false) } : null,
+          wins: Number(run.story.flags[`rivalW:${r.id}`] ?? 0),
+          losses: Number(run.story.flags[`rivalL:${r.id}`] ?? 0),
+          lead: leadLine(r.name, r.lead),
+        };
+      }),
+    });
+  }
+
   private worldPocket(pick: number): string {
     const { session } = services();
     const content = session.content, run = session.run!;
