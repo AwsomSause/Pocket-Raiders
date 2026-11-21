@@ -6,7 +6,6 @@
 // Pure: no Phaser. The Charter's crew is rolled on its own stream (`dominion-charter`, recruit.ts).
 
 import type { Content } from '../contentSchema';
-import { EVIL_MODE_ID } from '../evilMode/session';
 import type { RunState } from '../state';
 import { DOMINION_DATA } from './data';
 import { charterGrunt } from './recruit';
@@ -59,10 +58,10 @@ export const dominionFinished = (b: DominionBlock): boolean => completion(b) !==
 
 export interface DomTurnOffer { title: string; text: string; take: string; funds: number; regard: number }
 
-/** The Game Over card's offer: a main-game run that won (not already a Dominion or Evil Mode run, not already taken). */
+/** The Game Over card's offer: a main-game run that won (not already a Dominion run, not already taken). */
 export function domTurnOffer(run: RunState | null | undefined, on: boolean, mode: string): DomTurnOffer | null {
   if (!on || !run || run.phase !== 'over' || !run.victory) return null;
-  if (run.rules.modeId === mode || run.rules.modeId === EVIL_MODE_ID || run.expansion?.dominion || run.expansion?.evilMode) return null;
+  if (run.rules.modeId === mode || run.expansion?.dominion) return null;
   if (run.story.flags[TURN_FLAG]) return null;
   const t = C().turn;
   return { title: t.title, text: t.text, take: t.take, funds: Math.min(Math.max(0, run.money), t.fundsCap), regard: clamp(run.badges.length * t.regardPerBadge) };

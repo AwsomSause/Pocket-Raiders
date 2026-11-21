@@ -18,10 +18,6 @@ import { foldNpcMemory } from './npcMemory';
 import { foldTreasureHunt } from './treasureHunt';
 import { freshProfileStory } from './story2/schema';
 import { claimPast } from './memories/past';
-import { hallCard } from './evilMode/endings';
-
-/** Hall of Fame cards kept (oldest drop off first). */
-const HALL_KEPT = 100;
 import { ATTRIBUTE_NAMES, type Profile, type RunState } from './state';
 
 const FINALIZED_HISTORY = 50;
@@ -68,7 +64,6 @@ export function createProfile(content: Content, profileId: string): Profile {
     npcMemory: { npcs: {}, lore: [], epilogues: [], news: [], ngPlus: 0, hintsSeen: [], seenEvents: [] },
     hubTown: { pokemon: null, merchantDay: '', bought: [] },
     treasureHunt: { pieces: [], claimed: false },
-    evilHall: [],
     story: freshProfileStory(),
     legacyRuns: [],
     dominionDone: [],
@@ -123,9 +118,6 @@ export function finalizeRun(
   recordChronicle(next, run, now);
   foldModuleIntoProfile(next, run, content.storyData, (id) => content.species.get(id)?.types ?? []);
   next.treasureHunt = foldTreasureHunt(next.treasureHunt, run);
-  // Evil Mode slice 15: the one thing the mode writes to the profile, once, at its ending: the Hall of Fame card.
-  const hall = run.expansion?.evilMode ? hallCard(run.expansion.evilMode, run.runId, now.slice(0, 10)) : null;
-  if (hall && !(next.evilHall ?? []).some((h) => h.runId === run.runId)) next.evilHall = [...(next.evilHall ?? []), hall].slice(-HALL_KEPT);
   next.finalizedRunIds = [...next.finalizedRunIds, run.runId].slice(-FINALIZED_HISTORY);
   return { profile: next, applied: true, summary };
 }

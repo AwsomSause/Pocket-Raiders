@@ -9,7 +9,8 @@ pools, the applications desk's badges, the arrival scene, and where each of the 
 by takeover-to-json.py and left disabled 'needs D15') stands and what it pays.
 
 Sources: the canon games (town names, Gym Leaders, Elite Four, Champions, rival teams and their admins), the old Evil
-Mode region and district data (src/data/evilMode/region.json, district.json) for the neighbours, and the takeover-bonuses
+Mode region and district data (src/data/evilMode/region.json, district.json, deleted after D17: see git show
+8a168fc6:<path>) for the neighbours, and the takeover-bonuses
 list (plans/evil-mode-rework/lists/takeover-bonuses.md) through takeover.json. Owners, lines and foes are written for
 this slice in the same voice as Kanto's (field.json). Numbers follow Kanto's, scaled by the region's place in the run.
 
