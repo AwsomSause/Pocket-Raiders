@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import type { BattleEvent } from '../../src/core/battle/engine';
+import { planCues } from '../../src/core/presentation/cues';
+import { moveAnims } from '../../src/data/presentation';
+import { content } from './helpers';
 import { clipEnd, EASES, fxAllowed, sampleClip } from '../../src/core/presentation/motionClip';
-import { chevronWaves, COND_TINT, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
+import { chevronWaves, COND_TINT, CONFUSE, confusionHitClip, GUST_LEAN, protectedClip, SHIELD, gustLeanClip, intimidateClip, condArriveClip, condKind, condTickClip, parCantClip, SLUMP, STAT_COLOR, statClip, thawClip, wakeClip, type CondSpot } from '../../src/core/presentation/motionConditions';
 
 // Animation redesign pass 8 (Conditions): every status arrives, keeps a look and ticks, as the mockup's numbers.
 const FOE: CondSpot = { x: 648, y: 240, w: 100, h: 120, side: 'enemy' };
@@ -200,5 +204,33 @@ describe('conditions: an attack meets Protect', () => {
     expect(r.fx.map((f) => f.kind)).toEqual(['cue']);
     expect(sampleClip(r, 170).attacker!.dx).toBe(0);
     expect(protectedClip(FOE, ME, 'off').length).toBe(0);
+  });
+});
+
+describe('conditions: confusion', () => {
+  it('stars circle the head and it sways, as the mockup numbers', () => {
+    expect(CONFUSE).toMatchObject({ rx: 52, ry: 13, star: 22, sway: { rot: 5, dx: 6, ms: 1600 } });
+  });
+  it('hurting itself: it swings away from the other side and back, bonks (white, squash, star, shake) and stands home', () => {
+    const c = confusionHitClip(FOE, 'full');
+    expect(sampleClip(c, 120).mon!.dx).toBeCloseTo(40);
+    expect(sampleClip(confusionHitClip(ME, 'full'), 120).mon!.dx).toBeCloseTo(-40);
+    expect(sampleClip(c, 260).mon!.white).toBeCloseTo(0.7);
+    expect(sampleClip(c, 260).mon!.sy).toBeCloseTo(0.86);
+    expect(c.fx.find((f) => f.kind === 'star')).toMatchObject({ size: 90, color: 0xffcb05 });
+    expect(c.fx.some((f) => f.kind === 'cue' && f.name === 'shake')).toBe(true);
+    expect(clipEnd(c).mon).toMatchObject({ dx: 0, sy: 1, white: 0 });
+  });
+  it('Reduced: the blink only; Off: nothing', () => {
+    const r = confusionHitClip(FOE, 'reduced');
+    expect(sampleClip(r, 120).mon!.dx).toBe(0);
+    expect(sampleClip(r, 260).mon!.white).toBeCloseTo(0.7);
+    expect(confusionHitClip(FOE, 'off').length).toBe(0);
+  });
+  it('the cues let the screen show its stars for becoming confused, the "is confused!" check and hurting itself', () => {
+    const events = [{ type: 'confused', side: 'enemy' }, { type: 'confusion', side: 'enemy' }, { type: 'confusionHit', side: 'enemy', amount: 5, hpAfter: 10 }] as BattleEvent[];
+    const cues = planCues(events, content, moveAnims(), { mode: 'full', intensity: 1 });
+    const conds = cues.map((list) => list.find((c) => c.kind === 'commonAnim'));
+    expect(conds.map((c) => (c as { cond?: { at: string; status: string } } | undefined)?.cond)).toEqual([{ at: 'arrive', status: 'cnf' }, { at: 'cant', status: 'cnf' }, { at: 'tick', status: 'cnf' }]);
   });
 });

@@ -5,7 +5,7 @@
 // (BattleScene.standUp). Presentation only.
 
 import Phaser from 'phaser';
-import { BUBBLE_W, CHEVRON, COND_TINT, EMBERS, FLAME_W, GLARE, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
+import { BUBBLE_W, CHEVRON, COND_TINT, CONFUSE, EMBERS, FLAME_W, GLARE, type CondKind, type CondSpot } from '../../core/presentation/motionConditions';
 import { FONT_FAMILY } from '../theme';
 
 const HI = 2;
@@ -453,5 +453,58 @@ export function glarePicture(scene: Phaser.Scene): string | null {
     return key;
   } catch {
     return null;
+  }
+}
+
+/** Confusion's three yellow stars circling the Pokémon's head (pass 8); they follow it and hide with it. */
+export class DizzyStars {
+  readonly stars: Phaser.GameObjects.Star[] = [];
+  private t = 0;
+  private gone = false;
+  private readonly spin = (_: number, dt: number): void => this.track(dt);
+
+  constructor(
+    private readonly scene: Phaser.Scene,
+    readonly sprite: Phaser.GameObjects.Sprite,
+    /** How far its head is above its feet (px). */
+    private readonly height: number,
+    private readonly level: 'full' | 'reduced',
+    pop: boolean,
+  ) {
+    const r = CONFUSE.star / 2;
+    for (let i = 0; i < 3; i++) {
+      const st = putAbove(sprite, scene.add.star(sprite.x, sprite.y, 5, r * 0.42, r, 0xffcb05).setStrokeStyle(1.5, 0x131c36, 0.6));
+      this.stars.push(st);
+      if (pop) {
+        st.setScale(0);
+        scene.tweens.add({ targets: st, scale: 1, delay: i * CONFUSE.popGap, duration: CONFUSE.popMs, ease: 'Back.easeOut' });
+      }
+    }
+    scene.events.on(Phaser.Scenes.Events.UPDATE, this.spin);
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.destroy());
+    sprite.once(Phaser.GameObjects.Events.DESTROY, () => this.destroy());
+    this.track(0);
+  }
+
+  destroy(fadeMs = 0): void {
+    if (this.gone) return;
+    this.gone = true;
+    this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.spin);
+    const stars = this.stars.filter((s) => s.active);
+    if (fadeMs > 0 && this.scene.sys?.isActive()) this.scene.tweens.add({ targets: stars, scale: 0, alpha: 0, duration: fadeMs, onComplete: () => stars.forEach((s) => s.destroy()) });
+    else stars.forEach((s) => s.destroy());
+  }
+
+  /** Round its head: the oval turns (Full) on the scene clock and follows the Pokémon's sway and moves. */
+  private track(dt: number): void {
+    const v = this.sprite;
+    if (!v.active) return this.destroy();
+    if (this.level === 'full') this.t += (dt / 1000) * this.scene.time.timeScale;
+    const show = v.visible && v.alpha > 0.5;
+    const hy = v.y - this.height - CONFUSE.above;
+    this.stars.forEach((s, i) => {
+      const a = this.t * CONFUSE.spin + i * ((Math.PI * 2) / 3);
+      s.setPosition(v.x + CONFUSE.rx * Math.cos(a), hy + CONFUSE.ry * Math.sin(a)).setVisible(show);
+    });
   }
 }

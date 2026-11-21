@@ -121,9 +121,9 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
-import { HIT_RUN, stand, standStill, twitch } from '../ui/battleFx/stance';
-import { bubblePicture, chevronPicture, ConditionLook, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
-import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, gustLeanClip, parCantClip, protectedClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { HIT_RUN, stand, standStill, sway, twitch } from '../ui/battleFx/stance';
+import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, titlePicture } from '../ui/battleFx/conditionLook';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, confusionHitClip, gustLeanClip, parCantClip, protectedClip, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
 import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
@@ -477,6 +477,10 @@ export class BattleScene extends Phaser.Scene {
   private shown!: { player: PokemonInstance; enemy: PokemonInstance };
   /** The status look each side's Pokémon wears (pass 8), or none. */
   private conds: Record<Side, ConditionLook | null> = { player: null, enemy: null };
+  /** Confusion's circling stars, by side (pass 8). */
+  private dizzy: Record<Side, DizzyStars | null> = { player: null, enemy: null };
+  /** The first drawn row of each sprite frame (for where a head is). */
+  private readonly bodyTops = new Map<string, number>();
   /** Each side's stat stages as the screen has shown them (for the pips; reset when a Pokémon comes in or Haze). */
   private statStages: Record<Side, Record<string, number>> = { player: {}, enemy: {} };
   /** The opposing Pokémon shown as riled up (warned, not yet unleashed or calmed). Presentation only. */
@@ -1596,6 +1600,9 @@ export class BattleScene extends Phaser.Scene {
       this.slump(visual, side);
       return stand(this, visual, 'steady', this.motion === 'full', delay, 2600, (restY ?? visual.y) + SLUMP.dy);
     }
+    // Confused: it sways under its stars.
+    const dz = side ? this.dizzy[side] : null;
+    if (side && dz && dz.sprite === visual && this.motion === 'full') return sway(this, visual, true, this.spotXY(side).x, CONFUSE.sway.rot, CONFUSE.sway.dx, CONFUSE.sway.ms);
     // A Pokémon in danger keeps its sag and its fast, shallow breath.
     if (visual.getData('sag')) return stand(this, visual, 'steady', this.motion === 'full', delay, 750, restY);
     stand(this, visual, standKind(sp.dex, sp.types, !!mon.dynamaxed), this.motion === 'full', delay, undefined, restY);
@@ -4293,6 +4300,31 @@ export class BattleScene extends Phaser.Scene {
     return { x: at.x, y: at.y, w: Math.max(60, sprite.displayWidth * 0.6), h: Math.max(60, sprite.displayHeight * sprite.originY), side };
   }
 
+  /** How far the top of the Pokémon's drawn body is above its feet (the frame's empty rows left out), px on screen. */
+  private headHeight(sprite: Phaser.GameObjects.Sprite): number {
+    const full = sprite.displayHeight * sprite.originY;
+    try {
+      const f = sprite.frame;
+      const key = `${sprite.texture.key}|${f.name}`;
+      let top = this.bodyTops.get(key);
+      if (top === undefined) {
+        top = 0;
+        scan: for (let y = 0; y < f.height; y++) {
+          for (let x = 0; x < f.width; x += 2) {
+            if (this.textures.getPixelAlpha(x, y, sprite.texture.key, f.name) > 40) {
+              top = y;
+              break scan;
+            }
+          }
+        }
+        this.bodyTops.set(key, top);
+      }
+      return Math.max(30, full - top * Math.abs(sprite.scaleY));
+    } catch {
+      return full;
+    }
+  }
+
   /** The side's Pokémon, when it is one picture on the field that a look can sit on. */
   private condSprite(side: Side): Phaser.GameObjects.Sprite | null {
     const v = side === 'player' ? this.playerSprite : this.enemySprite;
@@ -4334,6 +4366,8 @@ export class BattleScene extends Phaser.Scene {
   /** Keeps the side's look in step with its status: a switch-in already burned wears it at once; a cure takes it off. */
   private condSync(side: Side): void {
     try {
+      const dz = this.dizzy[side];
+      if (dz && (dz.sprite !== this.condSprite(side) || this.clipLevel() === 'off')) this.dizzyOff(side, 0);
       const sprite = this.condSprite(side);
       const kind = condKind(this.shown[side]?.status?.id);
       const level = this.clipLevel();
@@ -4359,6 +4393,7 @@ export class BattleScene extends Phaser.Scene {
 
   /** BattleFx asks: show our own look for this status moment instead of the pack's animation? */
   private condition(side: Side, status: string, at: 'arrive' | 'tick' | 'cant'): boolean {
+    if (status === 'cnf') return this.confusionMoment(side, at);
     const kind = condKind(status);
     const sprite = this.condSprite(side);
     if (!kind || !sprite || !sprite.visible || this.clipLevel() === 'off') return false;
@@ -4372,6 +4407,54 @@ export class BattleScene extends Phaser.Scene {
       return kind === 'slp' || kind === 'frz';
     } catch {
       return false;
+    }
+  }
+
+  /** Confusion (pass 8): stars arrive and circle its head while it sways; hurting itself swings, bonks and shakes. */
+  private confusionMoment(side: Side, at: 'arrive' | 'tick' | 'cant'): boolean {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off' || this.duo) return false;
+    try {
+      if (at === 'arrive') return this.dizzyOn(side, true);
+      // The "is confused!" check: the circling stars already say it.
+      if (at === 'cant') return this.dizzyOn(side, false);
+      if (!this.dizzy[side]) this.dizzyOn(side, false);
+      const mon = this.shown[side];
+      this.condPlay(sprite, confusionHitClip({ ...this.condSpot(side, sprite), h: this.headHeight(sprite) }, level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => name === 'shake' && this.wxShake(5, 150));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** Puts confusion's stars on the side's Pokémon (popping in when `pop`) and starts its sway. */
+  private dizzyOn(side: Side, pop: boolean): boolean {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || level === 'off' || this.duo) return false;
+    if (this.dizzy[side]?.sprite === sprite) return true;
+    this.dizzy[side]?.destroy();
+    this.dizzy[side] = new DizzyStars(this, sprite, this.headHeight(sprite), level === 'full' ? 'full' : 'reduced', pop && level === 'full');
+    if (sprite.visible && this.shown[side]) this.standUp(sprite, this.shown[side]);
+    return true;
+  }
+
+  /** It snaps out of confusion (or leaves): the stars go and it stands as before. */
+  private dizzyOff(side: Side, fadeMs = 200): void {
+    const dz = this.dizzy[side];
+    if (!dz) return;
+    this.dizzy[side] = null;
+    dz.destroy(fadeMs);
+    const sprite = dz.sprite;
+    if (sprite.active && sprite === this.condSprite(side) && sprite.visible && this.shown[side]) {
+      standStill(this, sprite);
+      this.restAt(sprite, side);
+      this.standUp(sprite, this.shown[side]);
     }
   }
 
@@ -6804,6 +6887,13 @@ export class BattleScene extends Phaser.Scene {
           break;
         case 'protected':
           this.protectedMoment(e.side);
+          break;
+        case 'confused':
+          // Reduced (no picture cue): the stars still come.
+          if (!this.dizzy[e.side]) this.dizzyOn(e.side, false);
+          break;
+        case 'confusionEnd':
+          this.dizzyOff(e.side);
           break;
         case 'terrain':
           await this.setTerrain({ id: e.terrain, turns: this.trTurnsNow(e.terrain) }, true);

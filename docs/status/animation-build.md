@@ -157,3 +157,10 @@ The lists in `plans/animation-redesign/REANIMATE.md` and `NEW_ANIMATIONS.md` car
   boxes (the mockup's spot is where the game has your box). Reduced: the stamp only. Doubles: nothing new.
 - Stamps now slam in as the mockups do: hard ones (PROTECTED) drop in big and tilted with a small shake, soft ones (the
   weather boost) grow in; both hold 750 ms and lift away.
+- Confusion (pass 8 "Confusion"; `DizzyStars`, `confusionHitClip`): when a Pokémon becomes confused three yellow stars
+  pop in and circle its head (found from the top of its drawn body), and it sways under them, for as long as it stays
+  confused. The "is confused!" check shows the stars instead of the pack's picture. When it hurts itself it swings
+  40 px at nothing, a yellow star bursts on its head, it blinks white, squashes and springs back, and the screen
+  shakes. Snapping out takes the stars away and it stands as before. Reduced: the stars stay still and no sway; the
+  hurt is a blink. Limits: no CNF chip on the plate yet (the plates are the UI build's); doubles keep the pack picture;
+  a battle reloaded mid-confusion shows the stars from the next confusion moment.

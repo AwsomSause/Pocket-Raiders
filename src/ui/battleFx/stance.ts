@@ -76,3 +76,23 @@ export function twitch(scene: Phaser.Scene, v: Phaser.GameObjects.GameObject, fu
   });
   v.setData(LOOPS, [chain]);
 }
+
+/** Confused (pass 8): it sways under its circling stars, tipping and leaning each way in turn. */
+export function sway(scene: Phaser.Scene, v: Phaser.GameObjects.GameObject, full: boolean, restX: number, rot: number, dx: number, ms: number): void {
+  if (!full || !spritesAnimate() || !(v instanceof Phaser.GameObjects.Sprite) || !v.active) return;
+  standStill(scene, v);
+  v.setData(BASE, { y: v.y, sx: v.scaleX, sy: v.scaleY, angle: v.angle, x: restX } satisfies Base);
+  const q = ms / 4;
+  const ease = 'Sine.easeInOut';
+  const chain = scene.tweens.chain({
+    targets: v,
+    loop: -1,
+    tweens: [
+      { angle: rot, x: restX + dx, duration: q, ease },
+      { angle: 0, x: restX, duration: q, ease },
+      { angle: -rot, x: restX - dx, duration: q, ease },
+      { angle: 0, x: restX, duration: q, ease },
+    ],
+  });
+  v.setData(LOOPS, [chain]);
+}

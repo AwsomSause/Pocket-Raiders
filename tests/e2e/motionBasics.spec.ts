@@ -822,3 +822,46 @@ test('Protect: the attack meets the shield, PROTECTED slams in, the attacker is 
   expect({ x: l.x, solid: l.solid }).toEqual({ x: l.homeX, solid: 0 });
   expect(errors).toEqual([]);
 });
+
+test('confusion: three stars circle its head while it sways; hurting itself swings and bonks; snapping out leaves nothing', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await startBattle(page, 'confusion-e2e');
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const stars = () => b.field.list.filter((o: any) => o.type === 'Star' && o.fillColor === 0xffcb05);
+    const s = { stars: 0, moved: 0, tilt: 0, swing: 0 };
+    b.condition('enemy', 'cnf', 'arrive');
+    const first = { x: 0, y: 0 };
+    await new Promise((r) => setTimeout(r, 400));
+    const st = stars()[0];
+    if (st) [first.x, first.y] = [st.x, st.y];
+    const watch = () => {
+      s.stars = Math.max(s.stars, stars().length);
+      const now = stars()[0];
+      if (now) s.moved = Math.max(s.moved, Math.hypot(now.x - first.x, now.y - first.y));
+      s.tilt = Math.max(s.tilt, Math.abs(b.enemySprite.angle));
+    };
+    b.events.on('update', watch);
+    await new Promise((r) => setTimeout(r, 1700));
+    const home = b.spotXY('enemy').x;
+    const swing = () => (s.swing = Math.max(s.swing, b.enemySprite.x - home));
+    b.events.on('update', swing);
+    b.condition('enemy', 'cnf', 'tick');
+    await new Promise((r) => setTimeout(r, 700));
+    b.events.off('update', swing);
+    b.events.off('update', watch);
+    return s;
+  });
+  expect(seen.stars).toBe(3);
+  expect(seen.moved).toBeGreaterThan(20);
+  expect(seen.tilt).toBeGreaterThan(3);
+  expect(seen.swing).toBeGreaterThan(30);
+  // Snapping out: the stars go and it stands still and home.
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').dizzyOff('enemy', 0));
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').field.list.filter((o: any) => o.type === 'Star' && o.fillColor === 0xffcb05).length)).toBe(0);
+  const l = await look(page, 'enemy');
+  expect({ x: l.x, solid: l.solid }).toEqual({ x: l.homeX, solid: 0 });
+  expect(errors).toEqual([]);
+});

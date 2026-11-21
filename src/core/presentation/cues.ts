@@ -190,7 +190,7 @@ export function planCues(
       case 'seedDamage': {
         const common = e.type === 'residual' ? `status.${e.status}` : e.type === 'confusionHit' ? 'confusion' : e.type === 'bindDamage' ? 'bind' : e.type === 'seedDamage' ? 'seed' : '';
         if (full && e.type === 'bindDamage') cues.push({ kind: 'commonAnim', side: e.side, ...bindChoice(anims, e.moveId) });
-        else if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common), ...(e.type === 'residual' ? { cond: { at: 'tick' as const, status: e.status } } : {}) });
+        else if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common), ...(e.type === 'residual' ? { cond: { at: 'tick' as const, status: e.status } } : e.type === 'confusionHit' ? { cond: { at: 'tick' as const, status: 'cnf' } } : {}) });
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: 'damage', motion: full });
         break;
       }
@@ -217,7 +217,8 @@ export function planCues(
         break;
       case 'confused':
       case 'confusion':
-        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'confusion') });
+        // Becoming confused, or the "is confused!" check: the screen may show its own stars (pass 8) instead.
+        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'confusion'), cond: { at: e.type === 'confused' ? ('arrive' as const) : ('cant' as const), status: 'cnf' } });
         break;
       case 'protect':
         if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'protect') });

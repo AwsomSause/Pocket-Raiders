@@ -351,3 +351,31 @@ export function protectedClip(attacker: CondSpot, guarded: CondSpot, level: Clip
   b.beat(0, 'The attack lands on the shield').beat(50, 'Attacker is pushed back');
   return b.end(1200);
 }
+
+/**
+ * Confusion (pass 8): three yellow stars circle its head (an oval 52 px wide each way, 13 px tall, about 5 radians a
+ * second, a third of a turn apart) and it sways under them (5 degrees and 6 px each way, 1.6 s a sway) for as long
+ * as it is confused.
+ */
+export const CONFUSE = { rx: 52, ry: 13, spin: 5, star: 22, above: 6, popMs: 200, popGap: 80, sway: { rot: 5, dx: 6, ms: 1600 } } as const;
+
+/**
+ * It hurts itself in its confusion (pass 8): it swings at nothing (40 px away from the other side and back), then a
+ * yellow star bursts on its own head, it blinks white, squashes and springs back, and the screen shakes (cue `shake`).
+ * Reduced: the blink only. Off: nothing.
+ */
+export function confusionHitClip(at: CondSpot, level: ClipLevel): MotionClip {
+  const b = new ClipBuilder('confusion-hit', level);
+  const m = b.part('mon', { dx: 0, sy: 1, white: 0 });
+  if (level === 'off') return b.end(0);
+  const bonk = 200;
+  m.at(bonk).to(60, { white: 0.7 }).to(200, { white: 0 });
+  if (level === 'reduced') return b.end(bonk + 260);
+  const away = at.side === 'enemy' ? 1 : -1;
+  m.at(0).to(120, { dx: 40 * away }, 'out').to(200, { dx: 0 }, 'back');
+  m.at(bonk).to(60, { sy: 0.86 }).to(300, { sy: 1 }, 'el');
+  b.fx({ kind: 'star', at: bonk, x: at.x + 10 * away, y: at.y - at.h - CONFUSE.above + 30, size: 90, points: 4, d: 400, color: 0xffcb05 });
+  b.fx({ kind: 'cue', at: bonk, name: 'shake' });
+  b.beat(0, 'Swings at nothing').beat(bonk, 'Bonks itself');
+  return b.end(bonk + 400);
+}
