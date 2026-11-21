@@ -411,12 +411,16 @@ test('Pocket look: Party is a hand of cards and Summary has every tab; neither c
 
   await step(page, 'Enter');
   await onPkPage(page, 'Map', 'summary');
-  const sum = pkView(page, 'Map', 'summary');
+  // The Moves and Bond tabs are pages of their own (summary-moves, summary-bond).
+  const sum = pkView(page, 'Map');
   const tabs = await sum.locator('.t12 .tab').count();
   expect(tabs).toBeGreaterThanOrEqual(5);
   for (let t = 0; t < tabs; t++) {
     await expect(sum.locator('.t12 .tab').nth(t)).toHaveClass(/\bon\b/);
-    await fits(page, 'Map', 'summary');
+    const name = ((await sum.locator('.t12 .tab').nth(t).textContent()) ?? '').trim().toLowerCase();
+    const id = name === 'moves' ? 'summary-moves' : name === 'bond' ? 'summary-bond' : 'summary';
+    await onPkPage(page, 'Map', id);
+    await fits(page, 'Map', id);
     await step(page, 'ArrowRight');
   }
   await step(page, 'Escape', 2);
