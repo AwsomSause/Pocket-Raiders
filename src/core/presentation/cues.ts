@@ -39,13 +39,13 @@ export type Cue =
   /** The reduced-motion stand-in for a move animation: a soft tint on the target. */
   | { kind: 'pulse'; side: Side; color: string }
   /** A hit landing: freeze, shake, flash, then the HP bar drains. */
-  | { kind: 'impact'; side: Side; amount: number; crit: boolean; effectiveness: number; hitStopMs: number; shake: number; flash: string | null; flashAlpha: number }
+  | { kind: 'impact'; side: Side; amount: number; crit: boolean; effectiveness: number; hitStopMs: number; shake: number; flash: string | null; flashAlpha: number; /** The move's type colour (the light a hit throws on the floor). */ color?: string }
   /** The number that floats up from a Pokémon whose HP changed. */
   | { kind: 'number'; side: Side; amount: number; tone: 'damage' | 'crit' | 'super' | 'weak' | 'heal'; motion: boolean }
   | { kind: 'badge'; side: Side; badge: EffectivenessBadge | 'crit' }
   /** Status and healing animations (common-burn, common-health-up …). */
-  | { kind: 'commonAnim'; side: Side; anim: string; alt?: string }
-  | { kind: 'statArrows'; side: Side; up: boolean; motion: boolean }
+  | { kind: 'commonAnim'; side: Side; anim: string; alt?: string; /** A heal: the screen may show its own (redesign pass 3) instead. */ heal?: true; /** A status arriving, ticking or stopping a move: the screen may show its own look (pass 8) instead. */ cond?: { at: 'arrive' | 'tick' | 'cant'; status: string } }
+  | { kind: 'statArrows'; side: Side; up: boolean; motion: boolean; /** Which stat and by how many stages (the screen may show its own chevrons, stamp and pips: pass 8). */ stat?: string; change?: number }
   /** An ability triggering: banner with its name plus the category's flourish (registry id `ability.*`). */
   | { kind: 'abilityAnim'; side: Side; anim: string; label: string; ability: string }
   /** The badge's animated words (registry id `text.*`); `miss` has no badge text of its own. */
@@ -65,7 +65,7 @@ const TYPE_HEX: Record<string, string> = {
   dark: '#705848', steel: '#b8b8d0', fairy: '#ee99ac',
 };
 
-const STAT_WORDS: Record<string, string> = { atk: 'ATTACK', def: 'DEFENSE', spa: 'SP. ATK', spd: 'SP. DEF', spe: 'SPEED', acc: 'ACCURACY', eva: 'EVASION' };
+export const STAT_WORDS: Record<string, string> = { atk: 'ATTACK', def: 'DEFENSE', spa: 'SP. ATK', spd: 'SP. DEF', spe: 'SPEED', acc: 'ACCURACY', eva: 'EVASION' };
 const STATUS_WORDS: Record<string, string> = { brn: 'BURNED!', psn: 'POISONED!', tox: 'BADLY POISONED!', par: 'PARALYZED!', slp: 'ASLEEP!', frz: 'FROZEN!' };
 
 /** Events that mean the move didn't connect, so its animation is skipped. */
@@ -138,6 +138,7 @@ export function planCues(
             shake: full ? Math.round(Math.min(4, level) * 3 * shakeLevel) : 0,
             flash: full && (look?.flash || crit) ? (look?.flash ?? '#ffffff') : null,
             flashAlpha: full ? 0.35 * intensity : 0,
+            color: current ? TYPE_HEX[content.moves.get(current.moveId)?.type ?? ''] : undefined,
           });
         }
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: crit ? 'crit' : eff > 1 ? 'super' : eff < 1 ? 'weak' : 'damage', motion: full });
@@ -189,14 +190,14 @@ export function planCues(
       case 'seedDamage': {
         const common = e.type === 'residual' ? `status.${e.status}` : e.type === 'confusionHit' ? 'confusion' : e.type === 'bindDamage' ? 'bind' : e.type === 'seedDamage' ? 'seed' : '';
         if (full && e.type === 'bindDamage') cues.push({ kind: 'commonAnim', side: e.side, ...bindChoice(anims, e.moveId) });
-        else if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common) });
+        else if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common), ...(e.type === 'residual' ? { cond: { at: 'tick' as const, status: e.status } } : e.type === 'confusionHit' ? { cond: { at: 'tick' as const, status: 'cnf' } } : {}) });
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: 'damage', motion: full });
         break;
       }
       case 'drain':
       case 'heal':
         if (e.amount <= 0) break;
-        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'heal') });
+        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'heal'), heal: true });
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: 'heal', motion: full });
         break;
       case 'charge': {
@@ -216,7 +217,8 @@ export function planCues(
         break;
       case 'confused':
       case 'confusion':
-        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'confusion') });
+        // Becoming confused, or the "is confused!" check: the screen may show its own stars (pass 8) instead.
+        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'confusion'), cond: { at: e.type === 'confused' ? ('arrive' as const) : ('cant' as const), status: 'cnf' } });
         break;
       case 'protect':
         if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'protect') });
@@ -228,15 +230,15 @@ export function planCues(
         if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'seed') });
         break;
       case 'status':
-        if (full && anims.common[`status.${e.status}`]) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.status}`) });
+        if (full && anims.common[`status.${e.status}`]) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.status}`), cond: { at: 'arrive', status: e.status } });
         if (animated && STATUS_WORDS[e.status]) cues.push({ kind: 'textAnim', side: e.side, anim: 'text.status', label: STATUS_WORDS[e.status]! });
         break;
       case 'cant':
-        if (full && (e.reason === 'slp' || e.reason === 'frz' || e.reason === 'par')) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.reason}`) });
+        if (full && (e.reason === 'slp' || e.reason === 'frz' || e.reason === 'par')) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, `status.${e.reason}`), cond: { at: 'cant', status: e.reason } });
         break;
       case 'stat':
         if (animated) {
-          cues.push({ kind: 'statArrows', side: e.side, up: e.change > 0, motion: full });
+          cues.push({ kind: 'statArrows', side: e.side, up: e.change > 0, motion: full, stat: e.stat, change: e.change });
           const arrows = (e.change > 0 ? '+' : '-').repeat(Math.min(3, Math.abs(e.change)));
           cues.push({ kind: 'textAnim', side: e.side, anim: e.change > 0 ? 'text.statUp' : 'text.statDown', label: `${STAT_WORDS[e.stat] ?? String(e.stat).toUpperCase()} ${arrows}` });
         }

@@ -24,7 +24,7 @@ import { typeSoundFor } from '../../core/presentation/typeSound';
 import { playSfx } from '../audio';
 import { loadAssets } from '../lazyAssets';
 import type { Visual } from '../sprites';
-import { textStyle } from '../theme';
+import { FONT_FAMILY, textStyle } from '../theme';
 import { animSettingsFrom } from '../../core/accessibility';
 import { resolveAnim, type AnimPlan } from '../../core/presentation/animRegistry';
 import { abilityPackAnim } from '../../core/presentation/abilityAnims';
@@ -48,6 +48,25 @@ export interface FxOptions {
   mastery?: (moveId: string) => MoveRank;
   /** A scene that takes the whole screen is starting (true) or over (false): the battle clears whatever it draws over the canvas. */
   fullScreen?: (on: boolean) => void;
+  /** Settings > Damage numbers (off: none) and Damage popup size. Shown at size 1 when left out. */
+  numbers?: () => { show: boolean; scale: number };
+  /**
+   * The target's own reaction to a hit (redesign pass 2: white, squash, thrown back, springs home). Called when the
+   * hit lands with full animations; it plays by itself while the battle goes on. Left out: the plain white hit-stop.
+   */
+  /** The scene's own recoil for a hit; it may set the hit's shake (pass 12 power tiers) and ask for a heavy, double-size number. */
+  recoil?: (side: Side, cue: Extract<Cue, { kind: 'impact' }>) => boolean | { shake: number; heavy: boolean; /** Extra ms the battle holds (the critical-hit freeze). */ hold?: number };
+  /** A stat change: the scene shows its own chevrons, stamp and pips (pass 8); true means the pack's arrows and word stay away. */
+  stat?: (side: Side, stat: string, change: number) => boolean;
+  /** An ability: the scene unrolls its own flag (pass 8). 'all' means it also acted the ability out (Intimidate) and
+   *  holds the battle for `ms`; 'flag' means only the flag, so the category's flourish still plays here. */
+  ability?: (side: Side, ability: string, label: string) => { shown: 'all' | 'flag'; ms: number } | null;
+  /** The scene's own word stamp for a hit (pass 5); true means it showed, so the pack's badge stays away. */
+  stamp?: (side: Side, kind: string) => boolean;
+  /** The screen's own heal (redesign pass 3: plus-signs, a green glow, a hop). False when it can't play (the pack's heal shows). */
+  heal?: (side: Side) => boolean;
+  /** The screen's own status look (pass 8) arriving, ticking or stopping a move. False: the pack's animation plays. */
+  condition?: (side: Side, status: string, at: 'arrive' | 'tick' | 'cant') => boolean;
 }
 
 const BADGES: Record<string, { label: string; color: string }> = {
@@ -57,15 +76,10 @@ const BADGES: Record<string, { label: string; color: string }> = {
   crit: { label: 'CRITICAL HIT!', color: '#f8e050' },
 };
 
-const NUMBER_COLORS: Record<string, string> = {
-  damage: '#f8f8f8',
-  crit: '#f8e050',
-  super: '#f8a030',
-  weak: '#c0c8d8',
-  heal: '#78f090',
-};
-
 const hex = (color: string) => Phaser.Display.Color.HexStringToColor(color).color;
+
+/** Scene event fired whenever effects start playing. */
+export const BATTLE_FX_PLAY = 'battleFxPlay';
 
 export class BattleFx {
   private readonly cache = new Map<string, Promise<CompactAnim | null>>();
@@ -73,6 +87,10 @@ export class BattleFx {
   private skipping = false;
   /** How many badges are showing per side, so they stack instead of overlapping. */
   private readonly badgeCount: Record<Side, number> = { player: 0, enemy: 0 };
+  /** A stat change the scene showed with its own stamp: the word badge right after it is skipped (pass 8). */
+  private readonly statShown: Record<Side, boolean> = { player: false, enemy: false };
+  /** The next number on this side belongs to a heavy hit (pass 12): drawn twice the size. */
+  private readonly heavyNumber: Record<Side, boolean> = { player: false, enemy: false };
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -108,6 +126,8 @@ export class BattleFx {
   /** Plays one event's cues in order. Resolves when the screen is ready for the event's HP change and message. */
   async play(cues: readonly Cue[]): Promise<void> {
     this.skipping = false;
+    // Tells the scene something is playing (its idle look, "waiting on you", waits for a quiet screen).
+    this.scene.events.emit(BATTLE_FX_PLAY);
     for (const cue of cues) {
       if (!this.scene.sys.isActive()) return;
       try {
@@ -142,6 +162,8 @@ export class BattleFx {
       case 'pulse':
         return this.pulse(cue.side, cue.color);
       case 'commonAnim':
+        if (cue.heal && !this.skipping && this.opts.heal?.(cue.side)) return;
+        if (cue.cond && !this.skipping && this.opts.condition?.(cue.side, cue.cond.status, cue.cond.at)) return;
         return this.commonAnim(cue.side, cue.anim, cue.alt);
       case 'impact':
         return this.impact(cue);
@@ -152,19 +174,30 @@ export class BattleFx {
         this.badge(cue.side, cue.badge);
         return;
       case 'statArrows':
+        if (cue.stat && cue.change && !this.skipping && this.opts.stat?.(cue.side, cue.stat, cue.change)) {
+          // Its own stamp says the word, so the badge that follows is left out; the next change follows 0.7 s on.
+          this.statShown[cue.side] = true;
+          return this.wait(700);
+        }
         return this.statArrows(cue.side, cue.up, cue.motion);
       case 'abilityAnim': {
         const plan = this.plan(cue.anim);
         const visual = this.opts.sprite(cue.side);
         if (!plan || !plan.play || !visual) return;
+        const own = this.skipping ? null : (this.opts.ability?.(cue.side, cue.ability, cue.label) ?? null);
+        if (own?.shown === 'all') return this.wait(own.ms);
         const pack = plan.reduced ? null : abilityPackAnim(cue.ability);
         const packSide: Side = pack?.onFoe ? (cue.side === 'player' ? 'enemy' : 'player') : cue.side;
-        const parts = [playAbilityAnim({ ...this.tools(cue.side, visual, plan, cue.label), ability: cue.ability, foeSprite: this.opts.sprite(cue.side === 'player' ? 'enemy' : 'player') })];
+        const parts = [playAbilityAnim({ ...this.tools(cue.side, visual, plan, cue.label), ability: cue.ability, foeSprite: this.opts.sprite(cue.side === 'player' ? 'enemy' : 'player'), ownFlag: !!own })];
         if (pack) parts.push(this.commonAnim(packSide, pack.name).catch(() => undefined));
         await Promise.race([Promise.all(parts), this.wait(plan.ms)]);
         return;
       }
       case 'textAnim':
+        if ((cue.anim === 'text.statUp' || cue.anim === 'text.statDown') && this.statShown[cue.side]) {
+          this.statShown[cue.side] = false;
+          return;
+        }
         this.textAnim(cue.side, cue.anim, cue.label);
         return;
       case 'storyAnim':
@@ -391,7 +424,16 @@ export class BattleFx {
     const visual = this.opts.sprite(cue.side);
     if (!visual) return;
     // Hit-stop: the target flashes white and everything holds for a moment.
-    if (cue.hitStopMs > 0 && !this.skipping) {
+    const own = cue.hitStopMs > 0 && !this.skipping ? this.opts.recoil?.(cue.side, cue) : false;
+    let shake = cue.shake;
+    if (own) {
+      // The scene's recoil draws the white and the squash; the battle still holds for the hit-stop.
+      if (typeof own === 'object') {
+        shake = own.shake;
+        if (own.heavy) this.heavyNumber[cue.side] = true;
+      }
+      await this.wait(cue.hitStopMs + (typeof own === 'object' ? (own.hold ?? 0) : 0));
+    } else if (cue.hitStopMs > 0 && !this.skipping) {
       if (visual instanceof Phaser.GameObjects.Sprite) visual.setTintFill(0xffffff);
       else visual.setAlpha(0.5);
       await this.wait(cue.hitStopMs);
@@ -405,7 +447,7 @@ export class BattleFx {
       this.opts.field.add(flash);
       this.scene.tweens.add({ targets: flash, alpha: 0, duration: 180, onComplete: () => flash.destroy() });
     }
-    if (cue.shake > 0 && !this.skipping) this.shake(cue.shake);
+    if (shake > 0 && !this.skipping) this.shake(shake);
     // A blink without hit-stop (reduced motion or off).
     if (cue.hitStopMs === 0) this.scene.tweens.add({ targets: visual, alpha: 0.3, yoyo: true, repeat: 1, duration: 70 });
   }
@@ -423,24 +465,45 @@ export class BattleFx {
     });
   }
 
+  /**
+   * The one number per hit (redesign pass 5, Numbers and Stamps): it springs out of the hit (0.4 to full size), hangs,
+   * then lifts away. White, a bigger yellow one for a critical hit, green "+" for healing; beside the Pokémon's middle.
+   */
   private number(side: Side, amount: number, tone: string, motion: boolean): void {
     const visual = this.opts.sprite(side);
-    if (!visual || amount <= 0) return;
-    const { x, y } = this.top(visual);
+    const look = this.opts.numbers?.() ?? { show: true, scale: 1 };
+    if (!visual || amount <= 0 || !look.show) return;
+    const h = visual instanceof Phaser.GameObjects.Sprite ? visual.displayHeight * visual.originY : visual.getBounds().height || 120;
+    const x = visual.x + (side === 'enemy' ? -20 : 40);
+    const y = visual.y - h * 0.5 - 6;
     const sign = tone === 'heal' ? '+' : '-';
+    const color = tone === 'crit' ? '#ffcb05' : tone === 'heal' ? '#7dffa0' : '#ffffff';
     const text = this.scene.add
-      .text(x + (side === 'enemy' ? 60 : -60), y, `${sign}${amount}`, textStyle(tone === 'crit' ? 40 : 34, NUMBER_COLORS[tone] ?? '#ffffff', { stroke: '#181818', strokeThickness: 6 }))
-      .setOrigin(0.5);
+      .text(x, y, `${sign}${amount}`, textStyle(tone === 'crit' ? 60 : 44, color, { fontFamily: `"Jersey 15", ${FONT_FAMILY}`, fontSize: `${tone === 'crit' ? 60 : 44}px`, stroke: '#131c36', strokeThickness: 5, shadow: { offsetX: 3, offsetY: 3, color: '#131c36', fill: true, stroke: true, blur: 0 } }))
+      .setOrigin(0.5)
+      .setDepth(900);
+    // Pass 12: a heavy hit's number is twice the size.
+    const size = look.scale * (this.heavyNumber[side] && tone !== 'heal' ? 2 : 1);
+    this.heavyNumber[side] = false;
     if (motion) {
-      text.setScale(0.6);
-      this.scene.tweens.add({ targets: text, scale: 1, duration: 120, ease: 'Back.easeOut' });
-      this.scene.tweens.add({ targets: text, y: y - 46, alpha: 0, delay: 500, duration: 500, onComplete: () => text.destroy() });
+      text.setScale(0.4 * size).setAlpha(1);
+      this.scene.tweens.chain({
+        targets: text,
+        tweens: [
+          { scale: size, duration: 140, ease: 'Back.easeOut' },
+          { y: y - 54, alpha: 0, delay: 450, duration: 300, ease: 'Cubic.easeIn' },
+        ],
+        onComplete: () => text.destroy(),
+      });
     } else {
+      text.setScale(size);
       this.scene.tweens.add({ targets: text, alpha: 0, delay: 700, duration: 300, onComplete: () => text.destroy() });
     }
   }
 
   private badge(side: Side, kind: string): void {
+    // The scene's own stamp (pass 5: CRITICAL HIT!, SUPER EFFECTIVE! and the rest) takes the pack's word badge's place.
+    if (!this.skipping && this.opts.stamp?.(side, kind)) return;
     const look = BADGES[kind];
     if (look) this.textAnim(side, `text.${kind}`, look.label);
   }

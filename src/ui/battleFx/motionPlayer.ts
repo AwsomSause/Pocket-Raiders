@@ -43,7 +43,7 @@ export interface ClipRun {
 /** Sets how strongly a sprite's contact shadow shows (arenaLife reads it); 1 = as usual. */
 export const SHADOW_KEY = 'motionShadow';
 
-const TINTS: Record<string, number> = { red: 0xff3b30, white: 0xffffff };
+const TINTS: Record<string, number> = { red: 0xff3b30, white: 0xffffff, black: 0x000000, green: 0x7dffa0 };
 
 interface MonRig {
   v: Visual;
@@ -66,7 +66,7 @@ interface FreeRig {
 
 // Particle scatter: a tiny counter-based generator of its own, so effects never draw from gameplay RNG.
 let scatter = 1;
-function rnd(lo = 0, hi = 1): number {
+export function rnd(lo = 0, hi = 1): number {
   scatter = (scatter + 0x6d2b79f5) | 0;
   let t = Math.imul(scatter ^ (scatter >>> 15), 1 | scatter);
   t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
@@ -95,19 +95,20 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
   };
 
   /** A solid-colour copy of the sprite on top of it, for "turns red" and "pops out white". */
-  const overlay = (rig: MonRig, key: string, amount: number): void => {
+  const overlay = (rig: MonRig, key: string, amount: number, color = TINTS[key] ?? 0xffffff): void => {
     const v = rig.v;
     if (!(v instanceof Phaser.GameObjects.Sprite)) return;
     let o = rig.overlays.get(key);
     if (amount <= 0.01) return void o?.setVisible(false);
     if (!o) {
-      o = scene.add.sprite(v.x, v.y, v.texture.key, v.frame.name).setTintFill(TINTS[key] ?? 0xffffff);
+      o = scene.add.sprite(v.x, v.y, v.texture.key, v.frame.name).setTintFill(color);
       if (v.parentContainer) v.parentContainer.addAt(o, v.parentContainer.getIndex(v) + 1);
       else o.setDepth(v.depth + 0.5);
       if (v.mask) o.setMask(v.mask);
       rig.overlays.set(key, o);
     }
     if (o.frame !== v.frame) o.setFrame(v.frame.name, false, false);
+    if (o.tintTopLeft !== color) o.setTintFill(color);
     o.setVisible(v.visible).setOrigin(v.originX, v.originY).setPosition(v.x, v.y).setScale(v.scaleX, v.scaleY).setAngle(v.angle).setFlip(v.flipX, v.flipY).setAlpha(amount * v.alpha);
     if (v.isCropped) o.setCrop(0, 0, v.width, cropHeight(rig, lastSink.get(rig) ?? 0));
     else o.setCrop();
@@ -135,6 +136,8 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
     if (s.alpha !== undefined) v.setAlpha(rig.alpha * s.alpha);
     if (s.shadow !== undefined) v.setData(SHADOW_KEY, s.shadow);
     for (const key of Object.keys(TINTS)) if (s[key] !== undefined) overlay(rig, key, s[key]!);
+    // A wash in any colour the clip names (`tint` is its strength, `tintColor` the colour as a number).
+    if (s.tint !== undefined) overlay(rig, 'tint', s.tint, s.tintColor ?? 0xffffff);
   };
 
   const applyFree = (name: string, s: PartState, o: Free): void => {
@@ -174,20 +177,28 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
     }
   };
 
-  const finish = (): void => {
+  /** Ends the clip in its end state; `gone` (the scene shut down) only lets the waiting code go on: nothing is drawn
+   * and no cue is answered, because the scene's objects, camera and clock are being torn down. */
+  const finish = (gone = false): void => {
     if (over) return;
     over = true;
     scene.events.off(Phaser.Scenes.Events.UPDATE, tick);
+    scene.events.off(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
     window.clearTimeout(watchdog);
-    while (nextFx < clip.fx.length) fire(clip.fx[nextFx++]!);
-    apply(clipEnd(clip));
-    for (const rig of mons.values()) rig.overlays.forEach((o) => o.destroy());
+    if (!gone) {
+      while (nextFx < clip.fx.length) fire(clip.fx[nextFx++]!);
+      apply(clipEnd(clip));
+    }
+    for (const rig of mons.values()) rig.overlays.forEach((o) => o.active && o.destroy());
     settle();
   };
+  const onShutdown = (): void => finish(true);
+  /** The scene is shutting down or gone (a paused or sleeping one is not: its clips still end in their end state). */
+  const dead = (): boolean => (scene.sys?.settings.status ?? Phaser.Scenes.DESTROYED) >= Phaser.Scenes.SHUTDOWN;
 
   const tick = (_time: number, delta: number): void => {
     if (over) return;
-    if (!scene.sys?.isActive()) return finish();
+    if (!scene.sys?.isActive()) return finish(dead());
     // The scene's clock carries the battle speed; a paused clock holds the clip.
     if (!scene.time.paused) t += Math.min(delta, 100) * scene.time.timeScale * rate;
     while (nextFx < clip.fx.length && clip.fx[nextFx]!.at <= t) fire(clip.fx[nextFx++]!);
@@ -196,8 +207,8 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
   };
 
   // The scene clock can stall (a dialogue, a scene change): the real clock always ends the clip.
-  const watchdog = window.setTimeout(finish, clip.length * 3 + 2000);
-  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, finish);
+  const watchdog = window.setTimeout(() => finish(dead()), clip.length * 3 + 2000);
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
   if (clip.length <= 0) finish();
   else {
     while (nextFx < clip.fx.length && clip.fx[nextFx]!.at <= 0) fire(clip.fx[nextFx++]!);
@@ -211,7 +222,7 @@ export function playClip(scene: Phaser.Scene, clip: MotionClip, host: ClipHost):
     rig.v.setData(SHADOW_KEY, 1);
     if (rig.v instanceof Phaser.GameObjects.Sprite && rig.v.isCropped) rig.v.setCrop();
   };
-  return { done, stop: finish, rest };
+  return { done, stop: () => finish(), rest };
 }
 
 interface FxOpts {
@@ -231,12 +242,14 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
       if (!o.particles) return;
       // The mockup's dust: soft specks thrown up and outward that drift, swell and fade.
       for (let i = 0; i < fx.n; i++) {
+        const k0 = fx.big ?? 1;
         const a = Phaser.Math.DegToRad(rnd(185, 355));
-        const v = rnd(40, 150);
+        const v = rnd(40, 150) * k0;
         const life = rnd(0.35, 0.65);
-        const size = Math.max(3, Math.round(rnd(6, 15) / 3) * 3);
+        const size = Math.max(3, Math.round((rnd(6, 15) * k0) / 3) * 3);
         const x0 = fx.x + rnd(-22, 22);
-        const p = scene.add.circle(x0, fx.y, size / 2, DUST[i % DUST.length], 0.85).setDepth(o.depth);
+        const cols = fx.cols?.length ? fx.cols : DUST;
+        const p = scene.add.circle(x0, fx.y, size / 2, cols[i % cols.length], 0.85).setDepth(o.depth);
         const k = { u: 0 };
         scene.tweens.add({
           targets: k,
@@ -256,20 +269,38 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
     case 'flash': {
       const alpha = fx.alpha * o.flash;
       if (alpha <= 0.01) return;
-      const r = scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH * 1.4, GAME_HEIGHT * 1.4, 0xffffff, alpha).setDepth(o.depth + 2).setScrollFactor(0);
+      const r = scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH * 1.4, GAME_HEIGHT * 1.4, fx.color ?? 0xffffff, alpha).setDepth(o.depth + 2).setScrollFactor(0);
       scene.tweens.add({ targets: r, alpha: 0, duration: ms(fx.d), ease: EASES.in, onComplete: () => r.destroy() });
       return;
     }
     case 'ring': {
       // A shockwave on the ground: it grows fast, then thins out.
-      const e = scene.add.ellipse(fx.x, fx.y, fx.r1 * 2, fx.r1 * 2 * fx.flat).setStrokeStyle(fx.w ?? 6, fx.color ?? 0xffffff, 1).setDepth(o.depth).setScale(8 / fx.r1);
+      const e = scene.add.ellipse(fx.x, fx.y, fx.r1 * 2, fx.r1 * 2 * fx.flat).setStrokeStyle(fx.w ?? 6, fx.color ?? 0xffffff, 1).setDepth(o.depth).setScale((fx.r0 ?? 8) / fx.r1);
       scene.tweens.add({ targets: e, scale: 1, duration: ms(fx.d), ease: EASES.out3 });
       scene.tweens.add({ targets: e, alpha: 0, delay: ms(fx.d * 0.45), duration: ms(fx.d * 0.55), onComplete: () => e.destroy() });
       return;
     }
+    case 'bolt': {
+      // A jagged line with a wide pale glow under it (the mockup's two polylines), on for a blink.
+      const pts: Phaser.Math.Vector2[] = [];
+      for (let i = 0; i <= fx.n; i++) {
+        const u = i / fx.n;
+        const j = i && i < fx.n ? fx.j : 0;
+        pts.push(new Phaser.Math.Vector2(fx.x1 + (fx.x2 - fx.x1) * u + rnd(-j, j), fx.y1 + (fx.y2 - fx.y1) * u + rnd(-j, j)));
+      }
+      const g = scene.add.graphics().setDepth(o.depth + 1);
+      g.lineStyle(fx.w * 2.2, fx.color2, 0.55).strokePoints(pts, false, false);
+      g.lineStyle(fx.w, fx.color, 1).strokePoints(pts, false, false);
+      scene.time.delayedCall(ms(fx.d), () => g.setVisible(false));
+      if (fx.again) {
+        scene.time.delayedCall(ms(fx.d + 50), () => g.active && g.setVisible(true));
+        scene.time.delayedCall(ms(fx.d + 110), () => g.destroy());
+      } else scene.time.delayedCall(ms(fx.d + 10), () => g.destroy());
+      return;
+    }
     case 'star': {
-      // A white burst of many points that grows and fades.
-      const st = scene.add.star(fx.x, fx.y, fx.points, fx.size * 0.15, fx.size / 2, 0xffffff, 1).setDepth(o.depth + 1).setScale(0.1).setBlendMode(Phaser.BlendModes.ADD);
+      // A burst of points (white unless the clip names a colour) that grows and fades.
+      const st = scene.add.star(fx.x, fx.y, fx.points, (fx.size / 2) * (fx.inner ?? 0.3), fx.size / 2, fx.color ?? 0xffffff, 1).setDepth(o.depth + 1).setScale(0.1).setBlendMode(Phaser.BlendModes.ADD);
       scene.tweens.add({ targets: st, scale: 1, angle: 20, alpha: 0, duration: ms(fx.d), ease: EASES.out, onComplete: () => st.destroy() });
       return;
     }
@@ -285,12 +316,15 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
     case 'orbs': {
       if (!o.particles) return;
       for (let i = 0; i < fx.n; i++) {
-        const x0 = fx.x0 + rnd(-40, 40);
-        const y0 = fx.y0 + rnd(-30, 20);
-        const x1 = fx.x1 + rnd(-40, 40);
-        const h = rnd(40, 120);
-        const halo = scene.add.circle(x0, y0, 11, 0x4cc3ff, 0.35).setDepth(o.depth).setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
-        const core = scene.add.circle(x0, y0, 6, 0x9ae4ff, 1).setDepth(o.depth + 1).setVisible(false);
+        const sc = fx.jitter ?? 1;
+        const x0 = fx.x0 + rnd(-40, 40) * sc;
+        const y0 = fx.y0 + rnd(-30, 20) * sc;
+        const x1 = fx.x1 + rnd(-40, 40) * sc;
+        const h = fx.arc ?? rnd(40, 120);
+        const r = fx.r ?? 6;
+        // Its own colours glow as painted (an added glow turns green to cyan over a blue sky).
+        const halo = scene.add.circle(x0, y0, r * 1.8, fx.glow ?? 0x4cc3ff, fx.glow === undefined ? 0.35 : 0.55).setDepth(o.depth).setBlendMode(fx.glow === undefined ? Phaser.BlendModes.ADD : Phaser.BlendModes.NORMAL).setVisible(false);
+        const core = scene.add.circle(x0, y0, r, fx.color ?? 0x9ae4ff, 1).setDepth(o.depth + 1).setVisible(false);
         const k = { u: 0 };
         scene.tweens.add({
           targets: k,
@@ -307,7 +341,10 @@ export function drawFx(scene: Phaser.Scene, fx: MotionFx, o: FxOpts): void {
             halo.setPosition(x, y);
             core.setPosition(x, y);
           },
-          onComplete: () => { halo.destroy(); core.destroy(); },
+          onComplete: () => {
+            if (!fx.pop || !core.active) return void (halo.destroy(), core.destroy());
+            scene.tweens.add({ targets: [halo, core], scale: 2, alpha: 0, duration: ms(60), onComplete: () => (halo.destroy(), core.destroy()) });
+          },
         });
       }
       return;

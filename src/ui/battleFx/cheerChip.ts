@@ -70,16 +70,26 @@ export function cheerFace(scene: Phaser.Scene, artId: string, color: number): st
 
 /** The word as the mockup's pill: white, dark round letters, a thin ring in the trainer's colour. */
 export function cheerWordPicture(scene: Phaser.Scene, word: string, color: number): string | null {
-  const key = `cheer.word.${word}.${color}`;
+  return pill(scene, `cheer.word.${word}.${color}`, word, { fill: '#ffffff', ink: '#16203f', ring: css(color), size: 13 });
+}
+
+/** The shiny's chip (pass 11): "✦ SHINY" on the mockup's yellow pill with a white ring. */
+export function shinyChipPicture(scene: Phaser.Scene): string | null {
+  return pill(scene, 'cheer.shiny', '✦ SHINY', { fill: '#ffcb05', ink: '#16203f', ring: '#ffffff', size: 15 });
+}
+
+/** The mockup's `.pill`: round letters (M PLUS Rounded 1c, 800), 4 x 10 px padding (or `pad`), fully rounded, a 2 px ring. */
+export function pill(scene: Phaser.Scene, key: string, word: string, look: { fill: string; ink: string; ring: string; size: number; pad?: { x: number; y: number } }): string | null {
   if (scene.textures.exists(key)) return key;
   try {
-    const font = `800 ${13 * HI}px "M PLUS Rounded 1c", ${FONT_FAMILY}`;
+    const font = `800 ${look.size * HI}px "M PLUS Rounded 1c", ${FONT_FAMILY}`;
     const probe = document.createElement('canvas').getContext('2d');
     if (!probe) return null;
     probe.font = font;
     const border = 2 * HI;
-    const w = Math.ceil(probe.measureText(word).width) + 20 * HI + border * 2;
-    const h = 13 * HI + 8 * HI + border * 2;
+    const pad = look.pad ?? { x: 10, y: 4 };
+    const w = Math.ceil(probe.measureText(word).width) + pad.x * 2 * HI + border * 2;
+    const h = look.size * HI + pad.y * 2 * HI + border * 2;
     const c = document.createElement('canvas');
     c.width = w;
     c.height = h;
@@ -88,13 +98,13 @@ export function cheerWordPicture(scene: Phaser.Scene, word: string, color: numbe
     const r = h / 2 - border / 2;
     ctx.beginPath();
     ctx.roundRect(border / 2, border / 2, w - border, h - border, r);
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = look.fill;
     ctx.fill();
     ctx.lineWidth = border;
-    ctx.strokeStyle = css(color);
+    ctx.strokeStyle = look.ring;
     ctx.stroke();
     ctx.font = font;
-    ctx.fillStyle = '#16203f';
+    ctx.fillStyle = look.ink;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(word, w / 2, h / 2 + HI);
@@ -104,6 +114,134 @@ export function cheerWordPicture(scene: Phaser.Scene, word: string, color: numbe
     return null;
   }
 }
+
+/**
+ * The mockup's `.stamp`: Jersey 15 at 30 px, 5 x 14 px padding, 10 px corners, a 3 px dark ring. `fill` is the stamp's
+ * colour (`.stamp.y` is yellow with dark letters).
+ */
+export function stampPicture(scene: Phaser.Scene, word: string, fill = '#ffcb05', ink = '#131c36'): string | null {
+  const key = `stamp.${word}.${fill}`;
+  if (scene.textures.exists(key)) return key;
+  try {
+    const font = `400 ${30 * HI}px "Jersey 15", ${FONT_FAMILY}`;
+    const probe = document.createElement('canvas').getContext('2d');
+    if (!probe) return null;
+    probe.font = font;
+    const border = 3 * HI;
+    const w = Math.ceil(probe.measureText(word).width + word.length * 0.05 * 30 * HI) + 28 * HI + border * 2;
+    const h = 30 * HI + 11 * HI + border * 2;
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    ctx.beginPath();
+    ctx.roundRect(border / 2, border / 2, w - border, h - border, 10 * HI);
+    ctx.fillStyle = fill;
+    ctx.fill();
+    ctx.lineWidth = border;
+    ctx.strokeStyle = '#131c36';
+    ctx.stroke();
+    ctx.font = font;
+    ctx.fillStyle = ink;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // The mockup's letter-spacing (.05em) where the browser has it.
+    try {
+      (ctx as unknown as { letterSpacing: string }).letterSpacing = `${1.5 * HI}px`;
+    } catch {
+      /* older browsers draw it without */
+    }
+    ctx.fillText(word, w / 2, h / 2 + HI);
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/** The mockup's four-pointed white star (26 px), drawn once. */
+export function starPicture(scene: Phaser.Scene): string | null {
+  const key = 'cheer.star4';
+  if (scene.textures.exists(key)) return key;
+  try {
+    const z = 26 * HI;
+    const c = document.createElement('canvas');
+    c.width = c.height = z;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    const pts: [number, number][] = [[0.5, 0], [0.6, 0.4], [1, 0.5], [0.6, 0.6], [0.5, 1], [0.4, 0.6], [0, 0.5], [0.4, 0.4]];
+    ctx.beginPath();
+    pts.forEach(([x, y], k) => (k ? ctx.lineTo(x * z, y * z) : ctx.moveTo(x * z, y * z)));
+    ctx.closePath();
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The heal's plus-sign: the mockup's `.dmg` letters (Jersey 15) in green with the dark outline, at `HEAL_PLUS_SIZE`.
+ */
+export function plusPicture(scene: Phaser.Scene, size: number): string | null {
+  const key = `fx.plus.${size}`;
+  if (scene.textures.exists(key)) return key;
+  try {
+    const z = size * HI;
+    const c = document.createElement('canvas');
+    c.width = c.height = Math.ceil(z * 1.2);
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    ctx.font = `400 ${z}px "Jersey 15", ${FONT_FAMILY}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const mx = c.width / 2;
+    const my = c.height / 2;
+    ctx.fillStyle = '#131c36';
+    for (const [ox, oy] of [[3, 3], [-2, -2], [2, -2], [-2, 2]] as const) ctx.fillText('+', mx + ox * HI, my + oy * HI);
+    ctx.fillStyle = '#7dffa0';
+    ctx.fillText('+', mx, my);
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/** The size of `glowPicture` (px across). */
+export const GLOW_SIZE = 256;
+
+/**
+ * A round light, as the mockup's `lgt()`: full at the middle, about half at 35% out, gone at the edge. White, so it
+ * takes a tint (a move's type colour). Drawn once.
+ */
+export function glowPicture(scene: Phaser.Scene): string | null {
+  const key = 'fx.glow';
+  if (scene.textures.exists(key)) return key;
+  try {
+    const z = GLOW_SIZE;
+    const c = document.createElement('canvas');
+    c.width = c.height = z;
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    const g = ctx.createRadialGradient(z / 2, z / 2, 0, z / 2, z / 2, z / 2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.35, 'rgba(255,255,255,0.53)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, z, z);
+    scene.textures.addCanvas(key, c);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+/** Pictures here are drawn at twice their size; this is the scale that shows them at their own. */
+export const PICTURE_SCALE = 1 / HI;
 
 /** Both pictures, placed at their rest spots and shrunk to nothing (the clip grows them). */
 export function cheerParts(scene: Phaser.Scene, face: { x: number; y: number }, faceKey: string, wordKey: string, depth: number): { face: Phaser.GameObjects.Image; word: Phaser.GameObjects.Image } {

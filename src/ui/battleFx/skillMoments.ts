@@ -137,12 +137,12 @@ export class HazardFloor {
     this.gfx = scene.add.graphics().setDepth(depth);
   }
 
-  draw(effects: { player: SideEffects; enemy: SideEffects }, spots: { player: { x: number; y: number }; enemy: { x: number; y: number } }): void {
+  draw(effects: { player: SideEffects; enemy: SideEffects }, spots: { player: { x: number; y: number }; enemy: { x: number; y: number } }, opts: { rocks?: boolean } = {}): void {
     this.gfx.clear();
     for (const side of ['player', 'enemy'] as const) {
       const fx = effects[side];
       const { x, y } = spots[side];
-      if (fx.stealthRock) for (let i = 0; i < 4; i++) this.gfx.fillStyle(0x8a7a5a, 1).fillTriangle(x - 70 + i * 40, y + 62, x - 52 + i * 40, y + 62, x - 61 + i * 40, y + 44);
+      if (fx.stealthRock && opts.rocks !== false) for (let i = 0; i < 4; i++) this.gfx.fillStyle(0x8a7a5a, 1).fillTriangle(x - 70 + i * 40, y + 62, x - 52 + i * 40, y + 62, x - 61 + i * 40, y + 44);
       for (let i = 0; i < fx.spikes; i++) this.gfx.fillStyle(0xc8ccd8, 1).fillTriangle(x - 40 + i * 40, y + 78, x - 24 + i * 40, y + 78, x - 32 + i * 40, y + 58);
       for (let i = 0; i < fx.toxicSpikes; i++) this.gfx.fillStyle(0xa04ad8, 1).fillTriangle(x - 20 + i * 40, y + 92, x - 4 + i * 40, y + 92, x - 12 + i * 40, y + 72);
       if (fx.stickyWeb) {
