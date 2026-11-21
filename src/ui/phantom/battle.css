@@ -325,6 +325,8 @@
   & .ph-ln-list.two .lm em{font-size:14px;padding:4px 8px}
   & .ph-ln-cmp{top:506px;width:640px;padding:10px 24px 12px}
   & .ph-ln-cmp .txt{font-size:17px;line-height:1.22}
+  & .ph-ln-cmp .txt b{color:var(--gold)}
+  & .ph-ln-cmp .txt small{display:block;margin-top:4px;font-size:14px;line-height:1.2;opacity:.8}
   & .ph-ln-cmp.low{top:540px}
   & .ph-ln-cmp.low .txt{font-size:15px}
   & .ph-ln-keep{top:calc(612px + var(--b,0)*44px);cursor:pointer;font-size:24px}

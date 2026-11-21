@@ -41,6 +41,8 @@ export interface DecisionModel {
   /** The result line once the choice is made; it stays until the next input. */
   result: string | null;
   hints: readonly (readonly [string, string])[];
+  /** A new move against the lit known one (Phantom's compare box): names, power and type before and after, and what the old one does. */
+  swap?: { from: string; to: string; power: readonly [string, string]; type: readonly [string, string]; brief: string } | null;
 }
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);

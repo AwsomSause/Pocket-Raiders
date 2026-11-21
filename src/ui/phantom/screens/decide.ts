@@ -29,6 +29,17 @@ const shout = (title: string): string => (/^caught/i.test(title) ? 'GOTCHA!' : t
 const choice = (o: DecisionOption, i: number, on: boolean, n: number): string =>
   `<div class="ch${on ? ' on' : ''}${o.off ? ' off' : ''}" data-key="c${i}" style="--i:${i}"${pick(i)}><kbd>${i + 1}</kbd><b style="font-size:${fit(o.label, on ? 370 : 340, n > 5 ? 18 : 22, 13)}px">${esc(o.label)}</b>${o.small ? `<span>${esc(o.small)}</span>` : ''}</div>`;
 
+/**
+ * A known move's small line as the mock-up's: "NORMAL · PHYSICAL · POWER 40" and its PP apart at the right.
+ * A line that is not a move's ("Free move slot") stays as it is.
+ */
+const moveLine = (o: DecisionOption): string => {
+  const m = o.type ? /^(.+?) · (.+?) · PP (\S+)$/.exec(o.small) : null;
+  if (!m) return `<span class="s">${esc(o.type ? `${o.type.toUpperCase()} · ${o.small}` : o.small)}</span>`;
+  const [, cat, pow, pp] = m as unknown as [string, string, string, string];
+  return `<span class="s">${esc(`${o.type} · ${cat}${/status/i.test(cat) || pow === '—' ? '' : ` · Power ${pow}`}`.toUpperCase())}</span><span class="pp">${esc(pp)}</span>`;
+};
+
 function learn(d: DecisionModel): string {
   const k = d.card!;
   const art = k.art ?? k.file;
@@ -37,16 +48,18 @@ function learn(d: DecisionModel): string {
   const rows = d.options.map((o, i) => ({ o, i })).filter(({ o, i }) => o.type || i < lastTyped || lastTyped < 0);
   const blades = d.options.map((o, i) => ({ o, i })).filter(({ o, i }) => !o.type && i > lastTyped && lastTyped >= 0);
   const n = rows.length, lit = d.options[d.index];
+  const forget = /wants to learn/i.test(k.sub), asks = forget ? 'Forget which one?' : 'Which one?';
+  const sw = d.swap && lit?.type ? d.swap : null;
   const row = ({ o, i }: { o: DecisionOption; i: number }): string =>
-    `<div class="lm pn${i === d.index ? ' lt on' : ''}${o.off ? ' off' : ''}" data-key="m${i}" style="--i:${i};--tc:${tc(o.type)}"${pick(i)}><span class="t">${o.type ? `<img class="px" src="${rxUrl(`packs/story/badge/${o.type.toLowerCase()}.png`)}" alt="">` : ''}</span><b style="font-size:${fit(o.label, n > 6 ? 200 : 380, n > 6 ? 20 : n > 4 ? 24 : 30, 13)}px">${esc(o.label)}</b><span class="s">${esc(o.type ? `${o.type.toUpperCase()} · ${o.small}` : o.small)}</span>${i === d.index ? '<em>Z</em>' : ''}</div>`;
-  const asks = /wants to learn/i.test(k.sub) ? 'Forget which one?' : 'Which one?';
+    `<div class="lm pn${i === d.index ? ' lt on' : ''}${o.off ? ' off' : ''}" data-key="m${i}" style="--i:${i};--tc:${tc(o.type)}"${pick(i)}><span class="t">${o.type ? `<img class="px" src="${rxUrl(`packs/story/badge/${o.type.toLowerCase()}.png`)}" alt="">` : ''}</span><b style="font-size:${fit(o.label, n > 6 ? 200 : 380, n > 6 ? 20 : n > 4 ? 24 : 30, 13)}px">${esc(o.label)}</b>${moveLine(o)}${i === d.index ? `<em>${o.type && forget ? 'FORGET · Z' : 'Z'}</em>` : ''}</div>`;
   return page('learn', '<div class="bgk"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,44% 0,30% 100%,0 100%);inset:0" aria-hidden="true"></div><div class="burst" style="--x:20%;--y:60%" aria-hidden="true"></div>'
     + phHead(d.title, [k.name, k.level].filter(Boolean).join(' · ').toUpperCase(), 'onred')
     + `<div class="ln-mon ph-ln-mon">${art ? figure({ file: art, atlas: true }, 250) : ''}</div>`
     + `<div class="pn lt ln-new tilt" style="--r:-3deg;--tc:${tc(k.types[0])}"><span class="lab">${esc(k.sub)}</span><h3 class="tl1" style="font-size:${fit(k.accent, 320, 40, 22)}px">${esc(k.accent)}</h3>${k.types.length ? `<div class="ph-ln-ty">${k.types.map(ty).join('')}</div>` : ''}${k.lines.length ? `<p class="txt">${k.lines.map(esc).join('<br>')}</p>` : ''}</div>`
     + `<div class="ln-q">${asks}</div>`
     + `<div class="ln-list ph-ln-list${n > 6 ? ' two' : n > 4 ? ' six' : ''}">${rows.map(row).join('')}</div>`
-    + (d.text || d.details.length ? `<div class="pn ln-cmp ph-ln-cmp${n > 4 ? ' low' : ''}">${lit ? `<span class="lab">${esc(lit.label)}</span>` : ''}<p class="txt">${esc([d.text, ...d.details].filter(Boolean).join(' '))}</p></div>` : '')
+    + (sw ? `<div class="pn ln-cmp ph-ln-cmp${n > 4 ? ' low' : ''}"><span class="lab">${esc(sw.from)} → ${esc(sw.to)}</span><p class="txt">Power ${esc(sw.power[0])} → <b>${esc(sw.power[1])}</b> · ${esc(sw.type[0])} → <b>${esc(sw.type[1])}</b>${sw.brief ? `<br><small>${esc(sw.brief)}</small>` : ''}</p></div>`
+      : d.text || d.details.length ? `<div class="pn ln-cmp ph-ln-cmp${n > 4 ? ' low' : ''}">${lit ? `<span class="lab">${esc(lit.label)}</span>` : ''}<p class="txt">${esc([d.text, ...d.details].filter(Boolean).join(' '))}</p></div>` : '')
     + blades.map(({ o, i }, b) => `<div class="blade ln-keep ph-ln-keep${i === d.index ? ' on' : ''}${n > 4 ? ' low' : ''}" data-key="b${i}" style="--r:-2deg;--b:${b}"${pick(i)}>${esc(o.label)}</div>`).join('')
     + phKeys(d.hints) + over(d));
 }
