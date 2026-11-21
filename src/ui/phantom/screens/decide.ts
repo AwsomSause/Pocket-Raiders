@@ -43,7 +43,7 @@ const moveLine = (o: DecisionOption): string => {
 function learn(d: DecisionModel): string {
   const k = d.card!;
   const art = k.art ?? k.file;
-  // The moves it knows are the list; an answer after them ("Do not learn") is the blade under it.
+  // The moves it knows are the list; an answer after them is the blade under it; "Do not learn X" reads "Keep the old moves", as the mock-up (the full answer stays its label).
   const lastTyped = d.options.reduce((at, o, i) => (o.type ? i : at), -1);
   const rows = d.options.map((o, i) => ({ o, i })).filter(({ o, i }) => o.type || i < lastTyped || lastTyped < 0);
   const blades = d.options.map((o, i) => ({ o, i })).filter(({ o, i }) => !o.type && i > lastTyped && lastTyped >= 0);
@@ -60,7 +60,7 @@ function learn(d: DecisionModel): string {
     + `<div class="ln-list ph-ln-list${n > 6 ? ' two' : n > 4 ? ' six' : ''}">${rows.map(row).join('')}</div>`
     + (sw ? `<div class="pn ln-cmp ph-ln-cmp${n > 4 ? ' low' : ''}"><span class="lab">${esc(sw.from)} → ${esc(sw.to)}</span><p class="txt">Power ${esc(sw.power[0])} → <b>${esc(sw.power[1])}</b> · ${esc(sw.type[0])} → <b>${esc(sw.type[1])}</b>${sw.brief ? `<br><small>${esc(sw.brief)}</small>` : ''}</p></div>`
       : d.text || d.details.length ? `<div class="pn ln-cmp ph-ln-cmp${n > 4 ? ' low' : ''}">${lit ? `<span class="lab">${esc(lit.label)}</span>` : ''}<p class="txt">${esc([d.text, ...d.details].filter(Boolean).join(' '))}</p></div>` : '')
-    + blades.map(({ o, i }, b) => `<div class="blade ln-keep ph-ln-keep${i === d.index ? ' on' : ''}${n > 4 ? ' low' : ''}" data-key="b${i}" style="--r:-2deg;--b:${b}"${pick(i)}>${esc(o.label)}</div>`).join('')
+    + blades.map(({ o, i }, b) => `<div class="blade ln-keep ph-ln-keep${i === d.index ? ' on' : ''}${n > 4 ? ' low' : ''}" data-key="b${i}" style="--r:-2deg;--b:${b}"${pick(i)}${/^Do not learn /.test(o.label) ? ` aria-label="${esc(o.label)}">Keep the old moves` : `>${esc(o.label)}`}</div>`).join('')
     + phKeys(d.hints) + over(d));
 }
 

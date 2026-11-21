@@ -159,7 +159,8 @@ describe('the Phantom decision pages', () => {
     expect(count(html, '<em>FORGET · Z</em>')).toBe(1);
     expect(count(html, '<em>')).toBe(1);
     expect(html).toContain('ln-keep');
-    expect(html).toContain('Do not learn Air Slash');
+    // The no-thanks answer reads as the mock-up; the full answer stays its spoken label.
+    expect(html).toContain('aria-label="Do not learn Air Slash">Keep the old moves</div>');
     expect(html).toContain('Scratch would be replaced.');
     // Every answer can be clicked, by its own number.
     expect(count(html, 'data-act="pick"')).toBe(3);
