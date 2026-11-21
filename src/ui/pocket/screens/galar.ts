@@ -84,3 +84,13 @@ export function pkGaShop(d: PkGaShopModel): string {
     + `<div class="vs32">${pkSide32('a', 'On sale', d.heading, n ? rows : [{ art: null, title: 'Sold out', sub: 'Nothing left on the shelf' }], foot)}<i class="vsb32" data-nocheck>₽</i>${pkSide32('b', 'Your side', d.trainer, d.mine)}</div>`
     + `<div class="btn on nx go32" data-key="ga-shop-done"${act('back')}><b>Done shopping</b></div>${keys([['↑↓', 'look'], ['Enter', 'buy'], ['Esc', 'done']])}</div>`);
 }
+
+export interface PkGaLineupSide { tag: string; name: string; rows: readonly PkSideRow[]; foot: string }
+export interface PkGaLineupModel { me: PkGaLineupSide; foe: PkGaLineupSide }
+
+/** Both line-ups on the big screen before a stadium match (mock-up `ga-lineup`): your lead lit, their ace in gold. */
+export function pkGaLineup(d: PkGaLineupModel): string {
+  return page('ga-lineup', 51, `<div class="scr sz20 ar28 a-ga pg28" data-key="ga-lineup"><div class="sz-h" data-m="hdr"><i class="emb28 ga hd" data-nocheck></i><b>Line-ups</b><span>Shown on the big screen before every stadium match.</span></div>`
+    + `<div class="vs32">${pkSide32('a', d.me.tag, d.me.name, d.me.rows, d.me.foot)}<i class="vsb32" data-nocheck>VS</i>${pkSide32('b', d.foe.tag, d.foe.name, d.foe.rows, d.foe.foot)}</div>`
+    + `<div class="btn on nx go32" data-key="ga-walk"${act('next')}><b>Walk out</b></div>${keys([['Enter', 'walk out']])}</div>`);
+}

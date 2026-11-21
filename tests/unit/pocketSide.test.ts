@@ -331,6 +331,19 @@ describe('the Pocket Stadium Shop', () => {
   });
 });
 
+describe('the Pocket Galar line-ups', () => {
+  it('both sides with the lead lit, the ace in gold and who sits out', async () => {
+    const { pkGaLineup } = await import('../../src/ui/pocket/screens/galar');
+    const h = pkGaLineup({ me: { tag: 'Challenger', name: 'Red', rows: [{ art: null, title: 'Charizard', sub: 'Lv 36', tag: 'Lead', cls: 'me' }], foot: 'and Lucario on the bench' }, foe: { tag: 'Gym Leader', name: 'Raihan', rows: [{ art: null, title: 'Duraludon', sub: 'Lv 58 · will Dynamax', tag: '★ Ace', cls: 'boss' }], foot: 'and Torkoal' } });
+    expect(pkPageOf(h)?.id).toBe('ga-lineup');
+    expect(h).toContain('<p class="me">');
+    expect(h).toContain('<p class="boss">');
+    expect(h).toContain('<u>★ Ace</u>');
+    expect(h).toContain('<small>and Lucario on the bench</small>');
+    expect(h).toContain('data-act="next"');
+  });
+});
+
 describe('the Pocket Galar round won', () => {
   it('the round in the title, four cards with the shop lit, the next round and the counts', async () => {
     const { pkGaWon } = await import('../../src/ui/pocket/screens/galar');

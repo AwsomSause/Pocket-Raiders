@@ -151,8 +151,8 @@ import { pkHall } from '../ui/pocket/screens/hall';
 import { pkBadgeGet, pkExp, pkRivalLoss, pkVictory, type PkCatch, type PkExpRow } from '../ui/pocket/screens/after';
 import { battleInfo, battleStatus, moveInfo } from '../core/presentation/battleInfo';
 import { weatherCard } from '../ui/pocket/screens/sky';
-import { pkGaWon, type PkGaWonModel } from '../ui/pocket/screens/galar';
-import { itemArt, monArt } from '../ui/pocket/art';
+import { pkGaLineup, pkGaWon, type PkGaLineupModel, type PkGaWonModel } from '../ui/pocket/screens/galar';
+import { itemArt, monArt, type PkArt } from '../ui/pocket/art';
 import { pkArtOf } from '../ui/pocket/templates';
 import { activeGameEvents, objectiveViews } from '../core/gameEvents';
 import { phGimmick, type GimmickCard } from '../ui/phantom/screens/cutin';
@@ -3167,6 +3167,8 @@ export class BattleScene extends Phaser.Scene {
     }
     // Phantom UI: a fight inside an event says first that it is a side stage (it stands in for the wild card).
     const sideCard = await this.phSideCard();
+    // Pocket look: a Galar stadium match first shows both line-ups on the big screen (mock-up `ga-lineup`).
+    if (this.rx && battle.trainer && pocketOn()) await this.pkLineup();
     const card = this.rx && battle.trainer ? this.rxVersus(kind === 'trainer') : null;
     if (card) await this.playBeat(card, recap);
     if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') {
@@ -3744,6 +3746,39 @@ export class BattleScene extends Phaser.Scene {
     const view = mountRedux(this, { render, acts: { ...acts, next: () => end() }, card: true });
     this.events.once('shutdown', end);
     await this.playBeat({ done, skip: end });
+  }
+
+  /** Pocket look: both line-ups before a Galar Gym or Tournament match (mock-up `ga-lineup`); nothing elsewhere. */
+  private async pkLineup(): Promise<void> {
+    const battle = this.run.battle;
+    const boss = this.boss();
+    const { content } = services().session;
+    const scope = galarScope(content, this.run);
+    if (!battle || !boss || !scope || battle.rivalId) return;
+    const WILL: Record<string, string> = { dynamax: 'will Dynamax', mega: 'will Mega Evolve', tera: 'will Terastallize', zmove: 'has a Z-Move' };
+    const art = (m: PokemonInstance): PkArt | null => { const f = monFile(this, m.speciesId, 'front', !!m.shiny); return f ? monArt(f) : null; };
+    const four = (team: readonly PokemonInstance[], ace: boolean): PokemonInstance[] => (team.length <= 4 ? [...team] : ace ? [...team.slice(0, 3), team[team.length - 1]!] : team.slice(0, 4));
+    const mine = this.run.party.slice(0, 6);
+    const theirs = battle.enemyTeam;
+    const shownMine = four(mine, false), shownTheirs = four(theirs, true);
+    const rest = (team: readonly PokemonInstance[], shown: readonly PokemonInstance[]): string[] => team.filter((m) => !shown.includes(m)).map((m) => this.speciesName(m));
+    const and = (names: string[]): string => (names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0] ?? '');
+    const benchMine = rest(mine, shownMine), benchTheirs = rest(theirs, shownTheirs);
+    const round = scope === 'gym' ? null : currentTournamentRound(content, this.run);
+    const model: PkGaLineupModel = {
+      me: { tag: 'Challenger', name: content.archetypes.get(this.run.archetypeId)?.name ?? 'You', rows: shownMine.map((m, k) => ({ art: art(m), title: this.speciesName(m), sub: `Lv ${m.level}`, tag: k === 0 ? 'Lead' : '', cls: k === 0 ? 'me' : '' })), foot: benchMine.length ? `and ${and(benchMine)} on the bench` : '' },
+      foe: {
+        tag: scope === 'gym' ? 'Gym Leader' : round?.name ?? 'Champion',
+        name: boss.name,
+        rows: shownTheirs.map((m, k) => {
+          const ace = theirs.length > 1 && m === theirs[theirs.length - 1];
+          const will = WILL[battle.transform.bossPlan[m.uid] ?? ''];
+          return { art: art(m), title: this.speciesName(m), sub: `Lv ${m.level}${will ? ` · ${will}` : ''}`, tag: ace ? '★ Ace' : k === 0 ? 'Lead' : '', cls: ace ? 'boss' : '' };
+        }),
+        foot: benchTheirs.length ? `and ${and(benchTheirs)}` : '',
+      },
+    };
+    await this.pkPage((c) => (c.pk ? pkGaLineup(model) : ''));
   }
 
   /** Pocket look: a Champion's Tournament round won (mock-up `ga-won`) in place of the Victory page; null outside the tournament or after the last round. */
