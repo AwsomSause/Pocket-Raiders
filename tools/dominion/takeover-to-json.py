@@ -379,7 +379,7 @@ PLAY = {
 }
 STATUS = {k: dict(status='supported') for k in PLAY}
 for k, note in {
-    'study-the-elite-four': 'Studied Elite Four members fight 2 levels lower; learning their order and tell waits for D17\'s balance pass.',
+    'study-the-elite-four': 'Studied Elite Four members fight 2 levels lower; learning their send-out order and their tell (+15% first move) needs a battle-side preview the battle screen doesn\'t have (listed in docs/status/dominion-d17.md).',
     'elite-bribe': 'Each bribe sways the Champion\'s circle (Shadow\'s "Champion compromised" at 3 sway); the aide\'s vote at Lv 5 isn\'t acted on.',
     'elite-debate': 'A won debate sways the Elite: they field one Pokémon fewer.',
     'elite-rumour': 'The rumour sways one Elite: they field one Pokémon fewer. Stepping down at Lv 5 isn\'t acted on.',

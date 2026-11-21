@@ -12281,7 +12281,7 @@
  "status": {
   "study-the-elite-four": {
    "status": "limited",
-   "note": "Studied Elite Four members fight 2 levels lower; learning their order and tell waits for D17's balance pass."
+   "note": "Studied Elite Four members fight 2 levels lower; learning their send-out order and their tell (+15% first move) needs a battle-side preview the battle screen doesn't have (listed in docs/status/dominion-d17.md)."
   },
   "elite-bribe": {
    "status": "limited",
