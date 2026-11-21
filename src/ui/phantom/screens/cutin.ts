@@ -8,7 +8,7 @@ import { CUT_BEATS, type CutModel } from '../../redux/screens/cut';
 import type { VersusModel } from '../../redux/screens/versus';
 import { type Art, figure } from '../../redux/templates';
 import { rxUrl } from '../../redux/assets';
-import { act, esc, keys, mon, page, ransom, ty } from '../kit';
+import { act, esc, keys, mon, page, pic, ransom, ty } from '../kit';
 import { phHead } from '../templates';
 import { tall } from './event';
 
@@ -151,12 +151,13 @@ export function phGimmick(_ph: PhantomVersion, d: GimmickCard): string {
       + `<div class="zm-tags">${d.type ? ty(d.type) : ''}${d.move?.power ? `<b>Power ${d.move.power}</b>` : ''}${d.item ? `<span class="ac-it">${esc(d.item)}</span>` : ''}</div>`
       + `<div class="pn lt zm-say"><p class="txt">${who ? `${who} and ${name} let` : `${name} lets`} loose ${who ? 'their' : 'its'} full-force <b>Z-Power</b>!</p></div>` + foot);
   }
-  // Mega Evolution and Primal Reversion: the Trainer in the slanted cut, the Pokémon in the spinning ring.
+  // Mega Evolution and Primal Reversion (mock-up `mega`): the field dims, the Pokémon fills the slanted cut in close-up,
+  // the Mega Ring's stone spins top right, and the cut-out words and the line below.
   const [a, b] = GIM_WORDS[d.kind].toUpperCase().split(' ');
   const say = d.kind === 'primal' ? `${name} returns to its <b>PRIMAL</b> form!`
     : d.item ? `${name}'s <b>${esc(d.item.toUpperCase())}</b> is reacting to ${who ? `${who}'s` : 'the'} Mega Ring!` : `${name} is Mega Evolving!`;
-  return page('mega', '<div class="bgk"></div>'
-    + `<div class="cut"><div class="rays" aria-hidden="true"></div><div class="face ph-ct-face">${d.cast ? tall(d.cast, 420, 470) : ''}</div></div><div class="cutedge" aria-hidden="true"></div><div class="cutedge b" aria-hidden="true"></div>`
-    + `<div class="megaring ph-ct-ring"><div class="ring2" aria-hidden="true"></div></div><div class="ph-ct-pk form">${d.mon ? figure(d.mon, 300) : ''}</div>`
-    + `<div class="megat">${ransom(a ?? '', 3)}${ransom(b ?? '', 4)}</div><div class="megasay">${say}</div>` + foot);
+  const ring = d.kind === 'mega' ? `<div class="megaring ph-gm-ring" aria-hidden="true"><div class="ring2">${pic('packs/dbk/mega/ring.png', 3)}</div>${pic('packs/dbk/mega/icon.png', 2.4)}</div>` : '';
+  return page('mega', '<div class="dim ph-gm-dim" aria-hidden="true"></div>'
+    + `<div class="cut"><div class="rays" aria-hidden="true"></div><div class="face ph-gm-close">${d.mon ? figure(d.mon, 860) : ''}</div></div><div class="cutedge" aria-hidden="true"></div><div class="cutedge b" aria-hidden="true"></div>`
+    + ring + `<div class="megat">${ransom(a ?? '', 3)}${ransom(b ?? '', 4)}</div><div class="megasay">${say}</div>` + foot);
 }

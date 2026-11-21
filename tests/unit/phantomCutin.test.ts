@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PHANTOM_VERSIONS } from '../../src/core/presentation/phantom';
 import { pageOf } from '../../src/ui/phantom/kit';
+import { figure } from '../../src/ui/redux/templates';
 import { cutLook, phCut, phGimmick, phVersus, quoted, type GimmickCard } from '../../src/ui/phantom/screens/cutin';
 import type { CutModel } from '../../src/ui/redux/screens/cut';
 import type { VersusModel } from '../../src/ui/redux/screens/versus';
@@ -134,6 +135,14 @@ describe('the Phantom transformation cut-ins', () => {
     const primal = phGimmick(ph, card({ kind: 'primal', name: 'Kyogre' }));
     expect(cutOut(primal)).toEqual(['PRIMAL', 'REVERSION']);
     expect(primal).toContain('Kyogre returns to its <b>PRIMAL</b> form!');
+    // As in the mock-up: the Pokémon in close-up fills the cut (not the Trainer), the field dims, the ring spins top right for a Mega only.
+    const mon = { file: 'charizard-mega-x.png', atlas: true };
+    const pk = phGimmick(ph, card({ mon, cast: { file: 'red.png', atlas: true } }));
+    expect(pk).toContain(`class="face ph-gm-close">${figure(mon, 860)}</div>`);
+    expect(pk).toBe(phGimmick(ph, card({ mon, cast: null })));
+    expect(pk).toContain('ph-gm-dim');
+    expect(pk).toContain('packs/dbk/mega/ring.png');
+    expect(primal).not.toContain('ph-gm-ring');
   });
 
   it('Terastallizing shows the Tera type and spells the word letter by letter', () => {

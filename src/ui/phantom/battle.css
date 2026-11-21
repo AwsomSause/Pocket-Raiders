@@ -241,6 +241,10 @@
   & .ph-ct-face{pointer-events:none}
   & .s-ace .ac-face.ph-ct-face{left:150px;top:118px}
   & .s-mega .cut .face.ph-ct-face{top:150px}
+  /* The Mega card (mock-up `mega`): the battle shows dimmed through it, the Pokémon close-up fills the cut. */
+  & .s-mega .ph-gm-dim{position:absolute;inset:0;background:rgba(8,6,10,.8)}
+  & .s-mega .cut .face.ph-gm-close{left:40px;top:-130px}
+  & .s-mega .ph-gm-ring{z-index:4}
   & .s-mega .megasay{bottom:76px}
   & .s-tera .tr-say,& .s-dmax .dx-say{bottom:76px}
   & .s-zmove .zm-say b,& .s-dmax .dx-say b{white-space:nowrap}
