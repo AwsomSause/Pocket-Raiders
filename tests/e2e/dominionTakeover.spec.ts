@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { open, start, view, waitForScene, watch } from './helpers/newUi';
 
-// DOMINION slice D14 (Takeover): the Takeover page on K (mockup s9 with the four paths and the Hero's file), a Turning
+// DOMINION slice D14 (Takeover): the Takeover page on K (redesign R8: mockup `takeover`, the four paths), a Turning
 // Point, the Holdings list (P) and buying a place, the Moment's battle, and the hijacked broadcast (m13).
 
 async function dayOne(page: Page) {
@@ -66,7 +66,6 @@ test('Takeover: the four paths on K, a Turning Point, Holdings, the Moment, and 
   await expect(s.getByTestId('dom-path-goal')).toContainText('Stage 2');
   await expect(s.getByTestId('dom-takeover-rib')).toContainText('The first path to finish takes Kanto');
   await expect(s.getByTestId('dom-takeover-alerts')).toContainText('EXPOSURE');
-  await expect(s.getByTestId('dom-hero-file')).toBeVisible();
   // The Turning Point waits on top until it is read.
   await expect(s.getByTestId('dom-turning-point')).toContainText('TURNING POINT');
   await shot('s9-takeover-turning-point');

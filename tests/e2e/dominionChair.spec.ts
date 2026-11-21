@@ -86,7 +86,7 @@ test('the Chair: a visitor, the settings, Hand it off, a reload mid-sitting, the
   await expect(s.getByTestId('dom-chair-opts')).toBeVisible();
   await page.keyboard.press('Digit2');
   await expect.poll(async () => (await block(page)).chair.opts.numbers).toBe('exact');
-  await expect(s.getByTestId('dom-chair-opt-numbers').locator('b')).toHaveText('Exact');
+  await expect(s.getByTestId('dom-chair-opt-numbers').locator('b.tag')).toHaveText('Exact');
   await shot('chair-settings');
   await page.keyboard.press('KeyO');
   await expect(s.getByTestId('dom-chair-opts')).toBeHidden();

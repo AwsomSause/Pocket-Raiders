@@ -3,14 +3,17 @@
 // GameSession.dominionStep (saved at every step, so a reload lands on the same visitor).
 // Keys: 1 / 2 answer, 3 (or ◀▶ then Enter) Hand it off, C close the doors, O the Chair settings, Enter next / the Night.
 
-import { pokemonAssetIds, type AssetManifest } from '../../assets/catalog';
 import { chairModel } from '../../core/dominion/chairScreens';
 import { dominionBlock } from '../../core/dominion/session';
 import type { DominionAction } from '../../core/dominion/schema';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
-import { rxFileOf } from '../../ui/redux/assets';
-import { handView, tallyView, visitorView } from '../../ui/redux/screens/dominion/chair';
+import { favoursModel, queueModel } from '../../core/dominion/r8Pages';
+import { monName } from '../../core/dominion/crew';
+import type { R5Pics } from '../../ui/redux/screens/dominion/r50/chairR8';
+import { r5Favours, r5Hand, r5Queue, r5Tally, r5Visitor } from '../../ui/redux/screens/dominion/r50/chairR8';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
+import { chairVoice } from './r8Bridge';
 
 interface Host {
   screenName: string;
@@ -18,6 +21,8 @@ interface Host {
   refresh(): void;
   step(a: DominionAction): boolean;
   cache: { json: { get(k: string): unknown } };
+  /** Redesign R8: the pass-50 chrome's run data and how people are drawn. */
+  r8(): { run: R5Run; pics: R5Pics } | null;
 }
 
 const DIGITS: Record<string, number> = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5, Digit7: 6, Digit8: 7, Digit9: 8 };
@@ -29,6 +34,9 @@ export class ChairController {
   /** The Hand it off list's cursor, or null when the visitor is shown. */
   private hand: number | null = null;
   private opts = false;
+  /** Redesign R8: the waiting room (V) or the favour ledger (F) over the visitor, and the bench's cursor. */
+  private side: 'queue' | 'favours' | null = null;
+  private qAt = 0;
 
   constructor(private readonly host: Host) {}
 
@@ -48,17 +56,30 @@ export class ChairController {
     const b = this.block();
     if (!b) return '';
     const m = this.model();
-    const mon = (s: string): string | null => this.monFile(s);
-    if (m.kind === 'visitor') return visitorView(m, mon, b.teamName?.[0]?.toUpperCase() ?? 'N', notice, this.opts);
-    if (m.kind === 'hand') return handView(m, mon, notice);
-    if (m.kind === 'tally') return tallyView(m, mon);
+    const r = this.host.r8();
+    if (!r) return '';
+    const { run, pics } = r;
+    const who = chairVoice(b);
+    if (m.kind !== 'visitor' || m.result) this.side = null;
+    if (this.side === 'favours') return r5Favours(favoursModel(b), { pics, who }, run);
+    if (this.side === 'queue') {
+      const q = queueModel(b);
+      if (q) return r5Queue(q, { at: this.qAt, pics, who, team: b.teamName ?? 'Your crew' }, run);
+    }
+    if (m.kind === 'visitor') {
+      const v = m.lead ? { ...m, lead: { ...m.lead, react: m.lead.react.replace('{mon}', monName(m.lead.species)) } } : m;
+      return r5Visitor(v, { pics, team: b.teamName ?? 'Your crew', notice, opts: this.opts, queue: queueModel(b)?.left ?? 0 }, run);
+    }
+    if (m.kind === 'hand') return r5Hand(m, { pics, notice }, run);
+    if (m.kind === 'tally') return r5Tally(m, { who }, run);
     return '';
   }
 
-  private monFile(species: string): string | null {
-    const manifest = this.host.cache.json.get('manifest') as AssetManifest | undefined;
-    const sp = services().session.content.species.get(species);
-    return sp ? rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
+  /** Redesign R8: V the waiting room, F the favour ledger (from the bench), Esc or Enter back to the visitor. */
+  private openSide(s: 'queue' | 'favours' | null): void {
+    this.side = s;
+    if (s === 'queue') this.qAt = 0;
+    this.host.refresh();
   }
 
   private go(a: DominionAction): void {
@@ -111,6 +132,11 @@ export class ChairController {
       chairOpts: () => { this.opts = !this.opts; this.host.refresh(); },
       chairOpt: (k) => this.go({ t: 'chairOpt', key: k as (typeof OPT_KEYS)[number] }),
       toNight: () => this.next(),
+      r8Queue: () => this.openSide('queue'),
+      r8QueuePick: (i) => { this.qAt = Number(i); this.host.refresh(); },
+      r8QueueClose: () => this.openSide(null),
+      r8Favours: () => this.openSide('favours'),
+      r8FavoursBack: () => this.openSide('queue'),
     };
   }
   overs(): Record<string, (arg: string) => void> {
@@ -124,6 +150,11 @@ export class ChairController {
   raw(code: string): boolean {
     if (!this.owns()) return false;
     const m = this.model();
+    if (this.side) {
+      if (code === 'KeyF' && this.side === 'queue') this.openSide('favours');
+      else if (code === 'KeyV' || (code === 'KeyF' && this.side === 'favours')) this.openSide(this.side === 'favours' ? 'queue' : null);
+      return true;
+    }
     if (this.opts) {
       if (code in DIGITS && DIGITS[code]! < 3) this.go({ t: 'chairOpt', key: OPT_KEYS[DIGITS[code]!]! });
       else if (code === 'KeyO') { this.opts = false; this.host.refresh(); }
@@ -135,6 +166,7 @@ export class ChairController {
     }
     if (m.kind === 'visitor') {
       if (code === 'KeyO') { this.opts = true; this.host.refresh(); }
+      else if (code === 'KeyV') this.openSide('queue');
       else if (code === 'KeyC' && m.canClose) this.go({ t: 'closeDoors' });
       else if (code in DIGITS && DIGITS[code]! < 3) this.answer(DIGITS[code]!);
     }
@@ -144,6 +176,16 @@ export class ChairController {
   /** Arrow keys, Enter and Esc. Returns true when handled. */
   key(a: InputAction): boolean {
     if (!this.owns()) return false;
+    if (this.side === 'favours') {
+      if (a === 'back' || a === 'confirm') this.side = 'queue';
+      return true;
+    }
+    if (this.side === 'queue') {
+      const n = queueModel(this.block()!)?.left ?? 0;
+      if ((a === 'left' || a === 'right') && n) this.qAt = (this.qAt + (a === 'left' ? n - 1 : 1)) % n;
+      else if (a === 'confirm' || a === 'back') this.side = null;
+      return true;
+    }
     if (this.opts) {
       if (a === 'back') this.opts = false;
       return true;
