@@ -9,7 +9,7 @@ import type { TeamDraft } from '../../../../core/dominion/schema';
 import { act, esc } from '../../kit';
 import { rxUrl } from '../../assets';
 import { warehouseUrl } from './paint';
-import { emblem, stage } from './views';
+import { armbandIcon, emblem, stage } from './views';
 import { memberPic } from './teamPic';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
@@ -35,7 +35,7 @@ function back(morning = false): string {
 export function armbandPreview(c: TeamColours, caption: string): string {
   return `<div class="col" style="align-items:center;gap:3px;position:relative" data-testid="dom-armband">
     <div class="rays turn" style="left:-30px;top:-46px;width:180px;height:140px;--rc:color-mix(in srgb,${c.primary} 45%,transparent)"></div>
-    <div class="armband" style="position:relative;background:linear-gradient(180deg,color-mix(in srgb,${c.primary} 80%,#fff),${c.primary} 50%,color-mix(in srgb,${c.primary} 70%,#000));color:${c.secondary};box-shadow:0 0 0 3px var(--ink),inset 0 0 0 3px ${c.secondary},inset 0 -6px 0 rgba(0,0,0,.2),0 0 22px color-mix(in srgb,${c.primary} 75%,transparent)"><span>${esc(c.initial)}</span></div>
+    ${armbandIcon(c, 3, 'margin:6px 0') ?? `    <div class="armband" style="position:relative;background:linear-gradient(180deg,color-mix(in srgb,${c.primary} 80%,#fff),${c.primary} 50%,color-mix(in srgb,${c.primary} 70%,#000));color:${c.secondary};box-shadow:0 0 0 3px var(--ink),inset 0 0 0 3px ${c.secondary},inset 0 -6px 0 rgba(0,0,0,.2),0 0 22px color-mix(in srgb,${c.primary} 75%,transparent)"><span>${esc(c.initial)}</span></div>`}
     <span class="xs mu">${esc(caption)}</span></div>`;
 }
 

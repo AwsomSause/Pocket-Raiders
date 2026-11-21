@@ -6,11 +6,37 @@
 import { DOMINION_DATA } from '../../../../core/dominion/data';
 import type { TeamColours } from '../../../../core/dominion/founding';
 import { paintTeam } from '../../../../core/dominion/teamLook';
+import { ARMBAND_CELL, ARMBAND_ROW, armbandColumn, armbandFile } from '../../../../core/dominion/armbandSprite';
 import { rxAtlas, rxRedraw, rxUrl } from '../../assets';
 import { tall } from '../../kit';
 
 const built = new Map<string, string | null>();
 const busy = new Set<string>();
+const sheets = new Map<string, Promise<HTMLImageElement>>();
+
+/** Kice's PixelLab armband for the team, shrunk onto the sprite's checked arm anchor (over the painted band, which stays
+ *  underneath so a failed load still shows a band). The letter is too small to read at this size; the chips show it. */
+async function wearIcon(g: CanvasRenderingContext2D, a: NonNullable<(typeof DOMINION_DATA.armbands)[string]['anchor']>, team: TeamColours): Promise<void> {
+  const f = armbandFile(team.initial);
+  if (!f) return;
+  let sh = sheets.get(f);
+  if (!sh) { sh = load(rxUrl(f)); sheets.set(f, sh); }
+  const im = await sh;
+  const col = armbandColumn(team.initial, team.primary);
+  const cell = document.createElement('canvas');
+  cell.width = ARMBAND_CELL; cell.height = ARMBAND_CELL;
+  const c = cell.getContext('2d')!;
+  c.drawImage(im, col * ARMBAND_CELL, ARMBAND_ROW * ARMBAND_CELL, ARMBAND_CELL, ARMBAND_CELL, 0, 0, ARMBAND_CELL, ARMBAND_CELL);
+  const d = c.getImageData(0, 0, ARMBAND_CELL, ARMBAND_CELL).data;
+  let x0 = ARMBAND_CELL, y0 = ARMBAND_CELL, x1 = -1, y1 = -1;
+  for (let y = 0; y < ARMBAND_CELL; y++) for (let x = 0; x < ARMBAND_CELL; x++) if (d[(y * ARMBAND_CELL + x) * 4 + 3]! > 0) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+  if (x1 < 0) return;
+  const w = Math.max(...a.rows.map(([l, r]) => r - l + 1)) + 2, h = a.rows.length + 1;
+  const mid = a.rows.reduce((t, [l, r]) => t + (l + r) / 2, 0) / a.rows.length + 0.5;
+  g.imageSmoothingEnabled = true;
+  g.imageSmoothingQuality = 'high';
+  g.drawImage(cell, x0, y0, x1 - x0 + 1, y1 - y0 + 1, Math.round(mid - w / 2), a.y - 0.5, w, h);
+}
 
 function load(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -49,6 +75,7 @@ export function teamSrc(look: string, team: TeamColours | null): string | null {
       const d = g.getImageData(0, 0, e.w, e.h);
       paintTeam(d.data, e.w, e.h, e, team, DOMINION_DATA.founding.band);
       g.putImageData(d, 0, 0);
+      if (team && e.anchor) { try { await wearIcon(g, e.anchor, team); } catch { /* the painted band stays */ } }
       built.set(k, cv.toDataURL());
     } catch {
       built.set(k, null);
