@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { crewOf, crewStep, odds, taskById, withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA } from '../../src/core/dominion/data';
 import { card } from '../../src/core/dominion/field';
+import { answerCard, cardById, cardStatus, chairOf } from '../../src/core/dominion/chair';
 import { withReserve } from '../../src/core/dominion/reserve';
 import { takeoverOf } from '../../src/core/dominion/takeover';
 import { pyramidModel, pyramidOrder } from '../../src/core/dominion/reserveScreens';
@@ -333,6 +334,38 @@ describe('D8 Groups, tasks and the Card', () => {
     const o = groupOrder(g.block, g.block.squads!.groups[0]!.id, 'train');
     expect(o.ok).toBe(true);
     expect(o.block.squads!.list.every((s) => s.order === 'train')).toBe(true);
+  });
+  it('court card 8 "10% cut": the Admin takes 10% of each paying job of the squads in their Group', () => {
+    expect(cardStatus(cardById(8)!)).toBe('supported');
+    expect(cardStatus(cardById(9)!)).not.toBe('disabled');
+    let b = formed(ready(), { incentive: 'glory' });
+    b = formed(b, { codeName: 'Dock Rats', leader: 'cpl', members: ['g3'], incentive: 'glory', mark: 1 });
+    b = saveGroup(b, { id: null, codeName: 'Harbour Front', leader: 'adm', squads: ['sq1', 'sq2'], incentive: 'glory' }).block;
+    const ch = chairOf(b);
+    ch.open = true;
+    ch.docket = [{ card: 8, member: 'adm', second: null }];
+    ch.at = 0;
+    const out = answerCard(b, 0, 'cut8');
+    expect(out.ok).toBe(true);
+    expect(out.block.squads!.cuts).toEqual(['adm']);
+    expect(out.block.chair!.result!.some((l) => l.includes('ADM now takes 10%'))).toBe(true);
+    b = setOrder(out.block, 'sq1', 'shake-down').block;
+    b.members.find((m) => m.id === 'sgt')!.stats.nerve = 10;
+    b.phase = 'night';
+    let seen = false;
+    for (let i = 0; i < 12 && !seen; i++) {
+      const x = structuredClone(b);
+      const before = x.funds;
+      crewStep(x, `cut8-${i}`);
+      const line = x.crew!.alerts.find((a) => a.text.includes("took their cut of Night Shift's job"));
+      if (!line) continue;
+      const cut = Number(line.text.match(/₽(\d+)/)![1]);
+      // What the squad brought in, before the cut, is what's left plus the cut.
+      expect(cut).toBe(Math.round((x.funds - before + cut) * 0.1));
+      seen = true;
+    }
+    expect(seen).toBe(true);
+    expect(DominionBlockSchema.parse(b).squads!.cuts).toEqual(['adm']);
   });
   it('Match-Make pairs two members; Run a Crew lifts five', () => {
     const b = ready();

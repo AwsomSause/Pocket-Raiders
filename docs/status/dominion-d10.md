@@ -39,7 +39,7 @@ No version bump: `block.growth` is optional and filled the same way every time (
 - Browser `tests/e2e/dominionGrowth.spec.ts`: page to "Gyms and Heroes", the Card's five ways with Left/Right, Buy refused, Break in two battles with the map between, three window sizes, reload keeps the Gym.
 
 ## Follow-up 1: the Chair's cards (2026-11-20)
-- The 18 court cards that waited on D10, D5 and "quiz" now play: 29, 39, 45, 46, 65, 66, 78, 98, 100, 101, 130 (D10), 32, 37, 51, 53, 79, 131 (D5, handed over) and 99 (Blaine's quiz). The court is at 148 of 150 live after D15 and D16 merged; 2 wait (D8).
+- The 18 court cards that waited on D10, D5 and "quiz" now play: 29, 39, 45, 46, 65, 66, 78, 98, 100, 101, 130 (D10), 32, 37, 51, 53, 79, 131 (D5, handed over) and 99 (Blaine's quiz). The court is at 148 of 150 live after D15 and D16 merged; with the D8 follow-up (cards 8 and 9) all 150 play.
 - Rules in `src/core/dominion/growthCourt.ts` (each answer is a `hook:` in `tools/dominion/court-to-json.py`; numbers in growth.json `court`):
   - the cab driver (+10 on every Card while his deal stands), Koga (+10 on Steal and Thieve for 14 days)
   - the dockworkers (paid: routes pay 15% less, Smuggle's Heat halved; refused, 40%: a 3-day strike, no Smuggle, no route pay)

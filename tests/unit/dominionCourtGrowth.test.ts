@@ -56,14 +56,14 @@ const answer = (id: number, pick: 0 | 1, prep: (b: DominionBlock, r: RunState) =
 const said = (r: RunState): string => JSON.stringify([blk(r).chair, blk(r).report]);
 
 describe('DOMINION D10 follow-up: the Chair cards that waited on Growth', () => {
-  it('all 18 play now: no wait, no "waits for a later slice" note; 148 of 150 cards live (D15 and D16 opened 6 more)', () => {
+  it('all 18 play now: no wait, no "waits for a later slice" note; all 150 cards live (D15 and D16 opened 6 more, the D8 follow-up cards 8 and 9)', () => {
     for (const id of IDS) {
       const c = cardById(id)!;
       expect(c.wait, `card ${id}`).toBeUndefined();
       expect(cardStatus(c), `card ${id}`).not.toBe('disabled');
       expect([...c.a.fx, ...c.b.fx].some((e) => e.k === 'note'), `card ${id}`).toBe(false);
     }
-    expect(DOMINION_DATA.court.filter((c) => !c.wait)).toHaveLength(148);
+    expect(DOMINION_DATA.court.filter((c) => !c.wait)).toHaveLength(150);
     // The data it names exists: the quiz TM, the gift buildings, the raid crate, the gambler's trainer class.
     expect(content.items.has(CT.quiz.prize)).toBe(true);
     for (const id of Object.values(CT.gifts)) expect(DOMINION_DATA.buildings.some((x) => x.id === id), id).toBe(true);

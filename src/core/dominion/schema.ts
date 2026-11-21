@@ -901,7 +901,7 @@ export const OWED_KEYS = ['ten', 'threat', 'goal', 'stab', 'raid', 'shadow', 'wi
 /** D11: what a Chair answer does to the Hero (hero.ts): the route tomorrow, the Hero at the door (the Letter with the HQ's
  * Defense on your side), a town left alone, the Legendaries later, a Legendary hunt, a town lost. */
 export const HERO_COURT = ['intel', 'battle', 'letter', 'spare', 'late', 'hunt', 'lose'] as const;
-/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early, D15 the held-region answers (regions.ts), D16 close-deals + shadow-buy (partners.ts). */
+/** Chair answers whose rule lives in another slice's file (registered with setChairHook): D9 insure + double-agent, D13 debate-early, D15 the held-region answers (regions.ts), D16 close-deals + shadow-buy (partners.ts), D8 squad-cut (squads.ts). */
 export const CHAIR_HOOKS = [
   'insure', 'double-agent', 'debate-early',
   // D10 (growth.ts, the court-card follow-up): the docks, the fence, the law, a joint heist, Koga, Gyms, the council, gifts and the HQ.
@@ -909,6 +909,8 @@ export const CHAIR_HOOKS = [
   'council', 'gift-shop', 'gift-cafe', 'gift-house', 'accountant', 'machine', 'architect', 'weak-spot', 'quiz',
   // D15 (regions.ts) and D16 (partners.ts).
   'magma-cool', 'aqua-cool', 'held-two', 'tribute-cut', 'smuggle-line', 'uprising-cut', 'uprising-up', 'close-deals', 'shadow-buy',
+  // D8 (squads.ts): the Admin's cut.
+  'squad-cut',
 ] as const;
 export type ChairHook = (typeof CHAIR_HOOKS)[number];
 export const LEANS = ['money', 'regard', 'dread', 'heat', 'self'] as const;
@@ -2148,6 +2150,8 @@ export const SquadsStateSchema = z.object({
   pairs: z.array(z.tuple([S, S])),
   /** Members who were on the crew at the last look (to spot new ones: Welcome Mat, Talkers). */
   seen: z.array(S),
+  /** Members the Boss granted a cut of their squad's take at the Chair (court card 8): 10% off each paying squad job they're on. Optional (added after D8). */
+  cuts: z.array(S).optional(),
 }).strict();
 export type SquadsState = z.infer<typeof SquadsStateSchema>;
 
