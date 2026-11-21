@@ -70,5 +70,71 @@
   "q3": "Rotom's lessons get their own overlay page that dims everything but the part being taught.",
   "q4": "Effects (pass 4) has a 'Calm' switch that stops all of this; every animation also stops under reduced motion.",
   "q5": "Light rays behind a Mega are straight from the games; the battle transition shake and VS speed lines feel like a Gym Leader intro."
+ },
+ "i2": {
+  "name": "Comic Caper",
+  "big": "Interval 1 is thrown away. Dominion becomes a Saturday-morning villain comic: thick ink borders, halftone dots, slanted panels, yellow caption boxes, speech balloons and sound-effect lettering. Each page is a comic page of two to four panels."
+ },
+ "6": {
+  "name": "Issue #18",
+  "big": "Every page redrawn as a comic page. The top bar is the issue masthead with a price tag for your money and a striped Heat gauge. Talks are two slanted panels and a balloon; results are a white burst with KA-CHING! or BUSTED!",
+  "pages": [],
+  "q1": "Far louder: sunburst backgrounds, sound effects that boom in, buttons that jig like stickers, every panel slaps down at an angle.",
+  "q2": "Pass 5 was a clean, calm menu. This pass changes everything: colour, type, layout and motion all come from comics, and every page reads as a story beat.",
+  "q3": "Not yet; the comic look is being set across the same 76 pages first.",
+  "q4": "The Boss Menu is the comic's cover page: the Boss in his own panel with a balloon, the choices in a tall panel. Settings tabs are skewed comic tabs.",
+  "q5": "Yes: it is how Team Rocket feels in the anime, a cartoon villain gang. The battle, PC box and text box keep their Pokémon shape inside the comic frame."
+ },
+ "7": {
+  "name": "Chapters",
+  "big": "Each day now opens with a chapter cover (title, the job, the Hero lurking in shadow). Heat gets a Wanted poster page that says what each level brings. Crew banter plays as a three-panel strip.",
+  "pages": [
+   "Chapter cover",
+   "Wanted poster",
+   "Crew banter strip"
+  ],
+  "q1": "The chapter cover spins sun rays behind a giant title; the Hero's silhouette fades in last as a cliffhanger.",
+  "q2": "Pass 6 drew the same pages in comic style. Pass 7 uses the comic form to tell the day as a story: chapter, poster, strip.",
+  "q3": "Yes: three pages that used to be lines of text (the new day, the Heat number, Rotom's chatter).",
+  "q4": "The Wanted poster's button 'Lie low!' is the same action as the Boss Menu's Heat tip, so both lead to the morning.",
+  "q5": "The Wanted poster is pure Team Rocket; chapter covers feel like the anime's episode title cards."
+ },
+ "8": {
+  "name": "Reading order",
+  "big": "Pages now play in reading order: panels land one after another, speech balloons write themselves in, sound effects wobble. Events split into three pages (the text, then the choice, then the reward), and Continue opens with a 'Previously on' recap.",
+  "pages": [
+   "Previously on…",
+   "Event choice"
+  ],
+  "q1": "Every page now has a little sequence instead of one flash, so the eye is led panel to panel like a comic.",
+  "q2": "Pass 7 still dropped every panel at once. Now order matters, and long event text has room because the choices moved to their own page.",
+  "q3": "Yes: the event choice is its own page (the text stays until you press a key, then the choices), and the recap is a page on Continue.",
+  "q4": "The recap can be skipped with Esc; Settings › Effects › Text speed sets how fast balloons write in.",
+  "q5": "Event text works like a Pokémon NPC talk: text first, then a choice box, reward only after the text is closed."
+ },
+ "9": {
+  "name": "Splash pages",
+  "big": "The biggest moments drop their panels and take the whole page, like a comic splash: battle intros, the Boss's order, aces, Mega, Dynamax, Tera, Z-Power, the Betrayal and a new Rocket raid on your HQ. Giant italic words (VS!, MEGA!, Z-POWER!) slam in over spinning speed lines.",
+  "pages": [
+   "Rocket raid"
+  ],
+  "q1": "The splash pages are the loudest yet: full-page speed lines, a black ink slash between the two sides, the Pokémon growing in with a flash of light.",
+  "q2": "Pass 8 put big moments in the same two panels as a chat. Now quiet talks and big moments look different, so the player feels the difference.",
+  "q3": "The Rocket raid on the HQ is now a page with three choices (defend, run with the Vault, pay off) instead of a morning line.",
+  "q4": "Settings › Effects › Screen shake and Flashes control the splash moments only.",
+  "q5": "Gym Leader intros and Mega Evolution in the games use this exact beat: two sides, a slash, a shout. Only the Pokémon and background move; no move animation changes."
+ },
+ "10": {
+  "name": "Extras",
+  "big": "The comic's back pages become real menus: a Mailbag of letters from visitors and rivals (Favours and Grudges you can call in) and a Cover gallery of your past runs. Settings gets a live preview panel showing what each choice looks like. The Boss Menu now has 11 choices, each a page.",
+  "pages": [
+   "The mailbag",
+   "Cover gallery"
+  ],
+  "q1": "Settings shows a moving MEGA! preview, so 'Full show' versus 'Calm' is seen, not guessed.",
+  "q2": "Pass 9 made the moments loud; pass 10 makes the quiet parts (letters, past runs, settings) worth opening too.",
+  "q3": "Two new pages. Favours and Grudges used to be hidden numbers; now they arrive as letters you can act on.",
+  "q4": "The Boss Menu lists everything (HQ, Crew, Pokémon, Map, Ledger, Mailbag, Rotom, Covers, Lessons, Settings, Save), each a single press away; nothing opens a menu inside a menu.",
+  "q5": "The mailbag is the PC's Mail box; the cover gallery is the Hall of Fame for villains."
  }
 }
