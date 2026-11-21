@@ -87,6 +87,8 @@ export interface BattleModel {
   pkCatch?: PkCatch | null;
   /** Pocket look: a pseudo-stage's band while its battle opens (mock-up `ev-stage`). */
   pkBand?: { em: string; b: string; span: string } | null;
+  /** Pocket look: a boss battle's panel (mock-up `boss-battle`): its boss power, the healing items it has left, the badge at stake. */
+  pkBoss?: { name: string; tag: string; power: { kind: string; ready: boolean } | null; heals: readonly [number, number]; badge: string | null } | null;
   turn?: number;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;

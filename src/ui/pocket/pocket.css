@@ -661,3 +661,9 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-bt-page .lg-sum dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:4px 8px;font-size:14px}
 .pkx .pks .gx-bt-page .lg-sum dd{margin:0;font-weight:800}
 .pkx .pks .gx-bt-keys{z-index:5}
+/* Legendary cut-in: the mock-up's shine spiral, drawn as soft turning rays behind the Pokémon. */
+.pkx .pks .cleg .gx-spiral{position:absolute;left:330px;top:-80px;width:700px;height:700px;z-index:1;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(214,196,255,.38) 0 6deg,transparent 6deg 22deg);-webkit-mask:radial-gradient(circle,#000 0 20%,transparent 68%);mask:radial-gradient(circle,#000 0 20%,transparent 68%);animation:pk-spin 16s linear infinite}
+/* Boss battle panel: under the stage strip (the mock-up has no strip), heal dots in one row. */
+.pkx .pks .bb18 .boss18{top:132px}
+.pkx .pks .boss18 .hl{display:flex;flex-direction:row;align-items:center}
+.pkx .pks .boss18 .hl u{display:block;flex:none}

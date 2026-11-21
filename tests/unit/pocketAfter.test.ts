@@ -4,6 +4,7 @@ import { pkBadgeGet, pkCatchParts, pkEvolve, pkExp, pkLearn, pkLevel, pkRivalLos
 import { pkBattle } from '../../src/ui/pocket/screens/battle';
 import type { BattleModel } from '../../src/ui/redux/screens/battle';
 import { versusView, type VersusModel } from '../../src/ui/redux/screens/versus';
+import { cutView, type CutModel } from '../../src/ui/redux/screens/cut';
 
 // The Pocket look's pages after a battle (mock-ups `victory`, `exp`, `levelup`, `movelearn`, `capture`).
 
@@ -166,5 +167,43 @@ describe('the Pocket badge and rival-loss pages', () => {
     expect(html).toContain('<p class="ok"><i>✓</i>');
     expect(html).toContain('<p><i>!</i>');
     expect(html).toContain('Carry on');
+  });
+});
+
+describe('the Pocket Legendary and Ultra Beast cut-ins', () => {
+  const base: CutModel = { name: 'Mewtwo', role: 'Legendary Pokémon', line: '', cast: null, mon: null, backdrop: null, beat: 0, kind: 'aceEntrance' };
+  it('a wild Legendary: where, name, type and facts, the line and Next; no wormhole', () => {
+    const h = cutView({ pk: true } as never, { ...base, pkCut: { page: 'legend', where: 'Legendary Pokémon · Cerulean Cave', type: 'psychic', chips: ['Type: **Psychic**', 'Level **70**', 'It can be **caught**'], say: 'It goes silent. **Mewtwo** is watching you.', backdrop: null } });
+    expect(pkPageOf(h)?.id).toBe('legend');
+    expect(h).toContain('cut cleg');
+    expect(h).toContain('<b>Psychic</b>');
+    expect(h).toContain('It can be <b>caught</b>');
+    expect(h).toContain('<b>Mewtwo</b> is watching you.');
+    expect(h).toContain('gx-spiral');
+    expect(h).not.toContain('hole22');
+  });
+  it('an Ultra Beast: the wormhole, its rule, the Beast Ball and the setting; without pkCut the ace card stays', () => {
+    const h = cutView({ pk: true } as never, { ...base, name: 'Nihilego', pkCut: { page: 'ub', where: 'Ultra Deep Sea · Ultra Beast', type: 'rock', chips: ['Type: **Rock** and **Poison**', '**Host**: lead is possessed', 'ball:Only a **Beast Ball** catches it', 'Ultra Beasts are on'], say: 'The sky tears open.', backdrop: 'arenas/raid_ultra_bg.png' } });
+    expect(pkPageOf(h)?.id).toBe('ub');
+    expect(h).toContain('cut cub');
+    expect(h).toContain('hole22');
+    expect(h).toContain('raid_ultra_bg.png');
+    expect(h).toContain('Only a <b>Beast Ball</b> catches it');
+    expect(pkPageOf(cutView({ pk: true } as never, base))?.id).toBe('ace');
+  });
+});
+
+describe('the Pocket boss battle panel', () => {
+  it('a boss battle is its own page with the gold tag, power, heals left and badge', () => {
+    const base = { header: '', foes: [], mine: [], text: '', tabs: null, menu: null } as unknown as BattleModel;
+    const h = pkBattle({ ...base, pkBoss: { name: 'Leader Misty', tag: 'Gym Battle', power: { kind: 'dynamax', ready: true }, heals: [2, 4], badge: 'water' } });
+    expect(pkPageOf(h)?.id).toBe('boss-battle');
+    expect(h).toContain('bb18');
+    expect(h).toContain('Leader Misty');
+    expect(h).toContain('Ready');
+    expect(h).toContain('2 of 4');
+    expect((h.match(/<u class="on">/g) ?? []).length).toBe(2);
+    expect(h).toContain('Water');
+    expect(pkPageOf(pkBattle(base))?.id).toBe('battle');
   });
 });

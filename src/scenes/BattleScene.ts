@@ -18,6 +18,9 @@ import { FINALE_ASK, chunkLines } from '../core/sky/text';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { isEnemyAce } from '../core/battle/ace';
+import { ULTRA_BEASTS, type UltraBeast } from '../core/ultra/beasts';
+import { ultraOn } from '../core/ultra/run';
+import type { PkCutIn } from '../ui/pocket/screens/cards';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -1996,6 +1999,7 @@ export class BattleScene extends Phaser.Scene {
       pkMove: this.infoPanel ? this.rxPkMove : null,
       pkCatch: this.rxPkCatch,
       pkBand: !menu && (this.run.battle?.turn ?? 0) <= 1 ? this.rxPkBand : null,
+      pkBoss: this.pkBossPanel(),
       turn: this.run.battle?.turn ?? 0,
       panelAt: this.rxPanelAt,
       tip,
@@ -3248,6 +3252,23 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
+  /** Pocket look: the Legendary or Ultra Beast cut-in's facts (mock-ups `legend`, `ub`); only what is true of this fight. */
+  private pkCutIn(foe: PokemonInstance, beast: UltraBeast | undefined, label: string): PkCutIn {
+    const battle = this.run.battle!;
+    const types = services().session.content.species.get(foe.speciesId)?.types ?? [];
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    const typeChip = `Type: ${types.map((t) => `**${cap(t)}**`).join(' and ')}`;
+    const name = this.speciesName(foe);
+    if (beast) {
+      return { page: 'ub', where: `${beast.world} · Ultra Beast`, type: types[0] ?? 'psychic', backdrop: 'arenas/raid_ultra_bg.png', say: 'The sky tears open. Something drifts out that is not from this world.',
+        chips: [typeChip, `**${beast.ruleName}**: ${beast.ruleText}`, ...(nuzlockeCatchProblem(battle) ? [] : ['ball:Only a **Beast Ball** catches it']), 'Ultra Beasts are on. Settings › Gameplay can turn them off'] };
+    }
+    const place = this.header.text.split('\n')[0]!.split(/\s+·\s+/)[1] ?? '';
+    const backdrop = this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null;
+    return { page: 'legend', where: place ? `${label} · ${place}` : label, type: types[0] ?? 'psychic', backdrop, say: `It goes silent. **${name}** is watching you.`,
+      chips: [typeChip, `Level **${foe.level}**`, ...(nuzlockeCatchProblem(battle) ? [] : ['It can be **caught**'])] };
+  }
+
   /** True when the trainer just beaten is the Evil Team's leader (the Betrayal scene follows). */
   private evilLeaderBeaten(name: string | undefined): boolean {
     const team = evilTeam(services().session.content, this.run);
@@ -3297,10 +3318,13 @@ export class BattleScene extends Phaser.Scene {
       const foe = battle.enemyTeam[0];
       const tags = foe ? content.species.get(foe.speciesId)?.tags ?? [] : [];
       const rank = tags.includes('mythical') ? 'Mythical' : tags.includes('legendary') ? 'Legendary' : null;
-      if (this.rx && foe && rank) {
+      // Pocket look: an Ultra Beast from a Tear has its own cut-in (mock-up `ub`), even one not tagged Legendary.
+      const beast = foe && ultraOn(this.run) ? ULTRA_BEASTS.find((b) => b.speciesId === foe.speciesId) : undefined;
+      if (this.rx && foe && (rank || (beast && pocketOn()))) {
         const legend = this.run.expedition && battle.expedition ? content.expeditions.expeditions.find((e) => e.id === this.run.expedition!.id)?.legendary : undefined;
         const epithet = legend && legend.species === foe.speciesId ? legend.epithet : '';
-        await this.bigMoment('aceEntrance', `legend.${foe.speciesId}`, `${rank} Pokémon`, this.speciesName(foe), true, { cast: this.rxMe(), role: epithet || `${rank} Pokémon`, line: `A ${rank} Pokémon stands before you.` });
+        const label = beast ? 'Ultra Beast' : `${rank} Pokémon`;
+        await this.bigMoment('aceEntrance', `legend.${foe.speciesId}`, label, this.speciesName(foe), true, { cast: this.rxMe(), role: epithet || label, line: `A ${rank} Pokémon stands before you.`, pkCut: pocketOn() ? this.pkCutIn(foe, beast, epithet || label) : null });
       }
       return;
     }
@@ -3528,6 +3552,17 @@ export class BattleScene extends Phaser.Scene {
         stake,
       ].filter(Boolean),
     };
+  }
+
+  /** Pocket look: the boss battle's panel (mock-up `boss-battle`): its boss power, the healing items it has left, the badge at stake. */
+  private pkBossPanel(): BattleModel['pkBoss'] {
+    const battle = this.run.battle;
+    const boss = battle && pocketOn() ? this.boss() : null;
+    if (!battle || !boss) return null;
+    const most = services().session.content.balance.trainerAi.maxHealItems;
+    const kind = battle.transform.enemyMechanics[0];
+    const tag = ({ gym: 'Gym Battle', elite: 'Elite Four', champion: 'Champion' } as Record<string, string>)[boss.role] ?? 'Boss';
+    return { name: boss.title, tag, power: kind ? { kind, ready: !battle.transform.used.enemy.includes(kind) } : null, heals: [Math.max(0, most - battle.enemyItemsUsed), most], badge: boss.role === 'gym' ? boss.types[0] ?? null : null };
   }
 
   /** Pocket look: the band that names a pseudo-stage's battle (it is part of a stop, not a stage of its own). */

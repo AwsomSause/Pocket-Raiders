@@ -8,6 +8,7 @@ import type { VersusModel } from '../../redux/screens/versus';
 import { ballArt, type PkArt } from '../art';
 import { act, esc, page, spr, sprH, ty, typeColour } from '../kit';
 import { fit, fitPic, pkArtOf } from '../templates';
+import { rxUrl } from '../../redux/assets';
 
 /** A card's playback state (see the file's head). */
 export type PkCue = 'in' | 'hold' | 'out';
@@ -47,6 +48,36 @@ export function pkBoss(d: VersusModel & { pkBoss: NonNullable<VersusModel['pkBos
     + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(b.where, 440, 13, 10, 0.62)}px">${esc(b.where)}</small><b style="font-size:${fit(d.name, 440, 88, 44, 0.5)}px">${esc(d.name)}</b></div>`
     + `<div class="ct-chips" data-key="ct-chips">${b.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
     + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
+/** What the Legendary and Ultra Beast cut-ins show (mock-up pages `legend` and `ub`). Only true facts go in `chips`. */
+export interface PkCutIn {
+  page: 'legend' | 'ub';
+  /** The small line over the name: "Legendary Pokémon · Cerulean Cave", "Ultra Deep Sea · Ultra Beast". */
+  where: string;
+  type: string;
+  /** Chips; `**word**` is drawn bold. A chip starting with `ball:` draws the Beast Ball after its text. */
+  chips: readonly string[];
+  say: string;
+  /** The backdrop picture's file (under assets/images), or null for the card's own dark. */
+  backdrop: string | null;
+}
+
+/** A wild Legendary (`cleg`: rays, the shine spiral, the glowing Pokémon) or an Ultra Beast (`cub`: the wormhole). */
+export function pkCutIn(d: CutModel & { pkCut: PkCutIn }, cue: PkCue = 'in'): string {
+  const k = d.pkCut, mon = pkArtOf(d.mon);
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const chip = (t: string): string => (t.startsWith('ball:') ? `<span>${bold(t.slice(5))} ${spr(ballArt('ub'), 1.5)}</span>` : `<span>${bold(t)}</span>`);
+  const leg = k.page === 'legend';
+  return page(k.page, 26, cueRoot(leg ? 'cut cleg' : 'cut cub', 'boss', cue, `--c:${leg ? '#8a5cff' : '#7a4fd0'}`)
+    + (k.backdrop ? `<img class="px ct-bg" src="${esc(rxUrl(k.backdrop))}" alt="" data-key="ct-bg">` : '')
+    + (leg ? '' : '<i class="hole22" data-key="ct-hole"></i>') + '<i class="ct-rays"></i>'
+    + (leg ? '<i class="gx-spiral" data-key="ct-spiral"></i>' : '')
+    + (mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(mon, leg ? 340 : 260, leg ? 325 : 280, '', 4)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(k.where, 440, 13, 10, 0.62)}px">${esc(k.where)}</small><b style="font-size:${fit(d.name, 440, 88, 44, 0.5)}px">${esc(d.name)}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${k.chips.map(chip).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(k.say, 1500, 17, 13, 0.5)}px">${bold(k.say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 

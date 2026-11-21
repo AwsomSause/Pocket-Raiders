@@ -7,7 +7,7 @@
 
 import { BATTLE_LIST_ROWS, type BattleBox, type BattleListModel, type BattleModel, type BattleOption, type BattlePanel } from '../../redux/screens/battle';
 import { gridStart, scrollStart } from '../../redux/templates';
-import { ballArt, badgeArt, monArt } from '../art';
+import { ballArt, badgeArt, itemArt, monArt } from '../art';
 import { act, esc, frontRotom, hpc, page, spr, typeColour } from '../kit';
 import { fit, fitBody, fitPic, pkArtOf, pkConfirm } from '../templates';
 import { tyChip } from './party';
@@ -21,12 +21,12 @@ const plateStyle = (b: BattleBox, side: string): string => {
   return `--sc:${side};--t:${t[0] ? typeColour(t[0]) : side};--t2:${t[1] ? typeColour(t[1]) : t[0] ? typeColour(t[0]) : side}`;
 };
 const balls = (n: number, out: number): string => `<span class="balls">${Array.from({ length: Math.max(0, Math.min(6, n)) }, (_, k) => spr(ballArt(k >= n - out ? 'premier' : 'pb'), 1, k >= n - out ? 'gx-bt-out' : '')).join('')}</span>`;
-const nameRow = (b: BattleBox, big: number): string => `<span class="lb-n">${(b.types ?? []).map((t) => fitPic(badgeArt(t), 20, 20, '', 1)).join('')}<b style="font-size:${fit(b.name, 180, big, 16, 0.55)}px">${esc(b.name)}</b><span class="lv">${esc(b.level)}</span>${b.shiny ? '<em class="shtag">★ Shiny</em>' : ''}${b.tags.map((t) => `<u class="gx-bt-tag">${esc(t)}</u>`).join('')}</span>`;
+const nameRow = (b: BattleBox, big: number, tag = ''): string => `<span class="lb-n">${(b.types ?? []).map((t) => fitPic(badgeArt(t), 20, 20, '', 1)).join('')}<b style="font-size:${fit(b.name, 180, big, 16, 0.55)}px">${esc(b.name)}</b><span class="lv">${esc(b.level)}</span>${b.shiny ? '<em class="shtag">★ Shiny</em>' : ''}${tag ? `<em class="gymtag">${esc(tag)}</em>` : ''}${b.tags.map((t) => `<u class="gx-bt-tag">${esc(t)}</u>`).join('')}</span>`;
 const tipAttr = (b: BattleBox): string => (b.tip ? `${act('pin', b.tip)} data-tip="${esc(b.tip)}"` : '');
 
 /** A foe's plate (the first one along the top; more stand under it in a duo or a trio). */
-function foePlate(b: BattleBox, k: number): string {
-  return `<div class="lb top${k ? ' gx-bt-more' : ''}" style="${plateStyle(b, '#2a75bb')}${k ? `;top:${k * 60}px` : ''}" data-key="bt-foe-${k}"${tipAttr(b)}>${nameRow(b, 30)}<span class="lb-hp"><em>HP</em>${hpBar(b.hp)}<span class="num">${pct(b.hp)}%</span></span><span class="lb-o gx-bt-o">${b.team ? balls(b.team.n, b.team.out) : ''}</span></div>`;
+function foePlate(b: BattleBox, k: number, tag = ''): string {
+  return `<div class="lb top${k ? ' gx-bt-more' : ''}" style="${plateStyle(b, '#2a75bb')}${k ? `;top:${k * 60}px` : ''}" data-key="bt-foe-${k}"${tipAttr(b)}>${nameRow(b, 30, tag)}<span class="lb-hp"><em>HP</em>${hpBar(b.hp)}<span class="num">${pct(b.hp)}%</span></span><span class="lb-o gx-bt-o">${b.team ? balls(b.team.n, b.team.out) : ''}</span></div>`;
 }
 
 /** "Lv 12": the next level for the Exp line. */
@@ -134,7 +134,7 @@ export function pkBattle(d: BattleModel): string {
   const money = parts.find((x) => /^₽/.test(x)), rest = parts.filter((x) => x !== money);
   const strip = parts.length ? `<div class="bar23 gx-bt-bar" ${d.foes.length > 1 ? ` style="top:${d.foes.length * 60 + 36}px"` : ''} data-key="bt-bar"><b>${esc(rest[0] ?? '')}</b><span>${esc(rest.slice(1).join(' · '))}</span>${money ? `<i>${esc(money)}</i>` : ''}</div>` : '';
   const lines = [d.status, d.momentum].filter(Boolean).map((t) => `<p>${esc(t)}</p>`).join('');
-  const side = lines ? `<div class="gx-bt-lines" style="top:${Math.max(1, d.foes.length) * 60 + 70}px">${lines}</div>` : '';
+  const side = lines ? `<div class="gx-bt-lines" style="top:${Math.max(1, d.foes.length) * 60 + 70 + (d.pkBoss ? 160 : 0)}px">${lines}</div>` : '';
   const say = d.text ? `<div class="say17 gx-bt-say${row ? ' gx-up' : ''}" data-key="bt-say"><i>${me?.file ? fitPic(monArt(me.file), 42, 42, '', 1) : spr(frontRotom, 1)}</i><p style="font-size:${fitBody(d.text, 520, 76, [20, 18, 16, 15, 14], 1.25)}px">${esc(d.text).replace(/\n/g, '<br>')}</p></div>` : '';
   const note = d.note ? `<div class="gx-bt-note"><span>${esc(d.note)}</span></div>` : '';
   const pin = d.auto ? `<div class="gx-bt-auto"${act('auto')}><b>AUTO ▶▶</b></div>` : '';
@@ -157,10 +157,16 @@ export function pkBattle(d: BattleModel): string {
     f.trait ? `<div class="pn gx-bt-fx gx-bt-trait">${f.trait.file ? fitPic(monArt(f.trait.file), 40, 40, '', 1) : ''}<div><small>Signature trait · ${esc(f.trait.name)}</small><b>${esc(f.trait.text)}</b></div></div>` : '',
     f.shadow ? `<div class="pn gx-bt-fx gx-bt-shadow"><b>${esc(f.shadow.head)}</b>${f.shadow.plan ? `<small>${esc(f.shadow.plan)}</small>` : ''}</div>` : '',
   ].join('');
+  const bp = d.pkBoss, cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+  const POWER: Record<string, string> = { mega: 'mega_bracelet', tera: 'tera_orb', dynamax: 'dynamax_band', zmove: 'z_ring' };
+  const boss = bp ? `<div class="boss18" data-key="bt-boss"><b style="font-size:${fit(bp.name, 210, 22, 15, 0.5)}px">${esc(bp.name)}</b>`
+    + (bp.power ? `<p><em>Boss power</em><i class="bp">${fitPic(itemArt(POWER[bp.power.kind] ?? 'mega_bracelet'), 24, 22, '', 1)}</i><span>${bp.power.ready ? 'Ready' : 'Used'}</span></p>` : '')
+    + `<p><em>Heals left</em><i class="hl">${Array.from({ length: Math.min(8, bp.heals[1]) }, (_, k) => `<u class="${k < bp.heals[0] ? 'on' : ''}"></u>`).join('')}</i><span>${bp.heals[0]} of ${bp.heals[1]}</span></p>`
+    + (bp.badge ? `<p><em>Badge</em><i class="bp">${fitPic(badgeArt(bp.badge), 32, 32, '', 1)}</i><span>${esc(cap(bp.badge))}</span></p>` : '') + '</div>' : '';
   const notice = d.notice ? pkConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
   const quiet = !!(d.exp?.length || d.level || f.budget || f.variant);
-  return page('battle', 26, `<div class="scr b20 battle b6 b7 b16 b17 gx-bt${d.pkCatch ? ' capp' : ''}${d.pkBand ? ' evs' : ''}${d.shadow ? ' gx-bt-shadow' : ''}${d.foes.length > 1 ? ' gx-bt-duo' : ''}" data-key="battle">`
-    + d.foes.map(foePlate).join('') + (quiet ? '' : strip) + (d.exp?.length || d.level ? '' : side) + bot + cmd + say + note + pin + marks
+  return page(bp ? 'boss-battle' : 'battle', 26, `<div class="scr b20 battle b6 b7 b16 b17 gx-bt${bp ? ' bb18' : ''}${d.pkCatch ? ' capp' : ''}${d.pkBand ? ' evs' : ''}${d.shadow ? ' gx-bt-shadow' : ''}${d.foes.length > 1 ? ' gx-bt-duo' : ''}" data-key="battle">`
+    + d.foes.map((b, k) => foePlate(b, k, k === 0 && bp ? bp.tag : '')).join('') + (quiet ? '' : strip) + (quiet ? '' : boss) + (d.exp?.length || d.level ? '' : side) + bot + cmd + say + note + pin + marks
     + (d.level ? '' : fx + exp) + level + panels + tip + card + log + notice + (d.pkCatch ? pkCatchParts(d.pkCatch) : '') + (d.pkBand ? `<div class="evs-band" data-key="evs-band"><em>${esc(d.pkBand.em)}</em><b style="font-size:${fit(d.pkBand.b, 380, 36, 22, 0.5)}px">${esc(d.pkBand.b)}</b><span>${esc(d.pkBand.span)}</span></div>` : '') + '</div>', true);
 }
 
