@@ -624,3 +624,9 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-cr-col>div{display:flex;flex-direction:column;gap:1px}
 .pkx .pks .gx-cr-title b{color:var(--yel);font-size:30px!important}
 .pkx .pks .cred17 .cr-back{z-index:2}
+
+/* Region arrival (mock-up `region`): the Regional forms answers as a segment row. */
+.pkx .pks .rg .stamp.big{position:absolute;left:560px;top:64px;z-index:2}
+.pkx .pks .gx-rg-seg{display:flex;flex-wrap:wrap;gap:4px}
+.pkx .pks .gx-rg-seg i{cursor:pointer;white-space:nowrap}
+.pkx .pks .gx-rg-more{font-size:11px;color:#56627f}

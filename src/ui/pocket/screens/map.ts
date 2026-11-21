@@ -106,7 +106,7 @@ export function pkMap(d: MapModel, menu: NodeMenuModel | null = null, cue: PkCue
   const nextName = lit ? (lit.fog ? 'Fog' : lit.title || kindOf(lit.kind)[0]) : btn ? btn.label : 'Next stop';
   const info = firstThought(d.info.replace(/\s+/g, ' ').trim(), 96);
   const a = `<div class="mi-a" data-key="map-next"><b style="font-size:${fit(nextName, 380, 18, 13, 0.55)}px">${lit ? 'Next stop: ' : ''}${esc(nextName)}</b><span>${esc(info)}</span></div>`;
-  const b = h.gym ? `<div class="mi-b" data-key="map-gym"><b>${esc(h.gym)}</b><span>${esc(h.gymWho)}</span></div>` : '';
+  const b = h.gym ? `<div class="mi-b" data-key="map-gym"${act('key', 'G')}><b>${esc(h.gym)}</b><span>${esc(h.gymWho)}</span></div>` : '';
   const menuRow = `<div class="map-menu" style="grid-template-columns:repeat(${Math.max(1, d.buttons.length)},1fr)">${d.buttons.map((x) => `<div class="btn sm${x.opt === d.index ? ' on' : ''}${x.hot ? ' gx-hot' : ''}"${act('pick', x.opt, 'over')}><b style="font-size:${fit(x.label, 96, 15, 11)}px">${esc(x.label)}</b></div>`).join('')}</div>`;
   const tags = h.tags.length ? `<div class="gx-map-tags" data-key="map-tags">${h.tags.map((t) => `<i>${esc(t)}</i>`).join('')}</div>` : '';
   const notice = d.notice ? `<div class="gx-map-say" data-key="map-say"><p style="font-size:${fit(d.notice, 1500, 14, 11, 0.5)}px">${esc(d.notice)}</p></div>` : '';

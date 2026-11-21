@@ -88,6 +88,10 @@ import { openRunContentsMenu } from '../ui/runContentsMenu';
 import { onInputAction, type InputAction } from '../ui/input';
 import { Picker, speciesRow, type PickerLike, type PickerRow } from '../ui/partyPanel';
 import { regionFormPrompt, type RegionFormOffer } from '../core/regionForms';
+import { gimmickSlots } from '../core/battle/bossGimmicks';
+import { typeEffectiveness } from '../core/battle/damage';
+import { TYPE_NAMES, type TypeName } from '../core/contentSchema';
+import { pocketRoad } from '../core/presentation/pocket';
 import { STOP_STYLES, stopStyle } from '../ui/stopIcons';
 import { stopArtFor } from '../ui/stopArt';
 import { addStopArt } from '../ui/stopArtView';
@@ -131,6 +135,8 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, phantomOn, pocketOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { pkPauseModel } from '../ui/pocket/models';
 import { pkMap } from '../ui/pocket/screens/map';
+import { pkRegion } from '../ui/pocket/screens/region';
+import { pkBadges, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
 import { PK_PAUSE_COLS, pkPause } from '../ui/pocket/screens/pause';
 import { pkCard } from '../ui/pocket/screens/card';
 import type { RunCardModel } from '../ui/redux/screens/over';
@@ -223,7 +229,9 @@ type MapPop =
   | { kind: 'track' }
   | { kind: 'roll'; town: number; pick: number }
   | { kind: 'bracket'; page: number }
-  | { kind: 'phone'; chat: number; reply: number };
+  | { kind: 'phone'; chat: number; reply: number }
+  | { kind: 'world'; pick: number }
+  | { kind: 'badges'; pick: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -290,6 +298,10 @@ export class MapScene extends Phaser.Scene {
   private rxPop: MapPop | null = null;
   /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
   private rxForm: { offer: RegionFormOffer; index: number; pick: (i: number) => void } | null = null;
+  /** Pocket look: the region arrival page is up (mock-up `region`); Set off closes it. */
+  private rxRegion = false;
+  /** Pocket look: the regions whose arrival page has shown this visit (run seed and region number; never saved). */
+  private static readonly regionsShown = new Set<string>();
   private rxPause: { index: number; ask: number | null; card?: boolean; dex?: PhantomDex | null } | null = null;
   /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
   private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
@@ -314,6 +326,8 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'notes') pop = { kind, tab: 0, sel: [0, 0, 0, 0] };
     else if (kind === 'roll') pop = townRollPages(session.content, run).length ? { kind, town: 0, pick: 0 } : null;
     else if (kind === 'phone') pop = phantomOn() ? { kind, chat: this.phoneFirst(), reply: 0 } : null;
+    else if (kind === 'world') pop = pocketOn() ? { kind, pick: run.regionIndex } : null;
+    else if (kind === 'badges') pop = pocketOn() && run.stage ? { kind, pick: Math.min(run.stage.index, runCampaign(session.content, run).stagesPerRegion - 1) } : null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -637,7 +651,14 @@ export class MapScene extends Phaser.Scene {
     if (action === 'back' || action === 'confirm') return this.popClose();
     const d = action === 'right' || action === 'down' ? 1 : -1;
     const side = action === 'left' || action === 'right';
-    if (p.kind === 'report') {
+    if (p.kind === 'world') {
+      // Three cards across: up and down move a row.
+      const n = run.regionOrder.length, k = p.pick + (side ? d : d * 3);
+      if (k >= 0 && k < n) p.pick = k;
+    } else if (p.kind === 'badges') {
+      const n = runCampaign(session.content, run).stagesPerRegion;
+      p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'report') {
       const n = rivalReport(run).length;
       p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'dossier') {
@@ -681,7 +702,7 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'notes') {
       if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
       else p.sel[p.tab] = i;
-    } else if ((p.kind === 'report' || p.kind === 'roll') && what === 'pick') {
+    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges') && what === 'pick') {
       if (p.pick === i) return;
       p.pick = i;
     }
@@ -796,6 +817,8 @@ export class MapScene extends Phaser.Scene {
     const run = session.run!;
     const content = session.content;
     if (p.kind === 'phone') return c.ph ? this.phoneView(c.ph, p) : '';
+    if (p.kind === 'world') return c.pk ? this.worldPocket(p.pick) : '';
+    if (p.kind === 'badges') return c.pk ? this.badgesPocket(p.pick) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report') {
       const rows = rivalReport(run);
@@ -1587,6 +1610,7 @@ export class MapScene extends Phaser.Scene {
     this.rxLegend = null;
     this.rxPop = null;
     this.rxForm = null;
+    this.rxRegion = false;
     this.rxPause = null;
     this.rxWheel = null;
     this.rxMenu = null;
@@ -1616,13 +1640,14 @@ export class MapScene extends Phaser.Scene {
         keys: [['C', 'cry'], ['H', 'paw'], ['N', 'name']],
         hints: [['L', 'legend'], ['Enter', 'go']],
       };
-      const keyActs: Record<string, () => void> = { Tab: () => this.wheelOpen(false), C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
+      const keyActs: Record<string, () => void> = { Tab: () => this.wheelOpen(false), C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll'), G: () => this.popToggle('badges'), M: () => this.popToggle('world') };
       this.rxView = mountRedux(this, {
         render: (c) => {
           if (this.rxHeal && c.ph) return phHeal(c.ph, this.rxHeal.model);
           if (this.rxHeal && c.pk) return pkCenter(this.rxHeal.model);
           if (this.rxPop) return this.popView(c, this.rxPop);
           const model: MapModel = { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() };
+          if (c.pk && (this.rxRegion || this.rxForm)) return this.regionPocket();
           if (c.pk && this.rxPause) return this.pausePocket(model);
           if (c.pk) return pkMap(model, this.rxMenu);
           if (!c.ph) return mapView(c, model) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : '');
@@ -1647,6 +1672,7 @@ export class MapScene extends Phaser.Scene {
           // The Rotom Phone's screen dots: the cursor goes to that screen's first app.
           pausePage: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && !p.dex && !p.card && k >= 0 && k < this.pauseRows().length) { p.index = k; this.rxView?.refresh(); } },
           form: (i) => this.rxForm?.pick(Number(i)),
+          regionGo: () => this.regionGo(),
           dexPick: (i) => this.rxPause?.dex?.pick(Number(i)),
           dexGo: (name) => this.rxPause?.dex?.go(String(name)),
           dexType: (i) => this.rxPause?.dex?.pickType(Number(i)),
@@ -1690,6 +1716,7 @@ export class MapScene extends Phaser.Scene {
     onInputAction(this, (action) => {
       if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
       if (this.rxHeal) { if (action === 'confirm' || action === 'back') this.rxHeal.done(); return; }
+      if (this.rxRegion && !this.rxForm) { if (action === 'confirm' || action === 'back') this.regionGo(); return; }
       if (this.rxWheel) return this.wheelInput(action);
       if (this.rxPause) return this.pauseInput(action);
       if (this.rxMenu) return this.menuInput(action);
@@ -1777,6 +1804,12 @@ export class MapScene extends Phaser.Scene {
         this.rxModel.keys = [['O', 'town'], ...this.rxModel.keys];
         this.input.keyboard?.on('keydown-O', () => this.popToggle('roll'));
       }
+      // Pocket look: the World Tour (M) and the Badge Case (G), pages of their own in the mock-ups.
+      if (pocketOn()) {
+        this.rxModel.keys = [['G', 'badges'], ['M', 'world'], ...this.rxModel.keys];
+        this.input.keyboard?.on('keydown-G', () => this.popToggle('badges'));
+        this.input.keyboard?.on('keydown-M', () => this.popToggle('world'));
+      }
       if (this.children.getByName('bracket-tag')) this.rxModel.hints = [['L', 'legend'], ['B', 'bracket'], ['Enter', 'go']];
       this.rxView?.refresh();
     }
@@ -1797,6 +1830,12 @@ export class MapScene extends Phaser.Scene {
         const tournament = region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0);
         if (tournament) this.showBanner(region.name, 'Champion Tournament', `32 trainers, ${size + 1} wins to the title  ·  Healed after every round  ·  Ball Guy's shop after rounds 2 and 4`);
         else this.showBanner(region.name, 'Pokémon League', `Elite Four ×${size}, then ${leader.title}  ·  Healed after every battle`);
+      } else if (stage.index === 0 && this.rxView && pocketOn() && !MapScene.regionsShown.has(`${run.seed}:${run.regionIndex}`)) {
+        // Pocket look: a new region is the mock-ups' region page, up until Set off (once a visit: coming back from a menu shows the sign).
+        MapScene.regionsShown.add(`${run.seed}:${run.regionIndex}`);
+        this.rxRegion = true;
+        this.busy = true;
+        this.rxView.refresh();
       } else if (stage.index === 0) {
         this.showBanner(`Region ${run.regionIndex + 1} of ${regions}  ·  ${identity.motif}`, region.name, `${region.tagline ? `${region.tagline}  ·  ` : ''}Level cap ${cap}  ·  Stage 1: ${blindMap(run.rules) ? '???' : theme.name}  ·  ${leader.title}`);
       } else {
@@ -1834,8 +1873,8 @@ export class MapScene extends Phaser.Scene {
       const note = session.answerRegionForm(offer.uid, target);
       this.scene.restart({ notice: note, focus: this.index });
     };
-    if (this.rxView && phantomOn()) {
-      // Phantom UI: the offer is the mock-ups' Regional forms page; the answers and what they do are the same.
+    if (this.rxView && (phantomOn() || pocketOn())) {
+      // Phantom UI: the offer is the mock-ups' Regional forms page (Pocket: the question on the region page); the answers and what they do are the same.
       const n = offer.targets.length + 1;
       const form = { offer, index: 0, pick: (i: number): void => { if (i >= 0 && i < n) answer(offer.targets[i] ?? null); } };
       this.rxForm = form;
@@ -1863,6 +1902,84 @@ export class MapScene extends Phaser.Scene {
       onBack: () => answer(null),
     });
     this.picker = picker;
+  }
+
+  /** Pocket look: the World Tour (mock-up `world`): this run's regions in order. */
+  private worldPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!;
+    const ahead = (i: number): string => {
+      const cap = runLevelCap(content, { regionIndex: i, rules: run.rules });
+      const slots = gimmickSlots(i, null, content.balance.transformations.bossGimmickAfterStage);
+      return `Cap ${cap} · ${slots} boss ${slots === 1 ? 'power' : 'powers'}${i === run.regionOrder.length - 1 ? ' · The last Champion' : ''}`;
+    };
+    const road = pocketRoad(run.stage);
+    return pkWorld({
+      regions: run.regionOrder.map((id, i) => ({ name: content.regions.get(id)?.name ?? id, tagline: content.regions.get(id)?.tagline ?? '', small: ahead(i), state: i < run.regionIndex ? 'done' : i === run.regionIndex ? 'now' : i === run.regionIndex + 1 ? 'next' : 'ahead' })),
+      here: road ? `${Math.max(1, Math.min(road.n, road.at + 1))} of ${road.n}` : `Stage ${(run.stage?.index ?? 0) + 1}`,
+      cap: runLevelCap(content, run),
+      road,
+      index: pick,
+    });
+  }
+
+  /** Pocket look: the Badge Case (mock-up `badges`): this region's Gyms, the lit one's card, the League. */
+  private badgesPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!, stage = run.stage!;
+    const camp = runCampaign(content, run), n = camp.stagesPerRegion;
+    const league = stage.kind === 'league';
+    // This region's badges are the last ones won (one per stage cleared here).
+    const won = league ? run.badges.slice(-n) : stage.index > 0 ? run.badges.slice(-stage.index) : [];
+    const weakOf = (types: readonly string[]): string[] => TYPE_NAMES.filter((t) => typeEffectiveness(content.typeChart, t, types as TypeName[]) > 1);
+    const slot = (id: string | null, state: PkBadgeSlot['state']): PkBadgeSlot => {
+      const b = id ? content.bosses.get(id) : undefined;
+      if (!id || !b) return { name: null, type: '', state, art: null, weak: [] };
+      const info = bossInfo(content, 'gym', id);
+      return { name: info.name, type: b.types[0] ?? '', state, art: artOf(this, info.spriteAssetId) ?? null, weak: weakOf(b.types) };
+    };
+    const slots = Array.from({ length: n }, (_, k) => (k < won.length ? slot(won[k]!, 'got') : !league && k === stage.index ? slot(stage.leaderId, 'next') : slot(null, 'later')));
+    const road = pocketRoad(stage);
+    const e4 = (stage.eliteFour ?? []).map((id) => (content.bosses.get(id) ? artOf(this, bossInfo(content, 'elite', id).spriteAssetId) ?? null : null));
+    return pkBadges({
+      region: content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? 'This region',
+      slots,
+      index: pick,
+      stops: road ? Math.max(0, road.n - 1 - road.at) : 0,
+      badges: run.badges.length,
+      cap: runLevelCap(content, run),
+      road,
+      league: { size: camp.eliteFourSize, faces: e4, champion: null },
+    });
+  }
+
+  /** Pocket look: Set off on the region page. */
+  private regionGo(): void {
+    if (!this.rxRegion || this.rxForm) return;
+    this.rxRegion = false;
+    this.busy = false;
+    this.rxView?.refresh();
+  }
+
+  /** Pocket look: the region page (mock-up `region`), with the Regional forms question when an offer is open. */
+  private regionPocket(): string {
+    const { session } = services();
+    const content = session.content, run = session.run!, stage = run.stage;
+    const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '');
+    const name = region?.name ?? 'This region';
+    const sp = (id: string): string => content.species.get(id)?.name ?? id;
+    const f = this.rxForm;
+    const ask = f ? { text: regionFormPrompt(content, run, f.offer), options: [...f.offer.targets.map((t) => sp(t)), 'Not now'], index: f.index, more: Math.max(0, session.regionFormOffers().length - 1) } : null;
+    const slots = gimmickSlots(run.regionIndex, null, content.balance.transformations.bossGimmickAfterStage);
+    return pkRegion({
+      name,
+      no: run.regionIndex + 1,
+      of: run.regionOrder.length,
+      tagline: region?.tagline ?? '',
+      facts: [[`${stage?.map.columns ?? 0}`, 'stops'], [`${runCampaign(content, run).stagesPerRegion}`, 'Gym badges'], [`${runLevelCap(content, run)}`, 'level cap'], [`${slots}`, slots === 1 ? 'boss power' : 'boss powers']],
+      welcome: f ? `${sp(f.offer.speciesId)} can take its ${name} form. Choose, or keep it as it is.` : `Welcome to **${name}**. Its Gym Leaders, the Elite Four and a Champion stand between you and ${run.regionIndex + 1 < run.regionOrder.length ? 'the next region' : 'the end of your journey'}.`,
+      ask,
+    });
   }
 
   /** The Phantom Regional forms page for the offer that is open. */

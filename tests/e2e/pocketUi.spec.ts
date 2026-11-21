@@ -959,6 +959,70 @@ test('Pocket look: the credits say thank you, roll the run and walk the team; En
   expect(errors).toEqual([]);
 });
 
+test('Pocket look: a new region opens on its region page; a form offer is asked there and Not now keeps the Pokémon', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-reg');
+  for (let n = 0; n < 40 && (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Map'; n++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(700);
+  }
+  await onPkPage(page, 'Map', 'region');
+  const rg = pkView(page, 'Map', 'region');
+  await expect(rg.locator('.rg-facts span')).toHaveCount(4);
+  await expect(rg.locator('.vs-say .btn')).toHaveText('Set off');
+  await fits(page, 'Map', 'region');
+  await step(page, 'Enter');
+  await onPkPage(page, 'Map', 'map');
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr, run = pkr.session.run;
+    run.regionOrder[run.regionIndex] = 'alola';
+    run.party[0].speciesId = 'vulpix';
+    pkr.game.scene.getScene('Map').scene.restart({});
+  });
+  await onPkPage(page, 'Map', 'region');
+  await expect(rg.locator('.rg-ask .seg i')).toHaveCount(2);
+  await fits(page, 'Map', 'region');
+  await step(page, 'ArrowRight');
+  await expect(rg.locator('.rg-ask .seg i.on')).toHaveText('Not now');
+  await step(page, 'Enter');
+  await onPkPage(page, 'Map', 'map');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).toBe('vulpix');
+  expect(await page.evaluate(() => (window as any).__pkr.session.regionFormOffers().length)).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('Pocket look: M opens the World Tour and G the Badge Case from the map; looking changes nothing', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = watch(page);
+  await start(page, 'ui=pocket&seed=pk-world');
+  await toPocketMap(page);
+  const before = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run));
+  await step(page, 'm');
+  await onPkPage(page, 'Map', 'world');
+  const wt = pkView(page, 'Map', 'world');
+  await expect(wt.locator('.wt.now')).toHaveCount(1);
+  await expect(wt.locator('.wt.now em')).toContainText('You are here');
+  await fits(page, 'Map', 'world');
+  await step(page, 'ArrowRight');
+  await expect(wt.locator('.wt.gx-wt-on')).toHaveAttribute('data-key', 'wt-1');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Map', 'map');
+  await step(page, 'g');
+  await onPkPage(page, 'Map', 'badges');
+  const bc = pkView(page, 'Map', 'badges');
+  await expect(bc.locator('.bc.next')).toHaveCount(1);
+  await expect(bc.locator('.bc-next em')).toContainText('Next gym');
+  await expect(bc.locator('.bc-league')).toContainText('Pokémon League');
+  await fits(page, 'Map', 'badges');
+  await step(page, 'ArrowRight');
+  await expect(bc.locator('.bc-next b').first()).toHaveText('???');
+  await step(page, 'Escape');
+  await onPkPage(page, 'Map', 'map');
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run))).toBe(before);
+  expect(errors).toEqual([]);
+});
+
 test('Pocket look: starting a run, Starter Pick is three cards and the Briefing shows the first region and Gym', async ({ page }) => {
   test.setTimeout(180_000);
   const errors = watch(page);

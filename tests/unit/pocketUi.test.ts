@@ -32,6 +32,8 @@ import type { TradeModel } from '../../src/ui/redux/screens/stops';
 import { PK_TOOLS_PAGE, pkTools, toolShort } from '../../src/ui/pocket/screens/tools';
 import { PK_TRAINER_SIDE, pkTrainers, trainerColour } from '../../src/ui/pocket/screens/trainers';
 import { pkBoot, pkCredits, pkCreditsRows } from '../../src/ui/pocket/screens/ending';
+import { pkBadges, pkWorld } from '../../src/ui/pocket/screens/world';
+import { pkRegion, regionColours } from '../../src/ui/pocket/screens/region';
 import { hallTag, pkHall } from '../../src/ui/pocket/screens/hall';
 import { keepLine, pkOver } from '../../src/ui/pocket/screens/over';
 import { pkGallery, pkMemories, shelfMon, type PkGalleryModel } from '../../src/ui/pocket/screens/memories';
@@ -1108,5 +1110,63 @@ describe('Pocket look: boot and credits', () => {
     expect(still).toContain('gx-cr-still');
     expect(still).toContain('scroll');
     expect(still).not.toContain('walkrow');
+  });
+});
+
+describe('Pocket look: the region page', () => {
+  const d = { name: 'Kanto', no: 1, of: 9, tagline: 'Where every journey starts', facts: [['30', 'stops'], ['8', 'Gym badges'], ['150', 'level cap'], ['1', 'boss power']] as [string, string][], welcome: 'Welcome to **Kanto**.', ask: null };
+  it('the region in its colours, its numbers and Set off', () => {
+    const html = pkRegion(d);
+    expect(pkPageOf(html)?.id).toBe('region');
+    expect(html).toContain('--r1:#e3350d;--r2:#2f9e44');
+    expect(html).toContain('Region 1 of 9');
+    expect(html.match(/<span><b/g)?.length).toBe(4);
+    expect(html).toContain('<b>Kanto</b>');
+    expect(html).toContain('data-act="regionGo"');
+    expect(html).not.toContain('rg-ask');
+  });
+  it('a form offer asks on the page; the lit answer is what Choose sends; unknown regions get a colour', () => {
+    const html = pkRegion({ ...d, ask: { text: 'Vulpix loves the beach.', options: ['Alolan Vulpix', 'Not now'], index: 1, more: 2 } });
+    expect(html).toContain('Regional forms');
+    expect(html).toMatch(/class="on"[^>]*data-key="rg-opt-1"/);
+    expect(html).toContain('Choose');
+    expect(html).toMatch(/class="btn on nx" data-act="form" data-arg="1"/);
+    expect(html).toContain('2 more of your party');
+    expect(regionColours('Trial Archipelago')).toHaveLength(2);
+    expect(regionColours('ALOLA')[0]).toBe('#e8791a');
+  });
+});
+
+describe('Pocket look: World Tour and Badge Case', () => {
+  it('the World Tour is a card per region in order: here, next, ahead, cleared; it pages by nine', () => {
+    const regions = Array.from({ length: 11 }, (_, i) => ({ name: `R${i}`, tagline: '', small: `Cap ${150 + i * 50}`, state: (i < 2 ? 'done' : i === 2 ? 'now' : i === 3 ? 'next' : 'ahead') as 'done' | 'now' | 'next' | 'ahead' }));
+    const html = pkWorld({ regions, here: '12 of 30', cap: 250, road: null, index: 2 });
+    expect(pkPageOf(html)?.id).toBe('world');
+    expect(html.split('class="wt ').length - 1).toBe(9);
+    expect(html).toContain('You are here · 12 of 30');
+    expect(html).toContain('Region 3 of 11');
+    expect(html).toContain('gx-wt-done');
+    expect(html).toMatch(/class="wt now on gx-wt-on"/);
+    const p2 = pkWorld({ regions, here: '', cap: 1, road: null, index: 10 });
+    expect(p2.split('class="wt ').length - 1).toBe(2);
+    expect(p2).toContain('data-key="wt-10"');
+  });
+  it('the Badge Case: won, next and not-met discs; the lit one\'s card; the League', () => {
+    const slots = [{ name: 'Brock', type: 'rock', state: 'got' as const, art: null, weak: ['water'] }, { name: 'Misty', type: 'water', state: 'next' as const, art: null, weak: ['grass', 'electric'] }, { name: null, type: '', state: 'later' as const, art: null, weak: [] }];
+    const html = pkBadges({ region: 'Kanto', slots, index: 1, stops: 3, badges: 1, cap: 150, road: null, league: { size: 4, faces: [], champion: null } });
+    expect(pkPageOf(html)?.id).toBe('badges');
+    expect(html).toMatch(/class="bc got"/);
+    expect(html).toMatch(/class="bc next gx-bc-on"/);
+    expect(html).toContain('Not met yet');
+    expect(html).toContain('Next gym · in 3 stops');
+    expect(html).toContain('good picks');
+    expect(html).toContain('Opens with 3 badges. Four in a row, then the Champion.');
+    expect(html.match(/<i class=""><\/i>/g)?.length).toBe(4);
+    const later = pkBadges({ region: 'Kanto', slots, index: 2, stops: 0, badges: 1, cap: 150, road: null, league: { size: 1, faces: [], champion: null } });
+    expect(later).toContain('chosen when the stage begins');
+    expect(later).toContain('One battle, then the Champion.');
+    const won = pkBadges({ region: 'Kanto', slots, index: 0, stops: 0, badges: 1, cap: 150, road: null, league: { size: 4, faces: [], champion: null } });
+    expect(won).toContain('Badge won');
+    expect(won).not.toContain('good picks');
   });
 });

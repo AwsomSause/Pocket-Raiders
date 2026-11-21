@@ -20,6 +20,9 @@ export async function toPocketMap(page: Page) {
     await page.waitForTimeout(700);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.activeScene()), { timeout: 20_000 }).toBe('Map');
+  // A new region opens on its region page: Set off closes it.
+  await page.waitForTimeout(400);
+  if (await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').rxRegion)) await page.keyboard.press('Enter');
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);
   await page.waitForTimeout(400);
 }
