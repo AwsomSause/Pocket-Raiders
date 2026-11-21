@@ -11,6 +11,7 @@ import type { Threat } from '../../../../core/dominion/rivalScreens';
 import { act, esc, mini, tall, TYPE_COLORS } from '../../kit';
 import { rxUrl } from '../../assets';
 import { grainUrl, skylineUrl, warehouseUrl } from './paint';
+import { ARMBAND_CELL, ARMBAND_ROW, ARMBAND_SHEET, armbandColumn, armbandFile } from '../../../../core/dominion/armbandSprite';
 
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
@@ -43,11 +44,21 @@ export function emblem(c: TeamColours | null, w: number, h: number, fs: number, 
   return `<div class="emb" style="width:${w}px;height:${h}px;font-size:${fs}px;clip-path:${LOGO_CLIP[c.logo] ?? LOGO_CLIP.shield};background:linear-gradient(180deg,color-mix(in srgb,${c.primary} 75%,#fff),${c.primary} 55%,color-mix(in srgb,${c.primary} 60%,#000));color:${c.secondary};text-shadow:0 2px 0 rgba(0,0,0,.45);${extra}" data-testid="dom-emblem">${esc(c.initial)}</div>`;
 }
 
+/** The team's armband icon (Kice's PixelLab sheets): the sheet for the initial, the colourway nearest the primary. Scaled `k`
+ *  times (32 px cell). Null before the Founding or for a name with no A to Z initial (callers draw the grey band then). The
+ *  initial stays in the page as hidden text so the band reads for screen readers and tests. */
+export function armbandIcon(c: TeamColours | null, k: number, style = ''): string | null {
+  const f = c ? armbandFile(c.initial) : null;
+  if (!c || !f) return null;
+  const n = ARMBAND_CELL * k;
+  return `<i class="im" role="img" aria-label="${esc(c.initial)} armband" data-armband-icon="${esc(c.initial.toUpperCase())}" style="position:relative;width:${n}px;height:${n}px;background-image:url(${rxUrl(f)});background-size:${ARMBAND_SHEET * k}px ${ARMBAND_SHEET * k}px;background-position:${-armbandColumn(c.initial, c.primary) * n}px ${-ARMBAND_ROW * n}px;${style}"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">${esc(c.initial)}</span></i>`;
+}
+
 /** A small armband chip for a member's card: the team's band (primary, letter in secondary) or the plain grey one. */
 export function bandChip(c: TeamColours | null, label: string): string {
-  const band = c
+  const band = armbandIcon(c, 0.75, 'margin:-6px -2px;flex:none') ?? (c
     ? `<i style="width:30px;height:12px;border-radius:3px;display:grid;place-items:center;font:800 9px/1 var(--logo);font-style:normal;color:${c.secondary};background:linear-gradient(180deg,color-mix(in srgb,${c.primary} 80%,#fff),${c.primary});box-shadow:0 0 0 2px var(--ink),inset 0 0 0 1px ${c.secondary}">${esc(c.initial)}</i>`
-    : '<i style="width:30px;height:12px;border-radius:3px;background:linear-gradient(180deg,#9aa0b0,#6a7080);box-shadow:0 0 0 2px var(--ink)"></i>';
+    : '<i style="width:30px;height:12px;border-radius:3px;background:linear-gradient(180deg,#9aa0b0,#6a7080);box-shadow:0 0 0 2px var(--ink)"></i>');
   return `<span class="row xs" style="gap:5px;color:${c ? '#d4b8ff' : '#b2bde6'}" data-testid="dom-band">${band}${esc(label)}</span>`;
 }
 
