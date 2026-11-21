@@ -740,3 +740,6 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .cboss.gx-ga .fr33 { position: absolute; top: 0; bottom: 0; width: 12px; z-index: 8; pointer-events: none; border: 0 solid var(--ink); background: linear-gradient(135deg, #c1121f 33%, #fff 33% 66%, #2456c8 66%) 0 0/12px 36px; }
 .pkx .pks .cboss.gx-ga .fr33.l { left: 0; border-right-width: 2px; }
 .pkx .pks .cboss.gx-ga .fr33.r { right: 0; border-left-width: 2px; background: linear-gradient(225deg, #c1121f 33%, #fff 33% 66%, #2456c8 66%) 0 0/12px 36px; }
+/* Galar's Final (mock-up ga-final): the Champion's ace glowing behind them, the Champion moved right. */
+.pkx .pks .cboss.gx-fin .ct-mon { right: 120px; }
+.pkx .pks .cboss .gx-ace { position: absolute; left: 380px; top: 130px; z-index: 1; width: 260px; height: 260px; display: grid; place-items: end center; filter: drop-shadow(0 0 14px #ff3d7f); }

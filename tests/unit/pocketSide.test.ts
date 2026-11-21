@@ -355,5 +355,15 @@ describe('the Pocket Galar round won', () => {
     expect(h).toContain('<i>Left</i>8 of 32 trainers');
     expect(h).toContain('<b>78</b><em>crowd with you</em>');
     expect(h).not.toContain('extra');
+    expect(h).toContain('Back to the map');
+  });
+  it('the Final won is the Galar Champion page with its own title and button', async () => {
+    const { pkGaWon } = await import('../../src/ui/pocket/screens/galar');
+    const h = pkGaWon({ round: 'Final', text: 'Leon is beaten.', rows: [], side: 'What happens now', lines: [['Run', 'Kanto is next.']], party: [], counts: [['5 of 5', 'rounds won']], champ: { title: 'Galar Champion', button: 'Hall of Fame' } });
+    expect(pkPageOf(h)?.id).toBe('ga-champ');
+    expect(h).toContain('res31 champ34');
+    expect(h).toContain('Galar Champion');
+    expect(h).not.toContain('Final Won');
+    expect(h).toContain('<b>Hall of Fame</b>');
   });
 });

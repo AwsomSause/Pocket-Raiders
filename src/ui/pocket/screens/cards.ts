@@ -6,7 +6,7 @@
 import type { CutModel } from '../../redux/screens/cut';
 import type { VersusModel } from '../../redux/screens/versus';
 import type { GimmickCard } from '../../phantom/screens/cutin';
-import { ballArt, itemArt, typeArt, type PkArt } from '../art';
+import { ballArt, itemArt, monArt, typeArt, type PkArt } from '../art';
 import { act, back, esc, page, spr, sprH, ty, typeColour } from '../kit';
 import { fit, fitPic, pkArtOf } from '../templates';
 import { rxUrl } from '../../redux/assets';
@@ -45,8 +45,8 @@ export function pkBoss(d: VersusModel & { pkBoss: NonNullable<VersusModel['pkBos
   const say = d.line ? `${d.name}: "${d.line}"` : `${d.role} ${d.name} wants to battle!`;
   const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
   const ga = b.area === 'ga';
-  return page('boss-intro', 26, cueRoot(`cut cboss${ga ? ' gx-ga ar28 a-ga' : ''}`, 'boss', cue, `--c:${typeColour(b.type)}`)
-    + (ga ? back('arenas/grass_bg.png', 'ct-bg') : '') + '<i class="ct-rays"></i>' + (foe ? `<div class="ct-mon" data-key="ct-mon">${sprH(foe, 300)}</div>` : '')
+  return page('boss-intro', 26, cueRoot(`cut cboss${ga ? ' gx-ga ar28 a-ga' : ''}${b.ace ? ' gx-fin' : ''}`, 'boss', cue, `--c:${b.colour ?? typeColour(b.type)}`)
+    + (ga ? back('arenas/grass_bg.png', 'ct-bg') : '') + '<i class="ct-rays"></i>' + (b.ace ? `<div class="gx-ace" data-key="ct-ace">${fitPic(monArt(b.ace), 250, 250, '', 4)}</div>` : '') + (foe ? `<div class="ct-mon" data-key="ct-mon">${sprH(foe, 300)}</div>` : '')
     + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(b.where, 440, 13, 10, 0.62)}px">${esc(b.where)}</small><b style="font-size:${fit(d.name, 440, 88, 44, 0.5)}px">${esc(d.name)}</b></div>`
     + `<div class="ct-chips" data-key="ct-chips">${b.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
     + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`

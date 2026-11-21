@@ -3560,7 +3560,7 @@ export class BattleScene extends Phaser.Scene {
    * holds (a run's regions are fixed when it starts), the road so far and what changes there. Waits for an input.
    */
   /** Pocket look: the Boss Intro's heading and chips (what the battle already holds: type, team, powers, heals, the stake). */
-  private pkBossFacts(boss: BossInfo): { where: string; type: string; chips: string[]; area?: 'ga' } {
+  private pkBossFacts(boss: BossInfo): NonNullable<VersusModel['pkBoss']> {
     const battle = this.run.battle!;
     const { content } = services().session;
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
@@ -3586,6 +3586,19 @@ export class BattleScene extends Phaser.Scene {
     if (round) {
       const ace = battle.enemyTeam[n - 1];
       const aceName = ace ? content.species.get(ace.speciesId)?.name : undefined;
+      if (round.final) {
+        // The Final (mock-up `ga-final`): the Champion with their ace behind them, in red.
+        const WILL: Record<string, string> = { dynamax: 'It will **Dynamax**', mega: 'It will **Mega Evolve**', tera: 'It will **Terastallize**', zmove: 'It has a **Z-Move**' };
+        const will = ace ? WILL[battle.transform.bossPlan[ace.uid] ?? ''] : undefined;
+        return {
+          where: `Final · ${role || 'the Champion'}`,
+          area: 'ga',
+          type: boss.types[0] ?? 'normal',
+          colour: '#c1121f',
+          ace: ace && n > 1 ? monFile(this, ace.speciesId, 'front', !!ace.shiny) : null,
+          chips: [aceName ? `Ace: **${aceName}**` : typeChip, will ?? `${n} Pokémon${held ? ', each with a held item' : ''}`, `Crowd starts at **${crowdFavor(content, this.run) ?? 50}**`, 'Win, and you are **Champion**'].filter(Boolean),
+        };
+      }
       return {
         where: `Champion's Tournament · ${round.name}`,
         area: 'ga',
@@ -3764,6 +3777,8 @@ export class BattleScene extends Phaser.Scene {
     const rest = (team: readonly PokemonInstance[], shown: readonly PokemonInstance[]): string[] => team.filter((m) => !shown.includes(m)).map((m) => this.speciesName(m));
     const and = (names: string[]): string => (names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0] ?? '');
     const benchMine = rest(mine, shownMine), benchTheirs = rest(theirs, shownTheirs);
+    // Their pictures load first (most of these Pokémon have not been drawn in this battle yet).
+    await this.loadFronts([...shownMine, ...shownTheirs].map((m) => [m.speciesId, !!m.shiny] as [string, boolean])).catch(() => undefined);
     const round = scope === 'gym' ? null : currentTournamentRound(content, this.run);
     const model: PkGaLineupModel = {
       me: { tag: 'Challenger', name: content.archetypes.get(this.run.archetypeId)?.name ?? 'You', rows: shownMine.map((m, k) => ({ art: art(m), title: this.speciesName(m), sub: `Lv ${m.level}`, tag: k === 0 ? 'Lead' : '', cls: k === 0 ? 'me' : '' })), foot: benchMine.length ? `and ${and(benchMine)} on the bench` : '' },
@@ -3785,7 +3800,32 @@ export class BattleScene extends Phaser.Scene {
   private pkGaWonModel(before: RunState, after: RunState, art: Art | null, trainer: string, money: string | null): PkGaWonModel | null {
     const { content } = services().session;
     const round = currentTournamentRound(content, before);
-    if (!round || round.final) return null;
+    if (!round) return null;
+    if (round.final) {
+      // The Final won (mock-up `ga-champ`): the Champion is beaten; the Hall of Fame comes next.
+      const party = after.party.slice(0, 6);
+      const alive = party.filter((m) => m.hp > 0).length;
+      const favor = crowdFavor(content, before) ?? 50;
+      const foeAce = before.battle?.enemyTeam[before.battle.enemyTeam.length - 1];
+      const aceFile = foeAce ? monFile(this, foeAce.speciesId, 'front', !!foeAce.shiny) : null;
+      const at = after.regionOrder.indexOf('galar'), nextId = at < 0 ? undefined : after.regionOrder[at + 1];
+      const more = !!nextId;
+      return {
+        round: round.name,
+        text: `${trainer} is beaten. The whole stadium is on its feet.`,
+        rows: [
+          { art: pkArtOf(art), title: trainer, sub: `Beaten ${alive} to 0` },
+          { art: itemArt('amulet_coin'), title: money ?? 'No prize', sub: "Champion's prize" },
+          { art: itemArt('master_ribbon'), title: 'Hall of Fame', sub: 'Your team is recorded there', on: true },
+          { art: aceFile ? monArt(aceFile) : null, title: `Crowd at ${favor}`, sub: favor >= 95 ? 'As high as it goes' : 'With you at the end' },
+        ],
+        side: 'What happens now',
+        lines: [['', `Galar is cleared. Your team enters the Hall of Fame${more ? ' and the next region opens' : ''}.`], ['Run', nextId ? `${content.regions.get(nextId)?.name ?? nextId} is next.` : 'This was the last region of your run.']],
+        party: party.map((m) => { const f = monFile(this, m.speciesId, 'front', !!m.shiny); return f ? monArt(f) : null; }),
+        counts: [[`${GALAR_TOURNAMENT.rounds} of ${GALAR_TOURNAMENT.rounds}`, 'rounds won'], [String(after.badges.length), 'badges'], [String(favor), 'crowd with you']],
+        champ: { title: 'Galar Champion', button: 'Hall of Fame' },
+      };
+    }
     const view = bracketView(content, after);
     const next = view.rounds.find((r) => r.state === 'next');
     if (!next) return null;
