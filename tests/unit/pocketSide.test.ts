@@ -8,6 +8,7 @@ import { pkAchieve, type PkAchievement } from '../../src/ui/pocket/screens/achie
 import { pkBagUse } from '../../src/ui/pocket/screens/bagUse';
 import { pkEvents } from '../../src/ui/pocket/screens/events';
 import { pkNews } from '../../src/ui/pocket/screens/news';
+import { pkOverlay } from '../../src/ui/redux/screens/overlay';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -138,5 +139,19 @@ describe('the Pocket News page', () => {
     expect(h).toMatch(/class="nw on" style="--c:#b97f00"/);
     expect(h).toContain('data-act="pick"');
     expect(h).toContain('Bzzt!');
+  });
+});
+
+describe('the Pocket notice cards (toasts)', () => {
+  it('a card per notice and toast with its colour and a tap to send it away or open it; nothing when empty', () => {
+    const h = pkOverlay({ notices: [{ id: 1, head: 'Saved', text: 'Stop 3 · slot 1' }, { id: 2, head: 'Rival', text: 'Blue is 3 stops ahead' }], toasts: [{ id: 7, kicker: 'Achievement', title: 'Trainer Tamer', art: null, lines: ['+150 Bank credits'], open: true }] });
+    expect((h.match(/class="toast gx-toast"/g) ?? []).length).toBe(3);
+    expect(h).toContain('--c:#2f9e44');
+    expect(h).toContain('--c:#2a75bb');
+    expect(h).toContain('--c:#f2a900');
+    expect(h).toContain('data-act="notice" data-arg="2"');
+    expect(h).toContain('data-act="toast" data-arg="7"');
+    expect(h).toContain('+150 Bank credits');
+    expect(pkOverlay({ notices: [], toasts: [] })).toBe('');
   });
 });

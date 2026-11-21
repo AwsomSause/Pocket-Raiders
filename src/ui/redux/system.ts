@@ -3,8 +3,8 @@
 // or changes game state, and nothing uses a random stream.
 
 import type Phaser from 'phaser';
-import { agoWord, noticeOf, overlayView, type LogRow, type NoticeRow, type ToastRow } from './screens/overlay';
-import { mountOverlay, reduxCardUp } from './stage';
+import { agoWord, noticeOf, overlayView, pkOverlay, type LogRow, type NoticeRow, type ToastRow } from './screens/overlay';
+import { mountOverlay, pocketOn, reduxCardUp } from './stage';
 import { phLog, type PhLogModel } from '../phantom/screens/system';
 
 interface Toast extends ToastRow { timer: ReturnType<typeof setTimeout> | null }
@@ -22,7 +22,9 @@ let captionTimer: ReturnType<typeof setTimeout> | null = null;
 function layer(game: Phaser.Game): { refresh(): void } {
   view ??= mountOverlay(game, {
     // A versus or cutscene card fills the screen: notices and toasts wait behind it and show again when it leaves.
-    render: (c) => overlayView(c, { notices: reduxCardUp() ? [] : state.notices, toasts: reduxCardUp() ? [] : state.toasts, log: state.log, caption: state.caption }),
+    // Pocket look: notices and toasts are drawn on the Pocket layer (pk below); the log and the song caption stay here.
+    render: (c) => overlayView(c, { notices: reduxCardUp() || pocketOn() ? [] : state.notices, toasts: reduxCardUp() || pocketOn() ? [] : state.toasts, log: state.log, caption: state.caption }),
+    pk: () => (reduxCardUp() ? '' : pkOverlay({ notices: state.notices, toasts: state.toasts })),
     acts: {
       // A tap sends a notice away.
       notice: (id) => onNotice(Number(id)),
