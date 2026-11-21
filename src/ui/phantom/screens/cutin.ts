@@ -65,6 +65,7 @@ export function phCut(_ph: PhantomVersion, d: CutModel): string {
       + (d.role ? `<div class="ac-k"><span>${esc(d.role)}</span></div>` : '')
       + `<div class="ac-t" style="font-size:${n > 16 ? 56 : n > 11 ? 78 : n > 8 ? 96 : 118}px">${ransom(name.toUpperCase(), 5)}</div>`
       + `<div class="ac-star" aria-hidden="true"><b>${star}</b></div>`
+      + (d.tags ? `<div class="ac-tags"><b>Lv.${d.tags.level}</b>${d.tags.types.map((t) => ty(t)).join('')}</div>` : '')
       + (said ? `<div class="pn lt ac-say tilt" style="--r:-2deg"><p class="txt" style="font-size:${sayAt}px">${said}</p></div>` : '')
       + '<div class="flashw" aria-hidden="true"></div>' + foot);
   }

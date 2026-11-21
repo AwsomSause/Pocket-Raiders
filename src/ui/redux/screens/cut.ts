@@ -39,6 +39,8 @@ export interface CutModel {
   where?: string;
   /** What a boss brings: how many Pokémon, and true lines about the fight. */
   brings?: { team: number; notes: readonly string[] } | null;
+  /** The Pokémon a card shows (an ace): its level and types, under its name on the Phantom card. */
+  tags?: { level: number; types: readonly string[] } | null;
 }
 
 const letter = (h: string): string => `<div class="bars" style="top:0"></div><div class="bars" style="bottom:0"></div>${h}`;

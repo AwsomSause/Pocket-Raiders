@@ -3251,6 +3251,7 @@ export class BattleScene extends Phaser.Scene {
       line: '',
       cast: battle?.trainer ? artOf(this, this.trainerArt()?.assetId) : this.rxCast,
       mon: showsMon && foe ? ((f) => (f ? { file: f, atlas: true } : null))(monFile(this, foe.speciesId, 'front', !!foe.shiny)) : null,
+      tags: showsMon && foe ? { level: foe.level, types: content.species.get(foe.speciesId)?.types ?? [] } : null,
       player: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
       backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
       evil: kind === 'evilTeam' || kind === 'evilBetrayal',

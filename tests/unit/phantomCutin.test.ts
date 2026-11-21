@@ -101,6 +101,10 @@ describe('the Phantom cutscene card', () => {
     expect(html).toContain('<b>ACE</b>');
     expect(html).toContain('ACE · ACE');
     expect(html).toContain('“This is where you stop.”');
+    // Its level and types under the name (mock-up `ace`), only when the card is told them.
+    expect(html).not.toContain('ac-tags');
+    const tagged = phCut(ph, cut({ kind: 'aceEntrance', tag: 'ACE!', name: 'Gengar', mon: { file: 'gengar.png', atlas: true }, tags: { level: 60, types: ['ghost', 'poison'] } }));
+    expect(tagged).toMatch(/class="ac-tags"><b>Lv\.60<\/b><span class="ty"[^>]*>.*GHOST.*POISON/);
     // A Legendary's entrance uses the same cut with a plain star.
     expect(phCut(ph, cut({ kind: 'aceEntrance', tag: 'Legendary Pokémon', name: 'Mewtwo', mon: { file: 'm.png', atlas: true } }))).toContain('<b>★</b>');
   });
