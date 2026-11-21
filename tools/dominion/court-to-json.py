@@ -16,7 +16,9 @@ does with an answer is the SPEC table below, written in a small effect language 
   ten:N threat:N goal:N stab:N raid:N shadow:N wipe:N   (kept for the slice that builds them: owed)
   note:SLICE:"text"  (a part that waits for a later slice: the answer is "limited")
   hero:intel:N  hero:battle  hero:letter  hero:spare  hero:late:N  hero:hunt  hero:lose   (D11: the Hero, hero.ts)
-  hook:ID      (a rule another slice owns, registered with setChairHook: insure, double-agent (D9), debate-early (D13), D10's in growthCourt.ts)
+  hook:ID      (a rule another slice owns, registered with setChairHook: insure, double-agent (D9), debate-early (D13),
+                magma-cool, aqua-cool, held-two, tribute-cut, smuggle-line, uprising-cut, uprising-up (D15),
+               close-deals, shadow-buy (D16), D10's in growthCourt.ts)
 
 A card with `wait` is switched off (status "disabled") until the named slice builds what its answers need.
 Re-run after the list changes:  python3 tools/dominion/court-to-json.py <plans/evil-mode-rework/lists> src/data/dominion
@@ -312,7 +314,7 @@ SPEC = {
     60: dict(look='trainer/pr/officer', who='jenny', a='c$-300 heat:-8 reg:3', b='heat:3'),
     61: dict(look='trainer/pr/officer', who='rookie', a='$-200 heat:-10 follow:62:10', b='heat:5'),
     62: dict(look='trainer/pr/officer', who='rookie', followOnly=True, a='$-400 heat:-10', b='heat:-5 grudge'),
-    63: dict(look='trainer/pr/veteran_m', who='looker', a='wanted:-15 note:D16:"Snagem and Cipher deals closed for the run"', b='wanted:5 note:D2:"Looker watches: Heat +2 per Night action for 7 days"'),
+    63: dict(look='trainer/pr/veteran_m', who='looker', a='wanted:-15 hook:close-deals', b='wanted:5 note:D2:"Looker watches: Heat +2 per Night action for 7 days"'),
     64: dict(look='trainer/pr/rich_f', who='lawyer', named='jailed', a='$-500 free loy:10', b='out:7 loy:-10'),
     65: dict(look='trainer/pr/rich_m', who='judge', a='c$-1500 hook:judge', b='chance:20{hook:judge-dirt}'),
     66: dict(look='trainer/pr/hooligans', who='informant', a='$-150 hook:informant', b=''),
@@ -330,7 +332,7 @@ SPEC = {
     77: dict(look='trainer/pr/archer', who='archer', rival=True, name='Archer', role='Rocket Admin', followOnly=True, foe='archer', a='fight{dread:8 ten:5}', b='$-400 ten:-6 mor:-4'),
     78: dict(look='trainer/pr/ariana', who='rival', rival=True, a='hook:heist ten:-10 chance:25{ten:20}', b='ten:4'),
     79: dict(look='trainer/pr/scientist_m', who='rival', rival=True, needs='stores', a='hook:machine mon:-1 threat:4', b=''),
-    80: dict(look='trainer/pr/magma_grunt_m', who='rival', rival=True, region='hoenn', wait='D15', a='note:D9:"Magma Tension -15, Aqua +15"', b='note:D9:"Aqua Tension -15, Magma +15"'),
+    80: dict(look='trainer/pr/magma_grunt_m', who='rival', rival=True, region='hoenn', a='hook:magma-cool', b='hook:aqua-cool'),
     81: dict(look='trainer/pr/proton', who='rival', rival=True, a='hook:debate-early ten:-5', b='ten:8 dread:3'),
     82: dict(look='trainer/pr/proton', who='rival', rival=True, a='wipe:1 ten:20 join', b='$1000 ten:-10 grudge'),  # D14: the plans hand over one rival site
     83: dict(look=GR, who='rival', rival=True, needs='stores', a='mon:-1 mon:1 ten:-3', b=''),
@@ -372,7 +374,7 @@ SPEC = {
     116: dict(look='member', named='any', a='loy:6 reg:2', b='loy:-6 mon:1'),
     117: dict(look='trainer/pr/ruin_maniac', who='ballmaker', a='deal:0:item=luxury-ball:5 note:D10:"that forest is off-limits"', b='dread:2'),
     118: dict(look='mon:meowth', who='stray', a='chance:50{mon:1} mor:3', b=''),
-    119: dict(look='trainer/pr/scientist_m', who='cipher', wait='D16', a='$-1000 note:D16:"a Shadow Pokémon" threat:8', b='reg:3'),
+    119: dict(look='trainer/pr/scientist_m', who='cipher', a='$-1000 hook:shadow-buy threat:8', b='reg:3'),
     120: dict(look='trainer/pr/ruin_maniac', who='hermit', a='reg:6 hero:late:7', b='hero:hunt threat:10'),
     121: dict(look='member', named='any', a='rest chance:50{$200 fame:1}', b='loy:-3'),
     122: dict(look='trainer/pr/camper_m', who='trainer', a='$-60 reg:3', b='dread:2 reg:-2'),
@@ -380,13 +382,13 @@ SPEC = {
     123: dict(look='trainer/pr/rich_m', who='mayor', a='c$-3000 heatall:-10 reg:8', b='wanted:5'),
     124: dict(look='trainer/pr/rich_m', who='company', a='deal:1000:clean shadow:1', b=''),
     125: dict(look='trainer/pr/interviewers', who='producer', a='fame:8 reg:6 heat:10', b=''),
-    126: dict(look='trainer/pr/veteran_m', who='governor', wait='D15', a='stab:15 note:D15:"two members go to the held region"', b='stab:-10'),
-    127: dict(look='trainer/pr/hooligans', who='rebel', wait='D15', a='stab:10 note:D15:"tribute -20%"', b='stab:-5 dread:10'),
-    128: dict(look='trainer/pr/rich_m', who='magnate', a='deal:1500 wanted:5 note:D15:"region-to-region smuggling"', b=''),
-    129: dict(look='trainer/pr/ace_trainer_m', who='gym-union', wait='D15', a='deal:-2000 note:D15:"Monarch Uprising check -50%"', b='note:D15:"Uprising check +25%"'),  # uprisings come with Stability (D15)
+    126: dict(look='trainer/pr/veteran_m', who='governor', needs='held', a='stab:15 hook:held-two', b='stab:-10'),
+    127: dict(look='trainer/pr/hooligans', who='rebel', needs='held', a='stab:10 hook:tribute-cut', b='stab:-5 dread:10'),
+    128: dict(look='trainer/pr/rich_m', who='magnate', a='deal:1500 wanted:5 hook:smuggle-line', b=''),
+    129: dict(look='trainer/pr/ace_trainer_m', who='gym-union', needs='held', a='deal:-2000 hook:uprising-cut', b='hook:uprising-up'),  # uprisings come with Stability (D15)
     130: dict(look='trainer/pr/rich_f', who='council', a='c$-50000 hook:council', b=''),
     131: dict(look='trainer/worker_m', who='architect', a='hook:architect chance:25{hook:weak-spot}', b=''),
-    132: dict(look='member', who='former', wait='D15', a='join stab:-5', b='stab:5'),
+    132: dict(look='member', who='former', needs='held', a='join stab:-5', b='stab:5'),
     # J. regulars (all once; each step comes 5-9 days after the last)
     133: dict(look='trainer/pr/clerk_m', who='sal', name='Sal', role='Mart clerk', a='deal:-40 reg:4 fav', b='$60 dread:4 chance:50{racket-}'),
     134: dict(look='trainer/pr/clerk_m', who='sal', name='Sal', role='Mart clerk', a='reg:4 note:D10:"Extort on the manager opens"', b=''),

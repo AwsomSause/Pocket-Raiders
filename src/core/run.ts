@@ -22,7 +22,7 @@ import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { endEvilFight, evilFightOn } from './evilMode/fightEnd';
-import { dominionCatchBlock, dominionFightOn, endDominionFight } from './dominion/fightEnd';
+import { dominionCatchBlock, dominionFightOn, dominionNoXp, endDominionFight } from './dominion/fightEnd';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
 import { answerAsk } from './greenneedle/ask';
@@ -3858,6 +3858,8 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
     for (const uid of [...participants, ...sharers]) {
       const mon = run.party.find((p) => p.uid === uid);
       if (!mon || mon.hp <= 0) continue;
+      // Dominion D16: a Shadow Pokémon (Cipher's machine) can't level until it's purified.
+      if (dominionNoXp(run, mon)) continue;
       // Teachy TV: Pokémon below the lead's level catch up faster.
       const catchUp = mon.level < leadLevel ? passivePercent(content, run, 'catchUpExp') : 0;
       // Macho Brace: more EXP for its holder.

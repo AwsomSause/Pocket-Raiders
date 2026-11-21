@@ -295,7 +295,8 @@ describe('DOMINION D14: hand-offs from other slices', () => {
     const had = mine();
     expect(payOwed(b, 'wipe', 1)).toBe(true); // card 82, the deserter Admin's HQ plans: one site
     expect(mine()).toBe(had + 1);
-    expect(payOwed(b, 'stab', 1)).toBe(false); // Stability waits for D15
+    expect(payOwed(b, 'stab', 3)).toBe(true); // D15: nothing held yet, so it waits in chair.owed and lands on leaving
+    expect(b.chair!.owed.stab).toBe(3);
   });
 });
 

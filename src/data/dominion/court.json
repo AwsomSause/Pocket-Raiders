@@ -2890,9 +2890,8 @@
       "n": -15
      },
      {
-      "k": "note",
-      "slice": "D16",
-      "text": "Snagem and Cipher deals closed for the run"
+      "k": "hook",
+      "id": "close-deals"
      }
     ]
    },
@@ -3662,9 +3661,8 @@
     "does": "Magma Ten −15, Aqua Ten +15",
     "fx": [
      {
-      "k": "note",
-      "slice": "D9",
-      "text": "Magma Tension -15, Aqua +15"
+      "k": "hook",
+      "id": "magma-cool"
      }
     ]
    },
@@ -3673,14 +3671,12 @@
     "does": "Aqua Ten −15, Magma Ten +15",
     "fx": [
      {
-      "k": "note",
-      "slice": "D9",
-      "text": "Aqua Tension -15, Magma +15"
+      "k": "hook",
+      "id": "aqua-cool"
      }
     ]
    },
    "who": "rival",
-   "wait": "D15",
    "region": "hoenn",
    "rival": true
   },
@@ -5399,9 +5395,8 @@
       "n": -1000
      },
      {
-      "k": "note",
-      "slice": "D16",
-      "text": "a Shadow Pokémon"
+      "k": "hook",
+      "id": "shadow-buy"
      },
      {
       "k": "owed",
@@ -5420,8 +5415,7 @@
      }
     ]
    },
-   "who": "cipher",
-   "wait": "D16"
+   "who": "cipher"
   },
   {
    "id": 120,
@@ -5695,9 +5689,8 @@
       "n": 15
      },
      {
-      "k": "note",
-      "slice": "D15",
-      "text": "two members go to the held region"
+      "k": "hook",
+      "id": "held-two"
      }
     ]
    },
@@ -5713,7 +5706,7 @@
     ]
    },
    "who": "governor",
-   "wait": "D15"
+   "needs": "held"
   },
   {
    "id": 127,
@@ -5737,9 +5730,8 @@
       "n": 10
      },
      {
-      "k": "note",
-      "slice": "D15",
-      "text": "tribute -20%"
+      "k": "hook",
+      "id": "tribute-cut"
      }
     ]
    },
@@ -5759,7 +5751,7 @@
     ]
    },
    "who": "rebel",
-   "wait": "D15"
+   "needs": "held"
   },
   {
    "id": 128,
@@ -5786,9 +5778,8 @@
       "n": 5
      },
      {
-      "k": "note",
-      "slice": "D15",
-      "text": "region-to-region smuggling"
+      "k": "hook",
+      "id": "smuggle-line"
      }
     ]
    },
@@ -5820,9 +5811,8 @@
       "n": -2000
      },
      {
-      "k": "note",
-      "slice": "D15",
-      "text": "Monarch Uprising check -50%"
+      "k": "hook",
+      "id": "uprising-cut"
      }
     ]
    },
@@ -5831,14 +5821,13 @@
     "does": "Uprising check +25%",
     "fx": [
      {
-      "k": "note",
-      "slice": "D15",
-      "text": "Uprising check +25%"
+      "k": "hook",
+      "id": "uprising-up"
      }
     ]
    },
    "who": "gym-union",
-   "wait": "D15"
+   "needs": "held"
   },
   {
    "id": 130,
@@ -5952,7 +5941,7 @@
     ]
    },
    "who": "former",
-   "wait": "D15"
+   "needs": "held"
   },
   {
    "id": 133,

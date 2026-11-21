@@ -1,0 +1,2148 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (galar); see the tool for sources.",
+ "id": "galar",
+ "label": "GALAR",
+ "warehouse": "Hulbury",
+ "hq": "hulbury",
+ "arrive": [
+  "Hulbury: fish, chips, gulls, and a lighthouse with a Gym inside it. The new warehouse is a fish-salting shed.",
+  "{brought} pinches their nose. \"Boss. Boss. It's worse than the first one.\"",
+  "Every screen in the harbour shows the same smiling Chairman, promising Galar endless energy. The screen under the pier is broken; nobody fixes it."
+ ],
+ "districts": [
+  {
+   "id": "postwick",
+   "name": "Postwick",
+   "x": 40,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-grass",
+   "targets": [
+    {
+     "id": "postwick-farm",
+     "name": "Postwick Farms",
+     "kind": "site",
+     "owner": {
+      "name": "The farmers",
+      "look": "trainer/pr/worker_f",
+      "line": "Wooloo everywhere. They stop traffic."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Farmhand",
+      "cls": "worker",
+      "species": [
+       "wooloo",
+       "skwovet"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "slumbering-weald",
+     "name": "Slumbering Weald",
+     "kind": "route",
+     "owner": {
+      "name": "Nobody",
+      "look": "trainer/pr/ranger_m",
+      "line": "A misty wood the locals don't enter."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Lost hiker",
+      "cls": "hiker",
+      "species": [
+       "rookidee",
+       "skwovet"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "wedgehurst-lab",
+     "name": "Magnolia's Lab (Wedgehurst)",
+     "kind": "site",
+     "owner": {
+      "name": "Sonia",
+      "look": "trainer/pr/scientist_f",
+      "line": "Grandmother's lab, granddaughter's research."
+     },
+     "trait": {
+      "word": "Distracted",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Lab aide",
+      "cls": "youngster",
+      "species": [
+       "yamper",
+       "nickit"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "motostoke",
+   "name": "Motostoke",
+   "x": 140,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "fire-steel",
+   "targets": [
+    {
+     "id": "motostoke-stadium",
+     "name": "Motostoke Stadium",
+     "kind": "crowd",
+     "owner": {
+      "name": "The stadium crowd",
+      "look": "trainer/pr/linebacker",
+      "line": "Fans in the stands and bookies on the stairs."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Stadium guard",
+      "cls": "veteran",
+      "species": [
+       "rolycoly",
+       "growlithe"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "budew-drop",
+     "name": "Budew Drop Inn",
+     "kind": "crowd",
+     "owner": {
+      "name": "The landlady",
+      "look": "trainer/pr/waiter_f",
+      "line": "Every gym challenger sleeps here once."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 5
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Barman",
+      "cls": "veteran",
+      "species": [
+       "mudbray"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "motostoke-riverbank",
+     "name": "Motostoke Riverbank",
+     "kind": "route",
+     "owner": {
+      "name": "Bargemen",
+      "look": "trainer/pr/worker_f",
+      "line": "Coal barges and quiet deals."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Bargeman",
+      "cls": "worker",
+      "species": [
+       "chewtle",
+       "drednaw"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 124
+  },
+  {
+   "id": "hulbury",
+   "name": "Hulbury",
+   "x": 260,
+   "y": 300,
+   "control": 10,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-water",
+   "targets": [
+    {
+     "id": "hulbury-market",
+     "name": "Hulbury Market",
+     "kind": "crowd",
+     "owner": {
+      "name": "The fishmongers",
+      "look": "trainer/pr/clerk_f",
+      "line": "Fish, chips and what fell off a boat."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Fishmonger",
+      "cls": "fisherman",
+      "species": [
+       "chewtle",
+       "arrokuda"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "hulbury-harbour",
+     "name": "Hulbury Harbour",
+     "kind": "dock",
+     "owner": {
+      "name": "The harbour master",
+      "look": "trainer/pr/pilot",
+      "line": "Every ship in Galar docks here at least once."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Dock hand",
+      "cls": "worker",
+      "species": [
+       "wingull",
+       "arrokuda"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "seafood-restaurant",
+     "name": "Captain's Seafood",
+     "kind": "shop",
+     "owner": {
+      "name": "The head chef",
+      "look": "trainer/pr/waiter_m",
+      "line": "Michelin-rated chips. The chef battles too."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Head chef",
+      "cls": "veteran",
+      "species": [
+       "chewtle",
+       "wishiwashi"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "turffield",
+   "name": "Turffield",
+   "x": 40,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "grass-rock",
+   "targets": [
+    {
+     "id": "turffield-geoglyph",
+     "name": "The Geoglyph",
+     "kind": "crowd",
+     "owner": {
+      "name": "The ruin watchers",
+      "look": "trainer/pr/ruin_maniac",
+      "line": "A huge picture on the hillside. Tourists come in coaches."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 5
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Ruin watcher",
+      "cls": "psychic",
+      "species": [
+       "sigilyph"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "turffield-farm",
+     "name": "Turffield Farms",
+     "kind": "site",
+     "owner": {
+      "name": "The farm co-op",
+      "look": "trainer/pr/worker_f",
+      "line": "They grow half of Galar's food."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Farmhand",
+      "cls": "worker",
+      "species": [
+       "gossifleur",
+       "wooloo"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "galar-mine",
+     "name": "Galar Mine",
+     "kind": "cave",
+     "owner": {
+      "name": "The miners",
+      "look": "trainer/pr/worker_f",
+      "line": "Macro Cosmos coal, dug by hand."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Miner",
+      "cls": "hiker",
+      "species": [
+       "rolycoly",
+       "roggenrola"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "stow",
+   "name": "Stow-on-Side",
+   "x": 140,
+   "y": 70,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "fighting-ghost",
+   "targets": [
+    {
+     "id": "stow-bazaar",
+     "name": "The Bazaar",
+     "kind": "shop",
+     "owner": {
+      "name": "The stall holders",
+      "look": "trainer/pr/clerk_f",
+      "line": "Everything is for sale. Everything."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Stall tough",
+      "cls": "roughneck",
+      "species": [
+       "sinistea",
+       "impidimp"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "stow-mural",
+     "name": "The Old Mural",
+     "kind": "site",
+     "owner": {
+      "name": "The mural keeper",
+      "look": "trainer/pr/veteran_m",
+      "line": "An ancient painting a Champion's rival once broke open."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Keeper",
+      "cls": "hex-maniac",
+      "species": [
+       "sinistea",
+       "golett"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "glimwood-tangle",
+     "name": "Glimwood Tangle",
+     "kind": "route",
+     "owner": {
+      "name": "Mushroom pickers",
+      "look": "trainer/pr/ranger_f",
+      "line": "Glowing mushrooms and very small, very mean Pokémon."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Picker",
+      "cls": "picnicker",
+      "species": [
+       "impidimp",
+       "hatenna"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "ballonlea",
+   "name": "Ballonlea",
+   "x": 40,
+   "y": 40,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "grass-fairy",
+   "targets": [
+    {
+     "id": "ballonlea-forest",
+     "name": "Ballonlea Woods",
+     "kind": "route",
+     "owner": {
+      "name": "The woodsfolk",
+      "look": "trainer/pr/parasol_lady",
+      "line": "A town under glowing trees."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Woodsman",
+      "cls": "fairy-tale-girl",
+      "species": [
+       "morelull",
+       "impidimp"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "ballonlea-shop",
+     "name": "The Glow Shop",
+     "kind": "shop",
+     "owner": {
+      "name": "The shopkeeper",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells lamps in a town that doesn't need them."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The keeper's son",
+      "cls": "youngster",
+      "species": [
+       "milcery"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "ballonlea-stadium",
+     "name": "Ballonlea Stadium",
+     "kind": "crowd",
+     "owner": {
+      "name": "The tea ladies",
+      "look": "trainer/pr/veteran_f",
+      "line": "Opal's fans. They bring cake and opinions."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Tea lady",
+      "cls": "fairy-tale-girl",
+      "species": [
+       "spritzee",
+       "swirlix"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "hammerlocke",
+   "name": "Hammerlocke",
+   "x": 260,
+   "y": 170,
+   "control": 0,
+   "rival": 60,
+   "police": true,
+   "wild": "dragon-steel",
+   "targets": [
+    {
+     "id": "hammerlocke-vault",
+     "name": "The Vault",
+     "kind": "site",
+     "owner": {
+      "name": "The vault guard",
+      "look": "trainer/pr/veteran_m",
+      "line": "Old treasures behind the stadium, guarded by old men."
+     },
+     "trait": {
+      "word": "Steady",
+      "odds": -6
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Vault guard",
+      "cls": "veteran",
+      "species": [
+       "duraludon",
+       "bronzong"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "energy-plant",
+     "name": "Hammerlocke Energy Plant",
+     "kind": "site",
+     "owner": {
+      "name": "The plant crew",
+      "look": "trainer/pr/scientist_m",
+      "line": "Under the castle, the power plant of all Galar."
+     },
+     "trait": {
+      "word": "Loyal",
+      "odds": -6
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Plant crew",
+      "cls": "worker",
+      "species": [
+       "rolycoly",
+       "magneton"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "hammerlocke-station",
+     "name": "Hammerlocke Police",
+     "kind": "police",
+     "owner": {
+      "name": "The constable",
+      "look": "dominion/t-policeman.png",
+      "line": "Polite, thorough, and very hard to bribe."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Constable",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "boltund"
+      ],
+      "offset": 1
+     }
+    }
+   ],
+   "w": 130,
+   "rivalNote": "Macro Cosmos"
+  },
+  {
+   "id": "circhester",
+   "name": "Circhester",
+   "x": 400,
+   "y": 70,
+   "control": 0,
+   "rival": 25,
+   "police": false,
+   "wild": "ice-rock",
+   "targets": [
+    {
+     "id": "circhester-baths",
+     "name": "The Hot Baths",
+     "kind": "crowd",
+     "owner": {
+      "name": "The bath keeper",
+      "look": "trainer/pr/beauty_2",
+      "line": "The old Roman baths. Everyone talks in the water."
+     },
+     "trait": {
+      "word": "Gossip",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Bath attendant",
+      "cls": "aroma-lady",
+      "species": [
+       "eiscue"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "bob-diner",
+     "name": "Bob's Your Uncle",
+     "kind": "crowd",
+     "owner": {
+      "name": "Bob",
+      "look": "trainer/pr/waiter_m",
+      "line": "A diner shaped like Snorlax. Fans eat here after matches."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Diner regular",
+      "cls": "roughneck",
+      "species": [
+       "snom"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "route-8-galar",
+     "name": "Route 8 Ruins",
+     "kind": "route",
+     "owner": {
+      "name": "Climbers",
+      "look": "trainer/pr/snow_worker",
+      "line": "Steamy ruins, steep ladders."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Climber",
+      "cls": "hiker",
+      "species": [
+       "sneasel",
+       "onix"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Macro Cosmos"
+  },
+  {
+   "id": "spikemuth",
+   "name": "Spikemuth",
+   "x": 400,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "poison-dark",
+   "targets": [
+    {
+     "id": "spikemuth-alley",
+     "name": "The Alley Stage",
+     "kind": "crowd",
+     "owner": {
+      "name": "The Team Yell fans",
+      "look": "trainer/pr/hooligans",
+      "line": "Piers plays here. Everyone shouts along."
+     },
+     "trait": {
+      "word": "Hothead",
+      "odds": 4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Yell fan",
+      "cls": "guitarist",
+      "species": [
+       "zigzagoon",
+       "scraggy"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "spikemuth-shop",
+     "name": "Shuttered Shop",
+     "kind": "shop",
+     "owner": {
+      "name": "The last shopkeeper",
+      "look": "dominion/t-clerk.png",
+      "line": "Everyone else closed. He stays out of spite."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Shopkeeper",
+      "cls": "roughneck",
+      "species": [
+       "nickit"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "spikemuth-gate",
+     "name": "The Gate",
+     "kind": "street",
+     "owner": {
+      "name": "Team Yell",
+      "look": "trainer/pr/hooligans",
+      "line": "They block the gate for fun, and for Marnie."
+     },
+     "trait": {
+      "word": "Loyal",
+      "odds": -6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Yell member",
+      "cls": "roughneck",
+      "species": [
+       "linoone",
+       "obstagoon"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "wyndon",
+   "name": "Wyndon",
+   "x": 520,
+   "y": 196,
+   "control": 0,
+   "rival": 55,
+   "police": false,
+   "wild": "normal-psychic",
+   "targets": [
+    {
+     "id": "rose-tower",
+     "name": "Rose Tower",
+     "kind": "site",
+     "owner": {
+      "name": "Macro Cosmos security",
+      "look": "trainer/pr/veteran_f",
+      "line": "The Chairman's glass tower. Every floor has a guard."
+     },
+     "trait": {
+      "word": "Loyal",
+      "odds": -8
+     },
+     "pay": 1.8,
+     "foe": {
+      "name": "Security",
+      "cls": "ace-trainer",
+      "species": [
+       "copperajah",
+       "klinklang"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "wyndon-stadium",
+     "name": "Wyndon Stadium",
+     "kind": "crowd",
+     "owner": {
+      "name": "The Champion Cup crowd",
+      "look": "trainer/pr/linebacker",
+      "line": "Ninety thousand seats and a lot of betting slips."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Stadium guard",
+      "cls": "veteran",
+      "species": [
+       "corviknight"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "wyndon-hotel",
+     "name": "Rose of the Rondelands",
+     "kind": "shop",
+     "owner": {
+      "name": "The hotel manager",
+      "look": "trainer/pr/rich_m",
+      "line": "The best hotel in Galar, owned by guess who."
+     },
+     "trait": {
+      "word": "Snob",
+      "odds": -4
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Hotel guard",
+      "cls": "veteran",
+      "species": [
+       "mr-rime"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 124,
+   "rivalNote": "Macro Cosmos"
+  }
+ ],
+ "routes": [
+  [
+   "postwick",
+   "motostoke"
+  ],
+  [
+   "motostoke",
+   "turffield"
+  ],
+  [
+   "motostoke",
+   "hulbury"
+  ],
+  [
+   "motostoke",
+   "hammerlocke"
+  ],
+  [
+   "hammerlocke",
+   "stow"
+  ],
+  [
+   "stow",
+   "ballonlea"
+  ],
+  [
+   "hammerlocke",
+   "circhester"
+  ],
+  [
+   "circhester",
+   "spikemuth"
+  ],
+  [
+   "spikemuth",
+   "wyndon"
+  ],
+  [
+   "hammerlocke",
+   "wyndon"
+  ],
+  [
+   "postwick",
+   "turffield"
+  ]
+ ],
+ "water": [
+  [
+   "hulbury",
+   "spikemuth"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "skwovet",
+   "rookidee",
+   "blipbug",
+   "nickit",
+   "gossifleur",
+   "wooloo",
+   "chewtle",
+   "yamper",
+   "rolycoly",
+   "applin",
+   "silicobra",
+   "cramorant",
+   "arrokuda",
+   "toxel",
+   "sizzlipede",
+   "clobbopus",
+   "sinistea",
+   "hatenna",
+   "impidimp",
+   "milcery",
+   "falinks",
+   "pincurchin",
+   "snom",
+   "stonjourner",
+   "eiscue",
+   "indeedee",
+   "morpeko",
+   "cufant",
+   "zigzagoon-galar",
+   "meowth-galar",
+   "ponyta-galar",
+   "farfetchd-galar"
+  ],
+  "steal": [
+   "dreepy",
+   "duraludon",
+   "applin",
+   "toxel",
+   "falinks",
+   "stonjourner",
+   "eiscue",
+   "morpeko",
+   "ponyta-galar",
+   "darumaka-galar",
+   "grookey",
+   "scorbunny",
+   "sobble",
+   "eevee",
+   "larvitar",
+   "dracozolt"
+  ]
+ },
+ "rivals": {
+  "macro-cosmos": [
+   {
+    "id": "rose-tower-hq",
+    "name": "Rose Tower (Wyndon)",
+    "district": "wyndon",
+    "hq": true
+   },
+   {
+    "id": "energy-plant-hold",
+    "name": "Energy Plant Hold",
+    "district": "hammerlocke"
+   },
+   {
+    "id": "galar-mine-office",
+    "name": "Galar Mine Office",
+    "district": "turffield"
+   },
+   {
+    "id": "motostoke-rail",
+    "name": "Motostoke Rail Yard",
+    "district": "motostoke"
+   },
+   {
+    "id": "circhester-office",
+    "name": "Circhester Branch Office",
+    "district": "circhester"
+   },
+   {
+    "id": "hulbury-shipping",
+    "name": "Hulbury Shipping Desk",
+    "district": "hulbury"
+   },
+   {
+    "id": "wyndon-monorail",
+    "name": "Wyndon Monorail",
+    "district": "wyndon"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "turffield-gym",
+   "district": "turffield",
+   "leader": "Milo",
+   "leaderId": "milo",
+   "type": "grass",
+   "badge": "Grass",
+   "species": [
+    "gossifleur",
+    "eldegoss"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Gym Trainer Hayden",
+     "cls": "picnicker",
+     "leaderId": null,
+     "species": [
+      "gossifleur"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "hulbury-gym",
+   "district": "hulbury",
+   "leader": "Nessa",
+   "leaderId": "nessa",
+   "type": "water",
+   "badge": "Water",
+   "species": [
+    "goldeen",
+    "arrokuda",
+    "drednaw"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Swimmer Olivia",
+     "cls": "swimmer",
+     "leaderId": null,
+     "species": [
+      "chewtle"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "motostoke-gym",
+   "district": "motostoke",
+   "leader": "Kabu",
+   "leaderId": "kabu",
+   "type": "fire",
+   "badge": "Fire",
+   "species": [
+    "ninetales",
+    "arcanine",
+    "centiskorch"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Gym Trainer Belle",
+     "cls": "firebreather",
+     "leaderId": null,
+     "species": [
+      "sizzlipede"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "stow-gym",
+   "district": "stow",
+   "leader": "Bea",
+   "leaderId": "bea",
+   "type": "fighting",
+   "badge": "Fighting",
+   "species": [
+    "hitmontop",
+    "pangoro",
+    "sirfetchd",
+    "machamp"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Black Belt Ken",
+     "cls": "black-belt",
+     "leaderId": null,
+     "species": [
+      "clobbopus"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "ballonlea-gym",
+   "district": "ballonlea",
+   "leader": "Opal",
+   "leaderId": "opal",
+   "type": "fairy",
+   "badge": "Fairy",
+   "species": [
+    "weezing",
+    "mawile",
+    "togekiss",
+    "alcremie"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Gym Trainer Bianca",
+     "cls": "fairy-tale-girl",
+     "leaderId": null,
+     "species": [
+      "milcery"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "circhester-gym",
+   "district": "circhester",
+   "leader": "Gordie",
+   "leaderId": "gordie",
+   "type": "rock",
+   "badge": "Rock",
+   "species": [
+    "barbaracle",
+    "shuckle",
+    "stonjourner",
+    "coalossal"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Hiker Zack",
+     "cls": "hiker",
+     "leaderId": null,
+     "species": [
+      "rolycoly"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "spikemuth-gym",
+   "district": "spikemuth",
+   "leader": "Piers",
+   "leaderId": "piers",
+   "type": "dark",
+   "badge": "Dark",
+   "species": [
+    "scrafty",
+    "malamar",
+    "skuntank",
+    "obstagoon"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Guitarist Yell",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "nickit"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "hammerlocke-gym",
+   "district": "hammerlocke",
+   "leader": "Raihan",
+   "leaderId": "raihan",
+   "type": "dragon",
+   "badge": "Dragon",
+   "species": [
+    "gigalith",
+    "flygon",
+    "sandaconda",
+    "duraludon"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Ace Trainer Ryder",
+     "cls": "ace-trainer",
+     "leaderId": null,
+     "species": [
+      "applin"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "ballonlea-shop",
+   "name": "The Glow Shop",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week."
+  },
+  {
+   "target": "seafood-restaurant",
+   "name": "Captain's Seafood",
+   "price": 9000,
+   "income": 300,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "Free chips: Regard +1 in Hulbury each week."
+  },
+  {
+   "target": "hulbury-market",
+   "name": "Hulbury Market",
+   "price": 9000,
+   "income": 350,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 150
+   },
+   "text": "Cash stalls: ₽150 a week comes back clean."
+  },
+  {
+   "target": "wyndon-hotel",
+   "name": "Rose of the Rondelands",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 400
+   },
+   "text": "The Chairman's hotel pays you ₽400 more a week.",
+   "rival": true
+  },
+  {
+   "target": "motostoke-stadium",
+   "name": "Motostoke Stadium",
+   "price": 20000,
+   "income": 500,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "Match-day bets wash ₽200 a week.",
+   "rival": true
+  },
+  {
+   "target": "stow-bazaar",
+   "name": "The Bazaar",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Market gossip: +5% on jobs in Stow-on-Side."
+  },
+  {
+   "target": "bob-diner",
+   "name": "Bob's Your Uncle",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "The Hero stops for a burger."
+  },
+  {
+   "target": "spikemuth-shop",
+   "name": "Shuttered Shop",
+   "price": 4000,
+   "income": 150,
+   "clean": true,
+   "perk": {
+    "kind": "heatDown",
+    "n": 1
+   },
+   "text": "Spikemuth looks after its own: Heat −1 there each week."
+  }
+ ],
+ "pillars": [
+  "wyndon-hotel",
+  "motostoke-stadium"
+ ],
+ "hero": {
+  "path": [
+   "postwick",
+   "motostoke",
+   "turffield",
+   "hulbury",
+   "stow",
+   "ballonlea",
+   "circhester",
+   "spikemuth",
+   "hammerlocke"
+  ],
+  "allies": [
+   {
+    "id": "milo",
+    "name": "Milo",
+    "look": "bosses/milo.png",
+    "ace": "eldegoss"
+   },
+   {
+    "id": "nessa",
+    "name": "Nessa",
+    "look": "bosses/nessa.png",
+    "ace": "drednaw"
+   },
+   {
+    "id": "kabu",
+    "name": "Kabu",
+    "look": "bosses/kabu.png",
+    "ace": "centiskorch"
+   },
+   {
+    "id": "bea",
+    "name": "Bea",
+    "look": "bosses/bea.png",
+    "ace": "machamp"
+   },
+   {
+    "id": "piers",
+    "name": "Piers",
+    "look": "bosses/piers.png",
+    "ace": "obstagoon"
+   },
+   {
+    "id": "raihan",
+    "name": "Raihan",
+    "look": "bosses/raihan.png",
+    "ace": "duraludon"
+   },
+   {
+    "id": "leon",
+    "name": "Leon",
+    "look": "bosses/leon-masters.png",
+    "ace": "charizard",
+    "champion": true
+   }
+  ],
+  "mentor": "Professor Magnolia",
+  "parent": "The Hero's mother",
+  "sidekick": "Hop, from Postwick",
+  "homes": {
+   "zacian": {
+    "home": "postwick",
+    "over": "the Slumbering Weald"
+   },
+   "zamazenta": {
+    "home": "postwick",
+    "over": "the Slumbering Weald"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "marnie",
+    "name": "Marnie",
+    "species": [
+     "liepard",
+     "toxicroak",
+     "scrafty",
+     "morpeko",
+     "grimmsnarl"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "hop",
+    "name": "Hop",
+    "species": [
+     "dubwool",
+     "corviknight",
+     "pincurchin",
+     "snorlax",
+     "rillaboom"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "bede",
+    "name": "Bede",
+    "species": [
+     "mawile",
+     "gardevoir",
+     "rapidash",
+     "hatterene"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "raihan-e4",
+    "name": "Raihan",
+    "species": [
+     "flygon",
+     "sandaconda",
+     "gigalith",
+     "duraludon"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "leon",
+   "name": "Leon",
+   "species": [
+    "aegislash",
+    "dragapult",
+    "haxorus",
+    "seismitoad",
+    "mr-rime",
+    "charizard"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "dreepy",
+  "duraludon",
+  "dracozolt",
+  "arctozolt",
+  "porygon"
+ ],
+ "desk": {
+  "name": "Galar",
+  "rivals": [
+   "Macro Cosmos"
+  ],
+  "badges": [
+   {
+    "name": "Grass Badge",
+    "town": "Turffield",
+    "c": "#5aa84a"
+   },
+   {
+    "name": "Water Badge",
+    "town": "Hulbury",
+    "c": "#4fa3ff"
+   },
+   {
+    "name": "Fire Badge",
+    "town": "Motostoke",
+    "c": "#ff5a3a"
+   },
+   {
+    "name": "Fighting Badge",
+    "town": "Stow-on-Side",
+    "c": "#c86a3a"
+   },
+   {
+    "name": "Fairy Badge",
+    "town": "Ballonlea",
+    "c": "#e88ab0"
+   },
+   {
+    "name": "Rock Badge",
+    "town": "Circhester",
+    "c": "#a87a4a"
+   },
+   {
+    "name": "Dark Badge",
+    "town": "Spikemuth",
+    "c": "#4a3a5a"
+   },
+   {
+    "name": "Dragon Badge",
+    "town": "Hammerlocke",
+    "c": "#4a6ab8"
+   }
+  ],
+  "codes": {
+   "Turffield": "TRF",
+   "Hulbury": "HLB",
+   "Motostoke": "MTS",
+   "Stow-on-Side": "STW",
+   "Ballonlea": "BLN",
+   "Circhester": "CRC",
+   "Spikemuth": "SPK",
+   "Hammerlocke": "HMR"
+  },
+  "mons": [
+   "skwovet",
+   "rookidee",
+   "blipbug",
+   "nickit",
+   "gossifleur",
+   "wooloo",
+   "chewtle",
+   "yamper",
+   "rolycoly",
+   "applin",
+   "silicobra",
+   "cramorant",
+   "arrokuda",
+   "toxel",
+   "sizzlipede",
+   "clobbopus",
+   "sinistea",
+   "hatenna",
+   "impidimp",
+   "milcery",
+   "falinks",
+   "pincurchin",
+   "snom",
+   "stonjourner",
+   "eiscue",
+   "indeedee",
+   "morpeko",
+   "cufant",
+   "zigzagoon-galar",
+   "meowth-galar",
+   "ponyta-galar",
+   "farfetchd-galar"
+  ],
+  "offRegion": [
+   "rattata",
+   "sentret",
+   "zigzagoon",
+   "bidoof",
+   "lillipup",
+   "fletchling",
+   "yungoos",
+   "lechonk"
+  ],
+  "writers": [
+   {
+    "name": "Dig site foreman Milo's friend",
+    "short": "Farmer Tom",
+    "town": "Turffield",
+    "quote": "{first} dug at the Turffield geoglyph. Never broke a stone."
+   },
+   {
+    "name": "Hulbury fishmonger Nessa's aunt",
+    "short": "Auntie Fen",
+    "town": "Hulbury",
+    "quote": "{first} gutted fish at my stall for a year. Strong stomach."
+   },
+   {
+    "name": "Motostoke boiler man",
+    "short": "Boilerman Cole",
+    "town": "Motostoke",
+    "quote": "{first} kept the city's boilers running. Never late."
+   },
+   {
+    "name": "Stow-on-Side market trader",
+    "short": "Trader Sal",
+    "town": "Stow-on-Side",
+    "quote": "{first} ran my market stall. Haggles like a pro."
+   },
+   {
+    "name": "Ballonlea lamplighter",
+    "short": "Lamplighter Ivy",
+    "town": "Ballonlea",
+    "quote": "{first} lit the mushroom lamps every night in Glimwood."
+   },
+   {
+    "name": "Circhester bath attendant",
+    "short": "Attendant Rolf",
+    "town": "Circhester",
+    "quote": "{first} worked the hot baths. Discreet. Very discreet."
+   }
+  ]
+ },
+ "holdings": {
+  "galar:turffield-stadium-milo": {
+   "district": "turffield",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "via": "gym:turffield-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Grass crew +10%; farm income +₽200/day; first Dynamax training.\" waits for a battle or shop hook."
+  },
+  "galar:hulbury-stadium-nessa": {
+   "district": "hulbury",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "via": "gym:hulbury-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Water crew +10%; sea-trade +₽200/day.\" waits for a battle or shop hook."
+  },
+  "galar:motostoke-stadium-kabu": {
+   "district": "motostoke",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:motostoke-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fire crew +10%; free Fire items each week.\" waits for a battle or shop hook."
+  },
+  "galar:stow-on-side-stadium-bea-allister": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fighting/Ghost crew +10%; Dojo events.\" waits for a battle or shop hook."
+  },
+  "galar:ballonlea-stadium-opal": {
+   "district": "ballonlea",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:ballonlea-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fairy crew +10%; Fairy events.\" waits for a battle or shop hook."
+  },
+  "galar:circhester-stadium-gordie-melony": {
+   "district": "circhester",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Rock/Ice crew +10%; hot springs.\" waits for a battle or shop hook."
+  },
+  "galar:spikemuth-gym-piers": {
+   "district": "spikemuth",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "via": "gym:spikemuth-gym",
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Dark crew +10%; Team Yell's backing; concert Regard +10.\" waits for a battle or shop hook."
+  },
+  "galar:hammerlocke-stadium-raihan": {
+   "district": "hammerlocke",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:hammerlocke-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Dragon crew +10%; weather control (sandstorm).\" waits for a battle or shop hook."
+  },
+  "galar:wyndon-stadium-leon": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Leon's seat; free practice vs Champion weekly.\" waits for a battle or shop hook."
+  },
+  "galar:postwick": {
+   "district": "postwick",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"home; Loyalty +1 weekly; the Wishing Star event.\" waits for a battle or shop hook."
+  },
+  "galar:wedgehurst": {
+   "district": "postwick",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Magnolia's Lab and the Station; recruits +1 weekly.\" waits for a battle or shop hook."
+  },
+  "galar:motostoke": {
+   "district": "motostoke",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Macro Cosmos, the Stadium, Station and Pokémon Center; city income ×1.5; Regard \" waits for a battle or shop hook."
+  },
+  "galar:turffield": {
+   "district": "turffield",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"the Hill and Farm; Berry income +₽200/day; a Pokémon Day Care.\" waits for a battle or shop hook."
+  },
+  "galar:hulbury": {
+   "district": "hulbury",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Docks and seafood; import/export +2; fishing +25%.\" waits for a battle or shop hook."
+  },
+  "galar:stow-on-side": {
+   "district": "stow",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Quarry and Ghost Gym; Rock crew +5%; a Dojo event.\" waits for a battle or shop hook."
+  },
+  "galar:ballonlea": {
+   "district": "ballonlea",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Fairy Forest; Fairy crew +5%; Regard +10.\" waits for a battle or shop hook."
+  },
+  "galar:circhester": {
+   "district": "circhester",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Bath and Hot Spring; crew heal; Ice crew +5%.\" waits for a battle or shop hook."
+  },
+  "galar:spikemuth": {
+   "district": "spikemuth",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Team Yell's base; Dark crew +10%; concert Regard +10.\" waits for a battle or shop hook."
+  },
+  "galar:hammerlocke": {
+   "district": "hammerlocke",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Hammerlocke Hills and Tower; Dragon crew +5%; weather control once.\" waits for a battle or shop hook."
+  },
+  "galar:wyndon": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Rose Tower, the Stadium, Cup and Station; city income ×2; Regard +15.\" waits for a battle or shop hook."
+  },
+  "galar:slumbering-weald": {
+   "district": "postwick",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Zacian/Zamazenta rumours; Fairy/Steel crew +5%; a Rusted item event.\" waits for a battle or shop hook."
+  },
+  "galar:magnolias-research-lab-wedgehurst": {
+   "district": "postwick",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Dynamax research; new recruits start with a free Pokémon; hatch −30%.\" waits for a battle or shop hook."
+  },
+  "galar:hops-house-players-house": {
+   "district": "postwick",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"crew heal fully; Loyalty +2 weekly.\" waits for a battle or shop hook."
+  },
+  "galar:macro-cosmos-hq": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Front income +25%; Max Raid energy; a free Garage.\" waits for a battle or shop hook."
+  },
+  "galar:rose-tower": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "income",
+     "n": 7000
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Macro Cosmos HQ; ₽ income +₽1,000/day; a skyline view (Intel +2).\" waits for a battle or shop hook."
+  },
+  "galar:energy-plant-hammerlocke": {
+   "district": "hammerlocke",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free energy; all machine rooms −40% upkeep; Eternatus rumour.\" waits for a battle or shop hook."
+  },
+  "galar:motostoke-station": {
+   "district": "motostoke",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"fast travel between held cities (−2 days).\" waits for a battle or shop hook."
+  },
+  "galar:wyndon-station": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the fast-travel hub; Regard +5; import/export +1.\" waits for a battle or shop hook."
+  },
+  "galar:wild-area": {
+   "district": "motostoke",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"five wild per day plus weather encounters; Max Raid dens; Pen +20.\" waits for a battle or shop hook."
+  },
+  "galar:max-raid-dens": {
+   "district": "motostoke",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a Dynamax Pokémon encounter weekly; Dynamax candy.\" waits for a battle or shop hook."
+  },
+  "galar:route-5-camp": {
+   "district": "turffield",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"curry events (crew buffs); Loyalty +1 weekly.\" waits for a battle or shop hook."
+  },
+  "galar:pokemon-nursery-route-5": {
+   "district": "turffield",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"breeding; stolen Pokémon raised faster.\" waits for a battle or shop hook."
+  },
+  "galar:hulbury-docks": {
+   "district": "hulbury",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"import/export +2; sea ships +1.\" waits for a battle or shop hook."
+  },
+  "galar:galar-mine": {
+   "district": "turffield",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"ore +₽250/day; Rock crew +5%.\" waits for a battle or shop hook."
+  },
+  "galar:galar-mine-no-2": {
+   "district": "hulbury",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"ore +₽250/day; Dynamax dens.\" waits for a battle or shop hook."
+  },
+  "galar:glimwood-tangle": {
+   "district": "ballonlea",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Fairy crew +5%; hidden items; a Mushroom event.\" waits for a battle or shop hook."
+  },
+  "galar:ballonlea-fairy-forest": {
+   "district": "ballonlea",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fairy events; Fairy crew +5%.\" waits for a battle or shop hook."
+  },
+  "galar:hammerlocke-hills": {
+   "district": "hammerlocke",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Rock crew +5%; a shortcut (−1 day).\" waits for a battle or shop hook."
+  },
+  "galar:lake-of-outrage": {
+   "district": "hammerlocke",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Wild Reserve +1; Water crew +5%.\" waits for a battle or shop hook."
+  },
+  "galar:giants-cap": {
+   "district": "motostoke",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Dragon crew +5%; Dragon events.\" waits for a battle or shop hook."
+  },
+  "galar:dusty-bowl": {
+   "district": "hammerlocke",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Fighting crew +5%; Sandstorm.\" waits for a battle or shop hook."
+  },
+  "galar:battle-tower-galar": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Grunts train; extreme-trainer recruits.\" waits for a battle or shop hook."
+  },
+  "galar:master-dojo-isle-of-armor": {
+   "district": "hulbury",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    },
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Grunts learn strikes; Fighting crew +20%.\" waits for a battle or shop hook."
+  },
+  "galar:challenge-beach": {
+   "district": "hulbury",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"training; Fighting crew +5%.\" waits for a battle or shop hook."
+  },
+  "galar:poke-job-agency": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"crew jobs; income +₽200/day.\" waits for a battle or shop hook."
+  },
+  "galar:wyndon-stadium-cafe": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    },
+    {
+     "k": "regard",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Regard +5; clean income +₽150/day.\" waits for a battle or shop hook."
+  },
+  "galar:galar-gym-challenge-seat": {
+   "district": "wyndon",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"controls the Gym Challenge route; Badge power +1.\" waits for a battle or shop hook."
+  },
+  "galar:crown-tundra": {
+   "district": "circhester",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Legendary dens; Regi trio events; Ice crew +5%.\" waits for a battle or shop hook."
+  },
+  "galar:slumbering-weald-shrine": {
+   "district": "postwick",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Zacian/Zamazenta rite; Regard +15.\" waits for a battle or shop hook."
+  }
+ }
+}

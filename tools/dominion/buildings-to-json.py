@@ -233,8 +233,8 @@ EXTRA = [  # Part 3 §3.2 rooms not in the lists (Kice's poster names three of t
     dict(n='X2', id='recruitment-center', name='Recruitment Center', group='A', slots=1, cost=3500, t1='+1 walk-in recruit candidate a week; recruit attempts +10%; Hire Grunt costs −25%', per='+5% recruit', ladder=['Table', 'Desk', 'Office', 'Center', 'Bureau', 'Hall', 'Institute', 'Grand Hall']),
     dict(n='X3', id='luxury-suite', name='Luxury Suite', group='A', slots=1, cost=12000, t1="Boss's quarters: Boss rests give +2 Day actions instead of +1; Debates and recruit meetings held here +10%; Executives' Morale +10", per='+5% meetings', ladder=['Room', 'Suite', 'Apartment', 'Penthouse', 'Loft', 'Manor Wing', 'Palace Wing', 'Royal Suite']),
     dict(n='X4', id='night-shift', name='Night Shift', group='E', slots=1, cost=5000, t1='+1 Night action', per='+1 night crew', ladder=['Lamp', 'Shift', 'Crew', 'Watch', 'Guard', 'Patrol', 'Company', 'Night Legion']),
-    dict(n='X5', id='snag-desk', name='Snag Desk', group='G', slots=1, cost=0, t1='Built by Team Snagem (deal only)', per='—', ladder=['Desk'] * 8, deal='D16'),
-    dict(n='X6', id='shadow-lab', name='Shadow Lab', group='G', slots=1, cost=0, t1='Built by Team Cipher (deal only)', per='—', ladder=['Lab'] * 8, deal='D16'),
+    dict(n='X5', id='snag-desk', name='Snag Desk', group='G', slots=1, cost=0, t1='Built by Team Snagem (deal only)', per='—', ladder=['Desk'] * 8, deal='snagem'),
+    dict(n='X6', id='shadow-lab', name='Shadow Lab', group='G', slots=1, cost=0, t1='Built by Team Cipher (deal only)', per='—', ladder=['Lab'] * 8, deal='cipher'),
 ]
 for e in EXTRA:
     rows.append(dict(listName=e['name'], groupName='Part 3 §3.2', focus='hq', part3=True, outside=False, canOutside=False, cap='—', sub=None, **e))
@@ -248,7 +248,8 @@ for r in rows:
     r['minTier'] = 5 if r['id'] == 'throne-room' else MIN_TIER[r['group']]
     deal = r.pop('deal', None)
     if deal:
-        r.update(status='disabled', waits=deal, fx={})
+        # D16: the partner builds it when the deal is signed (partners.ts); it unlocks that partner's actions.
+        r.update(status='supported', waits=None, fx={'unlock': True}, deal=deal)
     elif fx:
         note = NOTE.get(r['id'])
         r.update(status='limited' if note else 'supported', fx=fx, waits=None)

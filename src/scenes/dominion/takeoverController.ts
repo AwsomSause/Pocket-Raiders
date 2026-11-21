@@ -11,7 +11,7 @@ import type { InputAction } from '../../ui/input';
 import type { MonFiles } from '../../ui/redux/screens/dominion/heroViews';
 import { broadcastView, holdingsView, takeoverView } from '../../ui/redux/screens/dominion/takeover';
 
-type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district';
+type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
 interface Host {
   screenName: Screen;
   setNotice(n: string | null): void;
@@ -21,6 +21,8 @@ interface Host {
   startFightFrom(from: Screen): void;
   monFilesOf(ids: string[]): MonFiles;
   bossLook(): string | null;
+  /** D15: the Leaving page (once the region is Taken). */
+  openLeave(): void;
 }
 
 export class TakeoverController {
@@ -95,6 +97,7 @@ export class TakeoverController {
       case 'fight': return this.host.startFightFrom('takeover');
       case 'moment': return this.step({ t: 'takeover', op: 'moment' });
       case 'storm': return this.step({ t: 'takeover', op: 'storm' });
+      case 'leave': return this.host.openLeave();
       default: return this.openHoldings();
     }
   }
@@ -181,6 +184,7 @@ export class TakeoverController {
     else if (code === 'KeyP') return this.page === 'holdings' ? ((this.page = 'paths'), this.host.refresh(), true) : (this.openHoldings(), true);
     else if (code === 'KeyM' && m?.cta.act === 'moment') return this.cta(), true;
     else if (code === 'KeyS' && m?.cta.act === 'storm') return this.cta(), true;
+    else if (code === 'KeyL' && m?.cta.act === 'leave') return this.cta(), true;
     else return true;
     this.host.refresh();
     return true;

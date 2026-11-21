@@ -40,8 +40,8 @@ export const scale = (b: DominionBlock, n: number): number => n * R().tierPay[ti
 /** A card is "live" when nothing in it waits for a later slice; "limited" when part of it does; else "disabled". */
 export function cardStatus(c: CourtCard): 'supported' | 'limited' | 'disabled' {
   if (c.wait) return 'disabled';
-  // D11 builds Hero Threat, so `threat:N` plays in full; the other owed numbers still wait.
-  const part = (fx: CourtFx[]): boolean => fx.some((e) => e.k === 'note' || (e.k === 'owed' && e.key !== 'threat') || (e.k === 'deal' && e.ten !== undefined)
+  // D11 builds Hero Threat and D15 Stability, so `threat:N` and `stab:N` play in full; the other owed numbers still wait.
+  const part = (fx: CourtFx[]): boolean => fx.some((e) => e.k === 'note' || (e.k === 'owed' && e.key !== 'threat' && e.key !== 'stab') || (e.k === 'deal' && e.ten !== undefined)
     || (e.k === 'chance' && (part(e.yes) || part(e.no))) || (e.k === 'later' && part(e.fx)) || (e.k === 'fight' && (part(e.win) || part(e.lose))));
   return part(c.a.fx) || part(c.b.fx) ? 'limited' : 'supported';
 }
@@ -134,6 +134,7 @@ const hasNeeds = (b: DominionBlock, c: CourtCard): boolean => {
     const way = c.needs === 'gym-bought' ? 'buy' : 'blackmail';
     return Object.values(b.growth?.gyms ?? {}).some((g) => g.way === way);
   }
+  if (c.needs === 'held') return !!b.realm?.held.some((h) => h.status === 'held');
   if (c.sect === 'crisis' || c.crisis) return true;
   if (c.a.fx.concat(c.b.fx).some((e) => e.k === 'fight' || (e.k === 'chance' && e.yes.some((x) => x.k === 'fight')))) return !b.field.fight;
   return true;
@@ -333,6 +334,8 @@ const hooks: Partial<Record<ChairHook, (b: DominionBlock, r: Roll) => string | n
 export function setChairHook(id: ChairHook, f: (b: DominionBlock, r: Roll) => string | null): void {
   hooks[id] = f;
 }
+/** The registered hook (tests and the court tool's checks). */
+export const chairHookOf = (id: ChairHook): ((b: DominionBlock, r: Roll) => string | null) | undefined => hooks[id];
 
 const bump = (x: Ctx, k: string, n: number): void => {
   if (n) x.changes[k] = (x.changes[k] ?? 0) + n;
@@ -459,7 +462,7 @@ function apply(x: Ctx, fx: CourtFx[]): void {
       }
       case 'follow': ch.follow.push({ card: e.card, day: b.day + e.days, member: x.member }); x.back = true; break;
       case 'owed':
-        // D9 built the rival team: Tension now moves the region's rival for real; D11 the Hero's Threat; D14 the Goal, Shadow and Wipe Out. The rest wait for their slice.
+        // D9 built the rival team: Tension now moves the region's rival for real; D11 the Hero's Threat; D14 the Goal, Shadow and Wipe Out; D15 Stability. The rest wait for their slice.
         if (!payOwed(b, e.key, e.n)) ch.owed[e.key] = (ch.owed[e.key] ?? 0) + e.n;
         bump(x, e.key, e.n);
         break;

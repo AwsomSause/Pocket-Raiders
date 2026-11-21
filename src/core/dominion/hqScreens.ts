@@ -194,7 +194,7 @@ export function assetsModel(b: DominionBlock, at: number): AssetsModel {
   const rows = h.rooms.map((r): AssetRow => {
     const def = buildingDef(r.id)!;
     const t = r.tier + 1;
-    const up = r.ruined || r.building || r.up ? null : t > 8 ? 'top tier' : t > top ? `T${t} needs more HQ/regions` : `T${t} ${def.ladder[t - 1]} · ${money(buildPrice(b, tierCost(def, t)))}`;
+    const up = r.ruined || r.building || r.up ? null : t > 8 ? 'top tier' : t > top ? `T${t} needs more HQ/regions` : `T${t} ${def.ladder[t - 1]} · ${money(buildPrice(b, tierCost(def, t), def.id))}`;
     return {
       uid: r.uid, name: roomName(r), tier: `T${r.tier} ${def.ladder[r.tier - 1]}`, cond: r.cond,
       where: r.at ? districtDef(r.at)?.name ?? r.at : 'HQ', state: stateLine(b, r, def), up,
