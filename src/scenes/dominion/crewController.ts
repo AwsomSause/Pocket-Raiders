@@ -103,6 +103,14 @@ export class CrewController {
     this.host.setNotice(null);
     this.host.refresh();
   }
+  /** D28 + D29: the board's Assign photo opens the Assign page on the task under the Morning's cursor (else the first). */
+  assignHere(): string | null {
+    if (!this.owns()) return 'Orders are given in the Morning, at the HQ.';
+    if (this.talking()) return 'Answer the crew first.';
+    if (!this.tasks().length) return 'Nobody has a task to take today.';
+    this.openAssign(Math.max(0, this.taskAt));
+    return null;
+  }
   private closeAssign(): void {
     this.host.screenName = 'hq';
     this.taskAt = this.asAt < this.tasks().length ? this.asAt : -1;

@@ -132,7 +132,7 @@ test('the command wheel: hold Q, point, let go to jump; digits, R and Backspace;
   expect(errors).toEqual([]);
 });
 
-test('the Boss\'s board: every page has a photo, and every page you can walk into opens from it and from the wheel', async ({ page }, info) => {
+test('the Boss\'s board: two sheets, and sheet 1\'s pages open from their photos (the board from the wheel)', async ({ page }, info) => {
   const shot = (n: string) => page.screenshot({ path: info.outputPath(`${n}.png`) });
   const errors = watch(page);
   await start(page, 'ui=new');
@@ -153,45 +153,91 @@ test('the Boss\'s board: every page has a photo, and every page you can walk int
   await expect(s.getByTestId('dom-pin-pyramid')).toBeHidden();
   await hereIs(page, 'hq');
 
-  // Every photo you can walk into, from the board (a click) and from the wheel (its place, then the page's own key).
-  // It is the first evening of a new run.
-  const want: Record<string, RegExp> = {
-    hq: /^hq$/, morning: /^hq$/, assign: /^hq$/, chair: /^hq$/, crew: /^crew$/, ledger: /^ledger$/, map: /^map$/, district: /^map$/,
-    card: /^map$/, takeover: /^map$/, base: /^base$/, rival: /^rival$/, hero: /^hero$/, voices: /^voices$/,
-    persona: /^persona$/, pyramid: /^pyramid$/, squads: /^squads$/, reserve: /^reserve$/, desk: /^desk$/,
-    menu: /^menu$/, settings: /^settings$/, rotom: /^settings$/,
-  };
-  const board = async () => {
-    await holdQ(page, s);
-    await page.keyboard.press('KeyM');
-    await page.keyboard.up('KeyQ');
-    await expect(s.getByTestId('dom-board-keys')).toBeVisible();
-  };
-  for (const [id, re] of Object.entries(want)) {
-    await board();
+  await walk(page, s, ['hq', 'morning', 'assign', 'chair', 'crew', 'ledger', 'map', 'district', 'card', 'takeover', 'base']);
+  expect(errors).toEqual([]);
+});
+
+// Every photo you can walk into opens from the board (a click), and the board from the wheel (M). It is the first
+// evening of a new run. Each jump is made from the page the one before landed on: a jump leaves any page the way its
+// own keys would. Split in two tests (sheet 1's photos above, the rest here) so each stays well inside the test time
+// limit on a slow CI runner.
+const WANT: Record<string, RegExp> = {
+  hq: /^hq$/, morning: /^hq$/, assign: /^hq$/, chair: /^hq$/, crew: /^crew$/, ledger: /^ledger$/, map: /^map$/, district: /^district$/,
+  card: /^map$/, takeover: /^map$/, base: /^base$/, rival: /^rival$/, hero: /^hero$/, voices: /^voices$/,
+  persona: /^persona$/, pyramid: /^pyramid$/, squads: /^squads$/, reserve: /^reserve$/, desk: /^desk$/,
+  menu: /^menu$/, settings: /^settings$/, rotom: /^settings$/,
+};
+async function board(page: Page, s: ReturnType<typeof view>) {
+  await holdQ(page, s);
+  await page.keyboard.press('KeyM');
+  await page.keyboard.up('KeyQ');
+  await expect(s.getByTestId('dom-board-keys')).toBeVisible();
+}
+async function walk(page: Page, s: ReturnType<typeof view>, ids: string[]) {
+  for (const id of ids) {
+    await board(page, s);
     const pin = s.getByTestId(`dom-pin-${id}`);
     if (!(await pin.isVisible())) await page.keyboard.press('Tab');
     await pin.first().click();
-    await hereIs(page, re);
-    // Back to the HQ through the wheel's first place before the next one.
-    await holdQ(page, s);
-    await page.keyboard.press('Digit1');
-    await page.keyboard.up('KeyQ');
-    await hereIs(page, 'hq');
+    await hereIs(page, WANT[id]!);
   }
+}
+
+test('the Boss\'s board, the rest: the back rooms, the Boss Menu, Settings and Rotom open from their photos', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new');
+  const s = await newDominion(page);
+  const rest = Object.keys(WANT).filter((id) => !['hq', 'morning', 'assign', 'chair', 'crew', 'ledger', 'map', 'district', 'card', 'takeover', 'base'].includes(id));
+  expect(rest).toHaveLength(11);
+  await walk(page, s, rest);
+  expect(errors).toEqual([]);
+});
+
+// Kept apart from the walk above so each stays well inside the test time limit on a slow CI runner.
+test('the Board: the Founding not yet, pages that come to you, and D29\'s Assign and District', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new');
+  const s = await newDominion(page);
   // The Founding opens once the first steps are done: on day 1 the jump says so (the page's own O key says the same).
-  await board();
+  await board(page, s);
   await page.keyboard.press('Tab');
   await s.getByTestId('dom-pin-founding').click();
   await hereIs(page, 'hq');
   await expect(s.getByText(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Dominion').notice))).toBeVisible();
 
   // Pages that come to you can't be walked into: the photo says so.
-  await board();
+  await board(page, s);
   await page.keyboard.press('Tab');
   await s.getByTestId('dom-pin-police').click();
   await expect(s.getByText('That page comes to you')).toBeVisible();
   await hereIs(page, 'hq');
+
+  // D29's Assign page: in the evening its photo says orders wait for the Morning; in the Morning it opens on a task.
+  await board(page, s);
+  await s.getByTestId('dom-pin-assign').click();
+  await expect(s.getByText('Orders are given in the Morning')).toBeVisible();
+  await hereIs(page, 'hq');
+  await s.getByTestId('dom-next').click();
+  await expect(s.getByTestId('dom-phase')).toHaveText('NIGHT');
+  await s.getByTestId('dom-next').click();
+  await expect(s.getByTestId('dom-phase')).toHaveText('MORNING');
+  for (let n = (await page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion.crew.talks.length)); n > 0; n--) {
+    await s.getByTestId('dom-talk-0').click();
+    await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion.crew.talks.length)).toBe(n - 1);
+  }
+  await hereIs(page, 'morning');
+  await board(page, s);
+  await s.getByTestId('dom-pin-assign').click();
+  await hereIs(page, 'assign');
+  await expect(s.getByTestId('dom-as-give')).toBeVisible();
+  // From the Assign page the wheel's Region Map, then the District photo from there.
+  await holdQ(page, s);
+  await page.keyboard.press('Digit2');
+  await page.keyboard.up('KeyQ');
+  await hereIs(page, 'map');
+  await board(page, s);
+  await s.getByTestId('dom-pin-district').click();
+  await hereIs(page, 'district');
   expect(errors).toEqual([]);
 });
 

@@ -56,7 +56,7 @@ describe('D28 the Boss\'s board (m5)', () => {
     expect(notJump).toEqual(['debate', 'interrupt', 'police', 'spy']);
     for (const p of PINS.filter((x) => x.reach === 'comes')) expect(p.how).toBe('comes to you');
     // Pages that live inside another one open that one.
-    expect(OPENS).toEqual({ morning: 'hq', assign: 'hq', chair: 'hq', district: 'map', card: 'map', takeover: 'map' });
+    expect(OPENS).toEqual({ morning: 'hq', chair: 'hq', card: 'map', takeover: 'map' });
   });
 
   it('the arrows walk the photos the way they lie, and stay put at an edge', () => {
