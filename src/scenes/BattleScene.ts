@@ -20,7 +20,7 @@ import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { isEnemyAce } from '../core/battle/ace';
 import { ULTRA_BEASTS, type UltraBeast } from '../core/ultra/beasts';
 import { ultraOn } from '../core/ultra/run';
-import { pkGaBand, pkGimmick, pkRdShield, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
+import { pkGaBand, pkGimmick, pkRdShield, pkTmPhase, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -3889,6 +3889,32 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** Pocket look: a Totem's next phase (mock-up `tm-phase`), found by its written rule; false when this is not one (the banner plays then). */
+  private async pkTotemPhase(text: string): Promise<boolean> {
+    try {
+      const battle = this.run.battle;
+      const totem = battle?.totem;
+      if (!this.rx || !pocketOn() || !totem || this.motion !== 'full') return false;
+      const { content } = services().session;
+      const tdef = content.totems.totems.find((x) => x.id === totem.id);
+      const i = tdef ? tdef.phases.findIndex((ph) => ph.text === text) : -1;
+      if (!tdef || i < 0) return false;
+      const ph = tdef.phases[i]!;
+      const t = battle!.enemyTeam.find((m) => m.uid === totem.uid) ?? battle!.enemyTeam[0];
+      const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'Accuracy', eva: 'Evasion' };
+      const boosts = Object.entries(ph.boost ?? {}).map(([k, v]) => `${STAT[k] ?? k} ${v > 0 ? '+' : ''}${v}`).join(', ');
+      const pct = Math.round(ph.atHp * 100);
+      const chips = ['The aura **flares again**', boosts, ph.shield ? 'A **shield** rises' : '', ph.weather ? `The weather turns: **${ph.weather}**` : '', ph.clearPlayerStages ? 'Your stat changes are **wiped**' : '', ph.cleanse ? 'It shakes off its status' : '', 'Losing never ends your run'].filter(Boolean).slice(0, 4);
+      const mon = t ? ((f) => (f ? monArt(f) : null))(monFile(this, t.speciesId, 'front', !!t.shiny)) : null;
+      const backdrop = this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null;
+      const big = `Phase ${['Two', 'Three', 'Four'][i] ?? i + 2}`;
+      await this.pkPage((c) => (c.pk ? pkTmPhase({ mon, small: `${tdef.name} · ${pct === 50 ? 'half' : `${pct}%`} HP`, big, chips, say: text, backdrop }) : ''), {}, 2600);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   /** Pocket look: a raid shield breaking (mock-up `rd-shield`), with the raid's real shields and clock. Presentation only. */
   private async pkShieldBroken(): Promise<void> {
     try {
@@ -7162,7 +7188,7 @@ export class BattleScene extends Phaser.Scene {
       if (e.type === 'raid' && e.tone === 'phase') this.focusPush('phase');
       if (e.type === 'raid' && e.tone === 'phase') this.arenaLight?.set(++this.arenaPhase, 0xff4fd8);
       // Phantom UI: the phase card (a boss's last stand, a raid's next phase) stands in for the banner.
-      if (e.type === 'raid' && e.tone === 'phase' && !(this.phTurnCards() && (await this.phPhaseCard(e.text)))) await this.playBeat(phaseBanner(this, e.text, 0xff4fd8, this.motion));
+      if (e.type === 'raid' && e.tone === 'phase' && !(await this.pkTotemPhase(e.text)) && !(this.phTurnCards() && (await this.phPhaseCard(e.text)))) await this.playBeat(phaseBanner(this, e.text, 0xff4fd8, this.motion));
       // Beta 0.7 Flight North: the shiny rescuer, or the Bug-type's return, swoops onto the field. A failed load only skips the picture.
       if (e.type === 'raid' && e.cameo) {
         try {

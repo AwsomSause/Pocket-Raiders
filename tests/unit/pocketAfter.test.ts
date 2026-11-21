@@ -299,3 +299,15 @@ describe('the Pocket Totem cut-in', () => {
     expect(h).toContain('<b>Ribombee</b>');
   });
 });
+
+describe('the Pocket Totem phase card', () => {
+  it('draws the tm-phase page with the phase changes', async () => {
+    const { pkTmPhase } = await import('../../src/ui/pocket/screens/cards');
+    const h = pkTmPhase({ mon: null, small: 'Totem Araquanid · half HP', big: 'Phase Two', chips: ['The aura **flares again**', 'Sp. Atk +1'], say: 'The bubbles burst into a torrent!', backdrop: null });
+    expect(h.startsWith('<!--pk:tm-phase:51-->')).toBe(true);
+    expect(h).toContain('ph33');
+    expect(h).toContain('flare33');
+    expect(h).toContain('Phase Two');
+    expect(h).toContain('<b>flares again</b>');
+  });
+});

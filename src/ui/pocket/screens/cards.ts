@@ -114,6 +114,18 @@ export function pkRdShield(d: { mon: PkArt | null; small: string; chips: readonl
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 
+/** A Totem's next phase (mock-up `tm-phase`): the aura flares around it on its own ground, with what the phase changes. */
+export function pkTmPhase(d: { mon: PkArt | null; small: string; big: string; chips: readonly string[]; say: string; backdrop: string | null }, cue: PkCue = 'in'): string {
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  return page('tm-phase', 51, cueRoot('cut cboss ar28 a-tm in29 ph33', 'boss', cue, '--c:#e8891a')
+    + (d.backdrop ? back(d.backdrop, 'ct-bg') : '') + '<i class="flare33" data-nocheck></i><i class="ct-rays"></i>'
+    + (d.mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(d.mon, 400, 330, '', 5)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(d.small, 440, 13, 10, 0.62)}px">${esc(d.small)}</small><b style="font-size:${fit(d.big, 440, 88, 44, 0.5)}px">${esc(d.big)}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${d.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(d.say, 1500, 17, 13, 0.5)}px">${esc(d.say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
 /** What the Legendary and Ultra Beast cut-ins show (mock-up pages `legend` and `ub`). Only true facts go in `chips`. */
 export interface PkCutIn {
   page: 'legend' | 'ub' | 'rd-intro' | 'tm-intro';
