@@ -137,6 +137,7 @@ import { pkPauseModel } from '../ui/pocket/models';
 import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
+import { pkXpDoor } from '../ui/pocket/screens/expedition';
 import { pkForecast } from '../ui/pocket/screens/forecast';
 import { pkTime, pkWeather, weatherCard, WEATHERS } from '../ui/pocket/screens/sky';
 import { timeOfDay } from '../core/arenaStyle';
@@ -239,7 +240,8 @@ type MapPop =
   | { kind: 'league'; pick: number }
   | { kind: 'forecast'; pick: number }
   | { kind: 'time'; pick: number }
-  | { kind: 'weather'; pick: number; from?: 'time' };
+  | { kind: 'weather'; pick: number; from?: 'time' }
+  | { kind: 'xpgate'; side: string; pick: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -340,6 +342,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'weather') pop = pocketOn() ? { kind, pick: weatherCard(this.stageWeather()) } : null;
     else if (kind === 'time') pop = pocketOn() ? { kind, pick: Math.max(0, ['day', 'eve', 'night'].indexOf(this.stageTime() ?? 'day')) } : null;
     else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
+    else if (kind === 'xpgate') pop = null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -689,6 +692,11 @@ export class MapScene extends Phaser.Scene {
       this.rxView?.refresh();
       return;
     }
+    // Pocket look: the Expedition Gate. Set out or Not now; Esc leaves.
+    if (p.kind === 'xpgate') {
+      if (action === 'confirm') return p.pick === 0 ? this.xpGateGo(p.side) : this.popClose();
+      if (action === 'up' || action === 'down') { p.pick = 1 - p.pick; this.rxView?.refresh(); return; }
+    }
     if (action === 'back' || action === 'confirm') return this.popClose();
     const d = action === 'right' || action === 'down' ? 1 : -1;
     const side = action === 'left' || action === 'right';
@@ -745,6 +753,12 @@ export class MapScene extends Phaser.Scene {
   private popPick(what: 'tab' | 'pick', i: number): void {
     const p = this.rxPop;
     if (!p || !Number.isFinite(i)) return;
+    if (p.kind === 'xpgate' && what === 'pick') {
+      if (p.pick === i) return void this.popInput('confirm');
+      p.pick = i;
+      this.rxView?.refresh();
+      return;
+    }
     if (p.kind === 'dossier') {
       if (what === 'tab') {
         p.tab = i;
@@ -877,6 +891,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'badges') return c.pk ? this.badgesPocket(p.pick) : '';
     if (p.kind === 'league') return c.pk ? this.leaguePocket(p.pick) : '';
     if (p.kind === 'forecast') return c.pk ? this.forecastPocket(p.pick) : '';
+    if (p.kind === 'xpgate') return c.pk ? this.xpGatePocket(p) : '';
     if (p.kind === 'time' || p.kind === 'weather') return c.pk ? this.skyPocket(p) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
@@ -2709,6 +2724,15 @@ export class MapScene extends Phaser.Scene {
   /** An expedition gate: shows the briefing (party rules, route length, finale, rewards), then asks to commit. */
   private openExpedition(sideId: string): void {
     const { session } = services();
+    // Pocket look: the gate is the mock-up's Expedition Gate page.
+    if (pocketOn() && this.rxView) {
+      this.rxPop = { kind: 'xpgate', side: sideId, pick: 0 };
+      this.rxPopAt = this.time.now;
+      this.rxCard = null;
+      this.busy = true;
+      this.rxView.refresh();
+      return;
+    }
     const pv = expeditionPreview(session.content, session.run!, sideId);
     const picker: Picker = new Picker(this, {
       glass: true,
@@ -2743,6 +2767,41 @@ export class MapScene extends Phaser.Scene {
       },
     });
     this.picker = picker;
+  }
+
+  /** Pocket look: leave the gate for the expedition. */
+  private xpGateGo(sideId: string): void {
+    const { session } = services();
+    let run: ReturnType<typeof session.beginExpedition>;
+    try {
+      run = session.beginExpedition(sideId);
+    } catch (err) {
+      this.scene.restart({ notice: String(err instanceof Error ? err.message : err), focus: 0 });
+      return;
+    }
+    playSfx(this, 'ui.select');
+    this.rxPop = null;
+    this.cameras.main.fadeOut(250);
+    this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+  }
+
+  /** Pocket look: the Expedition Gate (mock-up `xp-gate`): the briefing card, Set out or Not now, the ranger's line. */
+  private xpGatePocket(p: Extract<MapPop, { kind: 'xpgate' }>): string {
+    const { session } = services();
+    const run = session.run!;
+    const pv = expeditionPreview(session.content, run, p.side);
+    const region = session.content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? '';
+    const stop = run.stage?.current ? findNode(run.stage.map, run.stage.current)?.column ?? 1 : 1;
+    const kind = pv.legendary ? 'Legendary event' : `Tier ${pv.tier} Expedition`;
+    const rows: [string, string][] = pv.legendary
+      ? [['Omen', pv.legendary.omen], ['Finale', pv.finale], ['Rewards', pv.rewards.join(', ')], ['Gone', pv.legendary.temporaryNote], ['Safe', 'You are never forced to enter']]
+      : [['Party', pv.partyText], ['Stops', `${pv.nodes}, then the finale`], ['Finale', pv.finale], ['Extract', 'Leave early and keep the loot'], ['Safe', 'You never lose your own Pokémon']];
+    return pkXpDoor({
+      kind: 'gate', where: pv.legendary ? 'Legendary Gate' : 'Expedition Gate', sub: [region, `Stop ${stop}`, kind].filter(Boolean).join(' · '), kicker: kind, name: pv.name,
+      text: pv.legendary ? pv.legendary.lore[0] ?? pv.blurb : `${pv.blurb} Rewards: ${pv.rewards.join(', ')}.`, rows,
+      options: [{ label: 'Set out', detail: `Stop ${stop} waits for you` }, { label: 'Not now', detail: 'The gate stays open this stage' }], index: p.pick,
+      say: pv.legendary ? pv.legendary.omen : `A ranger checks your badges and lifts the gate. "${pv.rules.find((r) => /Losing/.test(r)) ?? 'Come back in one piece.'}"`, esc: 'leave',
+    }, { pick: 'popPick', over: '' });
   }
 
   /** Totem territory: shows the Totem, its aura, ally and rewards, then asks to commit. */

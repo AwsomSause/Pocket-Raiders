@@ -695,3 +695,6 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-qz-many .qz-a .btn{min-height:38px}
 .pkx .pks .gx-qz-many .qz-pips{top:auto;bottom:46px}
 .pkx .pks .gx-qz-long .qz-pips i{width:18px;height:8px}
+
+/* Expedition draft and recruit: the lit card on offer (the taken ones are the mock-up's yellow "on"). */
+.pkx .pks .dk35 p.gx-lit { box-shadow: 0 0 0 4px var(--blu, #2a75bb), 0 6px 0 rgba(13, 21, 48, .25); translate: 0 -4px; }

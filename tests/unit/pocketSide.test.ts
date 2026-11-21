@@ -234,3 +234,50 @@ describe('the Pocket Starter Quiz', () => {
     expect(h).not.toContain('Esc');
   });
 });
+
+describe('the Pocket Expedition pages', () => {
+  it('the gate: briefing card, Set out lit, the ranger line, Esc leaves', async () => {
+    const { pkXpDoor } = await import('../../src/ui/pocket/screens/expedition');
+    const h = pkXpDoor({ kind: 'gate', where: 'Expedition Gate', sub: 'Kanto · Stop 3', kicker: 'Tier 1 Expedition', name: 'Ember Trail', text: 'A short route.', rows: [['Party', 'Bring your own party']], options: [{ label: 'Set out', detail: '' }, { label: 'Not now', detail: '' }], index: 0, say: 'A ranger lifts the gate.', esc: 'leave' }, { pick: 'popPick', over: '' });
+    expect(pkPageOf(h)?.id).toBe('xp-gate');
+    expect(pkPageOf(h)?.tier).toBe(51);
+    expect(h).toMatch(/class="btn on"[^>]*data-key="xp-ch-0"/);
+    expect(h).toContain('data-act="popPick"');
+    expect(h).toContain('A ranger lifts the gate.');
+    expect(h).toContain('leave');
+  });
+  it('the route: stops placed up the ridge, the lit stop and the walked trail, Extract now as a choice', async () => {
+    const { pkXpRoute, xpPlace } = await import('../../src/ui/pocket/screens/expedition');
+    const nodes = [
+      { layer: 0, row: 0, rows: 1, kind: 'wild', title: 'Wild', past: true, on: true, opt: -1 },
+      { layer: 1, row: 0, rows: 2, kind: 'trainer', title: 'Trainer', past: false, on: false, opt: 0 },
+      { layer: 1, row: 1, rows: 2, kind: 'cache', title: 'Cache', past: false, on: false, opt: 1 },
+      { layer: 2, row: 0, rows: 1, kind: 'finale', title: 'Finale', past: false, on: false, opt: -1 },
+    ];
+    const h = pkXpRoute({ name: 'Ember Trail', tag: 'Expedition', layers: 3, layer: 1, nodes, edges: [{ a: 0, b: 1, went: false }, { a: 0, b: 2, went: false }, { a: 1, b: 3, went: false }], party: [{ art: null, hp: 0 }], boss: null, walker: null, now: 'Trainer: stop 2', money: 1200, items: 2, index: 1, extract: 2, flow: ['Gate', 'Route', 'Finale', 'Extract'], step: 1, lines: [] });
+    expect(pkPageOf(h)?.id).toBe('xp-route');
+    expect(xpPlace(0, 0, 1, 3)).toEqual({ x: 105, y: 404, ground: 434 });
+    expect(xpPlace(2, 0, 1, 3)).toEqual({ x: 745, y: 168, ground: 198 });
+    expect(h).toMatch(/class="nd42 cache on lab"/);
+    expect(h).toContain('₽1,200');
+    expect(h).toContain('+2 items');
+    expect(h).toContain('class="ko"');
+    expect(h).toMatch(/data-key="xp-extract" data-act="pick" data-arg="2"/);
+  });
+  it('the draft: taken ones lit and numbered, the lit offer, how many picked; extract: both sides; result and fail pages', async () => {
+    const { pkXpDraft, pkXpExtract, pkXpResult } = await import('../../src/ui/pocket/screens/expedition');
+    const d = pkXpDraft({ title: 'Draft', text: 'Pick 3.', taken: [{ art: null, name: 'Riolu', types: 'Fighting' }], offer: [{ art: null, name: 'Eevee', types: 'Normal', note: 'Lv10' }], index: 0, picks: 3, pass: null });
+    expect(pkPageOf(d)?.id).toBe('xp-draft');
+    expect(d).toContain('1 of 3 picked');
+    expect(d).toContain('<u>1</u>');
+    expect(d).toContain('Enter takes Eevee.');
+    const x = pkXpExtract({ money: 1200, items: ['Rare Candy ×2'], prize: '1 Mega Stone', left: 3, boss: null, keep: 300, index: 0 });
+    expect(x).toContain('3 layers left');
+    expect(x).toContain('Keep ₽300, items lost');
+    const base = { name: 'Ember Trail', text: 't', rows: [{ art: null, title: '₽0', sub: 's' }], side: 'Next time', lines: ['l'], party: [], counts: [['1 of 5', 'layers walked']] as const };
+    expect(pkPageOf(pkXpResult({ ...base, outcome: 'failed' }))?.id).toBe('xp-fail');
+    expect(pkXpResult({ ...base, outcome: 'failed' })).toContain('Expedition Failed');
+    expect(pkXpResult({ ...base, outcome: 'completed' })).toContain('Expedition Complete');
+    expect(pkXpResult({ ...base, outcome: 'extracted' })).toContain('Extracted');
+  });
+});
