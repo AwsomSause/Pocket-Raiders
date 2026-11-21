@@ -12,6 +12,7 @@ import { pkOverlay } from '../../src/ui/redux/screens/overlay';
 import { pkForecast } from '../../src/ui/pocket/screens/forecast';
 import { pkTime, pkWeather, weatherCard } from '../../src/ui/pocket/screens/sky';
 import { pkHelp } from '../../src/ui/pocket/screens/help';
+import { pkQuiz } from '../../src/ui/pocket/screens/quiz';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -210,5 +211,26 @@ describe('the Pocket Controls card', () => {
     expect(b).toContain('data-act="help"');
     expect(pkHelp('Map')).toContain('Forecast');
     expect(pkHelp('Shop')).toContain('You are on a menu');
+  });
+});
+
+describe('the Pocket Starter Quiz', () => {
+  const answers = ['Fire', 'Water', 'Grass', 'Electric', 'Rock'].map((label) => ({ label, off: label === 'Rock' }));
+  it('the question numbered from 1, the lit answer, pips past and on, many answers drawn smaller', () => {
+    const h = pkQuiz({ who: 'Prof. Vance', art: null, intro: 'First, tell me.', question: 'Which do you like?', answers, index: 1, at: 1, of: 5, back: true });
+    expect(pkPageOf(h)?.id).toBe('quiz');
+    expect(h).toContain('Question 2 of 5');
+    expect(h).toContain('gx-qz-many');
+    expect(h).toMatch(/class="btn on"[^>]*data-key="qz-1"/);
+    expect(h).toContain('class="btn off"');
+    expect((h.match(/<i class="past"><\/i>/g) ?? []).length).toBe(1);
+    expect((h.match(/<i class="on"><\/i>/g) ?? []).length).toBe(1);
+    expect(h).toContain('Esc');
+  });
+  it('three answers stay big; no Esc on the first question', () => {
+    const h = pkQuiz({ who: 'Prof. Vance', art: null, intro: '', question: 'Q?', answers: answers.slice(0, 3), index: 0, at: 0, of: 3, back: false });
+    expect(h).not.toContain('gx-qz-many');
+    expect(h).not.toContain('gx-qz-intro');
+    expect(h).not.toContain('Esc');
   });
 });

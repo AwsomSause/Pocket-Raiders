@@ -689,3 +689,9 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .wxi.gx-wx-q{display:inline-grid;place-items:center;font:800 18px/1 var(--fb);font-style:normal;color:#fff;background:rgba(255,255,255,.18);border:2px dashed rgba(255,255,255,.6)}
 .pkx .pks .gx-help{top:60px;cursor:pointer}
 .pkx .pks .gx-help small{display:block;margin-top:10px;font-size:12.5px;color:#cfd6e6}
+.pkx .pks .gx-qz-intro{font-size:13px;font-weight:700;line-height:1.35;color:#3c4766}
+.pkx .pks .gx-qz-many .qz-q{padding:12px 20px 14px;gap:5px}
+.pkx .pks .gx-qz-many .qz-a{top:auto;bottom:74px;gap:7px}
+.pkx .pks .gx-qz-many .qz-a .btn{min-height:38px}
+.pkx .pks .gx-qz-many .qz-pips{top:auto;bottom:46px}
+.pkx .pks .gx-qz-long .qz-pips i{width:18px;height:8px}
