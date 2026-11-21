@@ -30,7 +30,9 @@ import { RivalController } from './dominion/rivalController';
 import { SpyController } from './dominion/spyController';
 import { TakeoverController } from './dominion/takeoverController';
 import { EmpireController } from './dominion/empireController';
+import { completion } from '../core/dominion/ending';
 import { PartnersController } from './dominion/partnersController';
+import { EndingController } from './dominion/endingController';
 import { TURN_FLAG } from '../core/dominion/charters';
 import { DebateController } from './dominion/debateController';
 import { PoliceController } from './dominion/policeController';
@@ -109,6 +111,8 @@ export class DominionScene extends Phaser.Scene {
   private em = new EmpireController(this);
   /** D16: the Partnership page (key J). */
   private pt = new PartnersController(this);
+  /** D17: the ending page (opens once the run is complete; Enter closes the books). */
+  private end = new EndingController(this);
   /** D13: the Debate (mockup 8). */
   private debate = new DebateController(this);
   /** D24: police questioning (owns the screen while a case is open or its release page unread). */
@@ -156,6 +160,7 @@ export class DominionScene extends Phaser.Scene {
     this.tk = new TakeoverController(this);
     this.em = new EmpireController(this);
     this.pt = new PartnersController(this);
+    this.end = new EndingController(this);
     this.debate = new DebateController(this);
     this.police = new PoliceController(this);
     this.snatch = new SnatchController(this);
@@ -280,6 +285,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.tk.acts(),
         ...this.em.acts(),
         ...this.pt.acts(),
+        ...this.end.acts(),
         takeover: () => { if (this.tk.open(this.screen)) this.view?.refresh(); },
         ...this.debate.acts(),
         ...this.police.acts(),
@@ -348,6 +354,8 @@ export class DominionScene extends Phaser.Scene {
         return;
       }
       if (this.voices.raw(e.code)) return void (this.ate = MOVE_LETTERS.has(e.code));
+      // D17: once the run is complete, L on the Empire or Takeover page opens the ending (there's nowhere left to sail).
+      if (e.code === 'KeyL' && (this.screen === 'empire' || this.screen === 'takeover') && this.block() && completion(this.block()!)) return void (this.end.open() && this.view?.refresh());
       if (this.tk.raw(e.code)) return;
       if (e.code === 'KeyJ' && this.screen === 'empire') return void (this.pt.open() && this.view?.refresh());
       if (this.em.raw(e.code)) return void this.view?.refresh();
@@ -491,6 +499,8 @@ export class DominionScene extends Phaser.Scene {
     if (this.voices.on && this.screen === 'hq') return this.voices.render();
     // D13: a Debate on the table takes the screen (after the Debate action, a card answered, or a reload).
     if (b?.debate?.live && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'card' || this.screen === 'rival' || this.screen === 'crew' || this.screen === 'reserve' || this.screen === 'pyramid' || this.screen === 'ledger' || this.screen === 'base')) this.debate.claim();
+    // D17: the first time a hub page is drawn with the run complete, the ending opens over it.
+    if (b && this.inRun() && (this.end.owns() || this.end.maybeOpen())) return this.end.render(this.notice);
     switch (this.screen) {
       case 'title':
         return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null, colours: b ? teamColours(b) : null });
@@ -720,6 +730,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.leaving) return;
     if (this.nav.key(a)) return;
     if (this.menu.key(a)) return void this.view?.refresh();
+    if (this.end.key(a)) return;
     if (this.spy.key(a)) return void this.view?.refresh();
     if (this.debate.key(a)) return void this.view?.refresh();
     if (this.inRun() && this.job.key(a)) return void this.view?.refresh();
@@ -914,6 +925,7 @@ export class DominionScene extends Phaser.Scene {
     if (!b?.opened || !this.inRun()) return null;
     if (this.menu.owns()) return this.menu.page!;
     if (this.police.owns()) return 'police';
+    if (this.end.owns()) return null;
     switch (this.screen) {
       case 'hq':
         if (this.voices.on) return 'voices';
@@ -1035,6 +1047,11 @@ export class DominionScene extends Phaser.Scene {
   rivalStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
     return services().session.dominionStep(action);
   }
+  /** D17: the books are closed: the run is over, and the run-end page pays it. */
+  closeBooks(): void {
+    this.leaving = true;
+    this.scene.start('GameOver');
+  }
   /** D16: a choice on the Partnership page (saved). */
   partnerStep(action: DominionAction): { ok: boolean; fight: boolean; notice: string | null } {
     return services().session.dominionStep(action);
@@ -1054,6 +1071,7 @@ export class DominionScene extends Phaser.Scene {
   }
   /** D15: the Takeover page's "Leave" opens the Leaving page. */
   openLeave(): void {
+    if (this.block() && completion(this.block()!)) return void (this.end.open() && this.view?.refresh());
     if (this.em.open('takeover', true)) this.view?.refresh();
   }
   startFightFrom(from: Screen): void {

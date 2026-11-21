@@ -42,6 +42,7 @@ import { whatIf } from '../core/presentation/whatIf';
 import { EVIL_DATA } from '../core/evilMode/data';
 import { DOMINION_DATA } from '../core/dominion/data';
 import { endingCards, endingPay, ledgerPage } from '../core/evilMode/endings';
+import { endingTitle } from '../core/dominion/ending';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { paintBackdrop, RUNEND_SKINS } from '../ui/dSkins';
 import { buildShowcase } from '../ui/runEndLooks';
@@ -114,7 +115,9 @@ export class GameOverScene extends Phaser.Scene {
     }
     // Evil Mode slice 15: the ending's name is the title (never ranked), and its cards and pay lead the right panel.
     const evil = run?.expansion?.evilMode?.ending?.done ? run.expansion.evilMode : null;
-    const titleText = evil ? EVIL_DATA.endings.names[evil.ending!.id] : won ? 'You conquered every region!' : 'Your run has ended';
+    // DOMINION D17: a finished Dominion run is titled by its ending (The Empire, or its Goal's ending), never ranked.
+    const dom = run?.expansion?.dominion && run.phase === 'over' ? run.expansion.dominion : null;
+    const titleText = evil ? EVIL_DATA.endings.names[evil.ending!.id] : dom ? endingTitle(dom).title : won ? 'You conquered every region!' : 'Your run has ended';
     const title = this.add.text(GAME_WIDTH / 2, 38, titleText, textStyle(won ? 40 : 44, skin ? skin.title : won ? '#f0d060' : COLORS.textLight, skin ? { stroke: skin.stroke, strokeThickness: 6 } : {})).setOrigin(0.5);
     if (skin?.mark) this.add.text(GAME_WIDTH / 2, 66, skin.mark, textStyle(18, skin.title, { stroke: skin.stroke, strokeThickness: 4 })).setOrigin(0.5).setName('runend-mark');
     this.lineup(partySpecies(), title.width, won, session.settings.battleAnimations);

@@ -367,6 +367,8 @@ const BlockSchema = z.object({
   partners: z.lazy(() => PartnersStateSchema).optional(),
   /** D16: how this run began when it isn't the rainy warehouse: a Charter (its id) or the Turn from a won main-game run. */
   origin: z.object({ kind: z.enum(['charter', 'turn']), id: S }).strict().optional(),
+  /** D17: the run's books for the ending (funds at every night, across regions). Optional; `annalsOf` (ending.ts) fills it. */
+  annals: z.lazy(() => AnnalsSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -2797,3 +2799,9 @@ export const DomChartersFileSchema = z.object({
   }).strict(),
 }).strict();
 export type DomChartersFile = z.infer<typeof DomChartersFileSchema>;
+
+// ---------- D17: the ending (ending.json, block `annals`) ----------
+
+/** The Ledger across all days (Part 5 §7): funds after each night, from run day `from`, one point per `step` days. */
+export const AnnalsSchema = z.object({ from: I.min(1), step: I.min(1), funds: z.array(I).max(720) }).strict();
+export type Annals = z.infer<typeof AnnalsSchema>;
