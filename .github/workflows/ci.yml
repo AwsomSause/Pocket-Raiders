@@ -41,6 +41,9 @@ jobs:
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 100
+    # tsc on the whole game needs more than Node's default ~4 GB heap since the Dominion slices (D2 + D18 ran out).
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -56,6 +59,23 @@ jobs:
       # Asset audit and load budget (QUALITY_GATES gates 4 and 8).
       - run: npm run report:assets
       - run: npm run report:perf
+
+  # The bot playtests run beside "check" since 2026-11-21: with main and Dominion together, check ran out of its
+  # 100 minutes inside the second playtest (unit tests, build and reports all passed; the playtest itself passes in ~39 min).
+  playtest:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
       # Bot playtest: 50 seeded runs with side stops; any crash, stuck run or broken number fails the PR.
       - run: node tools/playtest.ts 0 50 --heal --sides --strict > /dev/null
       # The same 50 runs started the way the game starts them: every Beta 0.6 expansion setting at its shipped default (all on).
@@ -65,7 +85,7 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
-  # Browser tests run in 10 parallel shards (the slowest part of CI used to be one long serial job). Six became too few on
+  # Browser tests run in 14 parallel shards (the slowest part of CI used to be one long serial job). Six became too few on
   # 2026-11-15: with the catalog overhaul's specs two shards ran out of their 30 minutes while every test was passing.
   # Eight became too few on 2026-11-17: with Evil Mode's specs shard 2 ran out at 67 of 77 tests, every one passing.
   # A spec file runs in one worker from start to end, so a very long file cannot be shared out: split it instead.
@@ -73,15 +93,20 @@ jobs:
   # the alphabet: four of them side by side in one shard ran two at a time and timed out on a slow runner.
   # Ten from 2026-11-17: Evil Mode's specs moved frontDoorStyles' many tests into shard 2, which ran out of its 30 minutes
   # twice with every test passing.
+  # Fourteen from 2026-11-20: the Dominion slices put every dominion*.spec plus eggs/events in shard 2, which hit its
+  # 30 minutes on several PRs (events.spec slowed under load, then the job was cancelled) while each spec passed alone.
   e2e:
     needs: changes
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # tsc on the whole game needs more than Node's default ~4 GB heap since the Dominion slices (D2 + D18 ran out).
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -100,10 +125,10 @@ jobs:
       - run: npx playwright install-deps chromium
         if: steps.pw.outputs.cache-hit == 'true'
       # The perf project depends on main, which makes Playwright keep everything in one shard (shard 1 ran all 254 tests,
-      # shards 2-4 ran none). Shard the main project alone, and run the frame-time budget (perf) once, alone, after shard 10.
-      - run: npx playwright test --project=main --shard=${{ matrix.shard }}/10 --trace off --reporter=list
+      # shards 2-4 ran none). Shard the main project alone, and run the frame-time budget (perf) once, alone, after shard 14.
+      - run: npx playwright test --project=main --shard=${{ matrix.shard }}/14 --trace off --reporter=list
       - run: npx playwright test --project=perf --no-deps --trace off --reporter=list
-        if: matrix.shard == 10
+        if: matrix.shard == 14
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -116,12 +141,12 @@ jobs:
   ci-ok:
     name: CI ok
     if: always()
-    needs: [changes, check, e2e]
+    needs: [changes, check, playtest, e2e]
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "code=${{ needs.changes.outputs.code }} check=${{ needs.check.result }} e2e=${{ needs.e2e.result }}"
+          echo "code=${{ needs.changes.outputs.code }} check=${{ needs.check.result }} playtest=${{ needs.playtest.result }} e2e=${{ needs.e2e.result }}"
           if [ "${{ needs.changes.result }}" = skipped ]; then echo "Draft PR: CI did not run. Mark it ready for review to run CI."; exit 1; fi
           [ "${{ needs.changes.result }}" = success ] || exit 1
           if [ "${{ needs.changes.outputs.code }}" = false ]; then exit 0; fi
-          [ "${{ needs.check.result }}" = success ] && [ "${{ needs.e2e.result }}" = success ]
+          [ "${{ needs.check.result }}" = success ] && [ "${{ needs.playtest.result }}" = success ] && [ "${{ needs.e2e.result }}" = success ]

@@ -1,0 +1,196 @@
+{
+  "_source": "DOMINION slice D25 (Claude API draft §5.2; mockup a10 'Chatter, news and the Hero'). Written offline lines: crew chatter by trait and topic, the weekly Ledger news, extra Hero taunt / Disillusion lines and traitors' parting lines. Rotom only adds to these. Tokens: {name} speaker, {other} the one they answer, {gone} who left, {hero} the Hero, {region}, {memory} a remembered moment, {day} its day, {ace} the Hero's partner, {at} where the Hero is, {team} a rival team.",
+  "chatter": {
+    "max": 3,
+    "goneDays": 3,
+    "heatAt": 60,
+    "topics": {
+      "loyal": {
+        "quiet": ["Quiet night. Good. The Boss earned one.", "I'll take first watch. I always do."],
+        "win": ["Told you the Boss had a plan. Always does.", "Clean job. That's what happens when we stick together."],
+        "loss": ["We get them back. Together. Nobody walks alone in this crew.", "Bad night. Doesn't change who we follow."],
+        "gone": ["{gone} walked out on the Boss. I won't forget that.", "{gone}'s gone. More room at the table for the ones who stay."],
+        "hero": ["Let {hero} come. They'll have to get through me first.", "{hero} can have the whole region cheering. We've got the Boss."],
+        "heat": ["Cops on every corner. I'll stand at the door all night if I have to.", "Heat's up. We keep our heads down and our word good."]
+      },
+      "greedy": {
+        "quiet": ["Quiet night means nobody got paid. I hate quiet nights.", "Counting coins again. Still not enough coins."],
+        "win": ["Good haul. When do we split it?", "That's the sound of money. My favourite song."],
+        "loss": ["We lost the take? Somebody's paying for that, and it isn't me.", "A whole night for nothing. Not even a Nugget."],
+        "gone": ["{gone} quit? Good. Their cut is our cut now.", "{gone} left. Did anyone check the till?"],
+        "hero": ["{hero} costs us money every time they show up.", "I hear there's a price on {hero}'s cap. I'm just saying."],
+        "heat": ["Heat this high is bad for business. Very bad for business.", "Every cop out there is a fine waiting to happen."]
+      },
+      "joker": {
+        "quiet": ["Why did the Psyduck cross the road? Nobody knows. Nobody ever knows.", "Slow night. I counted the ceiling tiles. Forty. Lucky number."],
+        "win": ["Did you see their face? I'm framing that face.", "Easiest job ever. Ten out of ten, would rob again."],
+        "loss": ["So that went great. In the bad way.", "Look on the bright side: there isn't one. Ha."],
+        "gone": ["{gone} sang like a Chatot. Told you they were soft.", "{gone} left without saying goodbye. Rude. Also, they owe me ₽20."],
+        "hero": ["{hero}'s hat is bigger than their brain. I said it.", "Knock knock. Who's there? {hero}. Run."],
+        "heat": ["So many cops outside I'm thinking of charging them rent.", "Heat's up! Free sauna. You're welcome."]
+      },
+      "hothead": {
+        "quiet": ["Too quiet. I want to break something.", "Nothing happened tonight and I'm mad about it."],
+        "win": ["THAT's how you do it! Who's next?", "They never saw it coming. I wanted them to."],
+        "loss": ["Next time I go in first. No more sneaking.", "We got beat. I'm still shaking, and not from fear."],
+        "gone": ["If I see {gone} again, they'd better run.", "{gone} walked out? Say that name again and I walk out after them."],
+        "hero": ["Put me in front of {hero}. Just once. Please.", "{hero} thinks they're tough. I'll show them tough."],
+        "heat": ["Let the cops come. I've been waiting all week.", "Heat, heat, heat. I say we turn it up."]
+      },
+      "coward": {
+        "quiet": ["Quiet is good. Quiet means nobody's chasing me.", "I heard a noise. It was me. Never mind."],
+        "win": ["We did it and nobody got hurt? I need to sit down.", "Good job. Can we never do that again?"],
+        "loss": ["I knew it. I knew it! I said it would go wrong!", "I hid in a bin for an hour. Don't tell anyone."],
+        "gone": ["{gone} left... maybe they were the smart one.", "If {gone} can walk away, can I? Kidding. Mostly."],
+        "hero": ["{hero} is in town? I'm staying in the back room.", "Has anyone seen {hero}? No? Good. Let's keep it that way."],
+        "heat": ["So many cops. So many. I'm sleeping under the desk.", "Every siren is for me. I just know it."]
+      },
+      "zealot": {
+        "quiet": ["Every quiet night is a night closer to the Boss's world.", "I polished the emblem again. It deserves it."],
+        "win": ["Another step on the path. The Boss sees further than all of us.", "The region bends. As it should."],
+        "loss": ["A setback is a lesson. The Boss will make it mean something.", "The doubters will say we're finished. We are just beginning."],
+        "gone": ["{gone} never believed. Let the faithful close ranks.", "{gone} chose the easy road. History forgets the easy road."],
+        "hero": ["{hero} fights for a world that's already ending.", "{hero} is a question. The Boss is the answer."],
+        "heat": ["Let them watch. Let them see what loyalty looks like.", "The police serve the old order. It won't last."]
+      },
+      "proud": {
+        "quiet": ["A quiet night is wasted on a talent like mine.", "Nobody's talking about us tonight. That's a problem."],
+        "win": ["You're welcome, everyone.", "Write my name in the report. Spell it right."],
+        "loss": ["That wasn't my fault. Check the report.", "I don't lose. I take a short break from winning."],
+        "gone": ["{gone} couldn't handle this crew. Not everyone can.", "{gone} left? Who? Exactly."],
+        "hero": ["{hero} is famous because nobody's met me yet.", "When I beat {hero}, I want a parade."],
+        "heat": ["Of course they're watching. Have you seen us?", "Wanted posters. Finally, some recognition."]
+      },
+      "cautious": {
+        "quiet": ["Quiet. I checked the locks twice anyway.", "No news is the best news we get around here."],
+        "win": ["Good result. Now we lie low for a day.", "It worked. Let's not get greedy."],
+        "loss": ["We moved too fast. We always move too fast.", "I said wait for the patrol to pass. I did say it."],
+        "gone": ["{gone} knows where the back door is. We change the locks tonight.", "With {gone} gone, we change every plan they saw."],
+        "hero": ["{hero} wins because they plan. We should plan more.", "Track {hero} before {hero} tracks us."],
+        "heat": ["Heat's too high. I'd skip a night if it were up to me.", "Every job now is twice the risk. Count it."]
+      },
+      "gossip": {
+        "quiet": ["Did you hear about the Gym Leader's new haircut? I heard.", "Nothing happened, which is suspicious. Something always happens."],
+        "win": ["Everyone in town's talking about us. I made sure of it.", "I heard the shop owner cried. Big tears. True story."],
+        "loss": ["Don't worry, I already know who talked. Ask me later.", "Word is, someone tipped them off. Word is usually me."],
+        "gone": ["I know exactly why {gone} left. Want to hear? You do.", "{gone} was meeting someone at the Pokémon Center. Every night. Just saying."],
+        "hero": ["{hero} had three Potions and a sandwich for lunch. I have sources.", "My cousin's friend saw {hero} crying at a Gym. Probably."],
+        "heat": ["The cops know us by name now. Some of them by nickname.", "Officer Jenny's sister's barber says the heat is all about us."]
+      },
+      "loner": {
+        "quiet": ["...", "Quiet's fine. People aren't."],
+        "win": ["Job's done. I'm going.", "Worked. Don't make it a party."],
+        "loss": ["I'd have done it alone. Better.", "Next time leave me out of the group bit."],
+        "gone": ["{gone} left. People do.", "...{gone} was all right. That's all."],
+        "hero": ["{hero} travels with friends. That's their weak spot.", "I've watched {hero}. They never look behind them."],
+        "heat": ["I know a place to wait it out. Just me, though.", "Too many eyes. I'll work the night alone."]
+      },
+      "kind": {
+        "quiet": ["I made tea for everyone. And for the Rattata.", "A slow night. Good. Everyone could use the rest."],
+        "win": ["Nobody hurt? Then it's a good night.", "We did well. I hope the shop owner's all right, though."],
+        "loss": ["Is everyone okay? That's what matters.", "Rough night. I saved you all some soup."],
+        "gone": ["I hope {gone} finds what they were looking for.", "I'll miss {gone}. Even if they took the good mugs."],
+        "hero": ["{hero} seems nice, honestly. Is that bad to say?", "I don't want anyone hurt. Not even {hero}."],
+        "heat": ["The patrols scare the little ones. The Pokémon, I mean.", "Let's lie low. Nobody needs to get hurt over a job."]
+      },
+      "schemer": {
+        "quiet": ["Quiet nights are for planning. I've been planning.", "Everyone's asleep. Perfect time to think."],
+        "win": ["Just as I planned. Well. Close enough.", "That opens three new doors. I'll pick the right one."],
+        "loss": ["A lost piece. The board is still ours.", "Someone moved early. I'm finding out who."],
+        "gone": ["{gone} leaving was always on the board. I had a plan for it.", "{gone} took secrets with them. I keep copies."],
+        "hero": ["{hero} has one weakness. Give me a week to find it.", "Let {hero} win the small fights. We'll take the big one."],
+        "heat": ["Heat is just pressure. Pressure can be pointed somewhere else.", "If the cops want someone, I can give them someone."]
+      }
+    },
+    "reply": {
+      "loyal": ["{other}'s right. We stick together.", "Ease up, {other}. The Boss has this.", "Whatever happens, I'm here."],
+      "greedy": ["Sure, {other}. Is there money in it?", "Talk's cheap, {other}. I like expensive.", "Fine. As long as I get paid."],
+      "joker": ["Easy, {other}. Smile. You look like a sad Slowpoke.", "Ha! {other} said a thing.", "Write that down. Actually, don't."],
+      "hothead": ["Say that again, {other}, and you'll be the next one singing.", "Watch it, {other}.", "Are we talking or are we fighting?"],
+      "coward": ["Please don't start, {other}...", "Can we not? Please?", "I'll just... be over here."],
+      "zealot": ["The Boss knows best, {other}. Always.", "Faith, {other}. Have some.", "Doubt is a weakness, {other}."],
+      "proud": ["Nobody asked you, {other}.", "Leave it to me, {other}. As usual.", "Cute, {other}. Now watch a pro."],
+      "cautious": ["Keep it down, {other}. Walls have ears.", "Let's think before we say things, {other}.", "Not here, {other}."],
+      "gossip": ["Ooh, {other}, tell me more.", "I'm telling everyone you said that, {other}.", "Wait till the others hear this."],
+      "loner": ["...", "Whatever, {other}.", "I'm not part of this."],
+      "kind": ["Let's all be nice, {other}. Long night.", "Here, {other}, have some tea.", "We're all tired, {other}."],
+      "schemer": ["Interesting, {other}. Very interesting.", "Keep talking, {other}. I'm listening.", "Noted, {other}."]
+    },
+    "aside": {
+      "loyal": "...the Boss came back. That's what matters.",
+      "greedy": "...somebody owes me for tonight.",
+      "joker": "...I'll be here all week. Tip your grunt.",
+      "hothead": "...I'm still angry about something.",
+      "coward": "...is it morning yet?",
+      "zealot": "...the Boss's world is coming.",
+      "proud": "...I was the best one out there.",
+      "cautious": "...I'm checking the locks again.",
+      "gossip": "...I know a secret about that, by the way.",
+      "loner": "...",
+      "kind": "...everyone eat something before bed.",
+      "schemer": "...and that's step two done."
+    },
+    "memory": ["Day {day}. I still think about it. {memory}", "Remember Day {day}? \"{memory}\" I meant it.", "Day {day} keeps coming back to me. {memory}"]
+  },
+  "news": {
+    "masthead": "The {region} Ledger",
+    "price": "₽5",
+    "keep": 4,
+    "lines": 2,
+    "order": ["hero", "police", "rivals", "legends", "crew"],
+    "heads": {
+      "hero": ["{hero} ON THE WARPATH", "HERO {hero} VOWS TO CLEAN UP {region}", "{hero} STRIKES BACK"],
+      "police": ["POLICE TIGHTEN THE NET", "OFFICERS SWEEP THE STREETS", "CRACKDOWN IN {region}"],
+      "rivals": ["{team} ON THE MOVE", "GANG WAR FEARS GROW", "{team} BUYS UP THE BACK STREETS"],
+      "legends": ["LEGEND IN THE SKIES OVER {region}", "STORM BIRD SIGHTED", "WILD LEGEND WRECKS GANG DEN"],
+      "crew": ["CREW MEMBER WALKS OUT", "TROUBLE INSIDE THE NEW GANG", "A RAT LEAVES THE SHIP"],
+      "quiet": ["A QUIET WEEK IN {region}", "NOTHING TO REPORT. OR IS THERE?", "CALM BEFORE THE STORM?"]
+    },
+    "gone": {
+      "quit": "{name} quit the new crew without a word.",
+      "stole": "{name} left the crew with a pocket full of its money.",
+      "stripped": "{name} walked out on the crew, and took a Pokémon too.",
+      "poached": "{name} left the crew for a rival gang."
+    },
+    "quietBody": "Readers wrote in about the weather. Our reporters looked for trouble and found none, this week.",
+    "photo": "{hero} seen in {at}",
+    "photoUnknown": "Who is the stranger in the cap?",
+    "empty": "No paper yet. The Ledger comes out at the end of each week (Day 7, 14, 21...).",
+    "out": "This week's {masthead} is out: {head}."
+  },
+  "hero": {
+    "taunt": {
+      "ignores": ["Another little gang? {region} has seen plenty. I've got Gyms to beat.", "Me and {ace} have better things to do than chase you."],
+      "foils": ["I'll be at your next job. Bring your best, because {ace} will.", "I've seen what you did in town. Not on my watch.", "Heard about your crew. Pick a job. I'll be there."],
+      "attacks": ["Your people aren't safe on the streets anymore. I'll make sure of that.", "Every Pokémon you stole, I'm setting free. Starting tonight.", "Heard you got out. {ace} and I will be waiting. Bring the whole crew."],
+      "raids": ["Your rackets are falling one by one. Feel it yet?", "I know where you keep the money. I'm coming for it.", "The shops are paying me in thanks now, not you."],
+      "allies": ["The Gym Leaders stand with me now. All of {region} does.", "This ends at your door. Soon.", "You've got a crew. I've got a region."]
+    },
+    "disillusion": {
+      "low": ["I know exactly what you are.", "Don't bother explaining. I've seen enough."],
+      "mid": ["Sometimes I wonder who the real villains are here. Not tonight, though.", "The League didn't help those people either. That doesn't make you right."],
+      "high": ["...you helped that town. Why? Don't answer. I don't want to know.", "Some days I can't tell what I'm protecting anymore."]
+    },
+    "bands": { "mid": 30, "high": 60 },
+    "call": "Incoming · {hero}",
+    "joined": "{hero} sits with the crew now. Strange times."
+  },
+  "traitor": {
+    "head": "{name} on the way out",
+    "lines": {
+      "quit": ["I'm done. You never paid me what I was worth.", "Find someone else to do your dirty work.", "Don't come looking for me."],
+      "stole": ["Call it back pay. You owed me.", "The till was open. So was the door.", "Consider this my last job."],
+      "stripped": ["Back to Recruit? After everything? Keep the rank. I'm keeping my partner.", "You took my rank. I took the one thing that mattered.", "One Pokémon. That's my severance."],
+      "poached": ["They pay better. They talk nicer. Sorry, Boss. Not really.", "Their Boss asked me nicely. You never did.", "See you on the other side of a battle."]
+    },
+    "boss": "The crew watched them go. Nobody said a word."
+  },
+  "rotom": {
+    "chip": "Chatter + news · Rotom · saved with the run",
+    "chipOff": "Written lines · Rotom stays quiet tonight",
+    "chatter": "Say one short line (at most 22 words) to the crew in your own voice, about tonight's topic. Keep the facts given; add nothing about other runs.",
+    "news": "Write a 2-3 sentence newspaper summary of this week in the region from the stories given. Plain words, no new facts.",
+    "hero": "As the Hero, add one short line (at most 20 words) to your call to the Boss. Keep the facts given.",
+    "traitor": "As the member walking out, add one short parting line (at most 20 words) to the Boss."
+  }
+}

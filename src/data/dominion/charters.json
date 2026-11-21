@@ -1,0 +1,344 @@
+{
+ "_source": "DOMINION D16: the nine Charters (old Evil Mode Part 28, src/data/evilMode/charters.json) read as Dominion's established start (Part 0 §6.1 Q4). Made by tools/dominion/charters-to-json.py; the old house rules are not carried.",
+ "unlockAfter": 1,
+ "lockLine": "Finish one Dominion run to open the Charters.",
+ "pickLine": "Start established: a team with a name, money, a crew and an HQ. The rainy warehouse is always there too.",
+ "charters": [
+  {
+   "id": "rocket",
+   "name": "Rocket",
+   "team": "Rocket",
+   "question": "What's a ledger for?",
+   "creed": "profit",
+   "from": "Kanto",
+   "colours": [
+    "black",
+    "crimson"
+   ],
+   "initial": "R",
+   "logo": "shield",
+   "motto": "Steal for profit.",
+   "types": [
+    "poison",
+    "dark"
+   ],
+   "patron": {
+    "name": "Carrow",
+    "note": "The clerk who kept the books and was never once in the room.",
+    "look": "trainer/pr/clerk_m"
+   },
+   "funds": 6000,
+   "hqLevel": 3,
+   "grunts": 7,
+   "heat": 25,
+   "regard": 5,
+   "dread": 30,
+   "opening": [
+    "The Ledger's already open. Four thousand, one hundred and twelve names.",
+    "A note from Faye, in biro, on a paper napkin: \"I copied these by hand. Which d'you want to start with?\"",
+    "Carrow: \"What's a ledger for?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "rocket-return",
+   "name": "Rocket's Return",
+   "team": "Rocket",
+   "question": "Who were they waiting for?",
+   "creed": "belonging",
+   "from": "Johto",
+   "colours": [
+    "charcoal",
+    "crimson"
+   ],
+   "initial": "R",
+   "logo": "ring",
+   "motto": "He'll be back.",
+   "types": [
+    "poison",
+    "dark"
+   ],
+   "patron": {
+    "name": "Sabela",
+    "note": "Called the roll for three years to an empty chair.",
+    "look": "trainer/pr/ariana"
+   },
+   "funds": 900,
+   "hqLevel": 3,
+   "grunts": 8,
+   "heat": 15,
+   "regard": 10,
+   "dread": 15,
+   "opening": [
+    "A hundred and fifty people, at roll call. Sabela reads every name. Then: \"The Boss.\"",
+    "A silence. It's three years long. Sabela, to you, not unkindly: \"...Present?\"",
+    "Sabela: \"Who were they waiting for?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "joint",
+   "name": "The Joint Command",
+   "team": "Joint Command",
+   "question": "Can a house be two colours?",
+   "creed": "power",
+   "from": "Hoenn",
+   "colours": [
+    "navy",
+    "crimson"
+   ],
+   "initial": "J",
+   "logo": "diamond",
+   "motto": "Land and sea.",
+   "types": [
+    "water",
+    "ground"
+   ],
+   "patron": {
+    "name": "Ottoway",
+    "note": "Bunked with recruits and trained six cohorts for a flood.",
+    "look": "trainer/pr/veteran_m"
+   },
+   "funds": 2400,
+   "hqLevel": 3,
+   "grunts": 9,
+   "heat": 20,
+   "regard": 15,
+   "dread": 20,
+   "opening": [
+    "Two messages, an hour apart. The blue side: \"Don't trust the Magma lot. They'd have dried the sea.\" The red: \"Don't trust the Aqua lot. They'd have drowned the land.\"",
+    "Ottoway: \"I've trained both. I'm on the side of whoever's turn it is to wash up.\"",
+    "Ottoway: \"Can a house be two colours?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "galactic",
+   "name": "Galactic",
+   "team": "Galactic",
+   "question": "Has anybody asked?",
+   "creed": "wonder",
+   "from": "Sinnoh",
+   "colours": [
+    "charcoal",
+    "white"
+   ],
+   "initial": "G",
+   "logo": "star",
+   "motto": "",
+   "types": [
+    "steel",
+    "psychic"
+   ],
+   "patron": {
+    "name": "Wren Halvard",
+    "note": "The technician who took her helmet off.",
+    "look": "trainer/pr/scientist_f"
+   },
+   "funds": 8000,
+   "hqLevel": 3,
+   "grunts": 7,
+   "heat": 10,
+   "regard": 0,
+   "dread": 25,
+   "opening": [
+    "A clipboard. Saturn, who's stayed, because somebody had to hand over: \"I'll need a title for you. For the log.\"",
+    "The Board's all green. Every job's on time. Nobody in Galactic ever asked.",
+    "Wren Halvard: \"Has anybody asked?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "plasma",
+   "name": "Plasma",
+   "team": "Plasma",
+   "question": "What are we counting?",
+   "creed": "belonging",
+   "from": "Unova",
+   "colours": [
+    "white",
+    "navy"
+   ],
+   "initial": "P",
+   "logo": "shield",
+   "motto": "Liberation.",
+   "types": [
+    "psychic",
+    "dark"
+   ],
+   "patron": {
+    "name": "Bronius",
+    "note": "A Vigil Knight who counted candles.",
+    "look": "trainer/pr/ruin_maniac"
+   },
+   "funds": 1500,
+   "hqLevel": 2,
+   "grunts": 4,
+   "heat": 10,
+   "regard": 25,
+   "dread": 10,
+   "opening": [
+    "Six hundred candles and three hundred people with their hands in their pockets.",
+    "Bronius: \"I count. Six hundred, every night, for a king. What am I counting, under you?\"",
+    "Bronius: \"What are we counting?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "flare",
+   "name": "Flare",
+   "team": "Flare",
+   "question": "Who's the table for?",
+   "creed": "belonging",
+   "from": "Kalos",
+   "colours": [
+    "crimson",
+    "orange"
+   ],
+   "initial": "F",
+   "logo": "eye",
+   "motto": "A beautiful world.",
+   "types": [
+    "fire",
+    "dark"
+   ],
+   "patron": {
+    "name": "Yarborough",
+    "note": "The concierge who laid the tables.",
+    "look": "trainer/pr/waiter_m"
+   },
+   "funds": 14000,
+   "hqLevel": 3,
+   "grunts": 5,
+   "heat": 5,
+   "regard": 20,
+   "dread": 10,
+   "opening": [
+    "Yarborough, with a tray: \"Will there be a table, under the new management? I ask only to know how many to lay.\"",
+    "Yarborough: \"Who's the table for?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "two-boards",
+   "name": "The Two Boards",
+   "team": "Skull",
+   "question": "Who's doing the cooking?",
+   "creed": "belonging",
+   "from": "Alola",
+   "colours": [
+    "black",
+    "white"
+   ],
+   "initial": "S",
+   "logo": "fang",
+   "motto": "Skull.",
+   "types": [
+    "poison",
+    "bug"
+   ],
+   "patron": {
+    "name": "Iolana",
+    "note": "Tupp's aunt, who cooked for Skull before Plumeria did.",
+    "look": "trainer/pr/nursery_aide"
+   },
+   "funds": 300,
+   "hqLevel": 2,
+   "grunts": 4,
+   "heat": 15,
+   "regard": 20,
+   "dread": 15,
+   "opening": [
+    "Two Boards. One's a glass wall with every figure in the right column. One's plywood, rained on, with a drawing of a Wimpod.",
+    "Plumeria, with a ladle: \"Who's doin' the cookin'?\"",
+    "Iolana: \"Who's doing the cooking?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "group",
+   "name": "The Group",
+   "team": "Macro Cosmos",
+   "question": "Who signed for this?",
+   "creed": "power",
+   "from": "Galar",
+   "colours": [
+    "navy",
+    "gold"
+   ],
+   "initial": "M",
+   "logo": "diamond",
+   "motto": "A thousand years.",
+   "types": [
+    "steel",
+    "normal"
+   ],
+   "patron": {
+    "name": "Mr. Pettigrew",
+    "note": "Twenty-two years in payroll.",
+    "look": "trainer/pr/clerk_m_2"
+   },
+   "funds": 20000,
+   "hqLevel": 3,
+   "grunts": 7,
+   "heat": 10,
+   "regard": 30,
+   "dread": 15,
+   "opening": [
+    "Eight subsidiaries, each a column. And one that's a single line with no name, and a very large number.",
+    "A coach in the car park, engine running, twenty people in pink and black with horns.",
+    "Mr. Pettigrew: \"Who signed for this?\""
+   ],
+   "status": "supported"
+  },
+  {
+   "id": "staff-room",
+   "name": "The Staff Room",
+   "team": "Staff",
+   "question": "Where were the adults?",
+   "creed": "belonging",
+   "from": "Paldea",
+   "colours": [
+    "olive",
+    "white"
+   ],
+   "initial": "T",
+   "logo": "ring",
+   "motto": "Third period.",
+   "types": [
+    "normal",
+    "fighting"
+   ],
+   "patron": {
+    "name": "Yusuf",
+    "note": "The retired caretaker who watched a team form.",
+    "look": "trainer/pr/janitor"
+   },
+   "funds": 450,
+   "hqLevel": 2,
+   "grunts": 4,
+   "heat": 0,
+   "regard": 15,
+   "dread": 0,
+   "opening": [
+    "A timetable, pinned to the Board. Third period: Battle Studies. Teacher: —",
+    "Yusuf: \"They've asked for you. It came under the door, on squared paper. I'd go. I'd take chalk.\"",
+    "Yusuf: \"Where were the adults?\""
+   ],
+   "status": "supported"
+  }
+ ],
+ "turn": {
+  "fundsCap": 5000,
+  "regardPerBadge": 3,
+  "aceLevel": 15,
+  "title": "THE TURN",
+  "text": "You won. The League is yours, and it isn't enough. Carry on as a Boss: one Grunt, one warehouse, your ace turned back to where it started.",
+  "take": "Take the Turn",
+  "opening": [
+   "The trophy is in a box under the bed. The money is in a bag by the door.",
+   "Rook is waiting outside the warehouse, in the rain. \"They said you'd come. The Champion. Here.\"",
+   "You tell him to get the door. It's a start."
+  ]
+ }
+}

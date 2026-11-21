@@ -1,0 +1,47 @@
+/* Pass 47 · Clear Sight */
+/* brighter secondary text, steadier panels */
+&{--mut:#e2d9ca}
+.pn{background-color:rgba(23,19,29,.94)}
+/* the panel you work in stays bright, the others step back */
+.scr:has(.pn .on) .pn:not(:has(.on)){filter:brightness(.8) saturate(.85);transition:filter .3s}
+.scr:has(.pn .on) .pn:has(.on){box-shadow:5px 5px 0 var(--area),0 0 0 2px rgba(255,255,255,.25),0 0 22px rgba(255,255,255,.12)}
+/* Calm mode */
+.cm47{position:absolute;left:16px;top:70px;width:560px;height:328px;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;background:linear-gradient(#1f2a33,#12181d);border:2px solid #000}
+.sw47{position:relative;width:160px;height:76px;background:#3fbf6a;border:4px solid #000;border-radius:38px;box-shadow:inset 0 4px 0 rgba(255,255,255,.25)}
+.sw47 .kn{position:absolute;right:6px;top:6px;width:56px;height:56px;background:#fff;border:3px solid #000;border-radius:50%;animation:sw47 .5s .4s cubic-bezier(.3,1.4,.5,1) both}
+.cm47 b{font:400 34px/1 var(--fd)}
+.cm47 em{max-width:380px;font-style:normal;font-size:15px;line-height:1.4;color:var(--mut)}
+.cl47{left:592px;top:70px;width:352px;height:328px;gap:5px}
+.cl47 .srow,.cv47 .srow,.ro47 .srow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 10px;background:var(--pn2);border-radius:3px 10px 3px 10px;animation:in-r .3s both;animation-delay:var(--d)}
+.cl47 .srow b,.cv47 .srow b,.ro47 .srow b{font-size:14px}
+.cl47 .srow i,.cv47 .srow i,.ro47 .srow i{font-style:normal;font-size:13px;font-weight:800;color:var(--ok)}
+.cv47 .srow.on,.ro47 .srow.on{outline:3px solid #fff;outline-offset:2px}
+/* Colour assist */
+.cs47{left:16px;top:70px;width:560px;height:328px;gap:8px}
+.cr47{display:grid;grid-template-columns:40px 1fr 160px;align-items:center;gap:10px;padding:6px 10px;background:var(--pn2);border-radius:3px 10px 3px 10px;animation:in-r .3s both;animation-delay:var(--d)}
+.cr47>i{width:34px;height:34px;display:grid;place-items:center;font-style:normal;font-size:18px;color:#1d1622;background:var(--k);border:2px solid #000;border-radius:8px}
+.cr47 b{font-size:15px}
+.cr47 .hp{height:14px;background:#3b3346;border:2px solid #000;border-radius:7px;overflow:hidden}
+.cr47 .hp u{display:block;width:70%;height:100%;background:repeating-linear-gradient(135deg,var(--k) 0 6px,color-mix(in srgb,var(--k),#000 25%) 6px 12px)}
+.c-ok{--k:#3fbf6a}.c-bad{--k:#ff5d5d}.c-warn{--k:#ffb86a}.c-info{--k:#5ab4ff}.c-gold{--k:#ffd75a}
+.cv47{left:592px;top:70px;width:352px;height:328px;gap:8px}
+.pv47{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pv47 span{display:flex;flex-direction:column;padding:6px 10px;background:#0b0810;border-radius:8px}
+.pv47 b{font-size:13px}.pv47 i{font-style:normal;font-size:14px;font-weight:800;color:var(--k)}
+/* Read aloud */
+.dm47{position:absolute;inset:0;z-index:4;pointer-events:none;background:rgba(7,6,11,.6)}
+.rb47{position:absolute;left:16px;top:300px;width:560px;height:160px;z-index:5;display:flex;flex-direction:column;gap:8px;padding:22px 20px 14px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:12px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px #e07a10,5px 5px 0 rgba(0,0,0,.55)}
+.rb47 .who{position:absolute;left:16px;top:-12px;padding:0 12px;font-size:13px;line-height:18px;color:#fff;background:#3fbf6a;border:2px solid #1d1622;border-radius:8px}
+.rb47 p{margin:0;max-width:430px;font-size:21px;line-height:1.45}
+.rb47 p span{border-radius:4px;transition:background .2s}
+.rb47 p span.rd{color:#8a8296}
+.rb47 p span.now{background:#ffd75a;box-shadow:0 0 0 3px #ffd75a;animation:bmb36 .6s ease-in-out infinite}
+.sp47{position:absolute;right:18px;bottom:14px;display:flex;align-items:center;gap:6px}
+.sp47 .wv{display:flex;align-items:center;gap:3px;height:30px}
+.sp47 .wv u{width:5px;height:30%;background:#e07a10;border-radius:3px;animation:eq47 .7s ease-in-out infinite alternate}
+.sp47 .wv u:nth-child(2){animation-delay:.15s}.sp47 .wv u:nth-child(3){animation-delay:.3s}.sp47 .wv u:nth-child(4){animation-delay:.45s}
+.ro47{left:592px;top:70px;width:352px;height:390px;z-index:5;gap:8px}
+.k-ra47>.keys{z-index:6}
+/*@top*/
+@keyframes sw47{from{right:90px}}
+@keyframes eq47{to{height:100%}}

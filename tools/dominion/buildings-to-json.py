@@ -1,0 +1,278 @@
+"""DOMINION slice D5: turns the two building lists into game data.
+
+  lists/buildings.md                    (1-150, groups A-J)
+  lists/buildings-pokemon-and-grunt.md  (P1-P50, G1-G60)
+  + the Part 3 §3.2 rooms that aren't in either list (Pokémon Storage, Recruitment Center, Luxury Suite, Night Shift,
+    Snag Desk / Shadow Lab)
+  -> src/data/dominion/buildings.json
+
+Every row is kept word for word (name, slots, cost, T1 effect, per tier, capstone, ladder). What the engine does with a
+building is the FX table below (numbers at T1, scaled by the tier's Effect x). A building with no FX row is listed but
+can't be built yet: it names the slice its effect waits for (WAITS, by keyword). Part 3 names win where the poster
+renamed a room (Training Room, Research Lab, Treasury, Operations Room). Re-run after a list changes:
+  python3 -I tools/dominion/buildings-to-json.py <plans/evil-mode-rework/lists> src/data/dominion/buildings.json
+"""
+import ast
+import json
+import re
+import sys
+
+# A dict literal with the same key twice keeps only the last one, silently (two slices' merges did that to
+# WAIT_OVERRIDE). Refuse to run while any dict literal in this script repeats a key.
+_dupes = []
+for _node in ast.walk(ast.parse(open(__file__, encoding='utf-8').read())):
+    if isinstance(_node, ast.Dict):
+        _seen = set()
+        for _k in _node.keys:
+            if isinstance(_k, ast.Constant):
+                if _k.value in _seen:
+                    _dupes.append(f'line {_k.lineno}: {_k.value!r}')
+                _seen.add(_k.value)
+if _dupes:
+    sys.exit('buildings-to-json.py: duplicate keys in a dict: ' + ', '.join(_dupes))
+
+lists, out = sys.argv[1], sys.argv[2]
+
+
+def slug(t):
+    t = t.lower().replace('é', 'e').replace("'", '').replace('’', '').replace('.', '').replace('(', '').replace(')', '')
+    return re.sub(r'[^a-z0-9]+', '-', t).strip('-')
+
+
+# Part 3 §3.2 names (Kice's image) for list rows, and ids that would clash.
+RENAME = {
+    'Training Floor': 'Training Room', 'Science Lab': 'Research Lab', 'Vault': 'Treasury', 'War Room': 'Operations Room',
+}
+ID_FOR = {('A-J', 'Treasury'): 'treasury-hall', ('P', 'Pokémon Center Annex (ours)'): 'pokemon-center-annex-ours'}
+NAME_FOR = {'treasury-hall': 'Treasury Hall'}
+
+# What the engine does at T1. crewCap/storage/defense/dayActions/nightActions/restBonus: standing; morale/loyalty: every
+# week to every member; income (dirty) / clean: ₽ a day; weekly: ₽ a week; heatDay: HQ district Heat down each night;
+# heatWeek: same, weekly; control: district Control each week (the HQ's, or the outside building's own); heatOnce: the
+# district's Heat down once when built; trainXp: crew Train tasks; injury: % off injury days; recruit: % on pitches;
+# hireOff: % off Hire Grunt; launder: the fee in % (best one wins); treasury: ₽ kept safe in a raid (D9 raids read it);
+# unlock: actions/tasks that need the room (field.json / tasks.json name it); items / weeklyItems: into the Bag each night /
+# week; fatigue: % faster Fatigue recovery on Rest; repair: Condition back each week on every building; incomePct: % on
+# the daily income.
+FX = {
+    'bunk-room': dict(crewCap=2), 'barracks': dict(crewCap=6, morale=5), 'mess-hall': dict(morale=3), 'rec-room': dict(morale=4),
+    'card-den': dict(income=50), 'laundry': dict(heatDay=2), 'shrine-of-the-emblem': dict(loyalty=3),
+    'library': dict(unlock=True), 'training-room': dict(trainXp=1), 'dojo': dict(trainXp=2, unlock=True),
+    'infirmary': dict(injury=50), 'treasury': dict(treasury=10000), 'holding-pens': dict(unlock=True), 'kennel': dict(defense=1),
+    'operations-room': dict(dayActions=1, unlock=True), 'radio-room': dict(unlock=True), 'front-office': dict(launder=5, unlock=True),
+    'casino-floor': dict(income=300), 'laundering-room': dict(launder=10), 'protection-desk': dict(weekly=100),
+    'workshop': dict(unlock=True), 'garage': dict(unlock=True), 'print-shop': dict(unlock=True), 'research-lab': dict(unlock=True),
+    'trap-hall': dict(defense=1), 'executive-office': dict(dayActions=1), 'holding-cell': dict(unlock=True),
+    # D23 (snatch.ts): talk (% more Resolve each line breaks).
+    'interrogation-cell': dict(talk=10),
+    'safehouse': dict(control=10, heatOnce=15), 'outpost': dict(crewCap=2), 'front-shop': dict(clean=150),
+    'front-cafe': dict(clean=100), 'front-arcade': dict(clean=100), 'second-warehouse': dict(storage=100),
+    'pet-corner': dict(morale=2), 'portrait-studio': dict(morale=1),
+    'discipline-hall': dict(loyalty=3), 'cadet-quarters': dict(crewCap=2), 'grunt-mess': dict(morale=3), 'break-room': dict(morale=3),
+    'pay-window': dict(loyalty=2), 'family-fund': dict(loyalty=2), 'bunk-block': dict(crewCap=3), 'pension-office': dict(loyalty=1),
+    'smuggler-den': dict(income=100), 'racket-office': dict(weekly=100), 'street-patrol-station': dict(control=5),
+    'vanguard-camp': dict(control=10), 'hall-of-ranks': dict(loyalty=2), 'grunt-cafe': dict(clean=80), 'grunt-arcade': dict(clean=100),
+    'delivery-service': dict(clean=80), 'repair-shop': dict(clean=100), 'cleaning-crew': dict(heatWeek=5),
+    'pokemon-storage': dict(storage=60), 'recruitment-center': dict(recruit=10, hireOff=25), 'luxury-suite': dict(restBonus=1, debate=5),
+    'night-shift': dict(nightActions=1, unlock=True),
+    'berry-garden': dict(items={'oran-berry': 2}), 'pharmacy': dict(items={'potion': 1}), 'ball-foundry': dict(items={'poke-ball': 5}),
+    'first-aid-closet': dict(weeklyItems={'revive': 2}), 'canteen-kitchen': dict(fatigue=10), 'fix-it-corner': dict(repair=10),
+    'counting-room': dict(incomePct=5), 'night-market-stall': dict(income=80),
+    # D9 (rivals.ts): intel shows the rival's weekly plan; spyCatch/cipher/fireCut/truceOff are %; raidDef counts as
+    # Defense in raids only; warn is days' warning of the Boss's raid.
+    'lounge-bar': dict(intel=1), 'aviary': dict(intel=1), 'wiretap-closet': dict(intel=1), 'informant-office': dict(intel=1),
+    'drone-bay': dict(intel=1), 'mountain-lookout': dict(intel=1), 'pokedex-archive': dict(intel=1), 'lookout-post': dict(intel=1),
+    'taxi-rank': dict(intel=1), 'security-room': dict(spyCatch=25, warn=1), 'surveillance-wall': dict(spyCatch=15),
+    'counterintel-office': dict(spyCatch=20), 'code-room': dict(cipher=10), 'spy-academy': dict(cipher=10),
+    'armory': dict(raidDef=1), 'mech-hangar': dict(raidDef=1), 'guard-post': dict(raidDef=1), 'gate-house': dict(raidDef=1),
+    'perimeter-wall': dict(raidDef=1), 'alarm-network': dict(raidDef=1), 'decoy-room': dict(raidDef=1), 'pitfall-corridor': dict(raidDef=1),
+    'reinforced-doors': dict(raidDef=1), 'guard-duty-hall': dict(raidDef=1), 'honor-guard-hall': dict(raidDef=1),
+    # D6b (hq.ts weekly, town.ts): regard/dread each week in the building's district (the HQ's for a room); honest: the
+    # Card shows exact odds (Ledger Office).
+    'barber-and-uniform-shop': dict(dread=2), 'trophy-hall': dict(dread=1, recruit=5), 'ledger-office': dict(honest=1),
+    'propaganda-studio': dict(dread=2), 'press-office': dict(regard=1, dread=1), 'emblem-gallery': dict(dread=3),
+    'banner-hall': dict(regard=1, dread=1), 'charm-school': dict(regard=1, recruit=5), 'culture-wing': dict(regard=2),
+    'fossil-gallery': dict(dread=3), 'zoo-of-stolen': dict(dread=2, income=100), 'uniform-depot': dict(dread=2),
+    'dress-code-wall': dict(dread=2), 'standard-bearers-hall': dict(morale=2), 'newsstand': dict(intel=1, regard=1),
+    'watchtower': dict(warn=1), 'fire-suppression': dict(fireCut=50), 'ballroom': dict(truceOff=10, debate=5), 'embassy-wing': dict(truceOff=10),
+    # D4b (school.ts, pyramid.ts): seats are extra seats in a rank (+1 at T1, +1 more every 3 tiers); promoTrait a trait
+    # forms on promotion; spar bouts a week; sneak Stealth tenths a week; rankLv member levels off ranks up to Sergeant;
+    # examStat stat points on promotion; cure bad traits a week; retirees places; trustCure anxious Pokémon a week;
+    # gruntSkill stat points a week; taskXp task XP a day; vets / pairs lessons a week; reveal traits a week; dojo
+    # type -> level x XP a week (all eight Type Dojos share the rule).
+    'admin-quarters': dict(seats={'admin': 1}), 'sergeants-post': dict(seats={'sergeant': 1}),
+    'lieutenants-office': dict(seats={'lieutenant': 1}), 'captains-hall': dict(seats={'captain': 1}),
+    'classroom': dict(promoTrait=1), 'sparring-ring': dict(spar=1), 'stealth-school': dict(sneak=4), 'officer-academy': dict(rankLv=2),
+    'therapy-room': dict(cure=1), 'retiree-hall': dict(retirees=1), 'comfort-ward': dict(trustCure=1), 'grunt-academy': dict(gruntSkill=1),
+    'skill-booth': dict(taskXp=1), 'veterans-corner': dict(vets=1), 'skill-exam-hall': dict(examStat=1), 'personality-lab': dict(reveal=1),
+    'mentoring-office': dict(pairs=1),
+    'type-dojo-fire': dict(dojo={'fire': 4}), 'type-dojo-water': dict(dojo={'water': 4}), 'type-dojo-grass': dict(dojo={'grass': 4}),
+    'type-dojo-electric': dict(dojo={'electric': 4}), 'type-dojo-psychic-and-dark': dict(dojo={'psychic': 4, 'dark': 4}),
+    'type-dojo-fighting-and-rock': dict(dojo={'fighting': 4, 'rock': 4}), 'type-dojo-ghost-and-poison': dict(dojo={'ghost': 4, 'poison': 4}),
+    'type-dojo-steel-and-dragon': dict(dojo={'steel': 4, 'dragon': 4}),
+    # D13 (debate.ts): debate is Conviction at a Debate's start; debateFloor the least the first argument moves the bar;
+    # debateSee shows each set line's marks before you pick it.
+    'debate-hall': dict(debateFloor=5), 'briefing-theater': dict(debateSee=1),
+    # D10 (growth.ts): contact (a Black Market contact), routes (+ smuggling routes), papers (a forged paper a week),
+    # flyerPct (% on flyer walk-ins), interest (% a week on idle money, max ₽1,000), fence (% on what the Fence pays).
+    'contraband-cellar': dict(treasury=2000), 'aquarium-tank': dict(storage=10), 'forgery-desk': dict(papers=1), 'loan-desk': dict(weekly=100),
+    'pawn-shop-inside': dict(contact=1, fence=5), 'black-market-counter': dict(contact=1), 'smugglers-desk': dict(routes=1),
+    'auction-hall': dict(fence=10), 'treasury-hall': dict(treasury=20000, interest=1), 'investment-office': dict(interest=1),
+    'battle-arena': dict(trainXp=1), 'lockdown-control': dict(raidDef=2), 'recruitment-desk': dict(flyerPct=10), 'dockside-depot': dict(routes=1),
+    'lighthouse-beacon': dict(control=5), 'sewer-network': dict(heatWeek=5), 'gym-annex-branch': dict(control=10), 'ocean-pen': dict(routes=1),
+    'trainer-gym-annex': dict(weekly=150), 'grunt-bar': dict(morale=3), 'drivers-pool': dict(heatWeek=3), 'grunt-plot-desk': dict(income=60),
+    'collectors-office': dict(weekly=120), 'black-ops-room': dict(nightActions=1), 'security-firm': dict(clean=100, control=5),
+    'pawn-counter': dict(clean=80), 'grunt-gym-front': dict(control=10),
+}
+# D9 rows the rival rules don't reach yet: the slice that does (the keyword guess said D9).
+WAIT_OVERRIDE = {
+    'quarantine-ward': 'later', 'contraband-cellar': 'D10', 'ledger-office': 'D6', 'investment-office': 'D10',
+    'machine-shop': 'later', 'test-chamber': 'later', 'panic-room': 'D14', 'escape-tunnel': 'D14', 'battle-arena': 'D10',
+    'pokemon-nap-house': 'later', 'cave-habitat': 'later', 'strike-breakers-office': 'later', 'drivers-pool': 'D10',
+    'assassins-guild': 'later', 'security-firm': 'D10',
+    # D10 read these and found they need other systems: Pokémon friendship rooms and TMs (later). Captives are D23's (live,
+    # in FX). The hidden lab was listed twice (D10, then later): the later one always won, so it is kept once as 'later'.
+    'pokemon-spa': 'later', 'tm-library': 'later', 'research-library': 'later', 'hidden-lab': 'later',
+    'friendship-meadow': 'later',
+}
+# Effects that only part works now (the rest waits): shown on the room card.
+NOTE = {
+    'barracks': None,
+    'dojo': 'Stat classes come with ranks (later).',
+    'treasury': None, 'kennel': None, 'trap-hall': None,
+    'operations-room': None, 'front-office': None, 'radio-room': None, 'workshop': None,
+    'taxi-rank': 'Taxi fares are later; the drivers bring Intel now.', 'spy-academy': 'Training moles waits for D22; your spies are caught less now.',
+    'mech-hangar': 'Mechs are drawn later; they count in raids now.', 'decoy-room': 'The fake vault counts as raid Defense.',
+    'honor-guard-hall': 'Guards the HQ in raids; the Boss\'s own escort waits for D14.', 'ballroom': 'Hosting a Boss: +5 Conviction when a Debate starts; tribute is cheaper.',
+    'embassy-wing': 'Envoys come as Rival File cards; tribute is cheaper now.', 'watchtower': None, 'security-room': None,
+    'garage': None, 'print-shop': None, 'research-lab': 'Breeding is the Breed action (D4b, in the Pens); Hit a Lab and Hack the Terminal are open.',
+    # D10 rows that do part of what the list says.
+    'contraband-cellar': 'Hidden goods count as money kept safe in a raid.', 'aquarium-tank': 'Sea scouting is later; it holds 10 more Pokémon.',
+    'loan-desk': 'Interest from locals as a weekly ₽100.', 'auction-hall': 'Auctions sell through the Fence (+10%).',
+    'battle-arena': 'Battles on your terms are later; crew training +1 XP.', 'lockdown-control': 'Counts as raid Defense.',
+    'lighthouse-beacon': 'Sea control as Control in its district.', 'sewer-network': 'Moving unseen: Heat −5 a week.',
+    'gym-annex-branch': 'A local seat: Control +10 (badge power is later).', 'drivers-pool': 'Escape speed as Heat −3 a week.',
+    'grunt-plot-desk': 'Small plots as ₽60 a day.', 'black-ops-room': 'Special missions as one more Night action.',
+    'holding-pens': None, 'outpost': 'Its own 2 room slots come with many regions (D15).',
+    'safehouse': None, 'luxury-suite': 'Debates start at +5 Conviction (the +10% meeting bonus); Executives\' Morale waits for ranks (D4).',
+    'debate-hall': 'The first argument of each Debate moves the bar at least +5; the rhetoric die is the bar itself.', 'briefing-theater': 'Every set line\'s five marks show before you pick it; crew talks are D3\'s.',
+    'recruitment-center': None, 'executive-office': 'Admins\' Hold +20% is D15.',
+    'night-market-stall': 'The list gives no T1 number; ₽80 a day matches the Grunt Café.', 'berry-garden': 'One berry kind until the Cold Cellar (later).', 'card-den': 'The cheat chance comes with the Ledger (D6).', 'infirmary': 'Free healing: Rest already heals the team.',
+    'barber-and-uniform-shop': 'New looks wait for team colours (D7).', 'trophy-hall': 'Visitors surrendering at the door comes later.',
+    'propaganda-studio': 'Spread the Word is D10; broadcasting to the next region waits for many regions (D15).',
+    'press-office': 'Choosing the Morning Report headline comes later; the press work on the town now.',
+    'charm-school': 'The Boss has no Charm stat of their own yet: the school helps your pitches and Regard.',
+    'zoo-of-stolen': 'Pokémon on display never rebelling waits for rebellions (later).', 'newsstand': 'Controlling the Morning Report comes later.',
+    'standard-bearers-hall': 'Crew never routing waits for squads (D8).', 'fossil-gallery': 'The fossil stat aura comes later.',
+}
+# Slices for the rest, by the first keyword found in the row (effect, per tier, capstone).
+WAITS = [
+    (r'Debate|rhetoric|rehears', 'D13'), (r'Dread|Regard|emblem|Banner|Propaganda|headline|Morning Report|Culture', 'D6'),
+    (r'squad|Squad|Elite', 'D8'), (r'promot|Sergeant|Lieutenant|Captain|Admin cap|rank|trait|skill|mentor|exam|cadet|Pair Admin', 'D4'),
+    (r'Intel|spy|spies|Spy|rival|raid|Raid|guard|Guard|attack|alarm|Alarm|fire|Fire|escape|capture|wall|Wall|trap|Trap|intrud|Lockdown|decoy|envoy|tap|Counterintel|camera|cams|Surveillance|drone|mech|Prisoner|captured|Interrog|cell|walkout|mutiny|slack', 'D9'),
+    (r'Smuggl|route|ship|tunnel|sea|Buy Out|Bribe|Flyer|flyer|Sabotage|Gym|gym|Black|banned|Auction|bid|Pawn|Loot|loot|Counterfeit|Coin|Forg|permit|lend|Lend|interest|robbery|plot|mission|takedown|debts|Fence', 'D10'),
+    (r'tribute|held region|prefect|Seat|Rule|decree|Legendary|Blessing|Teleport', 'D15'),
+    (r'Hero', 'D11'),
+]
+
+
+def waits_for(text):
+    for pat, s in WAITS:
+        if re.search(pat, text):
+            return s
+    return 'later'
+
+
+def num(t):
+    t = t.replace(',', '').strip()
+    return int(t) if t.isdigit() else 0
+
+
+# HQ tier needed to place a T1 (buildings.md §1): A, B, C, D at the Warehouse; E-H Hideout; I Compound; J a held district.
+MIN_TIER = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 1, 'F': 1, 'G': 1, 'H': 1, 'I': 2, 'J': 0, 'P': 1, 'Q': 1}
+
+rows = []
+
+
+def read(path, kind):
+    group, gname = None, None
+    for line in open(path, encoding='utf-8'):
+        h = re.match(r'^#{3,4} ([A-J]|P\d|G\d)\.? (.+?) \(\d+\)', line)
+        if h:
+            group, gname = h.group(1), h.group(2)
+            continue
+        m = re.match(r'^\| *([PG]?\d+) *\|(.+)\|\s*$', line)
+        if not m or group is None:
+            continue
+        cells = [c.strip() for c in m.group(2).split('|')]
+        if len(cells) != 7:
+            continue
+        name, slots, cost, t1, per, cap, ladder = cells
+        star = '★' in name
+        name = name.replace('★', '').strip()
+        key = ('A-J' if kind == 'main' else m.group(1)[0], name)
+        shown = RENAME.get(name, name) if kind == 'main' else name
+        bid = ID_FOR.get(key) or slug(shown)
+        shown = NAME_FOR.get(bid, shown)
+        g = group if kind == 'main' else ('P' if group.startswith('P') else 'Q')
+        outside = slots in ('—', '-')
+        grunt_outside = kind != 'main' and group in ('G3', 'G5')
+        rows.append(dict(
+            n=m.group(1), id=bid, name=shown, listName=name, group=g, sub=group if kind != 'main' else None, groupName=gname,
+            focus='hq' if kind == 'main' else ('pokemon' if group.startswith('P') else 'grunt'),
+            part3=star, slots=0 if outside else num(slots) or 1, outside=outside or (g == 'J'), canOutside=grunt_outside,
+            cost=num(cost), t1=t1, per=per, cap=cap, ladder=[x.strip() for x in ladder.split('›')],
+        ))
+
+
+read(f'{lists}/buildings.md', 'main')
+read(f'{lists}/buildings-pokemon-and-grunt.md', 'pg')
+
+EXTRA = [  # Part 3 §3.2 rooms not in the lists (Kice's poster names three of them).
+    dict(n='X1', id='pokemon-storage', name='Pokémon Storage', group='D', slots=1, cost=1000, t1='Stores +60 Pokémon (the Warehouse holds 20); crew can draw Pokémon from it', per='+30 Pokémon', ladder=['Crates', 'Pens', 'Storage', 'Racks', 'Bays', 'Vaults', 'Archive', 'Ark']),
+    dict(n='X2', id='recruitment-center', name='Recruitment Center', group='A', slots=1, cost=3500, t1='+1 walk-in recruit candidate a week; recruit attempts +10%; Hire Grunt costs −25%', per='+5% recruit', ladder=['Table', 'Desk', 'Office', 'Center', 'Bureau', 'Hall', 'Institute', 'Grand Hall']),
+    dict(n='X3', id='luxury-suite', name='Luxury Suite', group='A', slots=1, cost=12000, t1="Boss's quarters: Boss rests give +2 Day actions instead of +1; Debates and recruit meetings held here +10%; Executives' Morale +10", per='+5% meetings', ladder=['Room', 'Suite', 'Apartment', 'Penthouse', 'Loft', 'Manor Wing', 'Palace Wing', 'Royal Suite']),
+    dict(n='X4', id='night-shift', name='Night Shift', group='E', slots=1, cost=5000, t1='+1 Night action', per='+1 night crew', ladder=['Lamp', 'Shift', 'Crew', 'Watch', 'Guard', 'Patrol', 'Company', 'Night Legion']),
+    dict(n='X5', id='snag-desk', name='Snag Desk', group='G', slots=1, cost=0, t1='Built by Team Snagem (deal only)', per='—', ladder=['Desk'] * 8, deal='snagem'),
+    dict(n='X6', id='shadow-lab', name='Shadow Lab', group='G', slots=1, cost=0, t1='Built by Team Cipher (deal only)', per='—', ladder=['Lab'] * 8, deal='cipher'),
+]
+for e in EXTRA:
+    rows.append(dict(listName=e['name'], groupName='Part 3 §3.2', focus='hq', part3=True, outside=False, canOutside=False, cap='—', sub=None, **e))
+
+ids = set()
+for r in rows:
+    assert r['id'] not in ids, r['id']
+    ids.add(r['id'])
+    assert len(r['ladder']) == 8, (r['id'], r['ladder'])
+    fx = FX.get(r['id'])
+    r['minTier'] = 5 if r['id'] == 'throne-room' else MIN_TIER[r['group']]
+    deal = r.pop('deal', None)
+    if deal:
+        # D16: the partner builds it when the deal is signed (partners.ts); it unlocks that partner's actions.
+        r.update(status='supported', waits=None, fx={'unlock': True}, deal=deal)
+    elif fx:
+        note = NOTE.get(r['id'])
+        r.update(status='limited' if note else 'supported', fx=fx, waits=None)
+        if note:
+            r['note'] = note
+    else:
+        r.update(status='disabled', waits='D14' if r['id'] == 'throne-room' else WAIT_OVERRIDE.get(r['id']) or waits_for(' '.join([r['t1'], r['per'], r['cap']])), fx={})
+    if r['sub'] is None:
+        del r['sub']
+
+for k in FX:
+    assert k in ids, k
+counts = {'main': sum(1 for r in rows if r['n'].isdigit()), 'P': sum(1 for r in rows if r['n'][0] == 'P'), 'G': sum(1 for r in rows if r['n'][0] == 'G'), 'X': sum(1 for r in rows if r['n'][0] == 'X')}
+assert counts == {'main': 150, 'P': 50, 'G': 60, 'X': 6}, counts
+
+data = {
+    '_source': 'plans/evil-mode-rework/lists/buildings.md (1-150) + buildings-pokemon-and-grunt.md (P1-P50, G1-G60), word for word; Part 3 §3.2 extras X1-X6; tools/dominion/buildings-to-json.py FX',
+    'buildings': rows,
+}
+with open(out, 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=1)
+    f.write('\n')
+st = {}
+for r in rows:
+    st[r['status']] = st.get(r['status'], 0) + 1
+print(len(rows), 'buildings', st)

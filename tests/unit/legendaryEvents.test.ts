@@ -177,11 +177,14 @@ describe('triggers and placement', () => {
         r.regionIndex = 3;
         r.stage!.index = i % 7;
         r.party = r.party.map((m) => ({ ...m, speciesId: 'gyarados' }));
-        placeLegendaryGate(content, r);
         return r;
       };
+      // Same state twice: a clone of one fresh run, placed separately (building a second
+      // run per seed doubled this test's time on slow CI runners).
       const a = make();
-      const b = make();
+      const b = structuredClone(a);
+      placeLegendaryGate(content, a);
+      placeLegendaryGate(content, b);
       const gates = (r: RunState) => r.stage!.map.nodes.flatMap((n) => n.sides.filter((s) => s.id.startsWith('legend-')).map((s) => `${n.id}:${s.expeditionId}`));
       expect(gates(a)).toEqual(gates(b));
       expect(gates(a).length).toBeLessThanOrEqual(1);

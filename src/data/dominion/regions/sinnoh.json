@@ -1,0 +1,2276 @@
+{
+ "_source": "tools/dominion/regions-to-json.py (sinnoh); see the tool for sources.",
+ "id": "sinnoh",
+ "label": "SINNOH",
+ "warehouse": "Canalave",
+ "hq": "canalave",
+ "arrive": [
+  "Canalave in the snow. The new warehouse is under the drawbridge, and every time it rises the whole place shakes.",
+  "{brought} sets down the bags. \"Cold. I like it. Keeps people indoors and not looking out the window.\"",
+  "A poster on the wall: GALACTIC ENERGY FOR A NEW WORLD. Somebody has drawn a moustache on it."
+ ],
+ "districts": [
+  {
+   "id": "twinleaf",
+   "name": "Twinleaf",
+   "x": 40,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-grass",
+   "targets": [
+    {
+     "id": "twinleaf-lake",
+     "name": "Lake Verity",
+     "kind": "route",
+     "owner": {
+      "name": "Lake walkers",
+      "look": "trainer/pr/backpacker_f",
+      "line": "A quiet lake that hums at night."
+     },
+     "trait": null,
+     "pay": 1.1,
+     "foe": {
+      "name": "Lass Kara",
+      "cls": "lass",
+      "species": [
+       "starly",
+       "bidoof"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "twinleaf-street",
+     "name": "Twinleaf Lane",
+     "kind": "street",
+     "owner": {
+      "name": "The neighbours",
+      "look": "trainer/pr/pokefan_f",
+      "line": "Four houses and a snowman."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -4
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Neighbour",
+      "cls": "picnicker",
+      "species": [
+       "bidoof"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "rowan-lab",
+     "name": "Rowan's Lab (Sandgem)",
+     "kind": "site",
+     "owner": {
+      "name": "Professor Rowan",
+      "look": "trainer/pr/scientist_m",
+      "line": "Stern old man. Never locks the back door."
+     },
+     "trait": {
+      "word": "Absent",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Lab aide",
+      "cls": "youngster",
+      "species": [
+       "starly",
+       "shinx"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "jubilife",
+   "name": "Jubilife",
+   "x": 140,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "normal-electric",
+   "targets": [
+    {
+     "id": "jubilife-tv",
+     "name": "Jubilife TV",
+     "kind": "site",
+     "owner": {
+      "name": "The producer",
+      "look": "trainer/pr/interviewers",
+      "line": "Will put anything on the air if it rates."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 5
+     },
+     "pay": 1.6,
+     "foe": {
+      "name": "Studio guard",
+      "cls": "veteran",
+      "species": [
+       "magnemite",
+       "chatot"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "poketch-co",
+     "name": "Pokétch Company",
+     "kind": "shop",
+     "owner": {
+      "name": "The president",
+      "look": "trainer/pr/rich_m",
+      "line": "Every Trainer has one of his watches."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Company guard",
+      "cls": "veteran",
+      "species": [
+       "magnemite"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "jubilife-school",
+     "name": "Trainers' School",
+     "kind": "crowd",
+     "owner": {
+      "name": "The teacher",
+      "look": "trainer/pr/expert_pokemon_breeder",
+      "line": "A blackboard full of type charts."
+     },
+     "trait": {
+      "word": "Kind",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Student",
+      "cls": "lass",
+      "species": [
+       "budew"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 124
+  },
+  {
+   "id": "canalave",
+   "name": "Canalave",
+   "x": 40,
+   "y": 120,
+   "control": 10,
+   "rival": 0,
+   "police": false,
+   "wild": "water-steel",
+   "targets": [
+    {
+     "id": "canalave-library",
+     "name": "Canalave Library",
+     "kind": "site",
+     "owner": {
+      "name": "The librarian",
+      "look": "trainer/pr/veteran_f",
+      "line": "Three floors of old books. One of them is a map."
+     },
+     "trait": {
+      "word": "Bookish",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Library guard",
+      "cls": "veteran",
+      "species": [
+       "bronzor"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "canalave-docks",
+     "name": "Canalave Docks",
+     "kind": "dock",
+     "owner": {
+      "name": "The sailors",
+      "look": "trainer/pr/pilot",
+      "line": "Ships to Iron Island twice a day."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Sailor Luther",
+      "cls": "swimmer",
+      "species": [
+       "wingull",
+       "buizel"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "canalave-mart",
+     "name": "Canalave Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Stocks rope and nets for the ships."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's son",
+      "cls": "worker",
+      "species": [
+       "machop"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "oreburgh",
+   "name": "Oreburgh",
+   "x": 260,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "ground-rock",
+   "targets": [
+    {
+     "id": "oreburgh-mine",
+     "name": "Oreburgh Mine",
+     "kind": "cave",
+     "owner": {
+      "name": "The foreman",
+      "look": "trainer/pr/worker_f",
+      "line": "Coal and fossils, and a lot of tired miners."
+     },
+     "trait": {
+      "word": "Bored",
+      "odds": 5
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Miner",
+      "cls": "worker",
+      "species": [
+       "geodude",
+       "onix"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "mining-museum",
+     "name": "Mining Museum",
+     "kind": "site",
+     "owner": {
+      "name": "The curator",
+      "look": "trainer/pr/scientist_f",
+      "line": "Fossil labs in the back. Locked with one key."
+     },
+     "trait": {
+      "word": "Nervous",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Museum guard",
+      "cls": "veteran",
+      "species": [
+       "cranidos",
+       "shieldon"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "oreburgh-gate",
+     "name": "Oreburgh Gate",
+     "kind": "route",
+     "owner": {
+      "name": "Hikers",
+      "look": "trainer/pr/backpacker_m",
+      "line": "Every Trainer walks through here first."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Hiker Daniel",
+      "cls": "hiker",
+      "species": [
+       "zubat",
+       "geodude"
+      ],
+      "offset": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "floaroma",
+   "name": "Floaroma",
+   "x": 260,
+   "y": 70,
+   "control": 0,
+   "rival": 40,
+   "police": false,
+   "wild": "electric-grass",
+   "targets": [
+    {
+     "id": "valley-windworks",
+     "name": "Valley Windworks",
+     "kind": "site",
+     "owner": {
+      "name": "The engineer",
+      "look": "trainer/pr/worker_f",
+      "line": "The windmills power half of Sinnoh."
+     },
+     "trait": {
+      "word": "Steady",
+      "odds": -4
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Windworks guard",
+      "cls": "veteran",
+      "species": [
+       "shinx",
+       "pachirisu"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "floaroma-meadow",
+     "name": "Floaroma Meadow",
+     "kind": "crowd",
+     "owner": {
+      "name": "The flower sellers",
+      "look": "trainer/pr/parasol_lady",
+      "line": "Honey and flowers, and Galactic grunts asking about honey."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.1,
+     "foe": {
+      "name": "Flower seller",
+      "cls": "aroma-lady",
+      "species": [
+       "combee",
+       "cherubi"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "eterna-forest",
+     "name": "Eterna Forest",
+     "kind": "route",
+     "owner": {
+      "name": "Bug catchers",
+      "look": "trainer/pr/backpacker_f",
+      "line": "Dark woods and an old mansion."
+     },
+     "trait": null,
+     "pay": 1,
+     "foe": {
+      "name": "Bug Catcher Jack",
+      "cls": "bug-catcher",
+      "species": [
+       "wurmple",
+       "buneary"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Galactic"
+  },
+  {
+   "id": "eterna",
+   "name": "Eterna",
+   "x": 400,
+   "y": 70,
+   "control": 0,
+   "rival": 55,
+   "police": false,
+   "wild": "grass-dragon",
+   "targets": [
+    {
+     "id": "galactic-eterna",
+     "name": "Eterna Building",
+     "kind": "site",
+     "owner": {
+      "name": "The receptionist",
+      "look": "trainer/pr/clerk_f",
+      "line": "A Galactic office pretending to be an office."
+     },
+     "trait": {
+      "word": "Shifty",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Galactic guard",
+      "cls": "veteran",
+      "species": [
+       "stunky",
+       "zubat"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "eterna-bikes",
+     "name": "Cycle Shop",
+     "kind": "shop",
+     "owner": {
+      "name": "The bike seller",
+      "look": "trainer/pr/cyclist_m",
+      "line": "Sells bikes nobody can afford."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Cyclist",
+      "cls": "biker",
+      "species": [
+       "starly"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "eterna-statue",
+     "name": "Dialga Statue Square",
+     "kind": "crowd",
+     "owner": {
+      "name": "The pilgrims",
+      "look": "trainer/pr/ruin_maniac",
+      "line": "They come to see the old statue and leave flowers."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -5
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Pilgrim",
+      "cls": "psychic",
+      "species": [
+       "bronzor",
+       "kadabra"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Galactic"
+  },
+  {
+   "id": "hearthome",
+   "name": "Hearthome",
+   "x": 400,
+   "y": 196,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "ghost-fairy",
+   "targets": [
+    {
+     "id": "hearthome-contest",
+     "name": "Contest Hall",
+     "kind": "crowd",
+     "owner": {
+      "name": "The judges",
+      "look": "trainer/pr/dancer",
+      "line": "The biggest stage in Sinnoh."
+     },
+     "trait": {
+      "word": "Proud",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Coordinator",
+      "cls": "aroma-lady",
+      "species": [
+       "buneary",
+       "glameow"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "amity-square",
+     "name": "Amity Square",
+     "kind": "street",
+     "owner": {
+      "name": "The square keeper",
+      "look": "trainer/pr/pokefan_m",
+      "line": "Only small Pokémon allowed. No grunts allowed."
+     },
+     "trait": {
+      "word": "Watchful",
+      "odds": -6
+     },
+     "pay": 1.2,
+     "foe": {
+      "name": "Square guard",
+      "cls": "veteran",
+      "species": [
+       "pikachu",
+       "happiny"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "hearthome-church",
+     "name": "Hearthome Church",
+     "kind": "ghost",
+     "owner": {
+      "name": "The old caretaker",
+      "look": "trainer/pr/veteran_m",
+      "line": "Lost Tower spirits drift in at night."
+     },
+     "trait": {
+      "word": "Superstitious",
+      "odds": 6
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Caretaker",
+      "cls": "hex-maniac",
+      "species": [
+       "drifloon",
+       "duskull"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "w": 130
+  },
+  {
+   "id": "veilstone",
+   "name": "Veilstone",
+   "x": 520,
+   "y": 120,
+   "control": 0,
+   "rival": 60,
+   "police": true,
+   "wild": "fighting-psychic",
+   "targets": [
+    {
+     "id": "galactic-hq",
+     "name": "Veilstone Store Front",
+     "kind": "shop",
+     "owner": {
+      "name": "The store manager",
+      "look": "trainer/pr/rich_f",
+      "line": "The biggest shop in Sinnoh. Galactic HQ is across the street."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 4
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Store guard",
+      "cls": "veteran",
+      "species": [
+       "croagunk",
+       "machop"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "veilstone-game-corner",
+     "name": "Veilstone Game Corner",
+     "kind": "site",
+     "owner": {
+      "name": "The floor boss",
+      "look": "trainer/pr/rich_m",
+      "line": "Galactic money goes through these slots."
+     },
+     "trait": {
+      "word": "Greedy",
+      "odds": 6
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Floor boss",
+      "cls": "roughneck",
+      "species": [
+       "croagunk",
+       "meowth"
+      ],
+      "offset": 1
+     }
+    },
+    {
+     "id": "veilstone-station",
+     "name": "Veilstone Police Post",
+     "kind": "police",
+     "owner": {
+      "name": "Officer Jenny",
+      "look": "dominion/t-policeman.png",
+      "line": "She watches the Galactic building through binoculars."
+     },
+     "trait": {
+      "word": "Sharp",
+      "odds": -10
+     },
+     "pay": 1,
+     "foe": {
+      "name": "Officer",
+      "cls": "veteran",
+      "species": [
+       "growlithe",
+       "machop"
+      ],
+      "offset": 1
+     }
+    }
+   ],
+   "rivalNote": "Galactic HQ"
+  },
+  {
+   "id": "pastoria",
+   "name": "Pastoria",
+   "x": 400,
+   "y": 300,
+   "control": 0,
+   "rival": 0,
+   "police": false,
+   "wild": "water-poison",
+   "targets": [
+    {
+     "id": "great-marsh",
+     "name": "Great Marsh",
+     "kind": "route",
+     "owner": {
+      "name": "The marsh guides",
+      "look": "trainer/pr/ranger_m",
+      "line": "Mud to your knees, Pokémon from every country."
+     },
+     "trait": null,
+     "pay": 1.3,
+     "foe": {
+      "name": "Ranger Jeffrey",
+      "cls": "ranger",
+      "species": [
+       "wooper",
+       "croagunk"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "pastoria-mart",
+     "name": "Pastoria Mart",
+     "kind": "shop",
+     "owner": {
+      "name": "The Mart clerk",
+      "look": "dominion/t-clerk.png",
+      "line": "Sells Safari Balls and mud boots."
+     },
+     "trait": {
+      "word": "Timid",
+      "odds": 5
+     },
+     "pay": 1,
+     "foe": {
+      "name": "The clerk's sister",
+      "cls": "picnicker",
+      "species": [
+       "psyduck"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "valor-lake",
+     "name": "Lake Valor",
+     "kind": "route",
+     "owner": {
+      "name": "The resort staff",
+      "look": "trainer/pr/waiter_f",
+      "line": "Rich guests, a lake, and a hotel full of keys."
+     },
+     "trait": {
+      "word": "Gullible",
+      "odds": 5
+     },
+     "pay": 1.4,
+     "foe": {
+      "name": "Resort guard",
+      "cls": "veteran",
+      "species": [
+       "magikarp",
+       "gyarados"
+      ],
+      "offset": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "snowpoint",
+   "name": "Snowpoint",
+   "x": 260,
+   "y": 20,
+   "control": 0,
+   "rival": 20,
+   "police": false,
+   "wild": "ice-steel",
+   "targets": [
+    {
+     "id": "snowpoint-temple",
+     "name": "Snowpoint Temple",
+     "kind": "ghost",
+     "owner": {
+      "name": "The temple keeper",
+      "look": "trainer/pr/veteran_f",
+      "line": "Down the stairs, something sleeps."
+     },
+     "trait": {
+      "word": "Pious",
+      "odds": -8
+     },
+     "pay": 1.5,
+     "foe": {
+      "name": "Keeper",
+      "cls": "psychic",
+      "species": [
+       "snover",
+       "bronzong"
+      ],
+      "offset": 2
+     }
+    },
+    {
+     "id": "acuity-lake",
+     "name": "Lake Acuity",
+     "kind": "route",
+     "owner": {
+      "name": "Snow walkers",
+      "look": "trainer/pr/snow_worker_f",
+      "line": "A frozen lake at the top of the world."
+     },
+     "trait": null,
+     "pay": 1.2,
+     "foe": {
+      "name": "Skier Edward",
+      "cls": "snow-worker",
+      "species": [
+       "snover",
+       "sneasel"
+      ],
+      "offset": 0
+     }
+    },
+    {
+     "id": "snowpoint-port",
+     "name": "Snowpoint Harbour",
+     "kind": "dock",
+     "owner": {
+      "name": "The ferryman",
+      "look": "trainer/pr/pilot",
+      "line": "One ferry a day, if the ice lets it."
+     },
+     "trait": {
+      "word": "Stubborn",
+      "odds": -4
+     },
+     "pay": 1.3,
+     "foe": {
+      "name": "Ferry hand",
+      "cls": "fisherman",
+      "species": [
+       "snorunt",
+       "buizel"
+      ],
+      "offset": 0
+     }
+    }
+   ],
+   "rivalNote": "Galactic"
+  }
+ ],
+ "routes": [
+  [
+   "twinleaf",
+   "jubilife"
+  ],
+  [
+   "jubilife",
+   "canalave"
+  ],
+  [
+   "jubilife",
+   "oreburgh"
+  ],
+  [
+   "oreburgh",
+   "floaroma"
+  ],
+  [
+   "floaroma",
+   "eterna"
+  ],
+  [
+   "eterna",
+   "hearthome"
+  ],
+  [
+   "hearthome",
+   "veilstone"
+  ],
+  [
+   "hearthome",
+   "pastoria"
+  ],
+  [
+   "pastoria",
+   "veilstone"
+  ],
+  [
+   "eterna",
+   "snowpoint"
+  ],
+  [
+   "oreburgh",
+   "hearthome"
+  ]
+ ],
+ "water": [
+  [
+   "canalave",
+   "twinleaf"
+  ]
+ ],
+ "pools": {
+  "catch": [
+   "starly",
+   "bidoof",
+   "kricketot",
+   "shinx",
+   "budew",
+   "cranidos",
+   "shieldon",
+   "burmy",
+   "combee",
+   "pachirisu",
+   "buizel",
+   "cherubi",
+   "shellos",
+   "drifloon",
+   "buneary",
+   "glameow",
+   "chingling",
+   "stunky",
+   "bronzor",
+   "bonsly",
+   "happiny",
+   "chatot",
+   "gible",
+   "riolu",
+   "hippopotas",
+   "skorupi",
+   "croagunk",
+   "carnivine",
+   "finneon",
+   "snover",
+   "geodude",
+   "zubat",
+   "machop",
+   "ponyta",
+   "psyduck"
+  ],
+  "steal": [
+   "gible",
+   "riolu",
+   "spiritomb",
+   "munchlax",
+   "mantyke",
+   "chatot",
+   "pachirisu",
+   "cranidos",
+   "shieldon",
+   "happiny",
+   "bonsly",
+   "eevee",
+   "togepi",
+   "snorunt",
+   "lucario"
+  ]
+ },
+ "rivals": {
+  "galactic": [
+   {
+    "id": "galactic-hq-site",
+    "name": "Galactic HQ (Veilstone)",
+    "district": "veilstone",
+    "hq": true
+   },
+   {
+    "id": "windworks-hold",
+    "name": "Valley Windworks Hold",
+    "district": "floaroma"
+   },
+   {
+    "id": "eterna-office",
+    "name": "Eterna Galactic Building",
+    "district": "eterna"
+   },
+   {
+    "id": "lake-verity-camp",
+    "name": "Lake Verity Camp",
+    "district": "twinleaf"
+   },
+   {
+    "id": "lake-valor-camp",
+    "name": "Lake Valor Camp",
+    "district": "pastoria"
+   },
+   {
+    "id": "lake-acuity-camp",
+    "name": "Lake Acuity Camp",
+    "district": "snowpoint"
+   },
+   {
+    "id": "veilstone-warehouse",
+    "name": "Veilstone Warehouse",
+    "district": "veilstone"
+   }
+  ]
+ },
+ "gyms": [
+  {
+   "id": "oreburgh-gym",
+   "district": "oreburgh",
+   "leader": "Roark",
+   "leaderId": "roark",
+   "type": "rock",
+   "badge": "Coal",
+   "species": [
+    "geodude",
+    "onix",
+    "cranidos"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Youngster Jonathon",
+     "cls": "youngster",
+     "leaderId": null,
+     "species": [
+      "geodude"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "eterna-gym",
+   "district": "eterna",
+   "leader": "Gardenia",
+   "leaderId": "gardenia",
+   "type": "grass",
+   "badge": "Forest",
+   "species": [
+    "cherubi",
+    "turtwig",
+    "roserade"
+   ],
+   "offset": 1,
+   "trainers": [
+    {
+     "name": "Lass Caroline",
+     "cls": "lass",
+     "leaderId": null,
+     "species": [
+      "budew"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "veilstone-gym",
+   "district": "veilstone",
+   "leader": "Maylene",
+   "leaderId": "maylene",
+   "type": "fighting",
+   "badge": "Cobble",
+   "species": [
+    "meditite",
+    "machoke",
+    "lucario"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Black Belt Darren",
+     "cls": "black-belt",
+     "leaderId": null,
+     "species": [
+      "machop"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "pastoria-gym",
+   "district": "pastoria",
+   "leader": "Crasher Wake",
+   "leaderId": "crasherwake",
+   "type": "water",
+   "badge": "Fen",
+   "species": [
+    "gyarados",
+    "quagsire",
+    "floatzel"
+   ],
+   "offset": 2,
+   "trainers": [
+    {
+     "name": "Fisherman Walter",
+     "cls": "fisherman",
+     "leaderId": null,
+     "species": [
+      "magikarp",
+      "gyarados"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "hearthome-gym",
+   "district": "hearthome",
+   "leader": "Fantina",
+   "leaderId": "fantina",
+   "type": "ghost",
+   "badge": "Relic",
+   "species": [
+    "duskull",
+    "haunter",
+    "mismagius"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Hex Maniac Kindra",
+     "cls": "hex-maniac",
+     "leaderId": null,
+     "species": [
+      "drifloon"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "canalave-gym",
+   "district": "canalave",
+   "leader": "Byron",
+   "leaderId": "byron",
+   "type": "steel",
+   "badge": "Mine",
+   "species": [
+    "bronzor",
+    "steelix",
+    "bastiodon"
+   ],
+   "offset": 3,
+   "trainers": [
+    {
+     "name": "Worker Gary",
+     "cls": "worker",
+     "leaderId": null,
+     "species": [
+      "onix",
+      "magnemite"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "snowpoint-gym",
+   "district": "snowpoint",
+   "leader": "Candice",
+   "leaderId": "candice",
+   "type": "ice",
+   "badge": "Icicle",
+   "species": [
+    "snover",
+    "sneasel",
+    "medicham",
+    "abomasnow"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Skier Alexa",
+     "cls": "snow-worker",
+     "leaderId": null,
+     "species": [
+      "snover"
+     ],
+     "offset": -1
+    }
+   ]
+  },
+  {
+   "id": "sunyshore-gym",
+   "district": "pastoria",
+   "leader": "Volkner",
+   "leaderId": "volkner",
+   "type": "electric",
+   "badge": "Beacon",
+   "species": [
+    "raichu",
+    "ambipom",
+    "octillery",
+    "luxray"
+   ],
+   "offset": 4,
+   "trainers": [
+    {
+     "name": "Guitarist Jerry",
+     "cls": "guitarist",
+     "leaderId": null,
+     "species": [
+      "pachirisu",
+      "luxio"
+     ],
+     "offset": -1
+    }
+   ]
+  }
+ ],
+ "business": [
+  {
+   "target": "canalave-mart",
+   "name": "Canalave Mart",
+   "price": 5000,
+   "income": 200,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "potion"
+   },
+   "text": "2 Potions a week."
+  },
+  {
+   "target": "poketch-co",
+   "name": "Pokétch Company",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Every watch tells you the time, and you where they are: +5% on jobs in Jubilife."
+  },
+  {
+   "target": "jubilife-tv",
+   "name": "Jubilife TV",
+   "price": 30000,
+   "income": 800,
+   "clean": true,
+   "perk": {
+    "kind": "heroDown",
+    "n": 1
+   },
+   "text": "Your story on the evening news. The Hero sees it.",
+   "rival": true
+  },
+  {
+   "target": "galactic-hq",
+   "name": "Veilstone Store Front",
+   "price": 15000,
+   "income": 600,
+   "clean": true,
+   "perk": {
+    "kind": "regard",
+    "n": 1
+   },
+   "text": "Regard +1 in Veilstone each week."
+  },
+  {
+   "target": "veilstone-game-corner",
+   "name": "Veilstone Game Corner",
+   "price": 20000,
+   "income": 500,
+   "clean": false,
+   "perk": {
+    "kind": "clean",
+    "n": 200
+   },
+   "text": "The slots wash ₽200 a week.",
+   "rival": true
+  },
+  {
+   "target": "eterna-bikes",
+   "name": "Cycle Shop",
+   "price": 4000,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "odds",
+    "n": 5
+   },
+   "text": "Fast bikes: +5% on jobs in Eterna."
+  },
+  {
+   "target": "pastoria-mart",
+   "name": "Pastoria Mart",
+   "price": 4500,
+   "income": 180,
+   "clean": true,
+   "perk": {
+    "kind": "items",
+    "n": 2,
+    "item": "safari-ball"
+   },
+   "text": "2 Safari Balls a week."
+  },
+  {
+   "target": "mining-museum",
+   "name": "Mining Museum",
+   "price": 9000,
+   "income": 300,
+   "clean": true,
+   "perk": {
+    "kind": "income",
+    "n": 300
+   },
+   "text": "Fossil tours pay ₽300 a week."
+  }
+ ],
+ "pillars": [
+  "jubilife-tv",
+  "veilstone-game-corner"
+ ],
+ "hero": {
+  "path": [
+   "twinleaf",
+   "jubilife",
+   "oreburgh",
+   "floaroma",
+   "eterna",
+   "hearthome",
+   "veilstone",
+   "pastoria",
+   "snowpoint"
+  ],
+  "allies": [
+   {
+    "id": "gardenia",
+    "name": "Gardenia",
+    "look": "bosses/gardenia.png",
+    "ace": "roserade"
+   },
+   {
+    "id": "maylene",
+    "name": "Maylene",
+    "look": "bosses/maylene.png",
+    "ace": "lucario"
+   },
+   {
+    "id": "crasherwake",
+    "name": "Crasher Wake",
+    "look": "bosses/crasherwake.png",
+    "ace": "floatzel"
+   },
+   {
+    "id": "fantina",
+    "name": "Fantina",
+    "look": "bosses/fantina.png",
+    "ace": "mismagius"
+   },
+   {
+    "id": "byron",
+    "name": "Byron",
+    "look": "bosses/byron.png",
+    "ace": "bastiodon"
+   },
+   {
+    "id": "volkner",
+    "name": "Volkner",
+    "look": "bosses/volkner.png",
+    "ace": "luxray"
+   },
+   {
+    "id": "cynthia",
+    "name": "Cynthia",
+    "look": "bosses/cynthia-gen7.png",
+    "ace": "garchomp",
+    "champion": true
+   }
+  ],
+  "mentor": "Professor Rowan",
+  "parent": "The Hero's mother",
+  "sidekick": "Barry, from Twinleaf",
+  "homes": {
+   "uxie": {
+    "home": "snowpoint",
+    "over": "Lake Acuity"
+   },
+   "mesprit": {
+    "home": "twinleaf",
+    "over": "Lake Verity"
+   },
+   "azelf": {
+    "home": "pastoria",
+    "over": "Lake Valor"
+   }
+  }
+ },
+ "league": {
+  "elite": [
+   {
+    "id": "aaron",
+    "name": "Aaron",
+    "species": [
+     "dustox",
+     "beautifly",
+     "vespiquen",
+     "heracross",
+     "drapion"
+    ],
+    "offset": 2
+   },
+   {
+    "id": "bertha",
+    "name": "Bertha",
+    "species": [
+     "quagsire",
+     "sudowoodo",
+     "golem",
+     "whiscash",
+     "hippowdon"
+    ],
+    "offset": 3
+   },
+   {
+    "id": "flint",
+    "name": "Flint",
+    "species": [
+     "rapidash",
+     "steelix",
+     "drifblim",
+     "lopunny",
+     "infernape"
+    ],
+    "offset": 4
+   },
+   {
+    "id": "lucian",
+    "name": "Lucian",
+    "species": [
+     "mr-mime",
+     "girafarig",
+     "medicham",
+     "alakazam",
+     "bronzong"
+    ],
+    "offset": 5
+   }
+  ],
+  "champion": {
+   "id": "cynthia",
+   "name": "Cynthia",
+   "species": [
+    "spiritomb",
+    "roserade",
+    "gastrodon",
+    "lucario",
+    "milotic",
+    "garchomp"
+   ],
+   "offset": 6
+  },
+  "standIn": {}
+ },
+ "lab": [
+  "cranidos",
+  "shieldon",
+  "gible",
+  "riolu",
+  "porygon"
+ ],
+ "desk": {
+  "name": "Sinnoh",
+  "rivals": [
+   "Team Galactic"
+  ],
+  "badges": [
+   {
+    "name": "Coal Badge",
+    "town": "Oreburgh City",
+    "c": "#7a6a5a"
+   },
+   {
+    "name": "Forest Badge",
+    "town": "Eterna City",
+    "c": "#5aa84a"
+   },
+   {
+    "name": "Cobble Badge",
+    "town": "Veilstone City",
+    "c": "#c8a87a"
+   },
+   {
+    "name": "Fen Badge",
+    "town": "Pastoria City",
+    "c": "#4a9ad8"
+   },
+   {
+    "name": "Relic Badge",
+    "town": "Hearthome City",
+    "c": "#a87ad8"
+   },
+   {
+    "name": "Mine Badge",
+    "town": "Canalave City",
+    "c": "#a8a8b8"
+   },
+   {
+    "name": "Icicle Badge",
+    "town": "Snowpoint City",
+    "c": "#a8e0f8"
+   },
+   {
+    "name": "Beacon Badge",
+    "town": "Sunyshore City",
+    "c": "#ffd23f"
+   }
+  ],
+  "codes": {
+   "Oreburgh City": "ORB",
+   "Eterna City": "ETR",
+   "Veilstone City": "VLS",
+   "Pastoria City": "PST",
+   "Hearthome City": "HRT",
+   "Canalave City": "CNL",
+   "Snowpoint City": "SNW",
+   "Sunyshore City": "SNY"
+  },
+  "mons": [
+   "starly",
+   "bidoof",
+   "kricketot",
+   "shinx",
+   "budew",
+   "cranidos",
+   "shieldon",
+   "burmy",
+   "combee",
+   "pachirisu",
+   "buizel",
+   "cherubi",
+   "shellos",
+   "drifloon",
+   "buneary",
+   "glameow",
+   "chingling",
+   "stunky",
+   "bronzor",
+   "bonsly",
+   "happiny",
+   "chatot",
+   "gible",
+   "riolu",
+   "hippopotas",
+   "skorupi",
+   "croagunk",
+   "carnivine",
+   "finneon",
+   "snover",
+   "geodude",
+   "zubat",
+   "machop",
+   "ponyta",
+   "psyduck"
+  ],
+  "offRegion": [
+   "rattata",
+   "sentret",
+   "zigzagoon",
+   "lillipup",
+   "fletchling",
+   "rookidee",
+   "yungoos",
+   "lechonk"
+  ],
+  "writers": [
+   {
+    "name": "Mine foreman Dag",
+    "short": "Dag",
+    "town": "Oreburgh City",
+    "quote": "{first} worked the coal face eight months. Never complained about the dust."
+   },
+   {
+    "name": "Bike shop owner Rae",
+    "short": "Rae",
+    "town": "Eterna City",
+    "quote": "{first} fixed bikes with me. Fast hands. Faster legs."
+   },
+   {
+    "name": "Game Corner usher Sid",
+    "short": "Sid",
+    "town": "Veilstone City",
+    "quote": "{first} worked the floor at the Game Corner. Saw the Galactic suits come and go."
+   },
+   {
+    "name": "Great Marsh guide Olu",
+    "short": "Olu",
+    "town": "Pastoria City",
+    "quote": "{first} guided tourists through the marsh. Never lost one in the mud."
+   },
+   {
+    "name": "Contest hall dresser Belle",
+    "short": "Belle",
+    "town": "Hearthome City",
+    "quote": "{first} dressed Pokémon for the Contests. Eye for detail."
+   },
+   {
+    "name": "Library keeper Mott",
+    "short": "Mott",
+    "town": "Canalave City",
+    "quote": "{first} read every book about the lakes. Every one. Twice."
+   }
+  ]
+ },
+ "holdings": {
+  "sinnoh:oreburgh-gym-roark": {
+   "district": "oreburgh",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:oreburgh-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"a free fossil each month; Rock crew +10% defense.\" waits for a battle or shop hook."
+  },
+  "sinnoh:eterna-gym-gardenia": {
+   "district": "eterna",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1050
+    }
+   ],
+   "via": "gym:eterna-gym",
+   "note": "Read from the list's Bonus as income each week; the rest of \"Grass crew +10% damage; berries +₽150/day.\" waits for a battle or shop hook."
+  },
+  "sinnoh:veilstone-gym-maylene": {
+   "district": "veilstone",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:veilstone-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Fighting crew train ×2; sparring gives crew +1 Nerve each week.\" waits for a battle or shop hook."
+  },
+  "sinnoh:pastoria-gym-crasher-wake": {
+   "district": "pastoria",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:pastoria-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Water crew +10% damage; a monthly tournament gives ₽2,000.\" waits for a battle or shop hook."
+  },
+  "sinnoh:hearthome-gym-fantina": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:hearthome-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Ghost crew +15% evasion; Contest entry free.\" waits for a battle or shop hook."
+  },
+  "sinnoh:canalave-gym-byron": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:canalave-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Steel crew +10% defense; harbour repairs free.\" waits for a battle or shop hook."
+  },
+  "sinnoh:snowpoint-gym-candice": {
+   "district": "snowpoint",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "via": "gym:snowpoint-gym",
+   "note": "Read from the list's Bonus as heat each week; the rest of \"Ice crew +10% damage; snow cover (Heat −5 in Snowpoint).\" waits for a battle or shop hook."
+  },
+  "sinnoh:sunyshore-gym-volkner": {
+   "district": "pastoria",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "gym:sunyshore-gym",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Electric crew +1 Speed stage; the Solar plant gives free power.\" waits for a battle or shop hook."
+  },
+  "sinnoh:sinnoh-league": {
+   "district": "snowpoint",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "via": "champion",
+   "note": "Read from the list's Bonus as odds each week; the rest of \"Cynthia's seat; free Champion-grade practice weekly.\" waits for a battle or shop hook."
+  },
+  "sinnoh:twinleaf-town": {
+   "district": "twinleaf",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Mom's kitchen heals crew each night; Loyalty +1 weekly; the starter bag event.\" waits for a battle or shop hook."
+  },
+  "sinnoh:sandgem-town": {
+   "district": "twinleaf",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Rowan's Lab; egg events; the Pokétch handoff.\" waits for a battle or shop hook."
+  },
+  "sinnoh:jubilife-city": {
+   "district": "jubilife",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Jubilife TV, Poketch Co. and the Trainers' School in one city; Regard +10 weekly\" waits for a battle or shop hook."
+  },
+  "sinnoh:oreburgh-city": {
+   "district": "oreburgh",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2100
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"coal income +₽300/day; Roark's fossils free monthly.\" waits for a battle or shop hook."
+  },
+  "sinnoh:floaroma-town": {
+   "district": "floaroma",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Flower shop gives Regard +10; Honey events give Combee/Vespiquen; berries +₽\" waits for a battle or shop hook."
+  },
+  "sinnoh:eterna-city": {
+   "district": "eterna",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Galactic's first seat (a free comms room); Old Chateau access.\" waits for a battle or shop hook."
+  },
+  "sinnoh:veilstone-city": {
+   "district": "veilstone",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Veilstone Dept Store and Galactic Warehouse; items −20%; the Game Corner.\" waits for a battle or shop hook."
+  },
+  "sinnoh:pastoria-city": {
+   "district": "pastoria",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Great Marsh access (daily Safari catches); Water Gym; Wake's tournaments.\" waits for a battle or shop hook."
+  },
+  "sinnoh:celestic-town": {
+   "district": "veilstone",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Celestic Ruins and Ancient lore; Wits +1.\" waits for a battle or shop hook."
+  },
+  "sinnoh:hearthome-city": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Contest Hall, Poffin House and Day Care in one city; Regard +10 weekly.\" waits for a battle or shop hook."
+  },
+  "sinnoh:solaceon-town": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "income",
+     "n": 350
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"Solaceon Ruins and the Day Care; Unown research; breeding +1 egg.\" waits for a battle or shop hook."
+  },
+  "sinnoh:canalave-city": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"port, Library and Iron Island ferry; ships +1; import/export +2.\" waits for a battle or shop hook."
+  },
+  "sinnoh:snowpoint-city": {
+   "district": "snowpoint",
+   "fx": [
+    {
+     "k": "heat",
+     "n": 5
+    }
+   ],
+   "note": "Read from the list's Bonus as heat each week; the rest of \"Snowpoint Temple access; Ice-type events; snow cover (Heat −5).\" waits for a battle or shop hook."
+  },
+  "sinnoh:sunyshore-city": {
+   "district": "pastoria",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1400
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Solar Plant gives free power (all machine rooms −30% upkeep); Vista Lighthou\" waits for a battle or shop hook."
+  },
+  "sinnoh:fight-area": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"the Battle Frontier access; Fighting crew train ×2.\" waits for a battle or shop hook."
+  },
+  "sinnoh:survival-area": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "income",
+     "n": 700
+    },
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as income, regard each week; the rest of \"wild Pokémon level-ups; Wild Reserve +1 daily.\" waits for a battle or shop hook."
+  },
+  "sinnoh:resort-area": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    },
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit, regard each week; the rest of \"the Villa, the Seven Stars and a beach; Regard +10 weekly; VIP recruits.\" waits for a battle or shop hook."
+  },
+  "sinnoh:rowans-lab-sandgem": {
+   "district": "twinleaf",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"crew evolution items cost −25%; hatch time −30%.\" waits for a battle or shop hook."
+  },
+  "sinnoh:players-house-twinleaf-rivals-house": {
+   "district": "twinleaf",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"crew heal fully; Loyalty +2 weekly.\" waits for a battle or shop hook."
+  },
+  "sinnoh:poketch-company-jubilife": {
+   "district": "jubilife",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"every crew member's Poketch shows live status and location; no Grunt gets lost.\" waits for a battle or shop hook."
+  },
+  "sinnoh:jubilife-tv": {
+   "district": "jubilife",
+   "fx": [
+    {
+     "k": "dread",
+     "n": 20,
+     "where": "district"
+    }
+   ],
+   "via": "biz:jubilife-tv",
+   "note": "Read from the list's Bonus as dread each week; the rest of \"Morning Report news +; Regard/Dread +20 weekly; Cyrus' Galactic news can be supp\" waits for a battle or shop hook."
+  },
+  "sinnoh:trainers-school": {
+   "district": "jubilife",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"walk-in adult recruits +1 weekly (adults only).\" waits for a battle or shop hook."
+  },
+  "sinnoh:oreburgh-mine": {
+   "district": "oreburgh",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"+₽400/day; a free fossil each month; Rock crew +5%.\" waits for a battle or shop hook."
+  },
+  "sinnoh:valley-windworks": {
+   "district": "floaroma",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"free electricity −20% HQ upkeep.\" waits for a battle or shop hook."
+  },
+  "sinnoh:veilstone-dept-store": {
+   "district": "veilstone",
+   "fx": [
+    {
+     "k": "income",
+     "n": 2800
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"items −20%; Vending buffs.\" waits for a battle or shop hook."
+  },
+  "sinnoh:galactic-warehouse-veilstone": {
+   "district": "veilstone",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"a stock of stolen Pokémon and items (restocked weekly); Poison crew +5%.\" waits for a battle or shop hook."
+  },
+  "sinnoh:galactic-hq-veilstone": {
+   "district": "veilstone",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"rival HQ; Dread +; Galactic crew; Wipe Out path +30%.\" waits for a battle or shop hook."
+  },
+  "sinnoh:galactic-eterna-building": {
+   "district": "veilstone",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Galactic's first seat; a free comms room (Intel +2); Jupiter's files.\" waits for a battle or shop hook."
+  },
+  "sinnoh:old-chateau": {
+   "district": "eterna",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Ghost crew +10% evasion; a hidden item weekly; Rotom event.\" waits for a battle or shop hook."
+  },
+  "sinnoh:great-marsh": {
+   "district": "pastoria",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"five wild per day; Safari species (Hippopotas, Carnivine); binocular scouting.\" waits for a battle or shop hook."
+  },
+  "sinnoh:hearthome-contest-hall": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"Regard +10 weekly; ribbon winnings ₽150 each; Contest-trained crew.\" waits for a battle or shop hook."
+  },
+  "sinnoh:poffin-house": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"Poffins improve condition; crew buffs for battles (+5% for one fight); berries c\" waits for a battle or shop hook."
+  },
+  "sinnoh:solaceon-ruins": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"crew Wits +1; Psychic research; Unown letters give hints.\" waits for a battle or shop hook."
+  },
+  "sinnoh:solaceon-day-care": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "loyalty",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as loyalty each week; the rest of \"breeding +1 egg; stolen Pokémon raised faster.\" waits for a battle or shop hook."
+  },
+  "sinnoh:canalave-library": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"research bonus; crew Wits +1; a free Move Tutor hint.\" waits for a battle or shop hook."
+  },
+  "sinnoh:iron-island": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "income",
+     "n": 1750
+    }
+   ],
+   "note": "Read from the list's Bonus as income each week; the rest of \"Steel crew +10% defense; Riolu event; iron ore +₽250/day.\" waits for a battle or shop hook."
+  },
+  "sinnoh:snowpoint-temple": {
+   "district": "snowpoint",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Regigigas rumour; Regi trio events; Ice crew +5%.\" waits for a battle or shop hook."
+  },
+  "sinnoh:solar-plant-sunyshore": {
+   "district": "pastoria",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"all machine rooms −30% upkeep; the Plant gives a free Electric TM weekly.\" waits for a battle or shop hook."
+  },
+  "sinnoh:battle-frontier-sinnoh": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit each week; the rest of \"Grunts learn items and gimmicks; recruits extreme trainers.\" waits for a battle or shop hook."
+  },
+  "sinnoh:survival-area-wild": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"wild Pokémon level-ups; Wild Reserve +1.\" waits for a battle or shop hook."
+  },
+  "sinnoh:resort-villa": {
+   "district": "canalave",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 15,
+     "where": "district"
+    },
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit, regard each week; the rest of \"Regard +15 weekly; VIP recruits.\" waits for a battle or shop hook."
+  },
+  "sinnoh:seven-stars-restaurant": {
+   "district": "hearthome",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    },
+    {
+     "k": "recruit",
+     "n": 1
+    }
+   ],
+   "note": "Read from the list's Bonus as recruit, regard each week; the rest of \"Regard +10; Berry buffs; high-roller recruits.\" waits for a battle or shop hook."
+  },
+  "sinnoh:lake-verity": {
+   "district": "twinleaf",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Mesprit rumour; Psychic crew +5%; Regard +10.\" waits for a battle or shop hook."
+  },
+  "sinnoh:lake-valor": {
+   "district": "pastoria",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Azelf rumour; Dark crew +5%; Regard +10.\" waits for a battle or shop hook."
+  },
+  "sinnoh:lake-acuity": {
+   "district": "snowpoint",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 10,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"the Uxie rumour; Wits +1; Regard +10.\" waits for a battle or shop hook."
+  },
+  "sinnoh:mt-coronet": {
+   "district": "eterna",
+   "fx": [
+    {
+     "k": "odds",
+     "n": 5,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as odds each week; the rest of \"a free route across Sinnoh (−2 travel days); Dialga/Palkia rumours; wild Rock/Ic\" waits for a battle or shop hook."
+  },
+  "sinnoh:spear-pillar": {
+   "district": "eterna",
+   "fx": [
+    {
+     "k": "dread",
+     "n": 40,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as dread each week; the rest of \"Dialga/Palkia rite; Regard/Dread +40.\" waits for a battle or shop hook."
+  },
+  "sinnoh:distortion-world": {
+   "district": "eterna",
+   "fx": [
+    {
+     "k": "regard",
+     "n": 1,
+     "where": "district"
+    }
+   ],
+   "note": "Read from the list's Bonus as regard each week; the rest of \"a Giratina rite; ghost routes that skip a day of travel.\" waits for a battle or shop hook."
+  }
+ }
+}

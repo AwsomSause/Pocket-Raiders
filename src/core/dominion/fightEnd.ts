@@ -1,0 +1,83 @@
+// DOMINION D2: a battle the Boss's action waited on has ended. Called by the battle rules (run.ts takeTurn) before any
+// of the main game's after-battle steps: no prize, no node, and a loss never ends the run. The Boss's team is not
+// healed (Rest does that, Part 1 §2.1). Doesn't import run.ts (it's called from there).
+
+import type { Content } from '../contentSchema';
+import type { RunState } from '../state';
+import { settle } from './field';
+import { DOMINION_DATA, useRegion } from './data';
+import { bookRest, weekSum } from './book';
+import { courtFightEnd } from './chair';
+import { hqFx } from './hqFx';
+
+const MODE = 'dominion';
+
+/** True while a Dominion run's battle is one an action is waiting on. */
+export const dominionFightOn = (run: RunState): boolean => run.rules.modeId === MODE && !!run.expansion?.dominion?.field.fight?.begun && !!run.battle;
+
+/** D11: a Heroic Legendary defending the region can't be caught (Part 4 §8). Pure, no imports (run.ts calls it). */
+export function dominionCatchBlock(run: RunState): string | null {
+  return dominionFightOn(run) && run.expansion?.dominion?.field.fight?.why === 'legend' ? DOMINION_DATA.hero.lines.legendNoCatch ?? 'It won\'t be caught.' : null;
+}
+
+/** D16: no levels for a Shadow Pokémon in a Dominion fight until it's purified (Part 4 §9). Pure (run.ts calls it). */
+export const dominionNoXp = (run: RunState, mon: { shadow?: unknown }): boolean => !!mon.shadow && dominionFightOn(run);
+
+/** D16: the battle's snagged Pokémon go to the Reserve with the Trust a snagged Pokémon starts at. Mutates `b`. */
+function snaggedToReserve(content: Content, b: NonNullable<NonNullable<RunState['expansion']>['dominion']>, run: RunState): string[] {
+  const taken = run.battle?.snagged ?? [];
+  if (!taken.length) return [];
+  const P = DOMINION_DATA.pyramid, L = DOMINION_DATA.partners.lines;
+  const r = (b.reserve ??= { box: [], meta: {}, hunt: {}, auto: false, passed: {}, promoted: [], stripped: [] });
+  const size = P.reserve.size + hqFx(b).storage;
+  const out: string[] = [];
+  let n = 0;
+  for (const t of taken) {
+    const mon = { ...structuredClone(t), uid: `${t.uid}-snag${b.day}-${n++}`, hp: Math.max(1, t.hp) };
+    const sp = content.species.get(mon.speciesId);
+    const name = sp?.name ?? mon.speciesId;
+    if (r.box.length >= size) {
+      out.push((L.snaggedFull ?? '').replace('{mon}', name));
+      continue;
+    }
+    const trust = P.trust.start.snagged;
+    r.box.push(mon);
+    r.meta[mon.uid] = {
+      trust, src: 'snagged', by: null, pens: 0, ace: false,
+      bst: sp ? Object.values(sp.baseStats).reduce((a, x) => a + x, 0) : 0, types: sp ? sp.types.slice(0, 2) : [],
+      rare: !!sp && (sp.tags.some((tg) => P.caps.neverTags.includes(tg)) || P.caps.never.includes(mon.speciesId)),
+    };
+    out.push((L.snagged ?? '').replace('{mon}', name).replace('{n}', String(trust)));
+  }
+  return out;
+}
+
+/** Settles the fight: a caught Pokémon joins the team (or the box), the battle's gone, the run's back on the map. Mutates `run`. */
+export function endDominionFight(content: Content, run: RunState, outcome: 'win' | 'lose' | 'caught' | 'fled'): string[] {
+  const block = structuredClone(run.expansion!.dominion!);
+  useRegion(block);
+  let caught: string | null = null;
+  if (outcome === 'caught' && run.battle) {
+    const foe = run.battle.enemyTeam[run.battle.enemyIndex];
+    if (foe) {
+      const mon = { ...structuredClone(foe), hp: Math.max(1, foe.hp) };
+      if (run.party.length < 6) run.party = [...run.party, mon];
+      else run.box = [...(run.box ?? []), mon];
+      caught = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
+    }
+  }
+  // D16: Pokémon taken with Snagem's Snag Balls join the Reserve on a win (Trust: snagged, A19); a loss loses them.
+  const snagLines = outcome === 'win' || outcome === 'caught' ? snaggedToReserve(content, block, run) : [];
+  run.battle = null;
+  run.phase = 'map';
+  const funds = block.funds, sum = weekSum(block), why = block.field.fight?.why ?? 'fail';
+  const lines = settle(content, block, run, outcome === 'caught' ? 'win' : outcome, caught);
+  // D12: a Chair visitor's fight at the door: what was at stake.
+  if (why === 'court') lines.push(...courtFightEnd(block, outcome === 'caught' ? 'win' : outcome, run.seed));
+  lines.push(...snagLines);
+  // D6: the fight's money on the Ledger (a fine, a raid's take, a duel's wager). The Notoriety ladder is checked on the
+  // next step (empire.ts isn't imported here: run.ts imports this file, and empire.ts would close a cycle).
+  bookRest(block, funds, sum, DOMINION_DATA.empire.ledger.byFight[why] ?? 'jobs');
+  run.expansion = { ...(run.expansion ?? {}), dominion: block };
+  return lines;
+}

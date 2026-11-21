@@ -1,0 +1,683 @@
+{
+ "1": {
+  "name": "Nova Baseline",
+  "big": "A fresh start built on the approved looks: every Dominion page redrawn in the main game's new style (word menus, black panels, key strip) in Team Nova's black, crimson and gold, with the HQ floors and Staff Office from the HQ plan.",
+  "pages": [],
+  "q1": "It starts from the strongest looks already approved: the main game's word menus and key strip, in black with crimson seams and gold numbers, with sprites on lit plinths and a crimson ray burst for the Boss's orders.",
+  "q2": "Everything before this is thrown away. Instead of the old Dominion boxes, all 66 pages now share the main game's parts (top bar, word menu, panels, tab strip, key strip), so Evil Mode looks like the same game seen from the other side.",
+  "q3": "The HQ now follows the HQ plan: three real floors (Upper Floor 2F, Ground Floor G, The Cellar B1) with plots for sale, and the Staff Office gets its own page (Auto-Checker with gear tiers). More splits come in later passes.",
+  "q4": "Esc opens the Boss Menu, built like the main game's title menu, with the empire at a glance beside it. Settings is the main game's Settings with Dominion and Rotom categories. The tab strip (1 to 6) is on every working page.",
+  "q5": "Yes: word menus, Trainer-style plates, the main game's battle console and Poké Ball buttons, with Persian at the Boss's feet. Grunts are male, Rotom is the guide."
+ },
+ "2": {
+  "name": "Big & Bold",
+  "big": "Every page title is now a crimson slash across the top, words are set in big slanted game type, sprites are about one and a half times bigger, and the battle commands become big slanted words under the right thumb.",
+  "pages": [
+   "Staff Office",
+   "Pick the crew"
+  ],
+  "q1": "Yes. Titles are now big crimson slashes that cut in from the left, the selected row juts out with a gold edge, and the battle's FIGHT is a huge slanted word.",
+  "q2": "Pass 1 still read like a spreadsheet in small type. Now the eye lands on one big word per page (THE COMPOUND, PICK THE CREW, FIGHT) and sprites are big enough to read faces.",
+  "q3": "Yes, two. The Staff Office gets its own page with the three posts as cards (Auto-Checker, Bookkeeper, Caretaker), and Pick the crew splits choosing who goes out from the odds on The Card.",
+  "q4": "The tab strip becomes six slanted words, the same type as the battle commands, so Menu, tabs and commands read as one system. Settings rows use the big type too.",
+  "q5": "Yes. Big slanted battle words and type colour chips are straight from the main game's battle look; the crew cards read like party slots."
+ },
+ "3": {
+  "name": "Places",
+  "big": "Every page now happens somewhere. Panels are smoked glass over a real place (the Compound, Viridian at morning, Celadon at night, the Holding Pens), people stand on the ground with shadows, and the HQ is the Compound cut open with the crew inside the rooms.",
+  "pages": [
+   "Walk the street"
+  ],
+  "q1": "Yes. The places glow through the panels: warm lamplight in the Compound, a pink morning over Viridian, blue night in Saffron. The HQ has a purple roof, wooden floors, a green ground line and a stone Cellar under it.",
+  "q2": "Passes 1 and 2 floated on a dark wash. Now you always know where you are: a location chip in the top bar, the real place behind the glass, people standing on the ground, and Mina, Rook and Persian sitting in their rooms on the HQ.",
+  "q3": "Yes, Walk the street: the district's shops stand as real buildings (Bike Shop, Gym, Poké Mart, Nugget Bridge), and each door says what you can do there (Extort, Challenge, Snatch, Recruit).",
+  "q4": "The Boss Menu now opens over the place you were in, so pausing never loses your spot. Settings sit in the Compound.",
+  "q5": "Yes. The street is built from the main game's own town buildings and the HQ reads like a Pokémon building interior."
+ },
+ "4": {
+  "name": "In Motion",
+  "big": "Nothing sits still any more. Pages wipe in behind a crimson blade while money, Heat, titles and panels glide to their new place, the Nova eye hops beside whatever you choose, cards deal in, numbers count up, the odds ring winds round, text types out and HP drains with a pale ghost.",
+  "pages": [
+   "Motion sheet"
+  ],
+  "q1": "Yes. A crimson blade wipes each new page in, the Nova eye hops beside your choice, result pages burst with coins, the VS disc wobbles, the eye in the top bar blinks and the HQ's lamps flicker on floor by floor.",
+  "q2": "Pass 3 was a still photo of a place. Now pages are linked by motion: the title, money, Heat, panels and the tab highlight glide from page to page instead of blinking, so you can follow where you went.",
+  "q3": "One new page, the Motion sheet, lists every motion with its timing and what Calm mode does instead. No action needed splitting this pass.",
+  "q4": "The tab highlight slides between tabs as you change page, and the Boss Menu words deal in one after another. Calm mode for every motion is listed and will get its own Settings row next pass.",
+  "q5": "Yes. The hopping cursor, the dealt cards and HP draining with a ghost are the main game's own motions, here with the Nova eye instead of a Poké Ball."
+ },
+ "5": {
+  "name": "Menu & Settings",
+  "big": "The Boss Menu becomes the Nova Dial, the same dial you get by holding Q, with a live look at the HQ beside it. Settings becomes a home page with eight tiles and one page per category with real switches, sliders and a live preview. Every area of the game now has its own colour and badge in its title slash.",
+  "pages": [
+   "Settings home",
+   "Settings · Effects",
+   "Settings · Sound",
+   "Save and quit"
+  ],
+  "q1": "Yes. The Boss Menu is a spinning crimson-and-gold dial with the Nova eye at its centre, the chosen word grows, and the Settings pages have moving previews: a blade wiping, an equaliser, a run bar with your node blinking.",
+  "q2": "Passes 1 to 4 had a plain word list for the menu and one long Settings list. Now the menu is a dial you turn, every area has its own colour and badge in its title (HQ crimson, Jobs purple, Crew teal, Opposition blue), and Settings is a real home page with categories.",
+  "q3": "Yes, four: Settings home, Effects, Sound, and Save and quit. Each Settings category has its own page, so no page holds more than five rows.",
+  "q4": "Esc opens the Nova Dial; holding Q on any page opens the same dial, so there is one menu to learn. Settings home sits on the dial; each category page keeps the categories down the left so you can hop between them.",
+  "q5": "Yes. It works like the main game's pause wheel and Settings, with Rotom explaining which settings are Evil Mode's own."
+ },
+ "6": {
+  "name": "Faces & Colours",
+  "big": "Every person now has a signature colour and a face. Round portraits ride on every text box and footer, people glow in their own colour on stage, files are painted in it, and the crew roster becomes a police line-up.",
+  "pages": [
+   "People you know",
+   "Crew ID · Rook"
+  ],
+  "q1": "Yes. Round portraits in each person's colour sit on every text box, actors glow in their colour, files are painted in it, and the roster is a police line-up with height lines.",
+  "q2": "Until now everyone wore the same crimson. Now you can tell people apart at a glance: Rosa is teal, Rook blue, Gus orange, Red red, Giovanni grey, Looker tan, and the same colour follows each of them from page to page.",
+  "q3": "Yes, two. People you know lists everyone met so far by side (crew, Rocket, heroes and gyms, the law), and each crew member gets a Crew ID card with photo, rank stripes and armband.",
+  "q4": "People you know is reachable from the Crew tab and the dial; portraits in the Boss Menu glance use the same faces.",
+  "q5": "Yes. Portraits by the text box and colour-coded trainers are how Pokémon games show who is talking."
+ },
+ "7": {
+  "name": "The Heist",
+  "big": "A job is now a heist in beats: pick it from the Job board, pick the crew, read the Card, give the order, watch it play out live, then walk through the report one step at a time. Orders left for the day ride in the top bar on every page.",
+  "pages": [
+   "Job board",
+   "The job · live"
+  ],
+  "q1": "Yes. Jobs are dealt as big heist cards with their target building and a gold odds dial, the order cut-in has speed lines and an ORDER stamp, and the live job shows Rook creeping past the Day Care under the moon with an alert popping over his head.",
+  "q2": "Before, a job jumped from the Card straight to a result. Now it has a shape: board, crew, card, order, live moment, report. The report has a step rail (take, Heat, crew, loot, next) so the result pages no longer dump everything at once.",
+  "q3": "Yes, two. The Job board shows today's three jobs side by side, and The job · live gives the risky moment its own page with three answers, instead of hiding it in a dice roll.",
+  "q4": "Orders left today now sit as three dots beside the Day in the top bar on every page, so the Menu never has to tell you. The Effects settings page already controls the speed lines and stamp.",
+  "q5": "Yes. A live moment with an alert mark over a sprite is straight from Pokémon's overworld, and the step-by-step report mirrors the main game's Victory Lap."
+ },
+ "8": {
+  "name": "Battle Stage",
+  "big": "Battles are filmed now. The camera sits behind the Boss's Pokémon, the foe stands on a Nova court under crossing spotlights, the Hideout Raid gets a turn clock, the crew wait on a bench, and the foe's team shows as Poké Balls. The spotlights now cross every scene in the game.",
+  "pages": [
+   "Pick a move",
+   "Crew steps in"
+  ],
+  "q1": "Yes. Two spotlights sweep across a crimson Nova court, the raid clock ticks, Houndoom fills the near side with a red glow, and the move list is painted in each move's type colour with a rainbow MEGA button.",
+  "q2": "Pass 2's battle was a flat picture with words on the side. Now it is a stage with depth (the court is tilted away from you), the raid has a clock you can read from across the room, and the foe's team and the Hero show at a glance.",
+  "q3": "Yes, two. Pick a move and Crew steps in are their own pages, so the battle screen only ever shows one choice at a time.",
+  "q4": "ORDER is the Boss's own battle command (one a battle), CREW opens the bench. Esc still opens the Nova Dial, which pauses the battle.",
+  "q5": "Yes, very: camera behind your Pokémon, foe on a platform, Poké Ball team pips, type-coloured moves and a MEGA button are core Pokémon battle parts."
+ },
+ "9": {
+  "name": "Power Surge",
+  "big": "Mega Evolution, Terastal, Dynamax and Z-Power each get a full-screen scene of their own (stones linked by a beam, red storm clouds, crystal shards, a Z spiral), the Legend gets a psychic storm, and a rainbow power line runs under the top bar whenever a power is charged. Move animations are not touched.",
+  "pages": [
+   "Pick a power",
+   "Power gear"
+  ],
+  "q1": "Yes, the loudest pass so far: a rainbow burst with stones joined by a beam for Mega, red storm clouds and a towering red-glowing Gengar for Dynamax, floating crystal shards for Terastal, a turning golden spiral with a giant Z, and a psychic storm behind Mewtwo.",
+  "q2": "In pass 8 the four powers shared one look. Now each has its own world, the Pokémon flashes white and then shows its new form, the trainer's power item glows between them, and a rainbow line under the top bar tells you a power is charged on any page.",
+  "q3": "Yes, two. Pick a power puts the four powers side by side (locked ones as black silhouettes with the region they open in), and Power gear lists the items you own, so the battle's MEGA button stays one press.",
+  "q4": "The rainbow line under the top bar shows on every page while a power is charged, so the Boss Menu does not need a separate notice. Effects settings can turn flashing down.",
+  "q5": "Yes. Each power is shown the way the Pokémon games stage it (Key Stone link, Dynamax clouds, Tera crystals, Z pose), only the Pokémon and its surroundings move, and the moves themselves are untouched."
+ },
+ "10": {
+  "name": "Story Beats",
+  "big": "Every event now plays in four beats (talk, choose, result, reward) with a beat bar across the top. Choices are big cards that show the stat check and your chance, the result shows the roll, and the reward only appears after the text is closed. The text box is rebuilt everywhere: a gold corner, a Log key and an Auto switch.",
+  "pages": [
+   "Event · choose",
+   "Event · result",
+   "Text log"
+  ],
+  "q1": "Yes. Events now feel like a show: a beat bar lights up step by step, choices slide in as big gold-edged cards with your chance counting up, and the result lands as a green SUCCESS plate with the roll under it.",
+  "q2": "Before, an event was one text box with a list of words. Now it is four clear beats on separate screens, every choice tells you the stat check and the odds before you pick, and the text box itself is rebuilt on every page with a gold corner, a speaker portrait, a Log key and an Auto switch.",
+  "q3": "Yes, three. Choose and Result each get their own page so the talk screen stays clean, and the Text log page lets you read everything said in the event without crowding the box.",
+  "q4": "The Log and Auto keys sit on every text box, and Auto has a matching switch in Settings > Dominion. The Boss Menu stays one key away and does not interrupt the beats.",
+  "q5": "Yes. It reads like a Pokémon game event: a speaker name plate, a blinking arrow, the text stays until you press a key, and the reward only shows after the text is closed, then waits for your key press."
+ },
+ "11": {
+  "name": "Living HQ",
+  "big": "The HQ becomes a building you live in. The tab bar is now a lit lift console on every page (a lamp, a count and a you-are-here arrow), every panel opens like lift doors and its ceiling light flickers on, and the Compound is cut open at night with a lift riding between floors and people working in lit rooms.",
+  "pages": [
+   "Ground Floor · G",
+   "The Cellar · B1",
+   "New floor",
+   "Staff gear"
+  ],
+  "q1": "Yes. The HQ is now a lit building at night under a moon, with a lift car riding up the shaft, people bobbing in warm rooms, scaffolding for the next floor, and a New floor reveal where the storey drops in with dust.",
+  "q2": "Pass 10 changed events; this pass changes every page. The tab bar became a lift console with lamps, counts and a you-are-here arrow, every panel opens like lift doors and its light flickers on, and the HQ went from a grid of boxes to a real building with floors you can ride to.",
+  "q3": "Yes, four. Each floor has its own page (lift buttons on the left, the rooms across the top, the picked room below), plus New floor and Staff gear, so the HQ screen only shows the building and tonight’s jobs.",
+  "q4": "The lift console is the main menu bar now, and the Boss Menu still opens on Q. The new floor reveal and the light flicker follow the Effects settings (they shorten when motion is turned down).",
+  "q5": "Yes. It feels like a Pokémon building interior, like Silph Co. or the Game Corner hideout: a lift with floor buttons, rooms with people at work, and floor names like 2F and B1."
+ },
+ "12": {
+  "name": "The Board",
+  "big": "Kanto becomes a tabletop board on a wooden table, with land, sea, the real routes and district tokens in their owner’s colour. Pieces stand on it: your crew, Rocket chips and the Hero with a blue ping. The whole UI turns into pieces too: money, Heat and the day are icons in the top bar, and the place chip is now a map pin that opens the board from any page.",
+  "pages": [
+   "Place your crew",
+   "Travel"
+  ],
+  "q1": "Yes. The map is now a board that tilts down onto a wooden table, tokens pop up in their colours, pieces drop onto the cities, dotted routes march between them, and the picked city lifts and glows.",
+  "q2": "Pass 11 was the HQ; this pass moves the rest of the world. The map stopped being a grid of boxes and became Kanto with real routes, the crew and the Hero are pieces you can see, and every page’s top bar now uses icons and a map pin that jumps to the board.",
+  "q3": "Yes, two. Place your crew keeps the board on screen while you put each crew member on a city, and Travel shows the road and its ambush odds, so the map page itself stays clean.",
+  "q4": "The map pin in the top bar is a shortcut to the board from any page, and the Boss Menu’s Region Map row opens the same board. A Board motion switch in Effects can stop the tilt and the dotted routes moving.",
+  "q5": "Yes. It reads like the Town Map in the Pokémon games, with Kanto’s real cities and routes (Route 3 by Mt. Moon, Cycling Road, the sea routes to Cinnabar), turned into a board game for the villains."
+ },
+ "13": {
+  "name": "Rotom Phone",
+  "big": "The Boss Menu is now a Rotom Phone you hold: Rotom’s eyes on top, nine apps with counts, and notifications sliding in beside it. The phone peeks out of the key strip on every page with a buzz and a count. Every speech line in the game is a chat bubble with a tail, and the buttons under it are reply chips.",
+  "pages": [
+   "Messages",
+   "Incoming call"
+  ],
+  "q1": "Yes. The phone rises into your hand with a tilt, Rotom’s eyes blink on top, apps pop in one by one, notifications drop in beside it, and a full-screen incoming call from Giovanni rings with red waves while Rotom buzzes.",
+  "q2": "Pass 12 changed the top bar; this pass changes the bottom of every page. The speech box became a chat bubble with a tail and the buttons became reply chips, and a buzzing Rotom Phone tab with a count now sits in the key strip everywhere. The Boss Menu went from a dial to a phone with apps.",
+  "q3": "Yes, two. Messages holds the crew’s texts with reply chips, and Incoming call gives big moments (Giovanni ringing) their own screen, so the HQ page does not have to show them.",
+  "q4": "The phone is the Menu now: P opens it from any page and its apps hold Settings, Save and Rotom. Notifications point straight to the page that needs you, so nothing feels like a maze.",
+  "q5": "Yes. The Rotom Phone is straight from Sword and Shield and Scarlet and Violet, and the chat bubbles and calls feel like the games’ phone calls from rivals and gym leaders."
+ },
+ "14": {
+  "name": "Card Collection",
+  "big": "Every person in Dominion is now a collectable card: a coloured frame, a name bar with their level, a foil that sweeps across, a role stripe and rarity stars. Every grid of people turns into cards with stars, every picked row shines like foil, and the roster becomes a hand of six cards dealt onto the table.",
+  "pages": [
+   "Card binder",
+   "New card"
+  ],
+  "q1": "Yes. Cards deal in from below with a spin, a rainbow foil sweeps across every card and every picked row, and a hire rips open like a booster pack before the new card flips over in a burst of light.",
+  "q2": "Pass 13 changed how people talk; this pass changes how people look everywhere. Every grid of people became framed cards with rarity stars, the roster went from a lineup to a hand of six cards with stats under them, and foil now marks whatever you have picked on any list.",
+  "q3": "Yes, two. The Card binder keeps everyone you have met (crew, Rocket, Heroes, Gyms, town) with set bonuses, and New card gives each hire its own moment, so the roster only shows your crew.",
+  "q4": "The Rotom Phone’s Crew app opens the hand of cards, and the binder is one key (B) from there. A Foil shine switch in Effects turns the sweep off for anyone who finds it busy.",
+  "q5": "Yes. It borrows the Pokémon Trading Card Game look (name bar, level, art window, rarity stars, holo foil), and a pack opening is one of the most Pokémon things there is."
+ },
+ "15": {
+  "name": "Day & Night",
+  "big": "Every page now happens at a time of day. The light changes (gold morning, bright noon, orange evening, blue night), weather drifts over the place (sun rays, rain, warm haze, fireflies), and a clock in the top bar shows the phase and opens The Day dial.",
+  "pages": [
+   "The Day",
+   "Forecast",
+   "Night falls"
+  ],
+  "q1": "Yes. Rain streaks over Saffron at night, fireflies drift over the jobs, sun rays sweep across mornings, the day dial’s hand swings round to Morning, and on Night falls the city’s windows switch on one by one under a rising moon.",
+  "q2": "Pass 14 changed people; this pass changes the air on every page. Each place now has a time and weather laid over it, the top bar has a clock that opens the day, and the day itself is a dial you can see and plan around instead of a number.",
+  "q3": "Yes, three. The Day dial shows the four phases and what is planned in each, the Forecast shows a week of weather and what it does to jobs, and Night falls shows what the night shift did before you sleep.",
+  "q4": "The clock in the top bar opens The Day from any page, and the Rotom Phone has the forecast. Weather effects follow the Effects settings, with a Weather on screen switch for anyone who wants it still.",
+  "q5": "Yes. Time of day and weather are core Pokémon ideas (day and night from Gold and Silver, weather from Ruby and Sapphire), and rain helping some types and hurting Fire types is exactly how the games work."
+ },
+ "16": {
+  "name": "Heat & the Law",
+  "big": "Heat becomes something you feel. The edges of every page glow red as it climbs, the Heat chip in the top bar is a thermometer that opens the Heat board, police sirens sweep red and blue over every police page, and the police get faces: Officer Jenny’s men, Looker’s notes and a wanted poster.",
+  "pages": [
+   "Heat",
+   "Wanted poster",
+   "Police raid"
+  ],
+  "q1": "Yes. Red and blue sirens sweep across every police page, the screen edges pulse red with Heat, a wanted poster slaps onto the board with pins, and a police raid flashes the whole HQ with a countdown and three officers at the door.",
+  "q2": "Pass 15 added time and weather; this pass adds danger to every page. Heat used to be a number in a chip. Now it is a red glow round every screen, a thermometer in the top bar, and a whole police side with its own faces, notes and raids.",
+  "q3": "Yes, three. The Heat board explains each level and where the Heat comes from, the Wanted poster gives a hunted crew member ways to cool down, and Police raid is its own big moment instead of a line in the morning report.",
+  "q4": "Tapping the Heat thermometer in the top bar opens the Heat board from any page. Flashing sirens and the red edge glow follow the Effects settings (Flashing lights off turns them into a calm red border).",
+  "q5": "Yes. Officer Jenny, policemen and Looker are all Pokémon characters, and evil teams being chased by the police and the International Police comes straight from the games."
+ },
+ "17": {
+  "name": "Rivals & Heroes",
+  "big": "You are never alone on screen now. Giovanni and Red watch from the key strip on every page with their Tension and Threat, every name plate in a scene is a slanted VS banner on halftone, and battle intros split the screen down the middle like a fight poster.",
+  "pages": [
+   "Rivals",
+   "Hero tracker"
+  ],
+  "q1": "Yes. Battle intros now tear open down a white split line with comic halftone, name plates are slanted VS banners, the Rivals board stands three enemies side by side under their colours, and Red’s route lights up across the board day by day.",
+  "q2": "Pass 16 brought the police; this pass brings your enemies onto every page. Giovanni and Red now sit in the key strip everywhere with their numbers, so you always feel watched, and every scene’s name plates and battle intros got a fight-poster look.",
+  "q3": "Yes, two. The Rivals board compares Rocket, the Hero and the Gym Leaders in one place, and the Hero tracker shows Red’s path and when he reaches you, with a plan to pick. The rival and hero files stay for the details.",
+  "q4": "Pressing the two faces in the key strip opens the Rivals board from any page, and the Rotom Phone sends a notification when a rival moves. The halftone and split effects follow the Effects settings.",
+  "q5": "Yes. Rivals, the Hero and Gym Leaders are the heart of every Pokémon game, and the split VS intro with name banners is how the games open a big trainer battle."
+ },
+ "18": {
+  "name": "Headlines",
+  "big": "Kanto talks about you now. A news ticker crawls under the top bar of every page, every result comes with a torn newspaper clipping about what you just did, and how the papers spin a job decides whether you gain Dread or Regard.",
+  "pages": [
+   "Newsstand",
+   "Scrapbook",
+   "Press interview"
+  ],
+  "q1": "Yes. A red news ticker crawls under every top bar, torn clippings slam onto every result, three newspapers drop onto the stand with different headlines, and the scrapbook pins six clippings to a cork board tied together with red string.",
+  "q2": "Pass 17 put your enemies on screen; this pass puts Kanto’s opinion on screen. Every page now carries the news, every result shows how the papers told it, and Dread and Regard are explained by real headlines instead of plain numbers.",
+  "q3": "Yes, three. The Newsstand compares how three papers spin the same job, the Scrapbook keeps the run’s story in one place, and the Press interview lets you choose your public face. Clicking the ticker or any clipping opens the Newsstand.",
+  "q4": "The ticker is one click from the Newsstand on any page, and the Rotom Phone’s notifications include big headlines. The ticker can be slowed or turned off in Effects for anyone who finds moving text hard to read.",
+  "q5": "Yes. Kanto newspapers and TV news are everywhere in the Pokémon games (Lilycove TV, the Celadon reporter, Team Rocket taking the Radio Tower), and evil teams always want the region to know their name."
+ },
+ "19": {
+  "name": "The Chair",
+  "big": "The Boss’s authority runs through the whole UI: every panel gets gold corner brackets like a framed decree, and every main button is a gold plate pressed with a crimson wax seal. The Chair becomes a first-person view across the Boss’s desk, with the visitor under the lamp, Persian on the desk and Dale at your shoulder.",
+  "pages": [
+   "Waiting room",
+   "Favour ledger"
+  ],
+  "q1": "Yes. The Chair is now a lamp-lit first-person scene across a desk with a gold nameplate, Persian sitting on the desk and Dale at your shoulder, and every main button in the game is stamped with a wax seal that presses in with a bounce.",
+  "q2": "Pass 18 was about what Kanto says; this pass is about the Boss’s power on every page. Gold corner brackets frame every panel, the main button everywhere is a sealed gold plate, and the Chair moved from a talk scene to the Boss’s own point of view.",
+  "q3": "Yes, two. The Waiting room lines up today’s visitors with what each wants and their mood, and the Favour ledger tracks who owes you and whom you owe, so the Chair screen only holds one visitor and three answers.",
+  "q4": "The Waiting room opens from the Chair with Q, and Favours sit in the Rotom Phone’s Ledger app. The wax-seal press follows the Motion setting.",
+  "q5": "Yes, in a villain way. It feels like walking into Giovanni’s office in Silph Co. or the Game Corner, with the Boss’s Persian at the desk, and every answer is a clear Pokémon-style choice with its result shown."
+ },
+ "20": {
+  "name": "Every Player",
+  "big": "Dominion is built for any player and any screen. The key strip shows the controller button next to every key, whatever you have picked wears a bright white focus ring you can always find, and Settings gains Access (text size, colour shapes, motion, one-button play) and Controls.",
+  "pages": [
+   "Settings · Access",
+   "Controls",
+   "On a phone"
+  ],
+  "q1": "It is the quietest pass on purpose, but it still shows off: a full controller drawing with a bouncing A button, coloured pad buttons beside every key on every page, and a phone in your hand showing the whole HQ on a tall screen.",
+  "q2": "Pass 19 added the Boss’s power; this pass makes every page easier to use. The key strip now speaks keyboard and controller at once, the thing you picked always has a bright white ring, and Settings gained an Access page with live previews and a Controls page.",
+  "q3": "Yes, three. Access holds text size, colour shapes, motion and one-button play, Controls shows every action for keys, pad and touch, and On a phone shows how the HQ rearranges on a tall screen. They sit in the Settings home with the others.",
+  "q4": "Access and Controls are two of the eight tiles on the Settings home, and the Access page keeps the same category list as the Dominion settings, so Settings stays one level deep.",
+  "q5": "Yes. Pokémon games always show which button does what (A to choose, B to go back), and playing the same game on a TV or in your hands is the Switch way."
+ },
+ "21": {
+  "name": "Rotom’s Lessons",
+  "big": "The tutorial is woven into the UI itself. Every page carries its lesson on T in the key strip, and a lesson lays a dark sheet over the real page, cuts a spotlight round the one thing it teaches, and has Rotom point at it with numbered steps, Skip and Next.",
+  "pages": [
+   "Lesson · the lift console",
+   "Lesson · the Card",
+   "Lesson book"
+  ],
+  "q1": "Yes, in a new way: the page you are on dims behind a dark sheet, a dashed gold spotlight pulses round the one thing being taught, and Rotom floats up beside it with a speech bubble and numbered steps.",
+  "q2": "Pass 20 made the UI easier for every player; this pass teaches it inside the real pages instead of on separate slides. Every page now shows its lesson number on T, and a lesson is the live page with a spotlight, so what you learn is exactly what you will use.",
+  "q3": "Yes, three. Two lessons show how it works on real pages (the lift console on the HQ, the chance ring on the Card), and the Lesson book lists all 15 lessons with what you have seen, so any lesson can be replayed without hunting.",
+  "q4": "T opens the lesson for the page you are on, the Lesson book sits in the Rotom Phone and Settings › Lessons, and the Tutorial row in Settings › Dominion picks Full, Tips only or Off.",
+  "q5": "Yes. Pokémon games teach with a friendly helper (the Rotom Dex, Professor Oak’s aides) who points at one thing at a time, and the text always waits for your button press."
+ },
+ "22": {
+  "name": "Empire",
+  "big": "The UI thinks bigger than one city. The Nova emblem on every page wears a gold ring that fills with your Goal and four region gems (Kanto lit), Empire pages turn gold and crimson with a slow banner wave, and Kanto becomes the first island on a World map.",
+  "pages": [
+   "The World",
+   "Sail to Johto",
+   "Pick the Holder"
+  ],
+  "q1": "Yes. A gold Goal ring spins up round the Nova emblem on every page, with four region gems (Kanto lit and pulsing), Empire pages hang a crimson and gold garland that sways under the ticker, and the World map has a dotted gold sea route with a little ship sailing it and islands that glow when they are yours.",
+  "q2": "Pass 21 taught the UI; this pass makes it feel like you are building something bigger than one city. Your progress to the Goal is always on screen in the emblem, and Kanto is now just the first island, so leaving a region is a proper journey with a sunset harbour and a list of what comes and what stays.",
+  "q3": "Yes, three. The World (all regions at a glance), Sail to Johto (one clear goodbye page that says money does not carry over) and Pick the Holder (who runs Kanto while you are away). The Empire page now leads to the World instead of crowding four regions onto one screen.",
+  "q4": "Press the Nova emblem on any page to open the World. In the menu, the World sits under Empire; the Holder choice is also in the Chair’s queue. Settings › Dominion gets a Holder row: Ask me, or Pick the most stable.",
+  "q5": "Yes. It feels like the moment you board the S.S. Anne or the Magnet Train to a new region: a harbour, a ship, a map with routes, and the next region waiting with its own villain team."
+ },
+ "23": {
+  "name": "Breathing Room",
+  "big": "Less chrome, more game. The top bar’s three chips fold into one status capsule, the bottom line becomes a real Pokémon text box that types itself out and waits on a bouncing ▼, and the buttons sit in a choice box with a ▶ cursor.",
+  "pages": [
+   "At a glance",
+   "Focus view",
+   "Settings · Screen"
+  ],
+  "q1": "Yes, by doing less, better. The page breathes: one clean capsule replaces three chips, the speech line is a framed Pokémon text box whose words type themselves out before a ▼ bounces, and the buttons sit in a white choice box with a ▶ cursor that nudges back and forth. Focus view folds the whole HUD away with a slide.",
+  "q2": "Pass 22 made the world bigger; this pass makes every page calmer and more readable. The top bar has a third fewer edges, the bottom of every page now reads like a real Pokémon conversation, and the HUD can be folded away completely when you want to look at the board.",
+  "q3": "Yes, three. At a glance explains the capsule in plain words with what needs you, so the top bar never has to explain itself. Focus view shows any page with no HUD at all. Settings › Screen lets you pick how much HUD you want. All three are one press from where you are.",
+  "q4": "Tap the capsule on any page for At a glance; V folds the HUD; Settings › Access gains a Screen tab with Status, News ticker, Key hints, Text speed and Focus view rows, each previewed live on the right.",
+  "q5": "Yes, more than any pass so far: the white framed text box, the ▼ that waits for your button, and the ▶ cursor in a YES/NO style choice box are exactly how every main-series Pokémon game talks to you."
+ },
+ "24": {
+  "name": "Nova Mark",
+  "big": "Team Nova finally has a brand, and the whole UI wears it: every page opens through a crimson Nova star that bursts like an iris, a giant Nova star turns slowly behind every page, every panel head is stamped with the four-point star, and every crew portrait wears a crimson armband.",
+  "pages": [
+   "The Mark",
+   "Uniforms",
+   "Calling card"
+  ],
+  "q1": "Yes. Every page now opens with a crimson four-point Nova star that spins open like an iris and wipes away, a huge Nova star turns slowly behind the panels, every panel head gets a little star that spins in, and every crew portrait wears a crimson N armband. The Mark page waves a full team flag with turning light rays, and the Calling card drops onto the table and gets stamped.",
+  "q2": "Pass 23 calmed the screen; this pass gives it an identity. Before, Team Nova looked like any menu; now the Nova star, crimson and the N armband are on every page, the same way Rocket’s R is everywhere in Pokémon. You feel like you are running a team with a brand, not reading a spreadsheet.",
+  "q3": "Yes, three. The Mark (team colour, emblem and armband letter) and Uniforms (the whole crew lined up in armbands) give the brand its own home instead of hiding it in settings. The Calling card is a quick choice after a job, between the result and the next morning, so it never blocks the flow.",
+  "q4": "The Mark sits in the Menu under HQ and in Settings › Dominion as “Team mark”. Settings › Effects gains a Page opener row: Nova star, Fade or Cut, so players who dislike the iris can turn it off. Uniforms opens from the Crew roster.",
+  "q5": "Yes. Every villain team in Pokémon is defined by its logo and uniform: Rocket’s R, Galactic’s G, the Plasma shield. Giving Nova its own mark, armbands and a calling card is exactly that language."
+ },
+ "25": {
+  "name": "Master Cut",
+  "big": "The first big synthesis: every panel now wears the same framed look as the text box (dark frame, cream inner line, area-colour rule), so the whole game reads as one Pokémon-style set of windows, and the frame itself is a choice in Options. The Phone tab becomes Start, which opens a classic Start menu that slides over the live page.",
+  "pages": [
+   "Start menu",
+   "Options",
+   "Boss card"
+  ],
+  "q1": "Yes. Every window now has the same jewel-like frame (dark edge, cream inner line, a colour rule), the Start menu slides in from the right over the live page while the rest dims, a ▶ cursor nudges through the list, and the Boss card flips over in 3D like a Trainer Card with district stamps popping in.",
+  "q2": "Passes 21 to 24 each added a layer (lessons, the world, a calmer HUD, the Nova brand). This pass ties them together: one frame for every window instead of mixed panel styles, one entry point (Start) instead of a Phone tab and a menu, and the Boss card becomes the one place that sums up your run.",
+  "q3": "Yes, two new and one remade. The Start menu is a short list over the live page, so you never lose your place. Options holds the five settings people change most plus the frame picker, so the full Settings stays for everything else. The Boss card replaces the plain file page.",
+  "q4": "This is the answer to both: Start (or the old Phone tab, which now says Start) opens the Start menu; Options is in it; Options links to All settings; Save is one line away. The Rotom Phone is item one, so nothing from before is lost.",
+  "q5": "Very much. The right-side Start menu with a ▶ cursor, Options with Text speed, Battle scene, Sound and Frame 1 to 6, and a Trainer Card with an ID No. and badge circles are straight from the main series."
+ },
+ "26": {
+  "name": "Spectacle",
+  "big": "Big moments hit like a Pokémon battle: every scene slams in with black letterbox bars, a white impact flash and a shake, the scene text box becomes the same cream framed box as everywhere else, and every page title streaks in on speed lines. Move animations are never touched: only trainers, Pokémon and the screen around them move.",
+  "pages": [
+   "Phase two",
+   "Crew team-up",
+   "Snapshot"
+  ],
+  "q1": "Yes. Scenes now hit: black letterbox bars slam in and pull back, the screen flashes white and shakes, Giovanni rises out of a red shockwave for Phase Two, three crew strips slash across the screen for a team-up, and a Snapshot develops from white like a real photo before it drops into the album.",
+  "q2": "Pass 25 unified every window; this pass makes the big moments feel big. The scene text box joins the cream frame look (with the ▼), page titles streak in on speed lines, and boss fights gain a proper second phase. It moves from tidy menus to a game with drama.",
+  "q3": "Yes, three. Phase two explains what changed in one screen instead of a pile of battle messages. The Crew team-up is its own cut-in with one choice, Team up or Not now. The Snapshot sits between the battle and the result and saves to an album shown on the Boss card.",
+  "q4": "Settings › Effects already has Show (Full, Lighter, Calm); Calm removes the bars, flash and shake. Options › Page opener covers the iris. The Album opens from the Boss card and from the Start menu’s Boss card line.",
+  "q5": "Yes. Letterbox bars and a white flash before a boss, a gym leader’s second phase with new music, and a photo of the moment are all things recent Pokémon games do, and moves themselves stay exactly as they are."
+ },
+ "27": {
+  "name": "Sound You Can See",
+  "big": "The UI shows what you hear: a little equaliser dances in the rainbow wedge, a Now playing card slides up whenever the music changes, speakers in the text box send out voice blips, and the lit lift button pulses on the beat.",
+  "pages": [
+   "Jukebox",
+   "Radio",
+   "Settings · Captions"
+  ],
+  "q1": "Yes. A record spins on the Jukebox with its arm swinging down, a waveform ripples beside it, the Radio needle sweeps across the dial while three speakers throb, and on every page a Now playing card rises from the corner, a tiny equaliser dances in the rainbow wedge, and voice rings pulse from whoever is talking.",
+  "q2": "Pass 26 gave big moments drama; this pass makes sound part of the screen. Music, voices and sirens now have something to look at, and the Radio turns sound into play: the Police band tells you where patrols will be, so you can plan around them.",
+  "q3": "Yes, three. The Jukebox collects tracks as you hear them. The Radio is a real tool, not decoration. Captions gives every sound words and an arrow, which helps deaf and hard of hearing players and anyone playing muted.",
+  "q4": "The Jukebox and Radio are lines in the Start menu (and the equaliser in the corner opens the Jukebox). Captions is a new tab beside Sound in Settings, with live captions in its preview.",
+  "q5": "Yes. The Pokégear radio from Gold and Silver, a sound test or jukebox, and a Now playing card are all Pokémon touches, and the Rocket takeover of a radio station is canon."
+ },
+ "28": {
+  "name": "Crew Life",
+  "big": "The crew stop being rows and start being people around you: whoever speaks in the text box pops a Pokémon-style emote bubble, off-duty crew stroll past behind the panels on every page, and the Crew button on the lift console shows the faces of whoever wants a word.",
+  "pages": [
+   "Bonds",
+   "Downtime",
+   "Heart-to-heart"
+  ],
+  "q1": "Yes. Speakers pop a little emote bubble that bounces (♥ for Rosa, ♪ for Gus, ! for Rook), off-duty crew hop past behind the panels on every page, the Bonds web draws itself line by line in gold, teal and dashed red, and each Downtime spot floats its icon in a warm glow.",
+  "q2": "Pass 27 made sound visible; this pass makes the crew feel alive. Before, crew were stats in rows; now they react when they talk, wander the HQ while you work, wave from the Crew button when they want you, and have friendships and grudges that change how jobs go.",
+  "q3": "Yes, three. Bonds shows every relationship on one web instead of hiding it in six files. Downtime is one evening choice with clear effects. The Heart-to-heart is a short scene with two answers, reached from Bonds or when a crew member wants a word.",
+  "q4": "Bonds and Downtime sit on the Crew page and in the Start menu under Crew. Settings › Dominion gains Crew chatter (Lots, Some, Few) for how often emotes and walk-bys appear; Effects › Calm hides the strollers.",
+  "q5": "Yes. Emote bubbles over heads are classic overworld Pokémon, Pokémon Amie and Camp gave Pokémon downtime, and support chats with your team match the warmth of the series."
+ },
+ "29": {
+  "name": "Rocket War",
+  "big": "Rocket is not a menu any more, it is a rival army pushing back on every page: a tug-of-war bar under the top bar shows Nova against Rocket across Kanto with a spark where they clash, Rocket’s R is sprayed behind the panels wherever they hold ground, and grunts patrol past the crew in the background.",
+  "pages": [
+   "War front",
+   "Turf clash",
+   "Parley"
+  ],
+  "q1": "Yes. A tug-of-war line runs under the top bar of every page, crimson for Nova and grey for Rocket, with a white spark pulsing where they clash. Rocket’s R fades in like spray paint on job and opposition pages, a Rocket grunt patrols past behind the panels, and the Turf clash lines up three against three around a spinning VS badge.",
+  "q2": "Pass 28 brought the crew to life; this pass gives them a real enemy. Before, Rocket was a number in district files; now the war is on every screen, you can see each district being pulled both ways, and you get a choice of how to deal with Archer: fight, pay, or split the city.",
+  "q3": "Yes, three. The War front shows all nine districts as tug bars on one page. The Turf clash is a single setup screen before a fight (squad, odds, go). The Parley gives three clear offers with their costs, so diplomacy is a page, not a hidden event.",
+  "q4": "The tug line opens the War front on any page, and it sits in the Start menu under Region map. Settings › Dominion gains Rocket pressure (Calm, Normal, Fierce), and Effects › Calm hides the spray tags.",
+  "q5": "Yes. Team Rocket taking over towns and Executives like Archer bargaining with you are canon from Gold and Silver and HeartGold and SoulSilver, and turf battles with three on three feel like the multi battles in later games."
+ },
+ "30": {
+  "name": "Second Cut",
+  "big": "The second synthesis pulls 26 to 29 together and clears space: the strip under the top bar carries news only where news matters and the Nova against Rocket war line everywhere else, every page arrives with a Black and White style place sign that slides in and away, and the speaker’s name moves onto a tab on top of the text box so the words get the whole box.",
+  "pages": [
+   "Last night",
+   "Adventure log",
+   "Hall of Infamy"
+  ],
+  "q1": "Yes. Each page now arrives with a cream place sign that drops in (“The Compound · Viridian”), the strip under the top bar becomes a bright Nova against Rocket war line with a spark on most pages, speaker names sit on coloured tabs on the text box, Last night deals four recap cards onto the table, the Adventure log turns its page and writes itself in ink, and the Hall of Infamy raises the crew onto gold pedestals under sweeping spotlights.",
+  "q2": "Passes 26 to 29 each added something big (drama, sound, crew life, the war). This pass makes them sit together calmly: news only shows where news matters, the war is always one glance away, the text box gives the words the full width, and three summary pages tie the run together: each morning, each day, and the end of a region.",
+  "q3": "Yes, three, and they reduce clutter. Last night replaces a pile of overnight pop-ups with one recap. The Adventure log is the one place the story is written down. The Hall of Infamy marks the end of a region before you sail on.",
+  "q4": "The Adventure log is in the Start menu; Last night can be switched in Settings › Dominion (Recap: Always, Short, Off); News ticker in Settings › Screen still picks On, Quiet (the new default, news only on news pages) or Off.",
+  "q5": "Yes. The sliding place sign is straight from Black and White, the Adventure log comes from Platinum and Omega Ruby and Alpha Sapphire, and the Hall of Infamy is a dark mirror of the Hall of Fame."
+ },
+ "31": {
+  "name": "Party Line",
+  "big": "Your Pokémon finally live on every page: the key strip carries your party of six as little icons with HP rings (the lead one bobbing), every Pokémon drawn anywhere now breathes and stands on a shadow, and the rivals’ eyes move into the Start menu.",
+  "pages": [
+   "Party",
+   "Summary",
+   "The Underworld"
+  ],
+  "q1": "Yes. Six little party icons with green HP rings pop into the key strip of every page (Persian’s ring is red and low), every Pokémon in the game now gently breathes on a soft shadow, the Party screen slides in like the one in the main games with a big lead slot, and the Summary draws a stat hexagon that springs open.",
+  "q2": "Pass 30 tied the story together; this pass puts your Pokémon back at the centre. Before, they only showed up in the Reserve and in battles; now your party is on every page, hurt Pokémon are noticed before a job, and the Underworld shows every villain team you will meet, using the team-coloured Zangoose from the Drive.",
+  "q3": "Yes, three. Party and Summary are the classic two-step Pokémon menus, so they need no explaining. The Underworld is one page for every rival team across the regions, with the ones you cannot reach yet shown as silhouettes.",
+  "q4": "The party icons open Party, which is also the Pokémon line in the Start menu; Rivals moved into the Start menu to make room. Settings › Effects gains Idle motion (On, Off) for the breathing.",
+  "q5": "Very much: a party of six on screen, the green, yellow and red HP bars, a Summary with a stat hexagon, moves with PP and an ability, and villain teams for every region."
+ },
+ "32": {
+  "name": "Dirty Money",
+  "big": "Money gets a colour: every page’s Funds now shows clean and dirty money as a two-tone line under the number, a little +₽ floats up from the capsule when cash comes in, and the coins on the capsule and the Ledger button flip.",
+  "pages": [
+   "Black market",
+   "Laundromat",
+   "Payday"
+  ],
+  "q1": "Yes. A gold “+₽1,200” rises out of the status pill and fades when cash comes in, the coin on the pill and on the Ledger button flips over, the Laundromat drum spins green ₽ coins behind a round glass door while the machine shudders, price tags hang crooked on the Black market shelves, and pay envelopes drop onto each crew card with a reaction bubble.",
+  "q2": "Pass 31 put your Pokémon on every page; this pass makes money something you can read at a glance. Clean and dirty money now look different everywhere, and spending, washing and paying each get their own clear page, instead of numbers buried in the Ledger.",
+  "q3": "Yes, three. The Black market is where dirty money is spent. The Laundromat turns it clean with a rate and a Heat warning. Payday shows what each crew member is paid and how they feel about it. Each is one stop with one clear button.",
+  "q4": "The Black market opens from the Region map in Celadon, the Laundromat from its HQ room, and Payday from the Crew page each week. Settings › Dominion gains Payday (Ask me, Auto-pay fair).",
+  "q5": "Yes. The shop grid with item sprites and prices, the Game Corner style back room, and the Amulet Coin and Big Nugget items all come from the series; washing money is the Dominion twist."
+ },
+ "33": {
+  "name": "Trust",
+  "big": "Loyalty is never hidden again: every crew portrait in the game wears a loyalty ring (gold when they would die for you, white when they are fine, a flickering red when they are slipping), and when someone who is slipping talks, the text box crackles with static.",
+  "pages": [
+   "Loyalty",
+   "Mole hunt",
+   "Interrogation"
+  ],
+  "q1": "Yes, in a tense way. Every crew portrait now wears a coloured loyalty ring, and Gus’s flickers red; when he talks, white static crackles across the text box. The Mole hunt pins three Polaroids to a cork board one by one and a red string draws itself between them and the note about the missing ₽2,000.",
+  "q2": "Pass 32 made money readable; this pass does the same for trust. Loyalty used to be a number inside each file; now you can see at a glance, on any page, who is solid and who is slipping, and a hidden mole becomes a mystery you solve on its own pages.",
+  "q3": "Yes, three. The Loyalty board ranks everyone and says what moves loyalty. The Mole hunt lays the clues out on one wall. The Interrogation is a short scene with three answers. Together they turn a vague worry into a clear little story.",
+  "q4": "Loyalty opens from the Crew page and the Start menu’s Crew line; the Mole hunt only appears in the Start menu when a mole is active. Settings › Access › Colour help adds shapes to the rings (★ gold, ● white, ▲ red) for colour-blind players.",
+  "q5": "Yes. It borrows the detective boards of Looker’s cases in Pokémon X and Y, and the friendship you can see in Pokémon Amie and Refresh, turned into crew loyalty."
+ },
+ "34": {
+  "name": "Festival Nights",
+  "big": "Kanto has a calendar, and the UI dresses for it: tonight is Celadon’s Fireworks Night, so paper lanterns sway along the top of every page, fireworks burst behind the panels on evening and night pages, and the Day segment of the capsule wears a festival lantern that opens the Calendar.",
+  "pages": [
+   "Calendar",
+   "Fireworks Night",
+   "Prize corner"
+  ],
+  "q1": "Yes. A string of red, gold and orange paper lanterns sways under the top bar of every page, fireworks bloom and fade behind the panels on evening pages and fill the sky on Fireworks Night, the Day segment wears a tiny lantern, and the Prize corner’s giant coin flips while Porygon and Dratini breathe on their stands.",
+  "q2": "Pass 33 dealt with trust inside the crew; this pass opens the city up around them. Kanto now has a calendar with paydays, festivals, raids and gym days, and special nights change the whole look of the UI and give you jobs you can only do then.",
+  "q3": "Yes, three. The Calendar puts the whole month on one screen. Fireworks Night is the festival’s own page with its three special jobs. The Prize corner sits inside it, one step away, so the festival never sends you hunting through menus.",
+  "q4": "The lantern on the Day segment opens the Calendar, and the Calendar is a line in the Start menu. Settings › Effects gains Festival decorations (On, Off).",
+  "q5": "Yes. The Game Corner prize counter with Porygon and Dratini is pure Kanto, and festivals like the Bug-Catching Contest and fireworks nights come straight from the series."
+ },
+ "35": {
+  "name": "Third Cut",
+  "big": "The third synthesis tidies everything 31 to 34 added: the bottom strip becomes one dark dock (Start, your party and the lesson sit together on one rounded bar), every page shows a ‹ back crumb in its title chip so you always know the way home, and nothing pops up on its own any more: calls, letters and alerts wait in one Inbox.",
+  "pages": [
+   "X-ray",
+   "Inbox",
+   "Lights out"
+  ],
+  "q1": "Yes. The dock slides up from the bottom like a handheld’s menu bar, the ‹ crumb blinks once when you land on a page, X-ray throws a blue glass sheet over the HQ and pings six labelled callouts one after another, and Lights out dims the screen to moonlight with the crew snoring Zzz before the end-of-day card flips in.",
+  "q2": "Passes 31 to 34 each added something to the bottom strip and to pop-ups; this pass cleans that up. The strip is now one dock, every page shows the way back in its title chip, and calls, letters and alerts collect in an Inbox instead of popping over what you are doing.",
+  "q3": "Yes, three. X-ray explains a busy screen without cluttering it. Inbox holds everything that used to pop up. Lights out gives the end of the day its own calm page with the save.",
+  "q4": "Inbox and X-ray are both lines in the Start menu, and the Inbox count shows on the dock. Settings › Screen gains Pop-ups (Inbox only, Show) and Autosave at Lights out (On, Off).",
+  "q5": "Yes. The end-of-day save works like Pokémon’s “Would you like to save?” prompt, the Inbox feels like the PC mailbox, and the dock is the same one-row Start bar the handheld games use."
+ },
+ "36": {
+  "name": "Rocket Falls",
+  "big": "The endgame arrives and the whole UI braces for it. Every page now opens through a Pokémon-style encounter wipe chosen by its group (sliding bars at home, a Poké Ball iris for battles and rivals, blinds for jobs and events, the Nova slash for the Empire), and the war line becomes a burning fuse: a smoking spark creeps toward Rocket’s bomb, and a red SIEGE chip counts down the days on every page.",
+  "pages": [
+   "Siege plan",
+   "The Hideout",
+   "Giovanni’s office"
+  ],
+  "q1": "Yes. Every page change is now an event: dark bars slide apart on home pages, a red-and-white Poké Ball iris opens onto battles and rivals, gold-edged blinds flip open on jobs, and the Empire splits open on a gold slash. The war line burns like a real fuse with a smoking spark, and the lift doors on the Hideout slide open onto your crew.",
+  "q2": "Pass 35 calmed the screen down; this pass gives it a heartbeat for the endgame. Moving between pages no longer just swaps the screen, it plays a wipe that tells you what kind of page you are entering, and the fuse plus the SIEGE chip keep the final goal in sight everywhere.",
+  "q3": "Yes, three, in a straight line: the Siege plan picks who holds each floor, the Hideout shows the descent floor by floor, and Giovanni’s office is the final talk with three choices. Each leads to the next with one button, so it never feels like a maze.",
+  "q4": "The SIEGE chip on every page opens the Siege plan, and the plan is also reachable from the War front. Settings › Effects gains Page wipes (Encounter, Simple fade, Off), and Off is the default when Reduce motion is on.",
+  "q5": "Very much. The encounter wipes copy the feeling of a wild battle starting, the hideout under the Celadon Game Corner with its poster switch, spin tiles and Lift Key is straight out of Red and Blue, and facing Giovanni in his office is the classic ending of Rocket’s story."
+ },
+ "37": {
+  "name": "Johto Bound",
+  "big": "The UI learns that Kanto is only one place. Every page now wears its region’s skin: Kanto’s skyline (Silph Co., the Department Store, Pokémon Tower) rises on the horizon behind every page with Nova’s windows glowing red, and every panel header catches a passing glint of light. Sail to Johto and the whole UI re-dresses in gold and silver, with the Bell Tower and the Radio Tower on the skyline.",
+  "pages": [
+   "Region skin",
+   "Arrival in Johto",
+   "Goldenrod Underground"
+  ],
+  "q1": "Yes. A skyline of Kanto landmarks rises behind every page with Nova’s windows glowing red, a glint of light runs across every panel header, and Arrival in Johto is a full golden sunset with the crew walking in one by one and Houndour trotting behind.",
+  "q2": "Pass 36 was about finishing Kanto; this pass makes the UI ready for the next region. The look is no longer fixed: every region has its own skin, so Johto pages turn gold and silver with the Bell Tower on the horizon, and the top bar resets to Johto’s money, Heat and day.",
+  "q3": "Yes, three. Region skin lets you preview and switch the looks, Arrival in Johto shows what changed in one screen (₽1,000, Heat 0, your ace back in its first form), and Goldenrod Underground is the new base you build up from one room.",
+  "q4": "Region skin lives in Settings beside Effects, and it is also a button on Arrival in Johto. Its options are Follow the region (default), Skyline behind pages, Panel glints, and how locked skins are shown.",
+  "q5": "Yes. Johto with Ethan, Silver, Whitney and Archer, the Goldenrod Underground shutters and Switch room from Gold and Silver, and a region-coloured UI like the way each Pokémon generation has its own menu colours."
+ },
+ "38": {
+  "name": "Magnet Line",
+  "big": "The tab row becomes a rail line. Your six main places are now stations on Nova’s own Magnet Line: the track runs under them, and the page you are on is the Magnet Train itself, a white and coloured carriage that glides into the station each time you switch. Moving around the game finally feels like travelling around a city.",
+  "pages": [
+   "Timetable",
+   "Smuggling run",
+   "Magnet Train"
+  ],
+  "q1": "Yes. The tab row is a lit rail line with sleepers, the current page is a white Magnet Train carriage in its area colour that slides into its station with speed lines, the Timetable draws its metro lines in one stroke and flips its split-flap board row by row, and the Magnet Train page has the train pull in at full speed before the ticket pops up.",
+  "q2": "Pass 37 changed the look by region; this pass changes how moving around feels. The six main places used to be plain buttons. Now they read as stations on one line, so you can see where you are and what is next to it, and travel itself becomes a feature with its own pages.",
+  "q3": "Yes, three. The Timetable shows every line and train at once (and which ones have police on them), the Smuggling run lets you hide cargo on a train for money, and the Magnet Train is the fast link between your Kanto and Johto empires.",
+  "q4": "The Timetable sits in the Start menu next to the Region map, and the Region map gets a Timetable button. Settings › Effects gains Train tabs (Train, Plain tabs) for players who prefer the old look.",
+  "q5": "Yes. The Magnet Train between Saffron and Goldenrod is from Gold, Silver, HeartGold and SoulSilver, Kanto’s towns are the stations, and checking a timetable before a trip feels like the train station in Black and White."
+ },
+ "39": {
+  "name": "Storm Front",
+  "big": "The weather reaches the UI itself. Tonight a storm hits Kanto: rain falls between the background and the panels, drops gather under every panel header and slide down, lightning flashes across the whole screen every few seconds and makes the top bar jolt, and the Day segment shows the storm. Weather is no longer a forecast line, it is something every page feels.",
+  "pages": [
+   "Blackout",
+   "Flooded tunnel",
+   "Shelter"
+  ],
+  "q1": "Yes. Rain slants between the background and the panels, drops gather and fall under every panel header, lightning lights the whole screen and jolts the status capsule, a tiny storm cloud with a flashing bolt sits on the Day segment, Celadon’s buildings flicker and go dark on Blackout, the tunnel floods up to the crew’s knees, and the Shelter fire flickers while a wet Poochyena shivers by the door.",
+  "q2": "Pass 38 made moving around feel like travel; this pass makes the world push back. Before, weather was a line on the Forecast page. Now a storm changes every screen and opens its own moments: a blackout to rob, a flood to cross, and a quiet night where the crew becomes more human.",
+  "q3": "Yes, three, all short and only during storms: Blackout (pick one dark building in 40 minutes), Flooded tunnel (three ways through, each with a cost), and Shelter (a small crew story with a stray). They appear from the Inbox and the map, so they never clog the main menus.",
+  "q4": "Storm pages arrive through the Inbox and the Region map. Settings › Effects gains Weather on screen (Full, Behind panels only, Off) and Lightning flashes (On, Off), and lightning is always off when Reduce flashing is on.",
+  "q5": "Yes. Weather that changes what you can do is a Pokémon idea from Ruby and Sapphire onward, the Underground Path between Routes 5 and 6 is Kanto, and taking in a stray Poochyena on a stormy night feels like the small story moments in the handheld games."
+ },
+ "40": {
+  "name": "Fourth Cut",
+  "big": "The fourth synthesis gives every page an ambience budget. Passes 34 to 39 stacked lanterns, fireworks, skylines, rain and lightning everywhere; now each group of pages gets at most two of them, picked to fit (storms on the night and Rocket pages, lanterns on the city and Empire pages, the skyline at home), so pages breathe again. The Empire Ledger, the last plain page, becomes a real ledger with a week chart, and the run gets chapters.",
+  "pages": [
+   "Ambience",
+   "The road so far",
+   "Chapter card"
+  ],
+  "q1": "Yes, in a calmer way. The Ledger’s bars grow day by day and the clean and dirty bar fills, The road so far runs like a moving film strip with the current chapter glowing red, and the Chapter card paints a red brush stroke across the screen while THE SIEGE drops in one letter at a time between two dark silhouettes.",
+  "q2": "Passes 36 to 39 each added a layer of atmosphere, and together they were too much. This pass decides where each one belongs: storms on the night and Rocket pages, lanterns and fireworks on the city and Empire pages, the skyline at home, never more than two. The Ledger, which was still a plain newspaper with a placeholder picture, becomes a real chart.",
+  "q3": "Yes, three. Ambience shows the whole budget on one grid so it is easy to change. The road so far turns the run into chapters you can look back on, and the Chapter card marks the big turning points. Both chapter pages are one step from the Start menu.",
+  "q4": "Ambience sits in Settings beside Effects and Region skin, with Ambience (Full, Calm, Off) at the top. The road so far is a new line in the Start menu, and the Chapter card can be replayed from it.",
+  "q5": "Yes. Chapter cards are like the chapter splashes in Pokémon Legends and Colosseum, the Ledger feels like the money and Pokédex progress screens, and the calmer pages read more like the clean menus of the main games."
+ },
+ "41": {
+  "name": "Pocket Classic",
+  "big": "The UI borrows the handheld games’ window frames: every panel now wears a pixel frame with stepped corners in black, gold and Nova red, like the Gen 3 text windows, and Johto pages swap to gold and silver frames. The three Pokémon care staples the Dominion still lacked arrive too: a real Bag with pockets, a back-alley Clinic with the healing machine, and Care time with your lead Pokémon.",
+  "pages": [
+   "Bag",
+   "Back-alley clinic",
+   "Care time"
+  ],
+  "q1": "Yes. Every window now has a crisp pixel frame with stepped corners, the Bag sways and its flap lifts while the pocket arrows nudge, the Clinic’s healing machine lights its six Poké Ball slots one by one and flares white like a Pokémon Center, and in Care time hearts float up from a happy Houndoom.",
+  "q2": "Pass 40 calmed the effects; this pass gives the windows themselves a classic Pokémon shape and fills the biggest gap in the menus. Before, there was no Bag, no place to heal and no way to just spend time with your Pokémon. Now all three exist, one step from the Pokémon tab.",
+  "q3": "Yes, three. The Bag holds items in five pockets instead of a long list, the Clinic shows the whole party’s health and cost on one screen, and Care time is a small, quiet page that pays off with Affection.",
+  "q4": "Bag is a new line in the Start menu, right after Pokémon. The Clinic opens from the Party screen and the map, and Care time from the Summary. Settings › Options’ Frame now changes these pixel frames too.",
+  "q5": "Very much. Pixel window frames and the Bag with pockets you flip with ◀ ▶ come straight from FireRed and Emerald, the healing machine with six lit Poké Balls is the Pokémon Center, and Care time is Pokémon-Amie and Refresh with a villain’s Houndoom."
+ },
+ "42": {
+  "name": "The Hunted",
+  "big": "Red is close, and the whole UI knows it. While the Hero’s Threat is over 70, every page beats with a slow blue heartbeat at its edges, a pulsing Hero ping sits on the war line where Red was last seen (and a blue RED · PEWTER flag rides the news ticker), so you always know how near he is without opening a menu.",
+  "pages": [
+   "Lie low",
+   "Disguises",
+   "Close call"
+  ],
+  "q1": "Yes. A slow blue heartbeat pulses at the edges of every page, a ringing Hero ping with Red’s tiny sprite sits on the war line, a blue RED · PEWTER flag blinks on the ticker, the Disguises mirrors open their red curtains one by one, and on Close call Red’s torchlight sweeps toward the crates while Gus shivers behind them.",
+  "q2": "Pass 41 was about looking after your own; this pass is about being hunted. Before, Red only lived on the Hero tracker page. Now his closeness is felt on every screen, and there are three new ways to answer it: hide, dress up, or hold your breath.",
+  "q3": "Yes, three. Lie low compares four hiding places and shows what two days will do to Heat, Disguises lets you dress each crew member for a job, and Close call is a short tense scene. All three open from the Hero ping, so there is one clear way in.",
+  "q4": "The Hero ping and the ticker flag both open the Hero tracker, which now links to Lie low. Disguises sits in the Crew menu next to Uniforms. Settings › Access gains Heartbeat edges (On, Soft, Off) for anyone who finds the pulse distracting.",
+  "q5": "Yes. Red with his cap and his Pikachu team is the Hero from Red and Blue, sneaking past a trainer’s line of sight is the classic “trainer spotted you!” moment turned around, and disguises borrow the Team Rocket costume jokes from the anime."
+ },
+ "43": {
+  "name": "Climbing the Ranks",
+  "big": "The Boss has a level now, like a Pokémon. Every page’s title chip carries a thin glowing EXP bar that fills as the run goes well, and the Nova emblem wears a Boss level badge, so progress is always on screen. Levelling up opens the classic stats window, and points go into a Boss skill tree.",
+  "pages": [
+   "Boss level up",
+   "Boss skill tree",
+   "Promotion night"
+  ],
+  "q1": "Yes. A glowing blue EXP bar fills under every page title, the Nova emblem wears a level badge, the Level up page spins blue rays behind Nate while each stat gain pops in, the skill tree lights its diamonds in red, gold and blue with the chosen one pulsing, and Promotion night drops a medal on Dale under a spotlight while confetti falls and the crew bounces.",
+  "q2": "Pass 42 was about pressure from outside; this pass is about growing from inside. Before, only the crew and Pokémon had levels. Now the Boss grows too, the progress is visible on every page, and promotions become a moment instead of a number changing in a list.",
+  "q3": "Yes, three. Level up shows exactly what changed and what it unlocked, the skill tree gives each point a clear choice between three paths, and Promotion night celebrates the crew. The level badge on the emblem opens Level up, so nothing is hidden.",
+  "q4": "The level badge opens Level up, and the skill tree is a line in the Start menu under Crew. Settings › Screen gains EXP bar on titles (On, Off) and Level up screens (Full, Short).",
+  "q5": "Yes. “NATE grew to Lv. 24!” with the stat window is exactly the Pokémon level-up screen, the EXP bar is the battle EXP bar, and the skill tree’s three paths feel like picking a type speciality."
+ },
+ "44": {
+  "name": "Gym Rush",
+  "big": "Kanto’s eight Gyms become part of the empire. The war line on every page now opens with a gym case of eight gym marks: the ones Nova controls glow gold and spin, Rocket’s are rusted red, and the next target pulses. Gyms are the new middle goal between single jobs and the whole region.",
+  "pages": [
+   "Gym case",
+   "Gym takeover",
+   "Erika’s choice"
+  ],
+  "q1": "Yes. Eight little gym marks now sit on the war line of every page, Nova’s spinning in gold and the next one pulsing. The Gym case opens its lid to show all eight in velvet slots, the Celadon Gym map draws a dashed gold route through the hedges while the trainers’ view cones sweep, and Erika’s choice is a full face-to-face scene.",
+  "q2": "Pass 43 gave the Boss a level; this pass gives the run a middle goal. Before, the jump from one job to taking all of Kanto was huge. Gyms sit in between: eight clear targets, each with its own leader and its own way in, shown on every page so you always know what is next.",
+  "q3": "Yes, three, in one short line: the Gym case shows all eight at once, Gym takeover plans one Gym with its weak spots, and Erika’s choice is the talk at the end. The gym marks on the war line open the Gym case directly.",
+  "q4": "The gym marks on every page open the Gym case, which is also a line on the Empire Ledger. Settings › Screen gains Gym marks on the war line (On, Off).",
+  "q5": "Very. Eight Gyms with their leaders (Brock, Misty, Lt. Surge, Erika, Koga, Sabrina, Blaine and Giovanni) are the heart of every Pokémon game, Celadon Gym’s hedge maze and its trainers’ lines of sight are from Red and Blue, and Erika’s greenhouse grudge against Rocket fits her character."
+ },
+ "45": {
+  "name": "Fifth Cut",
+  "big": "The fifth synthesis folds 41 to 44 into what was already there instead of adding more doors. Only one thing on screen may pulse at a time (the most urgent, right now Red’s ping), the Hero heartbeat stays off calm pages like Settings and Menu, and three existing pages are rebuilt to carry the new systems: the Boss card shows level, EXP and gym marks, Rotom’s X-ray labels the new parts of the screen, and the Start menu only lists what exists.",
+  "pages": [
+   "Boss card (rebuilt)",
+   "X-ray (rebuilt)",
+   "Start menu (tidied)"
+  ],
+  "q1": "Yes, by making the important things stand out. With only Red’s ping still pulsing, your eye goes straight to the one real danger. The Boss card now fills its EXP bar and pops in the gym marks one by one, and the X-ray draws its dotted lines to the six new parts of the screen.",
+  "q2": "Passes 41 to 44 each added something that blinked or pulsed: the siege chip, the gym target, the Red flag, the heartbeat. Together they competed for attention. This pass sets a rule that only the most urgent thing moves, keeps the calm pages calm, and puts the new systems onto pages players already know.",
+  "q3": "No new pages this time, on purpose. The Boss card, X-ray and Start menu already had the right job, so they were rebuilt to carry the level, EXP, gym marks and Red instead of adding three more places to look. The Start menu now only shows lines for pages that exist.",
+  "q4": "The Start menu stays one list (Rotom Phone, Crew, Pokémon, Bag, Region map, Rivals, Boss card, Save, Options). Settings › Effects gains One pulse at a time (On, Off), so players who like everything moving can turn it back.",
+  "q5": "Yes. The Boss card now reads like a real Trainer Card, with the level, play time, money and gym marks across the bottom where badges go, and one calm Start menu list is exactly how the handheld games feel."
+ },
+ "46": {
+  "name": "Rotom Live",
+  "big": "Rotom stops being a tutorial and becomes your advisor on every page. A small Rotom tab rides the top edge of every text box with one useful thought for that page (Persian is at 12%, Red is 2 days out, Barracks are full), and the lesson chip in the dock becomes Rotom’s chip, which opens Ask Rotom (the lessons live inside it now).",
+  "pages": [
+   "Ask Rotom",
+   "Rotom’s plan",
+   "Rotom’s diary"
+  ],
+  "q1": "Yes. A little bobbing Rotom tab pops onto every text box with a tip, Ask Rotom is a live chat where Rotom’s replies slide in with a typing bubble, Rotom’s plan lays out three glowing plan cards with a “Rotom picks this” badge, and the diary is a hand-written notebook with Rotom spinning in a doodled circle.",
+  "q2": "Pass 45 cut noise; this pass adds a voice. Before, Rotom only explained buttons in lessons. Now it reads the whole run and says one useful thing on every page, and you can ask it questions or let it plan a night, so the UI helps you think instead of just showing numbers.",
+  "q3": "Yes, three. Ask Rotom answers questions in one place instead of hiding tips in menus, Rotom’s plan compares tonight’s options side by side, and Rotom’s diary is a small reward that adds personality. The Rotom chip and every tip tab open Ask Rotom, so there is one door.",
+  "q4": "The T key and the Rotom chip open Ask Rotom, which also holds the Lesson book. Settings › Rotom (already there) gains Tips on text boxes (On, Only warnings, Off) and Plans (Suggest, Only when asked).",
+  "q5": "Yes. Rotom living in your phone and chatting is the Rotom Dex from Sun and Moon, its “Bzzt!” jokes match that Rotom, and a helper that suggests what to do next feels like Pokémon’s friendly guides."
+ },
+ "47": {
+  "name": "Clear Sight",
+  "big": "A readability pass over the whole UI. The panel you are working in stays bright while the others step back a little, like the active window in the handheld games, secondary text is brighter, and panels are less see-through so nothing behind them competes with the words. It also gives players who need it one-switch control over all the motion added since pass 34.",
+  "pages": [
+   "Calm mode",
+   "Colour assist",
+   "Read aloud"
+  ],
+  "q1": "Yes, in a calmer way. The page you are using now glows while the others dim, so the eye lands in the right place first. Calm mode has a big sliding switch, Colour assist shows each colour with its own shape and striped bar, and Read aloud lights up each word in yellow as Rotom says it.",
+  "q2": "Pass 46 added a voice; this pass makes everything easier to read. Grey helper text is brighter, panels are less see-through, and the inactive panels step back. Calm mode turns off every moving effect from passes 34 to 46 with one switch, so the busy new UI never gets in anyone’s way.",
+  "q3": "Yes, three, all inside Settings. Calm mode, Colour assist and Read aloud each get their own page with a live preview, instead of a long list of toggles on one crowded page.",
+  "q4": "All three sit in Settings › Access next to the controls and phone pages from pass 20. Calm mode also has a quick switch on the Start menu’s Options row, so a player can turn motion off in two presses.",
+  "q5": "Yes. The handheld games dim the box you are not using and keep text crisp on solid panels, and modern Pokémon games have text speed and reduced-motion style options in Settings, so this fits right in."
+ },
+ "48": {
+  "name": "Final Act",
+  "big": "The endgame gets the spectacle it has earned. Once the Goal passes 70% the whole UI goes into its Final Act: the Nova crest wears a crown and a gold foil sweep crosses the top bar on every page. Takeover night becomes four rising goal pillars, and the ending is rebuilt as a real finale: Saffron at night, the Nova banner unrolling down Silph Co., fireworks, and the whole crew on the rooftop.",
+  "pages": [
+   "Credits",
+   "Next Dominion"
+  ],
+  "q1": "Yes, this is the loudest pass yet, saved for the moment that earns it. KANTO IS YOURS slams in over Saffron at night, the red Nova banner unrolls down Silph Co., fireworks burst behind it, and the crew walks onto the rooftop one by one. The Takeover pillars fill up like gauges, and the Credits flip each crew card into view.",
+  "q2": "Before, the ending was the same result card as a job report, just with bigger text. Now it is a full finale scene with no menus in the way, Takeover night shows how close each goal is at a glance instead of four flat cards, and every page in the late game wears the Final Act crown and foil sweep, so the whole UI tells you the end is near.",
+  "q3": "Yes, two. The Credits page gives each crew member an epilogue so the story ends on people, not numbers, and Next Dominion explains what carries into the next run and opens the Charters. The path is a straight line: Takeover night, the ending, the Credits, then the Hall of Infamy or Next Dominion.",
+  "q4": "Next Dominion sits in the Start group and is where New Dominion on the title menu leads once a run is finished. Settings › Text and motion gets Skip the finale (off by default) and Calm mode turns the fireworks and banner into a simple fade.",
+  "q5": "Yes. It borrows the Hall of Fame and credits roll after the Champion, the cast walking on one by one, and the save-your-team moment that every main-series game ends with, but from the villain side."
+ },
+ "49": {
+  "name": "Feel",
+  "big": "A polish pass on how the whole UI answers your hands. Every button and tile lifts when you point at it and presses down when you pick it, a gold ring ripples out from every click, key caps have depth, and the A / Enter key taps itself down now and then so a new player always knows what moves things on.",
+  "pages": [
+   "Photo mode",
+   "Button feel",
+   "Your tag"
+  ],
+  "q1": "Yes, in the hands more than the eyes. Buttons lift and press with a real edge, clicks send out a gold ring, and the A key taps itself. The new pages are the showy part: Photo mode flashes like a camera with stickers and a Polaroid frame, and Your tag spray-paints a red N, a gold bolt and NOVA onto a brick wall with drips running down.",
+  "q2": "Pass 48 was about one big moment; this pass touches every moment. Before, a press just changed the page. Now every tile answers back as you point and press, so the whole UI feels physical, like pressing real buttons on a handheld, and the self-tapping key quietly teaches the controls.",
+  "q3": "Yes, three, and each pulls something out of a crowded place. Photo mode gives the crew a page of its own instead of a screenshot key, Button feel gathers rumble, sounds and cursor style in one place with a live preview, and Your tag turns a hidden setting (the team mark) into something you make.",
+  "q4": "Photo mode is on the Start menu, between Boss card and Save. Button feel lives in Settings next to Controls. Your tag is in Crew, and Calm mode turns the ripples and the self-tapping key off.",
+  "q5": "Yes. The Poké Ball cursor wobbles like a catch, the arrow cursor is straight from the classic menus, Photo mode is like the camera in Sword and Shield and Scarlet and Violet, and spray-painted team tags are exactly what Team Skull did in Sun and Moon."
+ },
+ "50": {
+  "name": "Final Cut",
+  "big": "The last synthesis pulls 46 to 49 into one finished look and trims what fights for attention: the foil sweep plays only on Empire and title pages, the self-tapping key only teaches on calm pages, and lanterns stay off pages where they would cover panels. The Title and How pages connect are rebuilt, and a Style sheet closes the redesign.",
+  "pages": [
+   "Style sheet"
+  ],
+  "q1": "Yes. The Title is now a scene, not a menu: Saffron at dusk, the crew and Houndoom on the rooftop, a crowned Nova crest with the Goal ring, and a gold Continue card that previews your save (Day, money, party, Goal). How pages connect turns into a colour-coded lift directory, and the Style sheet shows the whole kit on one page.",
+  "q2": "Passes 46 to 49 each added a layer (Rotom, readability, the finale, button feel). This pass makes them one look and takes noise away: the foil sweep, the tapping key and the lanterns now only appear where they help, so every page has one thing moving at most. The first screen and the page map were the oldest designs left; both are rebuilt to match pass 50.",
+  "q3": "Only one new page, the Style sheet, on purpose. The rebuilt directory proves the rule from the start: 194 pages, and every one is one or two steps from the HQ through a door you can name (1 to 6, Start, T, the war line, or the night).",
+  "q4": "Both are on the Title and on the Start menu: Settings opens Options and every settings page, and the Start menu holds the Rotom Phone, Bag, Rivals, Boss card, Photo mode and Save. The directory lists Menu and Settings as their own floors so they are never hidden.",
+  "q5": "Yes. The Title has the classic Pokémon front screen feel (logo, Continue with your save shown, the partner by your side), the menus use the Start menu, Poké Ball cursor and text box the games use, and everything from the Hall of Infamy to Photo mode borrows a real Pokémon moment, just told from the villain side."
+ }
+}

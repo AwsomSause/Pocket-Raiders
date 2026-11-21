@@ -158,8 +158,12 @@ test('switch Pokémon from the party menu, and give a reward to a chosen Pokémo
     (window as any).__pkr.game.scene.getScene('Battle').scene.restart();
     return session.run.party[1].uid as string;
   });
+  // The restart lands a frame later: until then the old Battle (and its menu) is still up, so wait it out, and wait after the
+  // menu shows too (the first key after a scene change can be dropped).
+  await page.waitForTimeout(250);
   await waitForScene(page, 'Battle');
   await waitForActionMenu(page);
+  await page.waitForTimeout(250);
   await page.keyboard.press('ArrowDown'); // Pokémon
   await page.keyboard.press('Enter');
   await page.waitForTimeout(200);

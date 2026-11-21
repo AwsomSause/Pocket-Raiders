@@ -1,0 +1,51 @@
+/* Pass 22 · Empire */
+/* the Nova emblem wears a gold Goal ring and four region gems */
+.crest22{position:relative;cursor:pointer;box-shadow:0 0 0 3px #1a1220,0 0 14px rgba(255,200,80,.6)}
+.crest22::before{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(#ffd75a calc(var(--g) * 1),rgba(255,255,255,.12) 0);-webkit-mask:radial-gradient(circle,transparent 19px,#000 20px);mask:radial-gradient(circle,transparent 19px,#000 20px);animation:ring22 1.4s .3s cubic-bezier(.3,1.2,.5,1) both}
+.crest22 .gm{position:absolute;width:8px;height:8px;border:1.5px solid #000;border-radius:2px;transform:rotate(45deg);background:#4a4052}
+.crest22 .gm.k{left:-4px;top:-4px;background:#ffd75a;box-shadow:0 0 8px #ffd75a;animation:gem22 1.8s ease-in-out infinite}
+.crest22 .gm.j{right:-4px;top:-4px}.crest22 .gm.h{right:-4px;bottom:-4px}.crest22 .gm.s{left:-4px;bottom:-4px}
+/* Empire pages: gold and crimson, a slow banner wave */
+&[data-g="Empire"] .scr:has(header)::after{content:'';position:absolute;left:0;right:0;top:62px;height:9px;z-index:5;pointer-events:none;background:conic-gradient(from -45deg at 50% 100%,#8a1030 0 90deg,transparent 0) 0 0/24px 9px repeat-x,conic-gradient(from -45deg at 50% 100%,#ffd75a 0 90deg,transparent 0) 12px 0/24px 9px repeat-x;transform-origin:50% 0;animation:flag22 3.2s ease-in-out infinite}
+&[data-g="Empire"] .pn{border-color:#c8971c}
+/* the World map */
+.sea22{position:absolute;inset:50px 0 76px;z-index:0;background:radial-gradient(ellipse at 50% 40%,rgba(40,96,201,.35),transparent 70%),repeating-linear-gradient(170deg,rgba(255,255,255,.05) 0 2px,transparent 2px 22px);animation:sea22 8s linear infinite;pointer-events:none}
+.rt22{position:absolute;inset:0;z-index:1;pointer-events:none;width:960px;height:540px}
+.rt22 path{fill:none;stroke:#ffd75a;stroke-width:4;stroke-dasharray:10 8;stroke-linecap:round;animation:dash22 1s linear infinite}
+.rt22 path.lk{stroke:rgba(255,255,255,.3);animation:none}
+.ship22{position:absolute;left:0;top:0;z-index:3;width:22px;height:16px;background:#fff8ea;border:2px solid #000;border-radius:2px 2px 10px 10px;offset-path:path('M300,250 C340,180 380,150 430,140');offset-rotate:0deg;animation:ship22 4s ease-in-out infinite;pointer-events:none}
+.isl22{position:absolute;z-index:2;width:240px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;text-align:center;animation:pop .5s both;animation-delay:var(--d)}
+.isl22 .land{width:150px;height:74px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 60%,#5aa04a 0 55%,#e8d49a 56% 66%,transparent 67%);border-radius:50%;filter:drop-shadow(0 6px 0 rgba(0,0,0,.4))}
+.isl22 .crest{width:44px;height:44px;display:grid;place-items:center;background:#1a1220;border:3px solid #ffd75a;border-radius:50%}
+.isl22 b{font:400 22px/1 var(--fd);text-transform:uppercase}
+.isl22 em{font-style:normal;font-size:12px;font-weight:800;line-height:1.2;color:var(--mut);padding:2px 8px;background:rgba(10,8,14,.75);border-radius:8px}
+.isl22.held b{color:#ffd75a}.isl22.held .land{animation:glow22 2s ease-in-out infinite}
+.isl22.next em{color:#ff8a7a}.isl22.next .crest{border-color:#e0294a;animation:hop .9s 1s ease-in-out infinite}
+.isl22.lock{opacity:.55}.isl22.lock .land{filter:grayscale(1) drop-shadow(0 6px 0 rgba(0,0,0,.4))}.isl22.lock .crest{border-color:#5c6b86}
+.i-kanto{left:90px;top:230px}.i-johto{left:395px;top:70px}.i-hoenn{left:690px;top:170px}.i-sinnoh{left:455px;top:270px}
+/* Sail to Johto */
+.dusk22{position:absolute;inset:0;z-index:0;background:linear-gradient(#3a1840 0,#c8503a 46%,#ffb86a 60%,#1c3a6a 61%,#0b1a33);opacity:.9;pointer-events:none}
+.wave22{position:absolute;left:0;right:0;top:300px;height:110px;z-index:1;overflow:hidden;pointer-events:none}
+.wave22 i{position:absolute;left:-60px;right:-60px;height:40px;background:radial-gradient(ellipse 30px 14px at 30px 0,transparent 98%,#1c3a6a) 0 0/60px 40px repeat-x;animation:wave22 3s linear infinite}
+.wave22 i:first-child{top:16px;opacity:.6;animation-duration:5s}.wave22 i:last-child{top:52px}
+.boat22{position:absolute;left:60px;top:170px;z-index:2;width:330px;height:170px;pointer-events:none;animation:boat22 3s ease-in-out infinite}
+.boat22 .hull{position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(#8a1030,#4a0818);border:3px solid #000;border-radius:4px 4px 60px 60px}
+.boat22 .flag{position:absolute;left:150px;top:0;width:60px;height:40px;background:#ffd75a;border:3px solid #000;clip-path:polygon(0 0,100% 20%,0 100%);animation:flag22 2s ease-in-out infinite;transform-origin:0 50%}
+.boat22 .crew{position:absolute;left:20px;bottom:44px;display:flex;gap:6px}
+.sh22{position:absolute;left:430px;top:66px;z-index:3;display:flex;flex-direction:column;animation:in-up .5s .2s both}
+.sh22 small{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#ffcf8a}
+.sh22 b{font:400 56px/1 var(--fd);color:#ffd75a;text-shadow:4px 4px 0 #8a1030}
+.sh22 em{font-style:normal;font-size:16px;font-weight:800}
+.carry22{left:430px;top:172px;width:500px;height:228px;z-index:3}
+.carry22 .chg{grid-template-columns:20px 64px 1fr;align-items:center;padding:5px 10px}
+.carry22 .chg i{grid-row:auto}
+/*@top*/
+@keyframes ring22{from{transform:rotate(-200deg) scale(.4);opacity:0}}
+@keyframes gem22{50%{box-shadow:0 0 14px #fff}}
+@keyframes flag22{50%{transform:skewY(6deg) scaleY(.94)}}
+@keyframes sea22{to{background-position:0 0,0 44px}}
+@keyframes dash22{to{stroke-dashoffset:-18}}
+@keyframes ship22{from{offset-distance:0%}to{offset-distance:100%}}
+@keyframes glow22{50%{filter:drop-shadow(0 6px 0 rgba(0,0,0,.4)) drop-shadow(0 0 14px #ffd75a)}}
+@keyframes wave22{to{transform:translateX(60px)}}
+@keyframes boat22{50%{transform:translateY(6px) rotate(-1.5deg)}}

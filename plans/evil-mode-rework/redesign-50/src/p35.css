@@ -1,0 +1,44 @@
+/* Pass 35 · Third Cut */
+/* one dark dock for Start, the party and the lesson */
+.dock35{position:absolute;left:126px;width:426px;top:3px;bottom:3px;background:linear-gradient(#2a2433,#120f17);border:2px solid #000;border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1);animation:cap23 .5s .2s both}
+.keys .ph13{z-index:1}.keys .pty31,.keys .ls21{z-index:1}
+/* a ‹ back crumb in every title chip */
+.cr35 b{margin-right:6px;padding-right:6px;color:var(--yel);border-right:1px solid rgba(255,255,255,.25);cursor:pointer}
+/* X-ray */
+.xs35{position:absolute;inset:0;z-index:7;pointer-events:none;background:rgba(10,30,60,.72);backdrop-filter:hue-rotate(180deg) saturate(.4);animation:fade25 .5s both}
+.xl35{position:absolute;inset:0;z-index:8;pointer-events:none;width:960px;height:540px}
+.xl35 path{fill:none;stroke:#8cffaa;stroke-width:2;stroke-dasharray:4 4;animation:dash22 1s linear infinite}
+.xl35 circle{fill:#8cffaa;stroke:#000;stroke-width:2;animation:ping35 1.4s ease-out infinite}
+.xc35{position:absolute;z-index:9;width:180px;display:flex;flex-direction:column;padding:6px 10px;color:#1d1622;background:#e8fff0;border:2px solid #000;border-radius:8px;box-shadow:3px 3px 0 rgba(0,0,0,.5);animation:pop .35s both;animation-delay:calc(var(--d) + .4s)}
+.xc35 b{font:400 17px/1 var(--fd);text-transform:uppercase;color:#1b6b3a}
+.xc35 em{font-style:normal;font-size:12px}
+.k-xr35>.keys{z-index:11}
+/* the Inbox */
+.il35{left:16px;top:72px;width:580px;height:324px;display:flex;flex-direction:column;gap:6px}
+.im35{display:flex;align-items:center;gap:10px;padding:3px 10px 3px 4px;text-align:left;background:var(--pn2);border-left:6px solid var(--area);border-radius:999px 12px 12px 999px;animation:in-r .3s both;animation-delay:var(--d)}
+.im35>span:not(.face){flex:1;min-width:0;display:flex;flex-direction:column}
+.im35 b{font-size:15px}.im35 em{font-style:normal;font-size:12px;color:var(--mut)}
+.im35 small{font-size:11px;font-weight:800;color:var(--mut)}
+.im35>i{width:54px;flex:none;text-align:center;font-style:normal;font-size:10px;font-weight:800;text-transform:uppercase;padding:2px 0;border-radius:999px;color:#1d1622;background:#d8cfbf}
+.im35.t-call>i{background:#5ad17a}.im35.t-alert>i{background:#ff5d5d;color:#fff}.im35.t-letter>i{background:#ffd75a}.im35.t-job>i{background:#ff8a3d}.im35.t-news>i{background:#8ab4ff}
+.im35.on{outline:3px solid var(--yel);outline-offset:2px}
+.im35>i{font-size:11px}
+.ip35{left:612px;top:72px;width:332px;height:324px}
+.ip35t{margin:0;font-size:14px;line-height:1.45}
+/* Lights out */
+.dk35{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(rgba(5,8,24,.55),rgba(5,8,24,.85));animation:fade25 1.2s both}
+.moon35{position:absolute;right:90px;top:50px;z-index:2;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffbe0,#e8d49a);box-shadow:0 0 60px 10px rgba(255,240,180,.35);animation:rise26 1s .3s both}
+.bunk35{position:absolute;left:30px;bottom:150px;z-index:2;display:flex;gap:16px}
+.bunk35 i{position:relative;font-style:normal;filter:brightness(.55) saturate(.6);animation:sleep35 3s ease-in-out infinite;animation-delay:calc(var(--i) * -.7s)}
+.bunk35 u{position:absolute;right:-6px;top:-6px;text-decoration:none;font:400 20px/1 var(--fd);color:#cfd8ff;filter:brightness(2);animation:zz35 2.4s ease-out infinite;animation-delay:calc(var(--i) * .5s)}
+.eod35{position:absolute;left:470px;top:150px;width:440px;z-index:3;display:flex;flex-direction:column;gap:8px;padding:16px 20px;color:#1d1622;background:#fff8ea;border:3px solid #1d1622;border-radius:12px;box-shadow:inset 0 0 0 2px #fff8ea,inset 0 0 0 4px #2860c9,6px 6px 0 rgba(0,0,0,.55);animation:in-up .5s .6s both}
+.eod35 small{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#2860c9}
+.eod35 b{font:400 40px/1 var(--fd);color:#1c3a6a}
+.eod35 dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0}
+.eod35 dt{font-size:12px;font-weight:800;text-transform:uppercase;color:#6a5a70}.eod35 dd{margin:0;font-size:14px;font-weight:800}
+.sv35{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:#2f9e44}
+.sv35 i{width:14px;height:14px;border:3px solid #2f9e44;border-top-color:transparent;border-radius:50%;animation:nova24 1s linear 3,fade25 .3s 3s reverse both}
+/*@top*/
+@keyframes ping35{0%{r:4}70%{r:10;opacity:.4}100%{r:4;opacity:1}}
+@keyframes sleep35{50%{transform:scaleY(.96) translateY(2px)}}
+@keyframes zz35{0%{opacity:0;transform:none}30%{opacity:1}100%{opacity:0;transform:translate(14px,-26px) scale(1.4)}}

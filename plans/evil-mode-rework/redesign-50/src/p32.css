@@ -1,0 +1,50 @@
+/* Pass 32 · Dirty Money */
+/* Funds show clean and dirty money; a +₽ floats up when you arrive */
+.cd32{position:absolute;left:30px;right:8px;bottom:2px;height:3px;border-radius:2px;background:linear-gradient(90deg,#fff8ea 0 var(--c),#5ad17a var(--c));opacity:.9;animation:fill23 .8s .6s both}
+.cap23 u.ic12:first-child{position:relative}
+.cap23::after{content:attr(data-plus);position:absolute;left:8px;top:28px;z-index:9;padding:1px 8px;font-size:12px;font-weight:800;color:#1d1622;background:var(--yel);border:2px solid #000;border-radius:999px;pointer-events:none;animation:plus32 2.4s 1s ease-out both}
+.cap23{position:relative}
+.cap23 u.ic12:first-child img{animation:coin32 2.4s 1s ease-in-out infinite}
+.tabs button:last-child .lamp img{animation:coin32 2s 1.4s ease-in-out infinite}
+/* the Black market */
+.sh32{position:absolute;left:16px;top:74px;width:640px;height:322px;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:10px;padding:10px;background:linear-gradient(#3a2418,#24160f);border:3px solid #000;border-radius:12px;box-shadow:inset 0 0 0 2px rgba(255,206,120,.35),5px 5px 0 rgba(0,0,0,.5)}
+.wr32{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding:8px;text-align:center;background:linear-gradient(rgba(255,206,120,.18),rgba(23,19,29,.9) 70%);border:2px solid #000;border-radius:8px;animation:pop .35s both;animation-delay:var(--d)}
+.wr32 .ic{flex:1;display:grid;place-items:center;animation:bob 1.8s ease-in-out infinite;animation-delay:var(--d)}
+.wr32 b{font:400 17px/1 var(--fd);text-transform:uppercase}
+.wr32 em{font-style:normal;font-size:11px;color:var(--mut)}
+.wr32 i{position:absolute;left:6px;top:6px;padding:1px 8px;font-style:normal;font-size:12px;font-weight:800;color:#1d1622;background:#5ad17a;border:2px solid #000;border-radius:3px 9px 3px 9px;transform:rotate(-4deg)}
+.wr32.on{outline:3px solid var(--yel);outline-offset:2px}
+.dl32{position:absolute;right:40px;top:120px;z-index:2;filter:drop-shadow(0 0 20px rgba(0,0,0,.8));animation:rise26 .6s .3s both}
+/* the Laundromat */
+.wm32{position:absolute;left:40px;top:76px;width:330px;height:320px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;background:linear-gradient(#e8e4dc,#b8b2a6);border:4px solid #000;border-radius:18px;box-shadow:inset 0 0 0 3px #fff,6px 8px 0 rgba(0,0,0,.5);animation:shk26 .4s 1s 3 both}
+.wm32 .door{position:relative;width:220px;height:220px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#1c3a6a 0 60%,#8a8296 61% 70%,#5a5468 71%);border:4px solid #000;overflow:hidden}
+.wm32 .drum{position:absolute;inset:20px;border-radius:50%;animation:nova24 1.2s linear infinite}
+.wm32 .drum i{position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px;display:grid;place-items:center;font-style:normal;font:400 18px/1 var(--fd);color:#1d1622;background:#5ad17a;border:2px solid #000;border-radius:50%;transform:rotate(var(--a)) translateY(-62px)}
+.wm32 .pnl{display:flex;align-items:center;gap:10px}
+.wm32 .pnl i{width:16px;height:16px;border-radius:50%;background:#5ad17a;border:2px solid #000;animation:blink 1s steps(2) infinite}
+.wm32 .pnl b{font:400 20px/1 var(--fd);color:#1d1622;letter-spacing:.1em}
+.lw32{left:400px;top:76px;width:544px;height:320px;display:flex;flex-direction:column;gap:12px}
+.tt32{display:flex;align-items:center;justify-content:space-around;padding:14px;background:var(--pn2);border-radius:10px}
+.tt32 span{display:flex;flex-direction:column;align-items:center}
+.tt32 small{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--mut)}
+.tt32 b{font:400 34px/1 var(--fd);color:#5ad17a}
+.tt32 .c b{color:#fff8ea}
+.tt32>i{font-style:normal;font-size:30px;color:var(--yel);animation:nudge32 1s ease-in-out infinite}
+.rate32,.hz32{display:flex;flex-direction:column;gap:2px;padding:8px 12px;background:var(--pn2);border-radius:8px}
+.rate32 b{color:var(--ok)}.hz32 b{color:#ff8a7a}
+.rate32 em,.hz32 em{font-style:normal;font-size:13px;color:var(--mut)}
+/* Payday */
+.pay32{position:absolute;left:16px;right:16px;top:74px;height:322px;z-index:2;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:8px}
+.pc32{position:relative;display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--pn2);border:2px solid #000;border-radius:14px;box-shadow:inset 0 0 0 2px rgba(255,248,234,.35);animation:in-r .35s both;animation-delay:var(--d)}
+.pc32 .tx{flex:1;display:flex;flex-direction:column}
+.pc32 b{font:400 20px/1 var(--fd);text-transform:uppercase}
+.pc32 em{font-style:normal;font-size:12px;color:var(--mut)}
+.pc32 .env{width:96px;height:50px;display:grid;place-items:center;background:linear-gradient(160deg,#f1d9b8,#d8b890);border:2px solid #000;border-radius:4px;clip-path:polygon(0 0,50% 40%,100% 0,100% 100%,0 100%);animation:env32 .5s both;animation-delay:calc(var(--d) + .4s)}
+.pc32 .env i{margin-top:14px;font-style:normal;font-size:15px;font-weight:800;color:#1d1622}
+.em32{position:absolute;right:-6px;top:-8px;width:24px;height:22px;display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:800;color:#1d1622;background:#fff8ea;border:2px solid #000;border-radius:9px 9px 2px 9px;animation:emo28 .4s both;animation-delay:calc(var(--d) + .8s)}
+.pc32.on{outline:3px solid var(--yel);outline-offset:2px}
+/*@top*/
+@keyframes plus32{0%{opacity:0;transform:translateY(6px)}15%{opacity:1;transform:none}75%{opacity:1;transform:translateY(-6px)}100%{opacity:0;transform:translateY(-12px)}}
+@keyframes coin32{0%,70%,100%{transform:none}80%{transform:scaleX(-1)}90%{transform:scaleX(1)}}
+@keyframes nudge32{50%{transform:translateX(6px)}}
+@keyframes env32{from{opacity:0;transform:translateY(-30px) rotate(-10deg)}}

@@ -3,11 +3,13 @@
 // defaults the game plays exactly as it did before (see tests/unit/expansionFoundation.test.ts).
 
 import { z } from 'zod';
+import { AiTierSchema, CLAUDE_USES_DEFAULT, ClaudeUsesSchema } from '../ai/schema';
 import { CastEntrySchema } from './cast/entry';
 import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { TeamSkyStateSchema } from '../evil/teamSkySchema';
+import { DominionBlockSchema, DominionPrefsSchema } from '../dominion/schema';
 import { EpilogueStateSchema, GrandArcStateSchema } from '../grandArc/schema';
 import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
@@ -17,7 +19,6 @@ import { SkyStateSchema } from '../sky/state';
 import { NodeMenuStateSchema } from '../nodeMenu/state';
 import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 import { RewindStateSchema } from '../rewindSchema';
-import { EvilModeBlockSchema, RunLengthSchema } from '../evilMode/schema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -65,16 +66,15 @@ export const ExpansionSettingsSchema = z.object({
   heatedMoments: z.boolean().default(true),
   /** Beta 0.7 M1 Mythical Promises (in-run only): Mythicals can be told of, visit and ask for a promise. Read when a run starts. */
   mythicalsEnabled: z.boolean().default(true),
-  /** Evil Mode (own mode on Run Setup; design plans/evil-mode). On by default from build plan slice 9 (a whole region plays); the slice's undo is false. A saved setting keeps its value. */
+  /** Evil Mode = Dominion (own mode on Run Setup; design plans/evil-mode-rework). The old Evil Mode flow was deleted after D17
+   *  (Kice 2026-11-20); its settings (run length, Shadow branch, roll seed, fire reminder) went with it and are dropped on load. */
   evilMode: z.boolean().default(true),
-  /** Evil Mode run length (Kice's answer 2): Three regions, or Six once six regions are built (slice 19). Read at founding. */
-  evilRunLength: RunLengthSchema.default('three'),
-  /** Evil Mode slice 21 (Kice's answer 8): the Shadow branch is Available by default; false removes it from all screens (no Lab, no Rig, no Corruption). Read at founding. */
-  evilShadow: z.boolean().default(true),
-  /** Evil Mode slice 22 (Part 29 section 22): Dispatch rolls shown with the district's seed beside them (there's no "hidden"). */
-  evilRollSeed: z.boolean().default(false),
-  /** Evil Mode slice 22: a line at Morning while a fire's on the road (a fire missed is gone). */
-  evilFireReminder: z.boolean().default(true),
+  /** Dominion slice D18 (CLAUDE_API_DRAFT section 1; Kice 2026-11-18: Standard by default): how much Claude voices, with a Key-Card set. Without one the game plays offline whatever this says. */
+  claudeAi: AiTierSchema.default('standard'),
+  /** Dominion slice D18 (mockup a1, "Use Claude for"): single uses on or off; each later slice reads its own. */
+  claudeUses: ClaudeUsesSchema.default(() => ({ ...CLAUDE_USES_DEFAULT })),
+  /** Dominion slice D27 (mockup m2, Settings · Dominion): the run rules (read when a Dominion starts), the Card's odds, ending the Day, and Effects & motion (presentation only). */
+  dominionPrefs: DominionPrefsSchema.default(() => DominionPrefsSchema.parse({})),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -180,7 +180,7 @@ export const ExpansionRunSchema = z.object({
   sky: SkyStateSchema.optional(),
   /** Team Sky run by the player (catalog row 9, HOENN_TEAMS parts 6-7; core/evil/teamSky.ts). Optional, no save bump. */
   teamSky: TeamSkyStateSchema.optional(),
-  /** Evil Mode (core/evilMode): the run's team, day and beat. Present only in an Evil Mode run once its team is founded. */
-  evilMode: EvilModeBlockSchema.optional(),
+  /** Evil Mode rework, DOMINION (core/dominion): the warehouse, the clock, the crew. Present only in a Dominion run once set up. Own `v`; optional, no save bump. */
+  dominion: z.lazy(() => DominionBlockSchema).optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;
