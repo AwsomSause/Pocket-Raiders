@@ -106,6 +106,8 @@ export class EventScene extends Phaser.Scene {
   private toggleTeam: (() => void) | null = null;
   /** Pocket look, an Evil Team stop: the team's Case File is open (J). */
   private rxFile = false;
+  /** Pocket look: the team's reveal cut-in (mock-up `et-reveal`) before its first stop's talk. */
+  private rxReveal = false;
   private toggleFile: (() => void) | null = null;
   /** New UI, Honest Trade Card page: the cursor is on Trade (0) or Back (1). */
   private pickFocus: 0 | 1 = 0;
@@ -155,6 +157,7 @@ export class EventScene extends Phaser.Scene {
     this.toggleTeam = null;
     this.rxFile = false;
     this.toggleFile = null;
+    this.rxReveal = false;
     this.result = null;
     this.leaving = false;
     this.fullLayer = null;
@@ -317,9 +320,10 @@ export class EventScene extends Phaser.Scene {
       // Pocket look: a stop of the run's Evil Team opens the team's Case File with J (mock-up `et-file`); it only reads the run.
       const teamId = run.story.evil?.teamId;
       const isEvilStop = !!teamId && view.event.id.startsWith(`evil-${teamId}-`);
+      this.rxReveal = isEvilStop && pocketOn() && view.event.id === `evil-${teamId}-suspicious`;
       if (isEvilStop) {
         this.toggleFile = (): void => {
-          if (!pocketOn() || this.rxBracket !== null || this.rxCard || this.rxTeam) return;
+          if (!pocketOn() || this.rxReveal || this.rxBracket !== null || this.rxCard || this.rxTeam) return;
           this.rxFile = !this.rxFile;
           playSfx(this, 'ui.select', 0.4);
           this.rx?.refresh();
@@ -432,6 +436,18 @@ export class EventScene extends Phaser.Scene {
               return card ? { name: card.alias, rank: card.rank, facts: card.facts, trainer: bossArt(card.givenBy), badges: r.run.badges.length } : null;
             })(),
             team: teamPage(),
+            reveal: c.pk && this.rxReveal ? (() => {
+              const t = content.evilTeams.teams.find((x) => x.id === run.story.evil?.teamId);
+              const f = evilCaseFile(content, r?.run ?? run);
+              if (!t || !f) return null;
+              const where = [run.stage?.pseudo?.name ?? currentRegion(content, run).name, run.stage ? `Stage ${run.stage.index + 1}` : ''].filter(Boolean).join(' · ');
+              return {
+                where, team: t.name, colour: t.color, backdrop: 'packs/memories/eventbg/city_night.png',
+                mon: pkArtOf(artOf(this, t.ranks.grunt.sprite)),
+                chips: ['They are active in this region', t.rule.text.replace(/\.$/, ''), `You will cross them **7 times**, about every ${f.every === 1 ? 'stop' : `${f.every} stops`}`, 'Getting in their way raises their **Heat**'],
+                say: `Grunt: ${t.ranks.grunt.lines.first}`,
+              };
+            })() : null,
             caseFile: c.pk && this.rxFile ? (() => {
               const f = evilCaseFile(content, r?.run ?? run);
               return f ? { file: f, boss: pkArtOf(artOf(this, f.boss.sprite)) } : null;
@@ -477,6 +493,7 @@ export class EventScene extends Phaser.Scene {
           card: () => this.toggleCard?.(),
           team: () => this.toggleTeam?.(),
           file: () => this.toggleFile?.(),
+          reveal: () => { this.rxReveal = false; playSfx(this, 'ui.select', 0.4); this.rx?.refresh(); },
           back: () => (this.rxFile ? this.toggleFile?.() : this.rxTeam ? this.toggleTeam?.() : this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
           // The Honest Trade Card page: Trade, Back, and the arrows that step through the player's fitting Pokémon.
           accept: () => this.tryTrade(),
@@ -615,6 +632,10 @@ export class EventScene extends Phaser.Scene {
       else this.rxBracket = null;
       playSfx(this, 'ui.select', 0.3);
       this.rx?.refresh();
+      return;
+    }
+    if (this.rxReveal) {
+      if (action === 'confirm' || action === 'back') { this.rxReveal = false; playSfx(this, 'ui.select', 0.4); this.rx?.refresh(); }
       return;
     }
     if (this.rxFile) {

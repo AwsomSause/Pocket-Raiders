@@ -99,6 +99,20 @@ function pkRdIntro(d: CutModel, k: PkCutIn, mon: PkArt | null | undefined, cue: 
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 
+/** An Evil Team shows itself (mock-up `et-reveal`): the city goes dark, the team's colour in the rays, the grunt steps out and the name slams in. */
+export interface PkEtReveal { where: string; team: string; colour: string; chips: readonly string[]; say: string; mon: PkArt | null; backdrop: string }
+export function pkEtReveal(k: PkEtReveal, cue: PkCue = 'in'): string {
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  return page('et-reveal', 51, cueRoot('cut cboss cs37 hg33 ar28 a-et cet27', 'boss', cue, `--c:${k.colour}`)
+    + back(k.backdrop, 'ct-bg') + '<i class="ct-rays"></i>'
+    + (k.mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(k.mon, 620, 620, '', 7)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(k.where, 440, 13, 10, 0.62)}px">${esc(k.where)}</small><b style="font-size:${fit(k.team, 440, 88, 44, 0.5)}px">${esc(k.team)}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${k.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(k.say, 1500, 17, 13, 0.5)}px">${bold(k.say)}</p><div class="btn on nx"${act('reveal')}><b>Next</b></div></div>`
+    + '<i class="fr33 l" data-nocheck></i><i class="fr33 r" data-nocheck></i>'
+    + `<div class="gx-hit"${act('reveal')}></div></div>`);
+}
+
 /** A raid shield breaks (mock-up `rd-shield`): the boss staggers in the den storm while the plates fly out. */
 export function pkRdShield(d: { mon: PkArt | null; small: string; chips: readonly string[] }, cue: PkCue = 'in'): string {
   const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');

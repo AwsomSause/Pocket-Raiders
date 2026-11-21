@@ -5,6 +5,7 @@ import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { pkPageOf } from '../../src/ui/pocket/kit';
 import { pkEtFile } from '../../src/ui/pocket/screens/evil';
+import { pkEtReveal } from '../../src/ui/pocket/screens/cards';
 import { content } from './helpers';
 
 function teamRun(): RunState {
@@ -50,5 +51,14 @@ describe('Evil Team Case File', () => {
     const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'cf0', seed: 'case-file', archetypeId: 'red' }), 0));
     run.story.evil = undefined as never;
     expect(evilCaseFile(content, run)).toBeNull();
+  });
+  it('the reveal cut-in names the team, its rule and the seven stops, and its Next closes it', () => {
+    const html = pkEtReveal({ where: 'Kanto · Stage 2', team: 'Team Rocket', colour: '#c1121f', chips: ['They are active in this region', 'You will cross them **7 times**, about every 3 stops'], say: 'Grunt: "Scram!"', mon: null, backdrop: 'packs/memories/eventbg/city_night.png' });
+    expect(pkPageOf(html)?.id).toBe('et-reveal');
+    expect(html).toContain('a-et');
+    expect(html).toContain('--c:#c1121f');
+    expect(html).toContain('<b>7 times</b>');
+    expect(html).toContain('data-act="reveal"');
+    expect(html).not.toContain('ct-mon');
   });
 });
