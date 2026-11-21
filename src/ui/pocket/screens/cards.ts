@@ -98,6 +98,21 @@ function pkRdIntro(d: CutModel, k: PkCutIn, mon: PkArt | null | undefined, cue: 
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 
+/** A raid shield breaks (mock-up `rd-shield`): the boss staggers in the den storm while the plates fly out. */
+export function pkRdShield(d: { mon: PkArt | null; small: string; chips: readonly string[] }, cue: PkCue = 'in'): string {
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const say = 'The shield breaks apart! The boss staggers.';
+  const shards = Array.from({ length: 10 }, (_, i) => `<i style="--a:${i * 36}deg;--d:${120 + (i % 3) * 46}px;--s:${18 + (i % 4) * 8}px"></i>`).join('');
+  return page('rd-shield', 51, cueRoot('cut cboss ar28 a-rd in29 brk32', 'boss', cue, '--c:#d9267d')
+    + back('arenas/raid_max_bg.png', 'ct-bg') + back('packs/raid/max/bg.png', 'ct-bg storm')
+    + spr({ file: 'packs/raid/max/spiral.png', whole: true }, 0.7, 'ct-spiral') + `<div class="shard32" data-nocheck>${shards}</div>` + '<i class="ct-rays"></i>'
+    + (d.mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(d.mon, 400, 330, '', 3.2)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small>${esc(d.small)}</small><b>Shield Broken</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${d.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
 /** What the Legendary and Ultra Beast cut-ins show (mock-up pages `legend` and `ub`). Only true facts go in `chips`. */
 export interface PkCutIn {
   page: 'legend' | 'ub' | 'rd-intro';

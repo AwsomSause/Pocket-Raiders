@@ -275,3 +275,15 @@ describe('the Pocket raid boss cut-in', () => {
     expect(h).toContain('a-rd in29');
   });
 });
+
+describe('the Pocket Shield Broken cut-in', () => {
+  it('draws the rd-shield page with the shields left', async () => {
+    const { pkRdShield } = await import('../../src/ui/pocket/screens/cards');
+    const h = pkRdShield({ mon: null, small: 'Shield 1 of 3', chips: ['The plate **shatters**', '2 more shields to come'] });
+    expect(h.startsWith('<!--pk:rd-shield:51-->')).toBe(true);
+    expect(h).toContain('Shield 1 of 3');
+    expect(h).toContain('<b>shatters</b>');
+    expect(h).toContain('brk32');
+    expect(h).toContain('shard32');
+  });
+});

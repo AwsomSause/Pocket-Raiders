@@ -20,7 +20,7 @@ import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { isEnemyAce } from '../core/battle/ace';
 import { ULTRA_BEASTS, type UltraBeast } from '../core/ultra/beasts';
 import { ultraOn } from '../core/ultra/run';
-import { pkGaBand, pkGimmick, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
+import { pkGaBand, pkGimmick, pkRdShield, type PkCutIn, type PkGimmickMore } from '../ui/pocket/screens/cards';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -3776,7 +3776,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Pocket look: one page over the battle (a card view) that waits for its button, a key or a click. */
-  private async pkPage(render: (c: ReduxCtx) => string, acts: Record<string, (arg: string) => void> = {}): Promise<void> {
+  private async pkPage(render: (c: ReduxCtx) => string, acts: Record<string, (arg: string) => void> = {}, ms = 0): Promise<void> {
     let finish!: () => void;
     const done = new Promise<void>((r) => (finish = r));
     let over = false;
@@ -3791,8 +3791,28 @@ export class BattleScene extends Phaser.Scene {
       finish();
     };
     const view = mountRedux(this, { render, acts: { ...acts, next: () => end() }, card: true });
+    if (ms > 0) this.time.delayedCall(ms, end);
     this.events.once('shutdown', end);
     await this.playBeat({ done, skip: end });
+  }
+
+  /** Pocket look: a raid shield breaking (mock-up `rd-shield`), with the raid's real shields and clock. Presentation only. */
+  private async pkShieldBroken(): Promise<void> {
+    try {
+      const battle = this.run.battle;
+      const raid = battle?.raid;
+      const { content } = services().session;
+      const base = raid ? content.raids.raids.find((r) => r.id === raid.id) : undefined;
+      if (!battle || !raid || !base) return;
+      const def = scaledRaid(content, base, raid.badges);
+      const total = def.shield?.at.length ?? 1, left = raid.pendingShields.length;
+      const foe = battle.enemyTeam[0];
+      const mon = foe ? ((f) => (f ? monArt(f) : null))(monFile(this, foe.speciesId, 'front', !!foe.shiny)) : null;
+      const chips = [left ? 'The plate **shatters**' : 'The last plate **shatters**', 'Your hits reach the boss again', left ? `${left} more shield${left > 1 ? 's' : ''} to come` : 'No shields left', raid.timerLeft ? `**${raid.timerLeft} turns** left on the clock` : ''].filter(Boolean);
+      await this.pkPage((c) => (c.pk ? pkRdShield({ mon, small: `Shield ${Math.max(1, total - left)} of ${total}`, chips }) : ''), {}, 2600);
+    } catch {
+      // A presentation failure must never block the battle.
+    }
   }
 
   /** Pocket look: both line-ups before a Galar Gym or Tournament match (mock-up `ga-lineup`); nothing elsewhere. */
@@ -6982,6 +7002,7 @@ export class BattleScene extends Phaser.Scene {
         await this.playBeat(chargeUp(this, { x: at.x, y: at.y - 80, tint: charge.tint, label: charge.label, motion: this.motion, intensity: effectIntensity }));
       }
       // A raid/totem phase change gets a banner with its written rule.
+      if (e.type === 'raid' && e.tone === 'shield' && e.text === 'The shield shattered!' && pocketOn() && this.rx && this.motion === 'full') await this.pkShieldBroken();
       if (e.type === 'raid' && e.tone === 'phase') this.focusPush('phase');
       if (e.type === 'raid' && e.tone === 'phase') this.arenaLight?.set(++this.arenaPhase, 0xff4fd8);
       // Phantom UI: the phase card (a boss's last stand, a raid's next phase) stands in for the banner.
