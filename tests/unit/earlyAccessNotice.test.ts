@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { earlyAccessDue, EARLY_ACCESS_LOCK_MS } from '../../src/ui/earlyAccessNotice';
+import { earlyAccessDue, EARLY_ACCESS_KEY, EARLY_ACCESS_LOCK_MS } from '../../src/ui/earlyAccessNotice';
 
 const env = (o: Partial<{ seen: string | null; webdriver: boolean; search: string }> = {}) => ({ seen: null, webdriver: false, search: '', ...o });
 
@@ -14,4 +14,6 @@ describe('early access notice gate', () => {
     expect(earlyAccessDue(env({ search: '?earlyaccess=0' }))).toBe(false);
   });
   it('locks for ten seconds', () => expect(EARLY_ACCESS_LOCK_MS).toBe(10000));
+  // Dominion replaced the original Evil Mode: a new key, so players who saw the old screen see the Dominion one once.
+  it('uses the Dominion key, not the original Evil Mode one', () => expect(EARLY_ACCESS_KEY).toBe('pkr.dominionEarlyAccessSeen'));
 });

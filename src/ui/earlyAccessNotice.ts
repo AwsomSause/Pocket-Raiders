@@ -1,7 +1,8 @@
-// One-time "Evil Mode is VERY EARLY ACCESS" screen. DOM overlay over the canvas; no Phaser import.
+// One-time "Dominion (Evil Mode) is EARLY ACCESS" screen. DOM overlay over the canvas; no Phaser import.
 // Shown once per browser (localStorage). No skip prompt for the first 10 seconds; the button appears after.
+// The key changed when Dominion replaced the original Evil Mode (2026-11-21), so players who saw the old screen see this one once.
 
-export const EARLY_ACCESS_KEY = 'pkr.evilEarlyAccessSeen';
+export const EARLY_ACCESS_KEY = 'pkr.dominionEarlyAccessSeen';
 export const EARLY_ACCESS_LOCK_MS = 10000;
 
 interface Env {
@@ -54,16 +55,14 @@ export function showEarlyAccessNotice(lockMs: number = EARLY_ACCESS_LOCK_MS): Pr
     root.setAttribute('role', 'dialog');
     root.setAttribute('aria-modal', 'true');
     root.innerHTML = `<style>${CSS}</style><div class="box">
-<h1>EVIL MODE</h1>
-<div class="warn">VERY EARLY ACCESS AND SUBJECT TO IMMENSE CHANGES</div>
+<h1>DOMINION (EVIL MODE)</h1>
+<div class="warn">EARLY ACCESS: EXPECT BIG CHANGES</div>
 <h2>What it is</h2>
-<p>A new way to play: instead of the hero, you found and run a criminal team. You pick a team, then play it day by day. You spend money, grow the team, and take over a region while a kid comes to stop you. A run crosses three regions (Kanto, Johto, Hoenn first).</p>
-<h2>Where you are</h2>
-<p>This is the first, original build of Evil Mode. It has the core loop and a lot of systems, but it is not finished or balanced. The whole mode is being reworked, so expect it to change a lot, or be replaced.</p>
+<p>You start with one warehouse and a crew of one, and build a criminal team region by region: hire crew, buy rooms for your HQ, take districts, and deal with rival teams and the Hero sent to stop you. A run crosses three regions (Kanto, Johto, Hoenn).</p>
 <h2>Where to find it</h2>
-<ul><li>Main menu, then <b>Run Setup</b>, then pick <b>Evil Mode</b> as the mode.</li><li>It can be turned off in <b>Settings &gt; Gameplay &gt; Evil Mode</b>.</li></ul>
+<ul><li>Main menu, then <b>Run Setup</b>, then pick <b>Dominion</b> as the mode. A tutorial walks you through your first days.</li><li>It can be turned off in <b>Settings &gt; Gameplay &gt; Evil Mode</b>.</li></ul>
 <h2>What to expect</h2>
-<ul><li>Bugs, rough screens and missing parts.</li><li>Balance and rules will change.</li><li>Evil Mode runs may not carry over to later versions.</li></ul>
+<ul><li>It is new and not fully balanced. Numbers and rules will change.</li><li>Some bugs and rough screens.</li><li>Runs from the original Evil Mode can't be continued.</li></ul>
 <div class="foot"><span class="wait" aria-live="off">Please read this screen.</span></div></div>`;
     document.body.appendChild(root);
     // Swallow keys while the screen is up so Enter/Space/Escape can't reach the game behind it.
