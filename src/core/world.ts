@@ -302,3 +302,35 @@ export function convoyStep(content: Content, run: RunState, node: MapNode): void
     stage.convoy = null;
   }
 }
+
+export interface StopForecast {
+  /** The stop's number on the stage (its column). */
+  stop: number;
+  /** What waits there: the strongest kind among the column's stops, or null while fog hides it. */
+  kind: MapNode['kind'] | null;
+  /** The front's weather, 'clear' when none is due, or null past what the forecast can see. */
+  weather: Weather | 'clear' | null;
+  /** The front covers only some routes there. */
+  band: Front['band'];
+}
+
+/** Pocket look's Forecast page (mock-up `forecast`): the next stops with what waits there and their weather, as far as
+ *  fog and the forecast reach. A view only: no rolls, nothing changes. */
+export function stopForecast(content: Content, run: RunState, count = 6): StopForecast[] {
+  const stage = run.stage;
+  if (!stage || stage.kind !== 'stage') return [];
+  const here = currentColumn(stage);
+  const w = worldOf(content);
+  const reach = here + 1 + w.frontForecast + (stage.foresight ?? 0) + stationTier(run);
+  const seen = visibleColumn(content, run);
+  const fronts = stageFronts(content, run);
+  const RANK: Record<MapNode['kind'], number> = { wild: 0, trainer: 1, gym: 2, elite: 3, champion: 4 };
+  const out: StopForecast[] = [];
+  for (let c = here + 1; c <= Math.min(stage.map.columns, here + count); c++) {
+    const nodes = stage.map.nodes.filter((n) => n.column === c);
+    const kind = c <= seen && nodes.length ? nodes.reduce((a, n) => (RANK[n.kind] > RANK[a] ? n.kind : a), nodes[0]!.kind) : null;
+    const f = c <= reach ? fronts.find((x) => c >= x.from && c <= x.to) : undefined;
+    out.push({ stop: c, kind, weather: c > reach ? null : f ? f.weather : 'clear', band: f?.band ?? 'all' });
+  }
+  return out;
+}

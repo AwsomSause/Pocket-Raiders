@@ -26,7 +26,7 @@ import { stopIsHidden } from '../core/events';
 import { leadChatter } from '../core/leadChatter';
 import { xatuBlur } from '../core/greenneedle/cartographer';
 import { sgHeader } from '../core/greenneedle/citysiege';
-import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
+import { forecast, foggedAt, frontAt, isFogged, sightRange, stopForecast, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
 
 /** gn.new.12: when the Xatu's map first went on show (kept across scene restarts; 0 = not running). */
@@ -137,6 +137,8 @@ import { pkPauseModel } from '../ui/pocket/models';
 import { pkMap } from '../ui/pocket/screens/map';
 import { pkRegion } from '../ui/pocket/screens/region';
 import { pkBadges, pkLeague, pkWorld, type PkBadgeSlot } from '../ui/pocket/screens/world';
+import { pkForecast } from '../ui/pocket/screens/forecast';
+import { timeOfDay } from '../core/arenaStyle';
 import { pkRivals } from '../ui/pocket/screens/rivals';
 import { PK_PAUSE_COLS, pkPause, pkQuick } from '../ui/pocket/screens/pause';
 import { pkCard } from '../ui/pocket/screens/card';
@@ -233,7 +235,8 @@ type MapPop =
   | { kind: 'phone'; chat: number; reply: number }
   | { kind: 'world'; pick: number }
   | { kind: 'badges'; pick: number }
-  | { kind: 'league'; pick: number };
+  | { kind: 'league'; pick: number }
+  | { kind: 'forecast'; pick: number };
 
 type Option =
   | { kind: 'node'; node: MapNode }
@@ -331,6 +334,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'world') pop = pocketOn() ? { kind, pick: run.regionIndex } : null;
     else if (kind === 'badges') pop = pocketOn() && run.stage ? { kind, pick: Math.min(run.stage.index, runCampaign(session.content, run).stagesPerRegion - 1) } : null;
     else if (kind === 'league') pop = pocketOn() ? { kind, pick: 0 } : null;
+    else if (kind === 'forecast') pop = pocketOn() && run.stage?.kind === 'stage' && stopForecast(session.content, run).length ? { kind, pick: 0 } : null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -661,6 +665,8 @@ export class MapScene extends Phaser.Scene {
     // Pocket look: Enter on the Rival Board opens the lit rival's full report; Esc there goes back to the board.
     // Pocket look: Enter in the Badge Case opens the League page; Esc there goes back to the case.
     if (p.kind === 'badges' && action === 'confirm') return this.popOpen();
+    // Pocket look: Enter on the Forecast is Fix my team (the Party).
+    if (p.kind === 'forecast' && action === 'confirm') return this.popOpen();
     if (p.kind === 'league' && action === 'back') {
       this.rxPop = { kind: 'badges', pick: 0 };
       this.rxView?.refresh();
@@ -681,6 +687,9 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'badges') {
       const n = runCampaign(session.content, run).stagesPerRegion;
       p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'forecast') {
+      const n = stopForecast(session.content, run).length;
+      if (side && n) p.pick = (p.pick + d + n) % n;
     } else if (p.kind === 'league') {
       const n = (services().session.run?.stage?.eliteFour?.length || runCampaign(session.content, run).eliteFourSize) + 1;
       if (side) p.pick = (p.pick + d + n) % n;
@@ -729,7 +738,7 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'notes') {
       if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
       else p.sel[p.tab] = i;
-    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges' || p.kind === 'league') && what === 'pick') {
+    } else if ((p.kind === 'report' || p.kind === 'roll' || p.kind === 'world' || p.kind === 'badges' || p.kind === 'league' || p.kind === 'forecast') && what === 'pick') {
       if (p.pick === i) {
         if (p.kind !== 'report' || !pocketOn() || p.full) return;
         p.full = true;
@@ -851,6 +860,7 @@ export class MapScene extends Phaser.Scene {
     if (p.kind === 'world') return c.pk ? this.worldPocket(p.pick) : '';
     if (p.kind === 'badges') return c.pk ? this.badgesPocket(p.pick) : '';
     if (p.kind === 'league') return c.pk ? this.leaguePocket(p.pick) : '';
+    if (p.kind === 'forecast') return c.pk ? this.forecastPocket(p.pick) : '';
     const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
     if (p.kind === 'report' && c.pk && !p.full) return this.rivalsPocket(p.pick);
     if (p.kind === 'report') {
@@ -1841,8 +1851,9 @@ export class MapScene extends Phaser.Scene {
       }
       // Pocket look: the World Tour (M) and the Badge Case (G), pages of their own in the mock-ups.
       if (pocketOn()) {
-        this.rxModel.keys = [['G', 'badges'], ['M', 'world'], ...this.rxModel.keys];
+        this.rxModel.keys = [['G', 'badges'], ['M', 'world'], ['Y', 'forecast'], ...this.rxModel.keys];
         this.input.keyboard?.on('keydown-G', () => this.popToggle('badges'));
+        this.input.keyboard?.on('keydown-Y', () => this.popToggle('forecast'));
         this.input.keyboard?.on('keydown-M', () => this.popToggle('world'));
       }
       if (this.children.getByName('bracket-tag')) this.rxModel.hints = [['L', 'legend'], ['B', 'bracket'], ['Enter', 'go']];
@@ -1984,9 +1995,36 @@ export class MapScene extends Phaser.Scene {
 
   /** Pocket look: Enter on a pop-up's card: the Badge Case opens the League page. */
   private popOpen(): void {
+    // The Forecast's Fix my team: the Party.
+    if (this.rxPop?.kind === 'forecast') { this.popClose(); openPokemonMenu(this.fieldHost()); return; }
     if (this.rxPop?.kind !== 'badges' || !pocketOn()) return;
     this.rxPop = { kind: 'league', pick: 0 };
     this.rxView?.refresh();
+  }
+
+  /** Pocket look: the Forecast (Y): the next six stops with what waits there, the stage's time of day and the weather. */
+  private forecastPocket(pick: number): string {
+    const { session } = services();
+    const content = session.content, run = session.run!;
+    const stops = stopForecast(content, run);
+    const time = run.stage ? timeOfDay(run.seed, run.stage.index) : 'day';
+    const KIND: Record<string, [string, string]> = { wild: ['Wild Pokémon', 'Tall grass'], trainer: ['Trainer', 'On the road'], gym: ['Gym', 'Gym Leader'], elite: ['Elite Four', 'The League'], champion: ['Champion', 'The League'] };
+    const next = stops.find((s) => s.weather && s.weather !== 'clear');
+    const WORD: Record<string, string> = { rain: 'Rain', sun: 'Harsh sun', sand: 'A sandstorm', snow: 'Snow', hail: 'Hail' };
+    const TIP: Record<string, string> = { rain: 'Water moves hit harder there, Fire moves softer.', sun: 'Fire moves hit harder there, Water moves softer.', sand: 'It hurts all but Rock, Ground and Steel Pokémon.', snow: 'Ice Pokémon guard better there.', hail: 'It hurts all but Ice Pokémon.' };
+    const gymAt = stops.find((s) => s.kind === 'gym');
+    const say = next
+      ? `Bzzt! ${WORD[next.weather!] ?? 'Weather'} from stop ${next.stop}${next.band !== 'all' ? ` on the ${next.band === 'high' ? 'top path' : 'lower paths'}` : ''}. ${TIP[next.weather!] ?? ''}${gymAt && next.stop <= gymAt.stop ? ' Check your team before the Gym.' : ''}`
+      : `Bzzt! Clear skies as far as I can see.${gymAt ? ` The Gym is at stop ${gymAt.stop}.` : ''}`;
+    const camp = runCampaign(content, run);
+    return pkForecast({
+      region: content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? 'Region',
+      stage: `Stage ${(run.stage?.index ?? 0) + 1} of ${camp.stagesPerRegion}`,
+      road: pocketRoad(run.stage),
+      index: Math.max(0, Math.min(stops.length - 1, pick)),
+      say,
+      stops: stops.map((s) => ({ stop: s.stop, kind: s.kind ? KIND[s.kind]![0] : null, sub: s.kind ? KIND[s.kind]![1] + (s.band !== 'all' && s.weather && s.weather !== 'clear' ? ` · ${s.band === 'high' ? 'top path' : 'lower paths'}` : '') : 'Hidden in fog', time, weather: s.weather, gym: s.kind === 'gym' })),
+    });
   }
 
   /** Pocket look: the Pokémon League (mock-up `league`): the rooms (named once the League begins) and the Champion. */

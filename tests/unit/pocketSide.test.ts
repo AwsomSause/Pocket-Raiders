@@ -9,6 +9,7 @@ import { pkBagUse } from '../../src/ui/pocket/screens/bagUse';
 import { pkEvents } from '../../src/ui/pocket/screens/events';
 import { pkNews } from '../../src/ui/pocket/screens/news';
 import { pkOverlay } from '../../src/ui/redux/screens/overlay';
+import { pkForecast } from '../../src/ui/pocket/screens/forecast';
 
 describe('the Pocket Rival Board', () => {
   const r = (name: string, x: Partial<PkRival> = {}): PkRival => ({ name, role: 'Rival', art: null, ace: null, wins: 0, losses: 0, lead: 'Level', ...x });
@@ -153,5 +154,24 @@ describe('the Pocket notice cards (toasts)', () => {
     expect(h).toContain('data-act="toast" data-arg="7"');
     expect(h).toContain('+150 Bank credits');
     expect(pkOverlay({ notices: [], toasts: [] })).toBe('');
+  });
+});
+
+describe('the Pocket Forecast', () => {
+  it('a card per stop with the time and weather icons, the Gym marked, fog as ???, too far as a question mark; Fix my team', () => {
+    const h = pkForecast({ region: 'Kanto', stage: 'Stage 2 of 8', road: null, index: 1, say: 'Bzzt! Rain from stop 3.', stops: [
+      { stop: 2, kind: 'Wild Pokémon', sub: 'Tall grass', time: 'eve', weather: 'rain', gym: false },
+      { stop: 3, kind: 'Gym', sub: 'Gym Leader', time: 'eve', weather: 'sun', gym: true },
+      { stop: 4, kind: null, sub: 'Hidden in fog', time: 'eve', weather: null, gym: false },
+    ] });
+    expect(pkPageOf(h)?.id).toBe('forecast');
+    expect((h.match(/class="fc /g) ?? []).length).toBe(3);
+    expect(h).toContain('class="fc eve gym on"');
+    expect(h).toContain('wxi rain');
+    expect(h).toContain('Harsh Sun');
+    expect(h).toContain('???');
+    expect(h).toContain('Too far to tell');
+    expect(h).toContain('Fix my team');
+    expect(h).toContain('data-act="popOpen"');
   });
 });

@@ -17,7 +17,7 @@ import { findNode, nextChoices } from '../../src/core/map';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { chooseStarter, chooseNode, createRun } from '../../src/core/run';
 import { StageStateSchema, type RunState } from '../../src/core/state';
-import { advanceRoamers, applyFrontWeather, convoyStep, healConvoy, forecast, foggedAt, frontAt, isFogged, placeCamp, roamerOn, scoutAhead, sightRange, spawnRoamers, stageFronts, stageHasCamp, visibleColumn } from '../../src/core/world';
+import { advanceRoamers, applyFrontWeather, convoyStep, healConvoy, forecast, foggedAt, frontAt, isFogged, placeCamp, roamerOn, scoutAhead, sightRange, spawnRoamers, stageFronts, stageHasCamp, stopForecast, visibleColumn } from '../../src/core/world';
 import { content } from './helpers';
 
 const withWorld = (patch: Partial<Content['balance']['world']>): Content => ({ ...content, balance: { ...content.balance, world: { ...content.balance.world, ...patch } } });
@@ -123,6 +123,24 @@ describe('weather fronts', () => {
     const fc = forecast(content, run);
     expect(fc?.front.from).toBeLessThanOrEqual(here + 7);
     expect(fc).not.toBeNull();
+  });
+
+  it('the Forecast page: the next six stops, fog hides what waits, the weather of a front inside the forecast, unknown past it; looking changes nothing', () => {
+    const run = newRun();
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)?.column ?? 0;
+    run.stage!.extraFronts = [{ weather: 'rain', from: here + 1, to: here + 2 }];
+    const before = JSON.stringify(run);
+    const fc = stopForecast(content, run);
+    expect(JSON.stringify(run)).toBe(before);
+    expect(fc.length).toBe(Math.min(6, run.stage!.map.columns - here));
+    expect(fc[0]!.stop).toBe(here + 1);
+    expect(fc[0]!.weather).toBe('rain');
+    expect(fc[1]!.weather).toBe('rain');
+    expect(fc.some((s) => s.weather === null)).toBe(true);
+    expect(fc.every((s) => s.weather === null || s.weather === 'clear' || s.weather === 'rain' || stageFronts(content, run).some((f) => f.weather === s.weather))).toBe(true);
+    const seen = visibleColumn(content, run);
+    expect(fc.filter((s) => s.stop > seen).every((s) => s.kind === null)).toBe(true);
+    expect(stopForecast(content, { ...run, stage: null })).toEqual([]);
   });
 
   it('a Weather Vane brings a chosen front in', () => {
