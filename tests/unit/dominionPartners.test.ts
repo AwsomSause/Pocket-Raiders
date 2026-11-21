@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { chairHookOf, freshChair } from '../../src/core/dominion/chair';
 import { applyCharter, charterProblem, chartersOpen, dominionFinished, domTurnOffer, domTurnRun, TURN_FLAG } from '../../src/core/dominion/charters';
-import { withCrew } from '../../src/core/dominion/crew';
+import { rng, withCrew } from '../../src/core/dominion/crew';
 import { DOMINION_DATA, setActiveRegion } from '../../src/core/dominion/data';
 import { empireOf } from '../../src/core/dominion/book';
 import { stepById } from '../../src/core/dominion/empire';
@@ -164,7 +164,7 @@ describe('D16 deals', () => {
   it("Looker's deal (Chair card 63) ends every deal for the run", () => {
     const r = go(syndicate(), { t: 'partner', op: 'sign', id: 'snagem' });
     const b = structuredClone(blk(r));
-    chairHookOf('close-deals')!(b);
+    chairHookOf('close-deals')!(b, rng('test'));
     expect(b.partners!.deals.snagem).toBeUndefined();
     expect(signProblem(b, 'cipher')).toMatch(/Looker/);
   });

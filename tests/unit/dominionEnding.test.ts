@@ -266,10 +266,11 @@ describe('D17 the audit: every Boss action, crew task, rival action, street meet
       expect(['supported', 'limited', 'disabled']).toContain(o.status);
       if (o.status === 'disabled') expect((o as { waits?: string }).waits).toMatch(/^D\d+$/);
     }
-    // The Chair: a card still waiting names the follow-up building it (D8's cards 8-9, D10's follow-up with D5's six and
-    // the quiz). Once those land, none waits.
+    // The Chair: D10's follow-up (#1543) switched on its 18 cards; only D8's cards 8-9 (#1542) may still wait. Once that
+    // lands, none waits.
     const waiting = D.court.filter((c) => cardStatus(c) === 'disabled');
-    for (const c of waiting) expect(['D5', 'D8', 'D10', 'quiz']).toContain(c.wait);
+    expect(waiting.length).toBeLessThanOrEqual(2);
+    for (const c of waiting) expect(c.wait).toBe('D8');
   });
 });
 

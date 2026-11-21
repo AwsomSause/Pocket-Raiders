@@ -18,7 +18,7 @@ does with an answer is the SPEC table below, written in a small effect language 
   hero:intel:N  hero:battle  hero:letter  hero:spare  hero:late:N  hero:hunt  hero:lose   (D11: the Hero, hero.ts)
   hook:ID      (a rule another slice owns, registered with setChairHook: insure, double-agent (D9), debate-early (D13),
                 magma-cool, aqua-cool, held-two, tribute-cut, smuggle-line, uprising-cut, uprising-up (D15),
-               close-deals, shadow-buy (D16))
+               close-deals, shadow-buy (D16), D10's in growthCourt.ts)
 
 A card with `wait` is switched off (status "disabled") until the named slice builds what its answers need.
 Re-run after the list changes:  python3 tools/dominion/court-to-json.py <plans/evil-mode-rework/lists> src/data/dominion
@@ -240,6 +240,7 @@ FOES = {
     'champion': dict(name='The retired Champion', cls='ace-trainer', species=['dragonair', 'gyarados', 'aerodactyl', 'dragonite'], offset=6),
     'hunter': dict(name='The bounty hunter', cls='ace-trainer', species=['arcanine', 'nidoking', 'scyther'], offset=5),
     'police': dict(name='International Police', cls='veteran', species=['growlithe', 'machoke', 'croagunk'], offset=4),
+    'gambler': dict(name='The gambler', cls='roughneck', species=['meowth', 'persian'], offset=1),
 }
 
 SPEC = {
@@ -277,32 +278,32 @@ SPEC = {
     26: dict(look='trainer/pr/musician', who='busker', a='reg:3 mor:2 heat:1', b='dread:1 reg:-2'),
     27: dict(look='trainer/pr/parasol_lady', who='widow', a='$-200 reg:10 fav', b='$200 reg:-6 dread:3'),
     28: dict(look='trainer/pr/doctor_f', who='nurse', a='reg:5 note:D10:"no Thieving in Centers for 14 days"', b='dread:2 reg:-4 note:D10:"Heal costs +10% there"'),
-    29: dict(look='trainer/pr/pilot', who='cabbie', wait='D10', a='deal:-140 note:D10:"chase odds +10%"', b=''),
+    29: dict(look='trainer/pr/pilot', who='cabbie', a='deal:-140', b=''),  # +10 on every Card while his deal stands (growthCourt.ts)
     30: dict(look='trainer/pr/janitor', who='caretaker', a='reg:6 note:D10:"flyer recruits -1 there"', b='heat:5 reg:-6'),
     31: dict(look='trainer/fisherman', who='fisherman', foe='poacher', a='fight{reg:6 fav}{reg:2}', b='reg:-2'),
-    32: dict(look='trainer/pr/clerk_f', who='shop-owner', wait='D5', a='c$-1500 note:D5:"+Building (Shop)" reg:5', b='dread:2'),
+    32: dict(look='trainer/pr/clerk_f', who='shop-owner', a='c$-1500 hook:gift-shop reg:5', b='dread:2'),
     33: dict(look='trainer/pr/worker_f', who='housing', a='$-250 reg:8 note:D10:"Night actions -5% there"', b='reg:-5 note:D10:"Night actions +5% there"'),
     34: dict(look='trainer/pr/pokefan_f', who='grandmother', a='scout reg:10', b='reg:-4 chance:30{loyall:1}'),
     35: dict(look='trainer/pr/waiter_m', who='vendor', a='mor:4 reg:3 heat:1', b=''),
     36: dict(look='trainer/pr/rich_kid_m', who='gambler-slots', needs='stores', a='mon:-1 chance:50{$600}', b='dread:1'),
-    37: dict(look='trainer/pr/waiter_f', who='cafe', wait='D5', a='mor:-2 reg:4', b='c$-2000 note:D5:"+Building (Café Front)"'),
+    37: dict(look='trainer/pr/waiter_f', who='cafe', a='mor:-2 reg:4', b='c$-2000 hook:gift-cafe'),
     38: dict(look='trainer/aroma_lady', who='florist', a='racket+ ten:6', b='reg:-2'),
-    39: dict(look='trainer/worker_m', who='union', wait='D10', a='note:D10:"Smuggle: -15% cut, Heat -50%"', b='note:D10:"40%: Smuggle blocked 3 days"'),
+    39: dict(look='trainer/worker_m', who='union', needs='routes', a='hook:union', b='chance:40{hook:strike}'),
     40: dict(look='trainer/pr/breeder_f', who='daycare', a='$-180 reg:3 mon:3', b='reg:-4 loyall:-1'),
     41: dict(look='trainer/pr/rich_f', who='planner', a='c$600 reg:6 heat:-2', b='dread:2'),
     42: dict(look='trainer/pr/artist', who='artist', a='$-200 fame:2 heat:6', b='heat:-2 reg:2'),
     43: dict(look='trainer/hiker', who='hiker', named='any', a='rest chance:30{join:look=trainer/hiker:green=lost} reg:4', b=''),
     44: dict(look='trainer/pr/clerk_m_2', who='blackout', a='note:D5:"HQ defense -1 battle tonight" reg:6', b='reg:-3'),
     # C. money and the underworld
-    45: dict(look='trainer/pr/collector', who='fence', wait='D10', a='note:D10:"60% of the Holding value"', b='follow:46:7'),
-    46: dict(look='trainer/pr/collector', who='fence', wait='D10', followOnly=True, a='note:D10:"Holding sells at 75% weekly" heat:-1', b='note:D10:"90% of the Holding value"'),
+    45: dict(look='trainer/pr/collector', who='fence', needs='hot', a='hook:fence-now', b='chance:80{follow:46:7}'),
+    46: dict(look='trainer/pr/collector', who='fence', followOnly=True, a='hook:fence-week heat:-1', b='hook:fence-last'),
     47: dict(look='trainer/roughneck', who='shark', a='$1000 follow:48:14', b='dread:1'),
     48: dict(look='trainer/roughneck', who='shark', followOnly=True, foe='shark', a='$-1500 fav', b='dread:4 heat:5 chance:50{fight{}{$-1500}}'),
     49: dict(look='trainer/pr/scientist_m', who='counterfeiter', a='$500 chance:30{heat:15}', b='heat:-8 reg:3 dread:-2'),
     50: dict(look='trainer/pr/scuba_diver_m', who='smuggler', a='deal:400:heat=3 threat:2', b='reg:2 dread:2'),
-    51: dict(look='trainer/pr/rich_m', who='gambler', wait='D5', a='note:D5:"win: +Building (House)" mon:-1', b=''),
+    51: dict(look='trainer/pr/rich_m', who='gambler', foe='gambler', needs='stores', a='fight{hook:gift-house}{mon:-1}', b=''),
     52: dict(look='trainer/pr/collector', who='black-market', a='$-600 item:ability-urge:1 heat:6', b=''),
-    53: dict(look='trainer/pr/rich_m', who='accountant', wait='D5', a='note:D5:"laundering at 5%"', b=''),
+    53: dict(look='trainer/pr/rich_m', who='accountant', a='hook:accountant', b=''),  # 15% a week he talks: growthCourt.ts
     54: dict(look='trainer/pr/rich_f', who='collector', needs='stores', a='$1200 mon:-1 threat:3', b='mon:-1 reg:6 threat:-2'),
     55: dict(look='trainer/pr/harlequin', who='corner-manager', a='deal:300:risk=10:heat=12', b=''),
     56: dict(look='trainer/pr/rich_m', who='insurance', a='deal:-150 hook:insure', b='dread:2'),
@@ -315,8 +316,8 @@ SPEC = {
     62: dict(look='trainer/pr/officer', who='rookie', followOnly=True, a='$-400 heat:-10', b='heat:-5 grudge'),
     63: dict(look='trainer/pr/veteran_m', who='looker', a='wanted:-15 hook:close-deals', b='wanted:5 note:D2:"Looker watches: Heat +2 per Night action for 7 days"'),
     64: dict(look='trainer/pr/rich_f', who='lawyer', named='jailed', a='$-500 free loy:10', b='out:7 loy:-10'),
-    65: dict(look='trainer/pr/rich_m', who='judge', wait='D10', a='c$-1500 note:D10:"police sweeps -30% for 2 weeks"', b='chance:20{note:D10:"Blackmail on him opens"}'),
-    66: dict(look='trainer/pr/hooligans', who='informant', wait='D10', a='$-150 note:D10:"this week\'s sweep can\'t catch anyone"', b=''),
+    65: dict(look='trainer/pr/rich_m', who='judge', a='c$-1500 hook:judge', b='chance:20{hook:judge-dirt}'),
+    66: dict(look='trainer/pr/hooligans', who='informant', a='$-150 hook:informant', b=''),
     67: dict(look='trainer/pr/officer', who='cousin', named='any', a='leave heat:-10', b='heat:6 loy:4'),
     68: dict(look='trainer/pr/interviewers', who='journalist', a='fame:3 heat:5', b='dread:3 chance:50{heat:8}'),
     69: dict(look='trainer/pr/officer', who='jenny', a='cool:1 fav note:D10:"that street: no actions"', b='heat:4 grudge'),
@@ -329,8 +330,8 @@ SPEC = {
     75: dict(look=GR, who='rival', rival=True, a='$500 ten:-5 heat:5', b='ten:5'),
     76: dict(look='trainer/pr/archer', who='archer', rival=True, name='Archer', role='Rocket Admin', needs='racket', a='racket- ten:-12', b='ten:10 dread:5 follow:77:3'),
     77: dict(look='trainer/pr/archer', who='archer', rival=True, name='Archer', role='Rocket Admin', followOnly=True, foe='archer', a='fight{dread:8 ten:5}', b='$-400 ten:-6 mor:-4'),
-    78: dict(look='trainer/pr/ariana', who='rival', rival=True, wait='D10', a='note:D10:"a joint Heist" ten:-10 chance:25{ten:20}', b='ten:4'),
-    79: dict(look='trainer/pr/scientist_m', who='rival', rival=True, wait='D5', a='note:D5:"a lab machine: +1 Room effect" mon:-1 threat:4', b=''),
+    78: dict(look='trainer/pr/ariana', who='rival', rival=True, a='hook:heist ten:-10 chance:25{ten:20}', b='ten:4'),
+    79: dict(look='trainer/pr/scientist_m', who='rival', rival=True, needs='stores', a='hook:machine mon:-1 threat:4', b=''),
     80: dict(look='trainer/pr/magma_grunt_m', who='rival', rival=True, region='hoenn', a='hook:magma-cool', b='hook:aqua-cool'),
     81: dict(look='trainer/pr/proton', who='rival', rival=True, a='hook:debate-early ten:-5', b='ten:8 dread:3'),
     82: dict(look='trainer/pr/proton', who='rival', rival=True, a='wipe:1 ten:20 join', b='$1000 ten:-10 grudge'),  # D14: the plans hand over one rival site
@@ -351,10 +352,10 @@ SPEC = {
     96: dict(look='trainer/red', who='hero', once=True, a='mor:8 reg:4', b='dread:8 goal:5 threat:5'),
     # G. gyms, League and famous trainers
     97: dict(look='trainer/pr/veteran_m', who='surge', name='Lt. Surge', role='Gym Leader', foe='surge', a='fight{$600}', b='dread:-1'),
-    98: dict(look='trainer/pr/striker', who='koga', wait='D10', a='$-800 note:D10:"+10% Steal/Thieve for 14 days"', b=''),
-    99: dict(look='trainer/firebreather', who='blaine', wait='quiz', a='note:quiz:"a quiz: 3 questions, a TM if 2 are right"', b=''),
-    100: dict(look='trainer/roark', who='gym-leader', wait='D10', a='shadow:-1 reg:10 fav', b='dread:4 grudge'),
-    101: dict(look='trainer/roark', who='gym-leader', wait='D10', a='$-1000', b='dread:6 chance:40{heat:20 note:D10:"lose the Gym"}'),
+    98: dict(look='trainer/pr/striker', who='koga', a='$-800 hook:koga', b=''),
+    99: dict(look='trainer/firebreather', who='blaine', a='hook:quiz', b=''),
+    100: dict(look='trainer/roark', who='gym-leader', needs='gym-blackmail', a='shadow:-1 reg:10 fav', b='dread:4 grudge'),
+    101: dict(look='trainer/roark', who='gym-leader', needs='gym-bought', a='$-1000', b='dread:6 chance:40{heat:20 hook:gym-lost}'),
     102: dict(look='trainer/black_belt_m', who='bruno', foe='bruno', a='fight{join:look=trainer/black_belt_m:name=Bruno}{dread:-5}', b=''),
     103: dict(look='trainer/pr/ace_trainer_f', who='aide', named='any', a='rest fame:5 loy:10 note:D11:"gone 3 days at the tournament"', b=''),
     104: dict(look='trainer/pr/ace_trainer_m', who='frontier', named='best', a='leave c$2000', b='loy:6'),
@@ -385,8 +386,8 @@ SPEC = {
     127: dict(look='trainer/pr/hooligans', who='rebel', needs='held', a='stab:10 hook:tribute-cut', b='stab:-5 dread:10'),
     128: dict(look='trainer/pr/rich_m', who='magnate', a='deal:1500 wanted:5 hook:smuggle-line', b=''),
     129: dict(look='trainer/pr/ace_trainer_m', who='gym-union', needs='held', a='deal:-2000 hook:uprising-cut', b='hook:uprising-up'),  # uprisings come with Stability (D15)
-    130: dict(look='trainer/pr/rich_f', who='council', wait='D10', a='c$-50000 note:D10:"police budget -20%"', b=''),
-    131: dict(look='trainer/worker_m', who='architect', wait='D5', a='note:D5:"next HQ tier -20% cost"', b=''),
+    130: dict(look='trainer/pr/rich_f', who='council', a='c$-50000 hook:council', b=''),
+    131: dict(look='trainer/worker_m', who='architect', a='hook:architect chance:25{hook:weak-spot}', b=''),
     132: dict(look='member', who='former', needs='held', a='join stab:-5', b='stab:5'),
     # J. regulars (all once; each step comes 5-9 days after the last)
     133: dict(look='trainer/pr/clerk_m', who='sal', name='Sal', role='Mart clerk', a='deal:-40 reg:4 fav', b='$60 dread:4 chance:50{racket-}'),

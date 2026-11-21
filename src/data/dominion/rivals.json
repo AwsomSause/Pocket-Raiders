@@ -179,6 +179,7 @@
     "tension": "{action}: Tension +{n}.",
     "hurt": "{action}: your team was ambushed in the night.",
     "fight": "{action}: {who} wants a battle. Answer on the Rival File (R).",
+    "turned": "{action}: {who} has a trainer device tuned to your strongest Pokémon. They want a battle where it fights you. Answer on the Rival File (R).",
     "demand": "{action}: {who} wants ₽{amount}. Pay or refuse on the Rival File (R).",
     "deal": "{action}: {who} offers a deal for ₽{amount} (Rival File, R).",
     "defect": "{action}: {who} will defect to you for ₽{amount} (Rival File, R).",

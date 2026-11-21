@@ -33,7 +33,7 @@
 - The old Evil Mode flow is untouched until Kice answers the retire question.
 
 ## Merged in
-- D15 #1545 and D16 #1546 (evil-mode 09923bd1), no conflicts. After the merge: typecheck clean, 733 Dominion unit tests pass, browser tests `dominionEnding`, `evilModeCharters`, `dominionPartners` pass (8).
+- D15 #1545 and D16 #1546 (evil-mode 09923bd1), no conflicts. D10's follow-up #1543 (8a168fc6): one import conflict in session.ts; the Chair is now 148 of 150 live, only D8's cards 8-9 (#1542) wait, and the audit test checks that. After the merge: typecheck clean, 733 Dominion unit tests pass, browser tests `dominionEnding`, `evilModeCharters`, `dominionPartners` pass (8).
 
 ## Saves
 No version bump: `block.annals` is optional (a block without it starts its book the first night it's seen). No existing roll moved; the sim's stream is its own.

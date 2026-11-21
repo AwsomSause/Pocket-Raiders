@@ -128,6 +128,13 @@ const hasNeeds = (b: DominionBlock, c: CourtCard): boolean => {
   if (c.needs === 'racket') return b.field.rackets.length > 0;
   if (c.needs === 'stores') return stores >= 1;
   if (c.needs === 'stores2') return stores >= 2;
+  // D10: stolen goods to sell, a smuggling route, a Gym held by blackmail or bought.
+  if (c.needs === 'hot') return Object.keys(b.growth?.hot ?? {}).length > 0;
+  if (c.needs === 'routes') return (b.growth?.routes.length ?? 0) > 0;
+  if (c.needs === 'gym-blackmail' || c.needs === 'gym-bought') {
+    const way = c.needs === 'gym-bought' ? 'buy' : 'blackmail';
+    return Object.values(b.growth?.gyms ?? {}).some((g) => g.way === way);
+  }
   if (c.needs === 'held') return !!b.realm?.held.some((h) => h.status === 'held');
   if (c.sect === 'crisis' || c.crisis) return true;
   if (c.a.fx.concat(c.b.fx).some((e) => e.k === 'fight' || (e.k === 'chance' && e.yes.some((x) => x.k === 'fight')))) return !b.field.fight;
@@ -324,12 +331,12 @@ export function setChairHero(h: NonNullable<typeof heroHooks>): void {
 }
 
 /** Answers whose rule another slice owns (`hook:id` in the SPEC): that slice registers it at load, like the Tension hook. */
-const hooks: Partial<Record<ChairHook, (b: DominionBlock) => string | null>> = {};
-export function setChairHook(id: ChairHook, f: (b: DominionBlock) => string | null): void {
+const hooks: Partial<Record<ChairHook, (b: DominionBlock, r: Roll) => string | null>> = {};
+export function setChairHook(id: ChairHook, f: (b: DominionBlock, r: Roll) => string | null): void {
   hooks[id] = f;
 }
 /** The registered hook (tests and the court tool's checks). */
-export const chairHookOf = (id: ChairHook): ((b: DominionBlock) => string | null) | undefined => hooks[id];
+export const chairHookOf = (id: ChairHook): ((b: DominionBlock, r: Roll) => string | null) | undefined => hooks[id];
 
 const bump = (x: Ctx, k: string, n: number): void => {
   if (n) x.changes[k] = (x.changes[k] ?? 0) + n;
@@ -462,7 +469,7 @@ function apply(x: Ctx, fx: CourtFx[]): void {
         break;
       case 'note': x.lines.push(`${e.text} ${fill(L().waits!, { slice: e.slice })}`); break;
       case 'hero': heroHooks?.act(b, e, x.lines); break;
-      case 'hook': { const said = hooks[e.id]?.(b); if (said) x.lines.push(said); break; }
+      case 'hook': { const said = hooks[e.id]?.(b, x.r); if (said) x.lines.push(said); break; }
       case 'deal': {
         ch.deals.push({ card: x.card.id, n: scale(b, e.n), clean: !!e.clean, heat: e.heat ?? 0, risk: e.risk ?? 0, wanted: e.wanted ?? 0, mon: e.mon ?? 0, item: e.item ?? null, itemN: e.itemN ?? 0, ten: e.ten ?? 0 });
         bump(x, 'week', scale(b, e.n));
