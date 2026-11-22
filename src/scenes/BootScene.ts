@@ -64,6 +64,9 @@ export class BootScene extends Phaser.Scene {
   private async loadFont(assets: AssetRegistry): Promise<void> {
     if (typeof FontFace === 'undefined') return;
     const families: Record<string, string> = { 'font.main': 'PokemonMain', 'font.bold': 'PokemonBold' };
+    // The mock-ups' display font (Jersey 15) is the default lettering; a failed load falls back to the Gen 3 fonts.
+    const mockup = new FontFace('Jersey 15', 'url(assets/fonts/redux/jersey-15-400.woff2)');
+    await mockup.load().then(() => { document.fonts.add(mockup); }).catch(() => undefined);
     await Promise.all(
       assets
         .entries()

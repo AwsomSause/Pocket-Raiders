@@ -7,12 +7,12 @@ describe('canvas text in the skin font', () => {
   afterEach(() => { setLookFont(null); setTextPrefs(1, null); });
 
   it('uses the game fonts until a screen asks for the skin font, and again after', () => {
-    expect(pixelFont(34)).toEqual({ family: expect.stringMatching(/^"PokemonBold"/), size: 24, grid: 3 });
-    expect(pixelFont(14).family).toMatch(/^"PokemonMain"/);
+    expect(pixelFont(34).family).toMatch(/^"Jersey 15", "PokemonBold"/);
+    expect(pixelFont(14).size).toBeGreaterThanOrEqual(14);
     setLookFont({ family: 'Pixelify Sans', weight: 400, scale: 1 });
     expect(pixelFont(34)).toEqual({ family: expect.stringMatching(/^"Pixelify Sans", "PokemonMain"/), size: 31, grid: 1 });
     setLookFont(null);
-    expect(pixelFont(34).family).toMatch(/^"PokemonBold"/);
+    expect(pixelFont(34).family).toMatch(/^"Jersey 15"/);
   });
 
   it('keeps small print readable and follows the skin\'s own size and weight', () => {

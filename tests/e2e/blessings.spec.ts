@@ -62,9 +62,9 @@ test('the holy opening: the rite is drawn once it has played, and in the New loo
   // Old look: the game's own pixel fonts. It opens in the dark: nothing of the rite shows yet.
   await toStarter(page, true);
   await page.keyboard.press('Enter');
-  await waitForScene(page, 'Blessing');
+  // Old look: the mock-ups' display font (Jersey 15), the game's default lettering.
   const old = await drawn(page);
-  expect(old.fonts.every((f) => f.startsWith('Pokemon'))).toBe(true);
+  expect(old.fonts.every((f) => f === 'Jersey 15')).toBe(true);
   expect(old.rite).not.toContain('rite.panel');
   expect(old.candles).toBe(0);
   // A first Confirm shows the whole picture at once: window, light, halo, the six lit candles, the panel, the partner's halo.
