@@ -1,0 +1,41 @@
+/* DOMINION redesign R8 (Empire and the Chair): the few pieces the game needs that the pass-50 mockups didn't draw
+   (the Chair settings panel, a notice, the whisper, a page's extra choices). Hand-written, same scope and look as r50.css. */
+#rx #r5 .dim8{position:absolute;inset:0;z-index:30;background:rgba(8,6,12,.62)}
+#rx #r5 .op8{left:220px;top:110px;width:520px;z-index:31}
+#rx #r5 .op8 .row{max-height:none;padding:8px 12px}
+#rx #r5 .op8 .row .tag{margin-left:auto;font:400 20px/1 var(--fd);color:var(--yel)}
+#rx #r5 .nt8{margin:4px 0 0;font-size:13px;font-weight:800;color:var(--mut)}
+#rx #r5 .nc8{position:absolute;left:250px;top:200px;width:460px;z-index:40;margin:0;padding:12px 16px;font-size:16px;line-height:1.35;color:#1d1622;background:#fff8ea;border:2px solid #000;border-radius:18px 18px 18px 4px;box-shadow:5px 5px 0 var(--red);cursor:pointer}
+#rx #r5 .wh8{position:absolute;left:24px;top:150px;width:200px;z-index:5;margin:0;padding:6px 10px;font-size:12px;line-height:1.3;color:#1d1622;background:#fff8ea;border:2px solid #000;border-radius:12px 12px 4px 12px;box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+#rx #r5 .wh8 b{display:block;font:400 14px/1 var(--fd);text-transform:uppercase;color:var(--red)}
+#rx #r5 .re8{position:absolute;left:300px;top:300px;width:180px;z-index:5;margin:0;text-align:center;font-size:13px;font-weight:800;color:#ffe2a8;text-shadow:0 2px 0 #000}
+#rx #r5 .dale19 .flip{transform:scaleX(-1)}
+#rx #r5 .cell .tag{position:absolute;right:10px;top:8px;font-style:normal;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;background:var(--line);color:#fff}
+#rx #r5 .vq .want{line-height:1.25}
+#rx #r5 .pl48 .tg8{font-style:normal;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;background:var(--yel);color:var(--ink);white-space:nowrap}
+#rx #r5 .pl48 .tg8.k{background:var(--line);color:#fff}
+#rx #r5 .pl48 .tg8.g{background:#2f9e44;color:#fff}
+#rx #r5 .tp8{position:absolute;left:180px;top:110px;width:600px;z-index:41;cursor:pointer}
+#rx #r5 .tp8 small{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--yel)}
+#rx #r5 .tp8 b{font:400 30px/1 var(--fd);text-transform:uppercase}
+#rx #r5 .tp8 p{margin:0;font-size:15px}
+#rx #r5 .bc8{display:flex;flex-wrap:wrap;gap:4px;grid-column:2/-1}
+#rx #r5 .bc8 button{display:flex;align-items:center;gap:4px;padding:1px 8px 1px 2px;font:800 12px/1 var(--fb);color:#fff;background:var(--pn2);border:2px solid var(--line);border-radius:999px;cursor:pointer}
+#rx #r5 .bc8 button.on{border-color:var(--yel);color:var(--yel)}
+#rx #r5 .bc8 .face{flex:none}
+#rx #r5 .rb8{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+#rx #r5 .rb8 .cta{padding:4px 12px;font-size:14px}
+#rx #r5 .rb8 .cta.y{background:var(--yel);color:var(--ink)}
+#rx #r5 .rb8 .cta.r{background:var(--red);color:#fff}
+#rx #r5 .sr8{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#rx #r5 .pl48 em.r8{display:block;font-style:normal;font-size:12px;line-height:1.25;color:var(--mut);white-space:normal;overflow-wrap:anywhere}
+#rx #r5 .isl22.on b{color:var(--yel)}
+#rx #r5 .isl22.on .land{outline:3px solid var(--yel);outline-offset:3px}
+#rx #r5 .bc8 button.on{border-color:var(--yel);color:var(--yel)}
+/* The game's atlas sprites (a visitor, a trainer, a Pokémon drawn from a sheet) inside the reset pass-50 pages. */
+#rx #r5 .an{position:relative;display:block;flex:none}
+#rx #r5 .an b{position:absolute;display:block;image-rendering:pixelated;background-repeat:no-repeat}
+/* Rule 3 (no text cut off): on the R8 pages a long spoken line wraps to a second line instead of running out of the box. */
+#rx #r5 :is(.k-jo37,.k-sail22,.k-tk48,.k-wd22,.k-uw31,.k-gy44,.k-hi30,.k-q19,.k-fv19,.k-nt15,.k-res,.k-ch19) .foot p{white-space:normal;overflow-wrap:anywhere;line-height:1.2}
+/* Sail: the who-comes and order chips sit on their row, beside the label. */
+#rx #r5 .carry22 .chg .bc8{grid-column:3}

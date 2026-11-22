@@ -322,6 +322,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.nav.acts(),
         ...this.menu.acts(),
         r5go: (id) => this.r5go(id),
+        r8StayUp: () => { this.stayUp = this.block()?.day ?? 0; this.view?.refresh(); },
         r5start: (i) => this.start.pick(Number(i)),
       },
       overs: {
@@ -391,10 +392,11 @@ export class DominionScene extends Phaser.Scene {
       }
       if (this.voices.raw(e.code)) return void (this.ate = MOVE_LETTERS.has(e.code));
       // D17: once the run is complete, L on the Empire or Takeover page opens the ending (there's nowhere left to sail).
+      if (this.end.raw(e.code)) return;
       if (e.code === 'KeyL' && (this.screen === 'empire' || this.screen === 'takeover') && this.block() && completion(this.block()!)) return void (this.end.open() && this.view?.refresh());
       if (this.tk.raw(e.code)) return;
       if (e.code === 'KeyJ' && this.screen === 'empire') return void (this.pt.open() && this.view?.refresh());
-      if (this.em.raw(e.code)) return void this.view?.refresh();
+      if (this.em.raw(e.code)) return void ((this.ate = MOVE_LETTERS.has(e.code)), this.view?.refresh());
       // D16: J opens the Partnership page from the HQ, the map, the Ledger and the Empire page (J again closes it).
       if (this.pt.raw(e.code)) return void this.view?.refresh();
       if (this.screen === 'partners') return;
@@ -707,6 +709,10 @@ export class DominionScene extends Phaser.Scene {
   /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. */
   private hqPage(b: DominionBlock): string {
     const m = hqModel(b);
+    if (this.nightPage()) {
+      const label = m.next.label === 'Rest' ? `Sleep to Day ${b.day + 1}` : `${m.next.label} · Day ${b.day + 1}`;
+      return r5Night({ day: b.day, phase: m.top.phaseWord, rows: nightRows(b), says: m.says, who: speaker(b, b.members[0]), next: label, pics: r5Pics(this, b), notice: this.notice }, r5Run(this, b));
+    }
     const x = r5Hub(b, { look: this.memberLook().look, bossFile: this.files?.boss.file ?? null, notice: this.notice, at: this.at, threat: threatRow(b), desk: deskOpen(b) ? deskWaiting(b) : null, paper: paperNote(b) });
     const run = r5Run(this, b);
     if (!this.start.on) return r5Hq(m, x, run);
@@ -728,6 +734,13 @@ export class DominionScene extends Phaser.Scene {
     if (id === 'party' || id === 'summary' || id === 'bag') { this.notice = null; this.res.openPage(id); return void this.view?.refresh(); }
     if (id === 'save') { this.notice = 'Saved. Dominion saves every step.'; return void this.view?.refresh(); }
     if (id === 'base' && this.screen === 'hq') { this.hq.open(); return void this.view?.refresh(); }
+    // Redesign R8: the Empire's and the Chair's pages.
+    const EM: Record<string, 'cards' | 'world' | 'holder' | 'underworld' | 'gymcase'> = { regions: 'cards', empire: 'cards', world: 'world', holder: 'holder', sail: 'holder', underworld: 'underworld', gymcase: 'gymcase' };
+    if (id in EM && b.opened) { const from = this.screen === 'empire' ? 'hq' : this.screen; return void (this.em.openAt(from, EM[id]!) && this.view?.refresh()); }
+    if ((id === 'takeover' || id === 'fronts') && b.opened) { if (this.tk.open(this.screen === 'takeover' ? 'hq' : this.screen)) { if (id === 'fronts') this.tk.acts().tkHoldings!(''); this.view?.refresh(); } return; }
+    if ((id === 'ending' || id === 'credits' || id === 'infamy') && this.end.open()) { if (id !== 'ending') this.end.acts()[id === 'credits' ? 'r8Credits' : 'r8Infamy']!(''); return void this.view?.refresh(); }
+    if ((id === 'queue' || id === 'favours') && this.chair.owns()) return this.chair.acts()[id === 'queue' ? 'r8Queue' : 'r8Favours']!('');
+    if (id === 'chair' && this.screen === 'hq') return this.tab(0);
   }
 
   /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
@@ -1029,6 +1042,7 @@ export class DominionScene extends Phaser.Scene {
       return;
     }
     if (this.hq.key(a)) return void this.view?.refresh();
+    if (a === 'back' && this.nightPage() && !this.notice) { this.stayUp = this.block()!.day; return void this.view?.refresh(); }
     if (a === 'back') return this.back();
     if (a === 'confirm') return this.confirm();
     if (this.screen === 'title' && (a === 'up' || a === 'down')) { const n = this.titleRows().length; this.titleAt = (this.titleAt + (a === 'up' ? -1 : 1) + n) % n; }
@@ -1298,6 +1312,25 @@ export class DominionScene extends Phaser.Scene {
   monFile(species: string): string | null {
     const sp = services().session.content.species.get(species);
     return sp ? rxFileOf(this.manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
+  }
+  /** Redesign R8: the Boss's picture at a height, and name. */
+  r8Boss(h: number): string {
+    return bossPic(this.files?.boss.file ?? null, h);
+  }
+  bossName(): string {
+    return this.files?.boss.name ?? 'Boss';
+  }
+  /** Redesign R8: the boat leaves from the region's harbour. */
+  harbour(): string {
+    const H: Record<string, string> = { kanto: 'Vermilion', johto: 'Olivine', hoenn: 'Slateport', sinnoh: 'Canalave', unova: 'Castelia', kalos: 'Coumarine', alola: 'Hau’oli', galar: 'Hulbury', paldea: 'Porto Marinada' };
+    return `${H[this.block()?.realm?.at ?? 'kanto'] ?? 'The'} harbour`;
+  }
+  /** Redesign R8: the Gym case's "Plan" opens that Gym's district file on the map. */
+  planDistrict(id: string): void {
+    this.tab(1);
+    if (this.cursor) this.cursor = { ...this.cursor, district: id, target: 0, focus: 'map' };
+    this.openDistrict();
+    this.view?.refresh();
   }
   /** The Boss's sprite on the release page. */
   bossLook(): string | null {
