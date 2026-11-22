@@ -11,7 +11,7 @@ import { book, fitsMember, reserveSize, usable } from './reserve';
 import type { DominionBlock, Member } from './schema';
 
 const P = () => DOMINION_DATA.pyramid;
-export const RESERVE_PAGE = 8;
+export const RESERVE_PAGE = 12;
 
 /** D8: the squad Mark shown beside a face on the Pyramid (Part 10 §9). */
 function markOf(b: DominionBlock, id: string): CandModel['mark'] {

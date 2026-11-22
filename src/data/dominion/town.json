@@ -19,7 +19,8 @@
   "noRival": "no rival team here",
   "spyGone": "a rival spy loses your trail",
   "pick": "Pick with ▲ ▼, answer with Enter",
-  "needRally": "Needs a rally first (Hold a Rally)."
+  "needRally": "Needs a rally first (Hold a Rally).",
+    "crewSays": "Your call, Boss."
  },
  "rows": {
   "O001": [{ "rg": 3 }, { "money": 80, "h": 1 }, { "lead": true }],

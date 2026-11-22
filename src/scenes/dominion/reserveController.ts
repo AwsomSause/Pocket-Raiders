@@ -2,15 +2,20 @@
 // Crew File), kept beside DominionScene so the scene only forwards to it. It keeps the cursors; every change goes through
 // GameSession.dominionStep (saved).
 
-import { pokemonAssetIds, type AssetManifest } from '../../assets/catalog';
 import { DOMINION_DATA } from '../../core/dominion/data';
 import { giveTargets, pyramidModel, pyramidOrder, reserveModel, RESERVE_PAGE } from '../../core/dominion/reserveScreens';
 import { dominionBlock } from '../../core/dominion/session';
 import type { DominionAction } from '../../core/dominion/schema';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
-import { rxFileOf } from '../../ui/redux/assets';
-import { pyramidView, reserveView } from '../../ui/redux/screens/dominion/reserve';
+import { pyramidView } from '../../ui/redux/screens/dominion/reserve';
+import { r5Reserve } from '../../ui/redux/screens/dominion/r50/pokemon';
+import { giveData, PokemonPages, r5Give, reserveData } from './r6Pokemon';
+import { r5Run } from './r50Bridge';
+import type Phaser from 'phaser';
+
+/** Columns of the Reserve's box grid (mockup `reserve`: 6 x 2). */
+const COLS = 6;
 
 type ScreenName = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
 interface Host {
@@ -31,20 +36,39 @@ export class ReserveController {
   private sel = 0;
   private stripArmed = false;
   private notice: string | null = null;
+  /** R6: the Card (mockup `give`) for the picked Pokémon is open over the box. */
+  private card = false;
+  /** R6: the notice the Reserve shows now (Enter or Esc closes it first). */
+  private shown: string | null = null;
+  /** R6: the Party, Summary and Bag pages of the Pokémon tab. */
+  readonly pages: PokemonPages;
 
-  constructor(private readonly host: Host) {}
+  constructor(private readonly host: Host) {
+    this.pages = new PokemonPages(this.scene(), { refresh: () => host.refresh(), toReserve: () => { host.screenName = 'reserve'; this.card = false; }, block: () => this.block() ?? null });
+  }
+
+  private scene(): Phaser.Scene {
+    return this.host as unknown as Phaser.Scene;
+  }
+
+  /** R6: a tap on the notice closes it. */
+  dismiss(): void {
+    this.notice = null;
+    this.pages.dismiss();
+  }
+
+  /** R6: opens a page of the Pokémon tab (from the chrome: the party chip, the Start menu's Bag). */
+  openPage(p: 'party' | 'summary' | 'bag'): void {
+    this.host.screenName = 'reserve';
+    this.card = false;
+    this.pages.open(p);
+  }
 
   private block() {
     return dominionBlock(services().session.run);
   }
   owns(): boolean {
     return this.host.screenName === 'reserve' || this.host.screenName === 'pyramid';
-  }
-
-  private monFile(species: string): string | null {
-    const manifest = this.host.cache.json.get('manifest') as AssetManifest | undefined;
-    const sp = services().session.content.species.get(species);
-    return sp ? rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null;
   }
 
   private whoId(): string {
@@ -66,14 +90,21 @@ export class ReserveController {
     const b = this.block();
     if (!b) return '';
     const n = notice ?? this.notice;
+    this.shown = this.host.screenName === 'reserve' && !this.pages.page ? n : null;
     if (this.host.screenName === 'pyramid') {
       this.sel = Math.min(this.sel, Math.max(0, b.members.length - 1));
       const hq = DOMINION_DATA.start.start.hqName.replace(/^THE /, '');
       return pyramidView(pyramidModel(b, this.sel, hq[0] + hq.slice(1).toLowerCase()), n);
     }
+    if (this.pages.page) return this.pages.render();
     const m = this.model();
     this.page = m.page;
-    return reserveView(m, (s) => this.monFile(s), n, this.focus, this.slotAt);
+    const run = r5Run(this.scene(), b);
+    // R6 (pass 50): the box grid, and the Card for the picked Pokémon.
+    const give = this.card ? giveData(this.scene(), b, m, this.focus === 'team' ? this.slotAt : null, n) : null;
+    if (give) return r5Give(give, run);
+    this.card = false;
+    return r5Reserve(reserveData(this.scene(), b, m, n), run);
   }
 
   private say(n: string | null): void {
@@ -91,6 +122,8 @@ export class ReserveController {
     const m = this.model();
     if (!m.pick) return;
     this.go({ t: 'give', uid: m.pick.uid, to: m.who.id });
+    this.card = false;
+    this.focus = 'box';
     this.at = Math.max(0, Math.min(this.at, this.model().tiles.length - 1));
   }
   private takeBack(i: number): void {
@@ -112,7 +145,7 @@ export class ReserveController {
   private moveTile(a: InputAction): void {
     const n = this.model().tiles.length;
     if (!n) return;
-    const d = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -4 : 4;
+    const d = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -COLS : COLS;
     const next = this.at + d;
     if (next < 0 || next >= n) {
       if (a === 'left' || a === 'up') this.turn(-1);
@@ -137,19 +170,23 @@ export class ReserveController {
   /** Tap targets (data-act). */
   acts(): Record<string, (arg: string) => void> {
     return {
-      tile: (i) => { const again = this.at === Number(i) && this.focus === 'box'; this.at = Number(i); this.focus = 'box'; if (again) this.give(); else this.host.refresh(); },
+      ...this.pages.acts(),
+      tile: (i) => { const again = this.at === Number(i) && this.focus === 'box'; this.at = Number(i); this.focus = 'box'; if (again && this.model().pick) this.card = true; this.host.refresh(); },
       who: (d) => { this.flipWho(Number(d)); this.host.refresh(); },
+      whoBack: () => { this.flipWho(-1); this.host.refresh(); },
+      fitsToggle: () => { this.fitsOnly = !this.fitsOnly; this.at = 0; this.page = 0; this.host.refresh(); },
       boxPage: (d) => { this.turn(Number(d)); this.host.refresh(); },
       fitsOnly: (v) => { this.fitsOnly = v === '1'; this.at = 0; this.page = 0; this.host.refresh(); },
       autoFill: () => this.go({ t: 'autoFill' }),
       giveIt: () => this.give(),
-      takeSlot: (i) => { if (Number(i) < 100) this.takeBack(Number(i)); },
+      takeSlot: (i) => { if (Number(i) >= 100) return; if (this.focus === 'team' && this.slotAt === Number(i)) this.takeBack(Number(i)); else { this.focus = 'team'; this.slotAt = Number(i); this.host.refresh(); } },
       promoteIt: () => { const id = this.member(); if (id) this.go({ t: 'promote', member: id }); },
     };
   }
   overs(): Record<string, (arg: string) => void> {
     return {
-      tileOver: (i) => { this.at = Number(i); this.focus = 'box'; this.host.refresh(); },
+      ...this.pages.overs(),
+      tileOver: (i) => { if (this.card) return; this.at = Number(i); this.focus = 'box'; this.host.refresh(); },
     };
   }
 
@@ -157,11 +194,15 @@ export class ReserveController {
   tab(i: number): boolean {
     if (i === 3) {
       this.host.screenName = 'reserve';
+      this.pages.close();
+      this.card = false;
       this.focus = 'box';
       this.say(null);
       return true;
     }
     if (i === 0 && this.owns()) {
+      this.pages.close();
+      this.card = false;
       this.host.screenName = 'hq';
       this.say(null);
       return true;
@@ -179,6 +220,7 @@ export class ReserveController {
     }
     // Q (hold: the command wheel) and End (quit to title) belong to the whole scene, never to these screens.
     if (!this.owns() || code.startsWith('Digit') || code === 'KeyQ' || code === 'End') return false;
+    if (this.host.screenName === 'reserve' && this.pages.raw(code)) return this.host.refresh(), true;
     const b = this.block();
     if (!b) return true;
     if (this.host.screenName === 'pyramid') {
@@ -206,7 +248,7 @@ export class ReserveController {
       case 'BracketRight': this.turn(1); break;
       case 'KeyH': if (m.who.id !== 'boss') this.go({ t: 'hunt', member: m.who.id, mode: m.who.hunt === 'Hunts for themselves' ? 'reserve' : 'self' }); break;
       case 'KeyX': if (m.pick) this.go({ t: 'free', uid: m.pick.uid }); break;
-      case 'Tab': if (m.who.id !== 'boss' && m.who.slots.length) { this.focus = this.focus === 'box' ? 'team' : 'box'; this.slotAt = 0; } break;
+      case 'Tab': if (this.card && m.who.id !== 'boss' && m.who.slots.length) { this.focus = this.focus === 'box' ? 'team' : 'box'; this.slotAt = 0; } break;
       default: break;
     }
     this.host.refresh();
@@ -218,8 +260,15 @@ export class ReserveController {
     if (!this.owns()) return false;
     const b = this.block();
     if (!b) return false;
+    if (this.host.screenName === 'reserve' && this.pages.key(a)) return true;
+    if (this.host.screenName === 'reserve' && this.shown && (a === 'confirm' || a === 'back')) {
+      this.shown = null;
+      this.say(null);
+      return true;
+    }
     if (a === 'back') {
       if (this.focus === 'team') this.focus = 'box';
+      else if (this.card) this.card = false;
       else this.host.screenName = this.host.screenName === 'pyramid' ? 'crew' : 'hq';
       this.say(null);
       return true;
@@ -241,13 +290,19 @@ export class ReserveController {
       else if (a === 'confirm') this.takeBack(this.slotAt);
       return true;
     }
-    if (a === 'confirm') this.give();
+    if (this.card) {
+      // The Card: Enter gives; left/right change who it goes to (the Change crew button).
+      if (a === 'confirm') this.give();
+      else if (a === 'left' || a === 'right') this.flipWho(a === 'left' ? -1 : 1), (this.card = true);
+      return true;
+    }
+    if (a === 'confirm') { if (this.model().pick) this.card = true; }
     else this.moveTile(a);
     return true;
   }
 
   /** Test hooks. */
-  state(): { who: string; at: number; page: number; perPage: number } {
-    return { who: this.whoId(), at: this.at, page: this.page, perPage: RESERVE_PAGE };
+  state(): { who: string; at: number; page: number; perPage: number; card: boolean; pages: ReturnType<PokemonPages['state']> } {
+    return { who: this.whoId(), at: this.at, page: this.page, perPage: RESERVE_PAGE, card: this.card, pages: this.pages.state() };
   }
 }
