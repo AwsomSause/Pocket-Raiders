@@ -22,6 +22,7 @@ import { refreshMusicVolume, stopMusic } from '../../ui/audio';
 import { TUT, type TutMode } from '../../core/dominion/tutorial';
 import { TutorialController } from './tutorialController';
 import { r5BossMenu } from '../../ui/redux/screens/dominion/r50/hub';
+import { r5Lessons, r5Motion, r5Style, r5Xray, XRAY } from '../../ui/redux/screens/dominion/r50/guide';
 import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 import { PREVIEW, r5Ambience, r5Calm, r5Colours, r5Controls, r5Feel, r5Options, r5ReadAloud, r5Save, r5SetHome, r5SetPage, r5Skins, r5Vault, CONTROLS, FRAMES, SAVE_ROWS, type R5Cat, type R5Ctl, type R5Row, type R5Tile } from '../../ui/redux/screens/dominion/r50/settings';
 import { WHEEL_KEY } from '../../ui/redux/screens/dominion/views';
@@ -40,29 +41,25 @@ interface Host {
   replay(lesson: string): void;
   /** Redesign R0: the pass-50 chrome's live data (party, funds, heat) for the phone page. */
   r5run(): R5Run | null;
-  /** Redesign R9: the HQ hub's page (Read aloud draws over it), the member on duty and their line, the crew's faces and
-   *  the Boss's name for Save and quit. */
-  r9hub?(): string;
-  r9says?(): { name: string; line: string; colour: string };
-  r9crew?(): string[];
-  r9boss?(): string;
-  /** Read aloud: reads the text box on screen now (R on the Read aloud page). */
-  r9read?(): void;
+  /** Redesign R1: the chrome's data before a run has a Dominion block (the title). */
+  r5pre(): R5Run;
+  /** Redesign R1: the HQ hub's page, for Rotom's X-ray over it (null before the run opens). */
+  hubHtml(): string | null;
 }
 
-/** A Settings category: its page id in the mockups and its rail icon. */
-interface Cat extends R5Cat { pid: string }
+/** The Guide's own pages (redesign R1, pass 50): Rotom's X-ray, the Style sheet and the Motion sheet. */
+type GuidePage = 'xray' | 'style' | 'motion';
 
-export const SETTINGS_CATS: readonly Cat[] = [
-  { id: 'dominion', name: 'Dominion', icon: 'g-dark-gem', pid: 'setdom' },
-  { id: 'rotom', name: 'Rotom', icon: 'g-xtransceiver', pid: 'rotom' },
-  { id: 'fx', name: 'Effects', icon: 'g-scope-lens', pid: 'seteff' },
-  { id: 'audio', name: 'Sound', icon: 'g-mic', pid: 'setsnd' },
-  { id: 'access', name: 'Access', icon: 'g-town-map', pid: 'access' },
-  { id: 'screen', name: 'Screen', icon: '', pid: 'hud' },
-  { id: 'display', name: 'Display', icon: '', pid: 'setdisplay' },
-  { id: 'battle', name: 'Battle', icon: '', pid: 'setbattle' },
-  { id: 'runs', name: 'Runs', icon: '', pid: 'setruns' },
+export const SETTINGS_CATS: SettingsCat[] = [
+  { id: 'dominion', label: 'Dominion', icon: 'g-relic-crown' },
+  { id: 'fx', label: 'Effects & motion', icon: 'g-star-piece' },
+  { id: 'display', label: 'Display', icon: 'g-scope-lens' },
+  { id: 'audio', label: 'Audio', icon: 'g-tea' },
+  { id: 'rotom', label: 'Rotom', icon: 'p-rotom' },
+  { id: 'battle', label: 'Battle', icon: 'g-choice-band' },
+  { id: 'runs', label: 'Runs', icon: 'g-town-map' },
+  { id: 'access', label: 'Accessibility', icon: 'g-soothe-bell' },
+  { id: 'saves', label: 'Saves', icon: 'g-storage-key' },
   // D28 (m5: the board "doubles as an in-game help page under Boss Menu, then Settings, then Controls").
   { id: 'controls', name: 'Controls', icon: '', pid: 'setcontrols' },
 ];
@@ -129,7 +126,11 @@ const RUN_OPTS = {
 
 export class BossMenuController {
   /** Open over the page Esc was pressed on (the scene's own screen is left as it was). */
-  private mode: 'menu' | 'settings' | 'replay' | Sub | null = null;
+  private mode: 'menu' | 'settings' | 'replay' | GuidePage | null = null;
+  /** Where Esc goes from the Lesson Book or Settings: the Boss Menu, or nothing (opened from the title). */
+  private home: 'menu' | null = 'menu';
+  /** Rotom's X-ray: which set of labels. */
+  private xPart = 0;
   /** The Replay a lesson page's row (tutorial e9). */
   private rAt = 0;
   private at = 0;
@@ -147,21 +148,14 @@ export class BossMenuController {
   owns(): boolean {
     return this.mode !== null;
   }
-  /** What the board and the wheel call the page: the menu, Settings (every Settings page) or a lesson replay. */
-  get page(): 'menu' | 'settings' | 'replay' | null {
-    const m = this.mode;
-    return m === null || m === 'menu' || m === 'replay' ? m : 'settings';
-  }
-  /** Redesign R9: the page shown, by the mockups' id (tests and the read-aloud page). */
-  get r9(): string | null {
-    const m = this.mode;
-    if (m === 'settings') return SETTINGS_CATS[this.cat]!.pid;
-    return m === 'menu' || m === 'replay' ? null : m;
+  get page(): 'menu' | 'settings' | 'replay' | GuidePage | null {
+    return this.mode;
   }
 
   /** Esc at the top of a run page: the Boss Menu opens over it. */
   open(): void {
     this.mode = 'menu';
+    this.home = 'menu';
     this.at = 0;
     this.notice = null;
   }
@@ -170,7 +164,13 @@ export class BossMenuController {
     this.mode = null;
   }
 
-  /** A Settings category (D27's entry point; the Rotom blade opens Rotom's). */
+  /** The title's Settings and Tutorial rows: Esc goes back to the title. */
+  openFromTitle(page: 'settings' | 'replay'): void {
+    if (page === 'settings') this.openSettings(0);
+    else { this.mode = 'replay'; this.rAt = 0; }
+    this.home = null;
+  }
+
   openSettings(cat = 0): void {
     this.mode = 'settings';
     this.cat = cat;
@@ -631,8 +631,17 @@ export class BossMenuController {
 
   render(): string {
     const s = this.mode;
-    if (s === 'replay') return TutorialController.replayPage(this.rAt, this.tutNow(), dominionBlock(services().session.run) ?? null);
+    if (s === 'settings') return settingsPageView(this.pageModel());
     const b = dominionBlock(services().session.run);
+    const pre = (): R5Run => this.host.r5run() ?? this.host.r5pre();
+    // Redesign R1 (pass 50): the Lesson Book and the Guide's pages.
+    if (s === 'replay') {
+      const done = TutorialController.doneRows(b ?? null);
+      return r5Lessons({ lessons: TUT.lessons.map((l, i) => ({ id: l.id, name: l.name, seen: !!done[i] })), at: this.rAt, mode: this.tutNow(), modes: TUT.replay.modes, xray: !!b?.opened }, pre());
+    }
+    if (s === 'xray') { const hub = this.host.hubHtml(); return hub ? r5Xray(hub, this.xPart, pre()) : ''; }
+    if (s === 'style') return r5Style(pre());
+    if (s === 'motion') return r5Motion(pre());
     if (!b) return '';
     const run = this.host.r5run();
     if (!run) return '';
@@ -716,21 +725,16 @@ export class BossMenuController {
     const r = (i: string): Row | undefined => this.rows()[Number(i)];
     return {
       menuBlade: (i) => { this.pickBlade(Number(i)); done(); },
-      setCat: (i) => { this.setCat(Number(i)); done(); },
-      setAt: (i) => { this.row = Number(i); done(); },
-      setRow: (i) => { this.row = Number(i); const x = r(i); (x?.press ?? (() => x?.change?.(1)))(); done(); },
-      setLeft: (i) => { this.row = Number(i); r(i)?.change?.(-1); done(); },
-      setRight: (i) => { this.row = Number(i); r(i)?.change?.(1); done(); },
-      setPick: (ij) => { const [i, j] = ij.split(':').map(Number); this.row = i!; this.rows()[i!]?.pick?.(j!); done(); },
-      setNoticeOff: () => { this.setNotice = null; done(); },
-      setTile: (i) => { this.tile = Number(i); this.go(TILES[this.tile]!.to); done(); },
-      r9go: (id) => { this.go(id); done(); },
-      saveRow: (i) => { this.tile = Number(i); this.saveRow(this.tile); done(); },
-      calmFlip: () => { this.flipCalm(); done(); },
-      feelCursor: (id) => { if (id === 'arrow' || id === 'ball' || id === 'badge') this.setLook({ cursor: id }); done(); },
-      skinPick: (id) => { if (id === 'kanto' || id === 'johto') this.setLook({ skin: id }); done(); },
-      vaultCard: (i) => { if (this.tile === Number(i)) this.openVault(this.tile); else this.tile = Number(i); done(); },
-      readAgain: () => { this.host.r9read?.(); },
+      setCat: (i) => { this.setCat(Number(i)); this.focus = 'rows'; done(); },
+      setAt: (i) => { this.focus = 'rows'; this.row = Number(i); done(); },
+      setRow: (i) => { this.focus = 'rows'; this.row = Number(i); const r = this.catRows()[this.row]; (r?.press ?? (() => r?.change?.(1)))(); done(); },
+      setLeft: (i) => { this.row = Number(i); this.catRows()[this.row]?.change?.(-1); done(); },
+      setRight: (i) => { this.row = Number(i); this.catRows()[this.row]?.change?.(1); done(); },
+      setPick: (ij) => { const [i, j] = ij.split(':').map(Number); this.focus = 'rows'; this.row = i!; this.catRows()[i!]?.pick?.(j!); done(); },
+      guideBack: () => { this.guideBack(); done(); },
+      guideXray: () => { if (this.mode === 'xray') this.xPart = (this.xPart + 1) % XRAY.length; else this.guide('xray'); done(); },
+      guideStyle: () => { this.guide('style'); done(); },
+      guideMotion: () => { this.guide('motion'); done(); },
       tutReplay: (i) => { if (this.rAt === Number(i)) this.playLesson(); else this.rAt = Number(i); done(); },
       tutMode: (id) => { if (id === 'full' || id === 'tips' || id === 'off') this.setTut(id); done(); },
       fxLevel: (lv) => { if (lv === 'full' || lv === 'lighter' || lv === 'calm') this.setFx(presetFx(lv)); done(); },
@@ -745,6 +749,19 @@ export class BossMenuController {
       saveOver: at((i) => { this.tile = i; }),
       vaultOver: at((i) => { this.tile = i; }),
     };
+  }
+
+  /** Opens a Guide page from the Lesson Book (the X-ray only once the run's HQ is open). */
+  private guide(p: GuidePage): void {
+    if (p === 'xray') {
+      if (!this.host.hubHtml()) return;
+      this.xPart = 0;
+    }
+    this.mode = p;
+  }
+  private guideBack(): void {
+    if (this.mode === 'xray' || this.mode === 'style' || this.mode === 'motion') this.mode = 'replay';
+    else if (this.mode === 'replay') this.mode = this.home;
   }
 
   private playLesson(): void {
@@ -763,6 +780,11 @@ export class BossMenuController {
       // The other tab keys and letters do nothing here (Q is the wheel's).
       return code.startsWith('Digit') || (code.startsWith('Key') && !['KeyW', 'KeyA', 'KeyD', 'KeyZ', 'KeyX'].includes(code));
     }
+    if (s === 'replay') {
+      const g: Record<string, GuidePage> = { KeyI: 'xray', KeyK: 'style', KeyM: 'motion' };
+      if (code in g) { this.guide(g[code]!); this.host.refresh(); return true; }
+    }
+    if (s === 'xray' || s === 'style' || s === 'motion') return code.startsWith('Digit') || code.startsWith('Key');
     if (s === 'replay') return code.startsWith('Digit') || (code.startsWith('Key') && !['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyZ', 'KeyX'].includes(code));
     if (s === null) return false;
     if (s === 'settings') {
@@ -786,27 +808,26 @@ export class BossMenuController {
       return true;
     }
     if (s === 'replay') {
-      const n = TUT.lessons.length, modes = TUT.replay.modes.map(([id]) => id as TutMode);
-      if (a === 'up' || a === 'down') this.rAt = (this.rAt + (a === 'up' ? -1 : 1) + n) % n;
-      else if (a === 'left' || a === 'right') {
-        const i = modes.indexOf(this.tutNow()), j = Math.max(0, Math.min(modes.length - 1, i + (a === 'left' ? -1 : 1)));
-        if (j !== i) this.setTut(modes[j]!);
-      } else if (a === 'confirm') this.playLesson();
-      else if (a === 'back') this.go('set');
+      // The Lesson Book (pass 50): five lessons a row; arrows walk the grid.
+      const n = TUT.lessons.length;
+      if (a === 'left' || a === 'right') this.rAt = (this.rAt + (a === 'left' ? -1 : 1) + n) % n;
+      else if (a === 'up' || a === 'down') { const j = this.rAt + (a === 'up' ? -5 : 5); if (j >= 0 && j < n) this.rAt = j; }
+      else if (a === 'confirm') this.playLesson();
+      else if (a === 'back') this.mode = this.home;
       return true;
     }
-    if (a === 'back') { this.back(); return true; }
-    if (s === 'home') {
-      const cols = 4, n = TILES.length;
-      if (a === 'left' || a === 'right') this.tile = (this.tile + (a === 'left' ? -1 : 1) + n) % n;
-      else if (a === 'up' || a === 'down') this.tile = (this.tile + cols) % n;
-      else if (a === 'confirm') this.go(TILES[this.tile]!.to);
+    if (s === 'xray' || s === 'style' || s === 'motion') {
+      if (a === 'confirm' && s === 'xray') this.xPart = (this.xPart + 1) % XRAY.length;
+      else if (a === 'confirm' && s === 'style') this.mode = 'motion';
+      else if (a === 'back') this.guideBack();
       return true;
     }
-    if (s === 'save' || s === 'controls') {
-      const n = s === 'save' ? SAVE_ROWS.length : CONTROLS.length;
-      if (a === 'up' || a === 'down') this.tile = (this.tile + (a === 'up' ? -1 : 1) + n) % n;
-      else if (a === 'confirm') { if (s === 'save') this.saveRow(this.tile); else this.go('setcontrols'); }
+    if (s !== 'settings') return false;
+    this.setNotice = null;
+    if (this.focus === 'cats') {
+      if (a === 'up' || a === 'down') this.setCat(this.cat + (a === 'up' ? -1 : 1));
+      else if (a === 'right' || a === 'confirm') { this.focus = 'rows'; this.row = 0; }
+      else if (a === 'back') this.mode = this.home;
       return true;
     }
     if (s === 'vault') {

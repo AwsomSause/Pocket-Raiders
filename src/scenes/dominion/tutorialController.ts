@@ -14,8 +14,10 @@ import { lessonDue, pageDue, seen, TUT, tutMode, weekOne, type Due, type TutMode
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { pngSrc } from '../../ui/redux/screens/dominion/teamPic';
+import { r5Help } from '../../ui/redux/screens/dominion/r50/guide';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 import {
-  billsView, coldRewardView, coldView, doneOverlay, fill, foundedRewardView, gangView, giftView, helpView, kitView, lessonOverlay,
+  billsView, coldRewardView, coldView, doneOverlay, fill, foundedRewardView, gangView, giftView, kitView, lessonOverlay,
   lessonSteps, nightView, replayOverlay, replayView, rivalView, setupTip, stepView, titleTip, weekView,
 } from '../../ui/redux/screens/dominion/tutorial';
 
@@ -48,6 +50,8 @@ export interface TutHost {
   setupState(): { page: string; types: number; problem: boolean } | null;
   /** The title, a profile that has never finished or started a Dominion (A1). */
   firstTitle(): boolean;
+  /** Redesign R1: the pass-50 chrome's data before the run has a Dominion block. */
+  r5pre(): R5Run;
 }
 
 /** Lessons that never hold the page: the tip shows and the next key goes through. */
@@ -149,7 +153,8 @@ export class TutorialController {
   // ---------- drawing ----------
 
   renderPage(): string {
-    if (this.pre === 'help') return helpView(this.helpAt);
+    // Redesign R1 (pass 50, mockup `tut`): How much help?
+    if (this.pre === 'help') return r5Help(TUT.help.options.map((o) => ({ id: o.id, label: o.label, line: o.line, tag: o.tag })), this.helpAt, this.host.r5pre());
     if (this.pre === 'cold') return coldView(this.beat);
     if (this.pre === 'reward') return coldRewardView();
     const b = this.block();

@@ -6,13 +6,13 @@
     "rotom": "Rotom: “New in the business? Don't worry. Everyone starts with a leaky roof.”",
     "phone": "BZZT!|BOSS-PHONE|ONLINE",
     "options": [
-      { "id": "full", "label": "Show me the ropes", "tag": "RECOMMENDED", "line": "Fifteen short lessons across your first week. Rotom points, you press.", "stripe": "#ff8a3d" },
-      { "id": "tips", "label": "Just give me tips", "line": "One line the first time each screen opens. Nothing blocks you.", "stripe": "#a678ff" },
-      { "id": "off", "label": "I know what I'm doing", "line": "No help. You can turn tips on later in Settings.", "stripe": "#5a6488" }
+      { "id": "full", "label": "Full walkthrough", "tag": "Best for new bosses", "line": "15 short lessons across the first week", "stripe": "#ff8a3d" },
+      { "id": "tips", "label": "Tips only", "line": "One line the first time you open a page", "stripe": "#a678ff" },
+      { "id": "off", "label": "No help", "line": "You know how this works", "stripe": "#5a6488" }
     ],
     "foot": "Change it any time: Boss Menu › Settings › Dominion › Tutorial. Replay any lesson from the Boss Menu.",
     "firstTime": "FIRST TIME",
-    "titleTip": "First Dominion? I'll walk you through it. Press <b>Enter</b> on New run."
+    "titleTip": "First Dominion? I'll walk you through it. Press <b>Enter</b> on New Dominion."
   },
   "cold": {
     "skip": "skip the opening",

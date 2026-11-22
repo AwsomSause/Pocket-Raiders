@@ -9,45 +9,65 @@
 #rx #r5 .keys .q4{display:inline-block;padding:0 6px;border-radius:4px;font:800 12px/18px var(--fb);color:#1d1622;background:#fff8ea;cursor:pointer}
 /* Settings > Effects & motion: Calm stops every move on a redesigned page, like the game's Calm mode. */
 #rx .domfx.fx-calm #r5 *,#rx .domfx.fx-calm #r5 *::before,#rx .domfx.fx-calm #r5 *::after{animation:none!important;transition:none!important}
-/* ---------- Redesign R9: the look settings (Settings · Screen, Access, Options, Region skin, Ambience, Button feel) ---------- */
-/* Screen · Status: separate chips, or no capsule at all. */
-#rx #r5[data-status=chips] .cap23{gap:6px;background:none!important;border:0!important;box-shadow:none!important}
-#rx #r5[data-status=chips] .cap23>u{padding:3px 8px;background:#17131d;border:2px solid #000;border-radius:999px;box-shadow:2px 2px 0 var(--red)}
-#rx #r5[data-status=hidden] .cap23{display:none}
-/* Screen · Key hints: the keys without their words, or only the Start and Rotom chips. */
-#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27){font-size:0;gap:2px}
-#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27) kbd{font-size:12px}
-#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27) .pad20{font-size:10px}
-#rx #r5[data-keys=off] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27){display:none}
-/* Colour assist · Shapes: every warning colour also has a shape (danger ▲, good ●, yours ★, hero/police ■). */
-#rx #r5[data-colour=shapes] .heat b::before{content:'▲';margin-right:3px;font-size:.8em}
-#rx #r5[data-colour=shapes] [data-m=funds] b::before{content:'●';margin-right:3px;font-size:.8em}
-#rx #r5[data-colour=shapes] .war30>b:first-of-type::before{content:'★ '}
-#rx #r5[data-colour=shapes] .war30>b.r::before{content:'▲ '}
-#rx #r5[data-colour=shapes] .rp42::after{content:'■';position:absolute;right:-8px;top:-6px;font-size:9px;color:#5ad1ff}
-#rx #r5[data-colour=shapes] .tag::before{content:'◆ '}
-/* Colour assist · High contrast: solid dark panels and brighter small text. */
-#rx #r5[data-colour=contrast]{--mut:#ece6f4;--line:#fff8ea}
-#rx #r5[data-colour=contrast] .pn{background-color:#09070c!important;backdrop-filter:none!important}
-#rx #r5[data-colour=contrast] .foot p,#rx #r5[data-colour=contrast] .sd25{background:#fff!important;color:#000!important}
-/* Button feel · Cursor: an arrow or a Poké Ball instead of the N badge on what you picked. */
-#rx #r5[data-cursor=arrow] :is(.row,.wm,.ch,.srow).on::before{content:'▶';background:none!important;color:var(--yel)!important;box-shadow:none!important;border:0!important;font-size:18px}
-#rx #r5[data-cursor=arrow] .cta.on::before{content:'▶';background:none!important;color:var(--red)!important;box-shadow:none!important;border:0!important}
-#rx #r5[data-cursor=ball] :is(.row,.wm,.ch,.srow,.cta).on::before{content:'';background:linear-gradient(var(--red) 0 42%,#000 42% 58%,#fff 58%)!important;border:2px solid #000!important;border-radius:50%!important;box-shadow:none!important}
-/* Button feel · Press bounce off: buttons stay still under the pointer. */
-#rx #r5[data-press=off] :is(.cta,.row,.cell,.srow,.lb,.c49,.tb49,.sh-t,.si25,.ap13){transition:none!important;translate:none!important;scale:none!important}
-/* Options · Frame: the colour on every window's frame. */
-#rx #r5[data-frame=gold]{--fc:#e8b23a}
-#rx #r5[data-frame=night]{--fc:#2860c9}
-#rx #r5[data-frame=jade]{--fc:#16938a}
-#rx #r5[data-frame=plum]{--fc:#8e2bd1}
-#rx #r5[data-frame=ash]{--fc:#8a8296}
-#rx #r5:not([data-frame=nova]) .pn{box-shadow:5px 5px 0 var(--fc)!important;border-color:var(--fc)!important}
-#rx #r5:not([data-frame=nova]) .foot p{border-color:var(--fc)!important}
-/* Region skin: no skyline, no panel glints. Ambience off: no walkers, lanterns, fireworks or rain; no lightning. */
-#rx #r5[data-amb~=nosky] .sky37{display:none!important}
-#rx #r5[data-amb~=noglint] .pn::after{display:none!important}
-#rx #r5[data-amb~=off] :is(.lan34,.fw34,.stroll28,.rn39,.lt39,.tod15 .w3){display:none!important}
-#rx #r5[data-amb~=nolight] .lt39{display:none!important}
-/* Read aloud: the word being read. */
-#rx #r5 .ra9 .now{background:var(--yel);color:#1d1622;border-radius:3px}
+
+/* ---------- Redesign R1: the Start and Guide pages (the bits the mockups' static pages didn't need) ---------- */
+/* A list longer than its panel scrolls under the title tab; the stage keeps the cursor's row in view (data-scrollrow). */
+#rx #r5 .r5sc{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;overflow-y:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 6px}
+#rx #r5 .r5sc::-webkit-scrollbar{display:none}
+#rx #r5 .r5sc>.row{flex:none;height:62px}
+#rx #r5 .row[data-off]{opacity:.55;filter:grayscale(.7)}
+#rx #r5 .wm50.on{outline:3px solid #fff;outline-offset:3px;background:linear-gradient(90deg,rgba(232,178,58,.35),rgba(13,10,18,.9) 70%)}
+#rx #r5 .wm50.on b{color:var(--yel)}
+#rx #r5 .r5bad{margin:0;padding:4px 8px;border-radius:6px;font-size:14px;font-weight:800;color:#fff;background:rgba(193,18,31,.75)}
+#rx #r5 .mr48.r5lock{color:var(--yel);font-weight:800}
+#rx #r5 .r5off .cs48{filter:saturate(.35) brightness(.75)}
+#rx #r5 .r5blk{display:block}
+#rx #r5 .r5nar p{font-style:italic}
+#rx #r5 .r5n{position:absolute;right:8px;bottom:6px;font:800 11px/16px var(--fb);padding:0 5px;border-radius:4px;color:#1d1622;background:#fff8ea}
+#rx #r5 .r5ft{margin:auto 0 0;font-size:12px;color:var(--mut)}
+#rx #r5 .r5m3{display:flex;gap:8px;margin-top:6px}
+#rx #r5 .r5m3 span{padding:8px 0 6px;gap:2px}
+#rx #r5 .r5m3 em{font-style:normal;font-size:11px;font-weight:800;color:var(--mut)}
+/* The Founding: the team's emblem (views.emblem draws it with inline colours), the armband, fields and swatches. */
+#rx #r5 .emb{display:grid;place-items:center;flex:none;font-family:var(--fd);font-style:normal;line-height:1}
+#rx #r5 .r5door{display:flex;align-items:center;justify-content:center;gap:18px;height:96px}
+#rx #r5 .r5door .emb{animation:r5-breathe 3s var(--now,0ms) ease-in-out infinite}
+#rx #r5 .r5band{display:grid;place-items:center;line-height:0}
+#rx #r5 .r5gb{display:grid;place-items:center;width:64px;height:30px;font:400 20px/1 var(--fd);font-style:normal;color:#fff;background:var(--c);border:3px solid #000;border-radius:6px}
+#rx #r5 .r5fld{display:inline-flex;align-items:baseline;gap:6px;padding:0 6px;border-radius:4px;background:rgba(255,255,255,.06)}
+#rx #r5 .r5fld.on{outline:2px solid var(--yel)}
+#rx #r5 .r5fld small{font-size:10px;color:var(--mut)}
+#rx #r5 .r5car{color:var(--yel);animation:r5-blink 1s steps(2) infinite}
+#rx #r5 .r5dot{display:inline-block;width:12px;height:12px;margin-right:4px;border-radius:50%;background:var(--c);border:2px solid #000;vertical-align:-1px}
+#rx #r5 .r5sw{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:3px 6px;border-radius:6px}
+#rx #r5 .r5sw.on{background:rgba(232,178,58,.18);outline:2px solid var(--yel)}
+#rx #r5 .r5sw b{width:64px;font-size:12px;text-transform:uppercase;color:var(--mut)}
+#rx #r5 .r5sw>i{width:18px;height:18px;border-radius:4px;background:var(--c);border:2px solid #000;cursor:pointer}
+#rx #r5 .r5sw>i.on{outline:3px solid #fff;outline-offset:1px}
+#rx #r5 .r5sw>i.off{opacity:.25}
+#rx #r5 .r5let{font:400 20px/1 var(--fd);color:var(--yel)}
+#rx #r5 .r5lg{cursor:pointer;opacity:.55}
+#rx #r5 .r5lg.on{opacity:1;filter:drop-shadow(0 0 6px var(--yel))}
+#rx #r5 .r5fd p{margin:0}
+#rx #r5 .r5fd .y{color:var(--yel)}
+#rx #r5 .r5emb{position:absolute;left:300px;top:150px}
+/* The Lesson Book's Tutorial setting (Full, Tips only, Off), under Rotom. */
+#rx #r5 .r5seg{position:absolute;right:16px;top:224px;z-index:4;display:flex;flex-direction:column;gap:3px;width:150px;font:800 11px/1.2 var(--fb)}
+#rx #r5 .k-book21 .rbk21{top:76px}
+#rx #r5 .r5seg b{color:var(--yel);text-transform:uppercase;letter-spacing:.08em}
+#rx #r5 .r5seg span{padding:2px 8px;border-radius:6px;background:rgba(13,10,18,.85);border:2px solid #000;cursor:pointer;color:var(--mut)}
+#rx #r5 .r5seg span.on{color:#1d1622;background:var(--yel)}
+/* How pages connect: the row under the cursor, and pages that come to you. */
+#rx #r5 .fl50{cursor:pointer}
+#rx #r5 .fl50.on{outline:3px solid #fff;outline-offset:1px;filter:brightness(1.2)}
+#rx #r5 .fl50.off{opacity:.6}
+/* Atlas sprites (the game's mini/tall/face pictures) keep their frame inside the pass-50 pages. */
+#rx #r5 .an{position:relative;display:block;flex:none}
+#rx #r5 .an b{position:absolute;display:block;image-rendering:pixelated;background-repeat:no-repeat}
+#rx #r5 .an.sil b{filter:brightness(0)}
+#rx #r5 .an.flip{transform:scaleX(-1)}
+#rx #r5 .trait.r5tr{display:block;width:100%;text-align:left;cursor:pointer;border:0;border-left:4px solid var(--mut);font:inherit;color:inherit}
+#rx #r5 .trait.r5tr b{color:#cfd3e4}
+#rx #r5 .trait.r5tr:hover{border-left-color:var(--yel)}
+#rx #r5 .r5seg b+span{margin-top:0}
+#rx #r5 .r5seg span kbd{font:800 10px/1 var(--fb);padding:1px 4px;border-radius:3px;background:#efe6d4;color:#1d1622}
