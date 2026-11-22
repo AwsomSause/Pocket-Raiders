@@ -15,9 +15,17 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { setLogKeyTaken } from '../ui/overlays';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, type ReduxView } from '../ui/redux/stage';
-import { openingView, setupView, titleView, type SetupFiles } from '../ui/redux/screens/dominion/views';
+import { emblem, type SetupFiles } from '../ui/redux/screens/dominion/views';
+import { foundingModel, r5Cold, r5Founding, r5Setup, r5Sign, r5Title, type R5Actor, type R5SetupModel, type R5TitleRow } from '../ui/redux/screens/dominion/r50/start';
+import { r5PreRun } from '../ui/redux/screens/dominion/r50/run';
+import type { R5Run } from '../ui/redux/screens/dominion/r50/kit';
+import { districtDef } from '../core/dominion/field';
+import { hqName } from '../core/dominion/hq';
+import { mini, tall } from '../ui/redux/kit';
+import { monFile } from '../ui/redux/game';
+import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
-import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
+import { bossPic, facePic, r5Hub, r5Party, r5Run, R5StartMenu } from './dominion/r50Bridge';
 import { CrewController } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
@@ -51,7 +59,7 @@ import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
 import { meetModel } from '../core/dominion/town';
 import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
-import { FOUNDING_ROWS, foundedView, foundingView, type FoundingUi } from '../ui/redux/screens/dominion/founding';
+import { FOUNDING_ROWS, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, interruptView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController';
@@ -184,7 +192,7 @@ export class DominionScene extends Phaser.Scene {
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
-    this.titleAt = dominionBlock(run) ? 1 : 0;
+    this.titleAt = 0;
     const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
     this.manifest = manifest;
     this.garage = false;
@@ -243,6 +251,7 @@ export class DominionScene extends Phaser.Scene {
         type: (i) => { this.setup = toggleType({ ...this.setup, at: Number(i) }); this.view?.refresh(); },
         member: (i) => { this.setup = { ...this.setup, member: i === '0' ? 'grunt' : 'admin', problem: null }; this.view?.refresh(); },
         next: () => this.next(),
+        setupBack: () => this.back(),
         more: () => this.confirm(),
         order: (i) => { this.at = Number(i); this.confirm(); },
         tab: (i) => this.tab(Number(i)),
@@ -313,6 +322,7 @@ export class DominionScene extends Phaser.Scene {
       },
       overs: {
         typeOver: (i) => { this.setup = { ...this.setup, at: Number(i) }; this.view?.refresh(); },
+        titleOver: (i) => { if (this.titleAt !== Number(i)) { this.titleAt = Number(i); this.view?.refresh(); } },
         charterOver: (i) => { this.setup = { ...this.setup, cAt: Number(i) }; this.view?.refresh(); },
         orderOver: (i) => { this.at = Number(i); this.view?.refresh(); },
         ...this.crew.overs(),
@@ -539,6 +549,7 @@ export class DominionScene extends Phaser.Scene {
       hqNext: () => sc().next(),
       setupState: () => (sc().screen === 'setup' ? { page: sc().setup.page, types: sc().setup.types.length, problem: !!sc().setup.problem } : null),
       firstTitle: () => sc().screen === 'title' && !sc().block() && !sc().files?.charters.open,
+      r5pre: () => sc().r5pre(),
     };
   }
 
@@ -553,7 +564,137 @@ export class DominionScene extends Phaser.Scene {
       bossFile: () => sc.files?.boss.file ?? null,
       replay: (lesson: string) => sc.tut.replay(lesson),
       r5run: () => { const b = sc.block(); return b ? r5Run(sc, b) : null; },
+      r5pre: () => sc.r5pre(),
+      hubHtml: () => { const b = sc.block(); return b?.opened ? sc.hubHtml(b) : null; },
     };
+  }
+
+  /** Redesign R1: the chrome's data before the run has a Dominion block (the title, the setup, the help choice). */
+  r5pre(): R5Run {
+    return r5PreRun(r5Party(this));
+  }
+
+  /** Redesign R1: the HQ hub's page, for Rotom's X-ray over it. */
+  hubHtml(b: DominionBlock): string {
+    const x = r5Hub(b, { look: this.memberLook().look, bossFile: this.files?.boss.file ?? null, notice: null, at: this.at, threat: threatRow(b), desk: deskOpen(b) ? deskWaiting(b) : null, paper: paperNote(b) });
+    return hubScr(hqModel(b), x, r5Run(this, b));
+  }
+
+  // ---------- Redesign R1 (pass 50): the Start pages ----------
+
+  /** The title's rows (mockup `title`): Continue when there is a run, New Dominion, the Lesson Book, Settings, leave. */
+  private titleRows(): R5TitleRow[] {
+    const b = this.block();
+    const open = !!this.files?.charters.open;
+    const rows: R5TitleRow[] = [];
+    if (b) rows.push({ id: 'continue', label: 'Continue', sub: '', on: true, testid: 'dom-title-1' });
+    rows.push({ id: 'new', label: 'New Dominion', sub: b ? 'End this run first' : open ? 'A run finished · Charters open' : 'One Grunt and a leaky warehouse', on: !b, testid: 'dom-title-0' });
+    rows.push({ id: 'lessons', label: 'Tutorial', sub: 'Rotom’s lessons · replay any', on: true, testid: 'dom-title-tut' });
+    rows.push({ id: 'settings', label: 'Settings', sub: '', on: true, testid: 'dom-title-set' });
+    rows.push({ id: 'leave', label: 'Back to Pocket Raiders', sub: '', on: true, testid: 'dom-title-leave' });
+    return rows;
+  }
+
+  private bossFace(sz: number): string {
+    const h = Math.round(sz * 2.5);
+    return `<span style="display:block;margin-left:${-Math.round(sz * 0.14)}px;margin-top:${-Math.round(sz * 0.08)}px">${bossPic(this.files?.boss.file ?? null, h)}</span>`;
+  }
+
+  /** A member's full picture at a height (a png look in the team's colours, or a trainer atlas). */
+  private memberTall(look: string, b: DominionBlock | null, h: number): string {
+    const tc = b ? teamColours(b) : null;
+    return look.endsWith('.png') ? `<img class="px" src="${pngSrc(look, tc)}" alt="" style="height:${h}px;width:auto">` : tallTeam(look, h, tc);
+  }
+
+  private titlePage(): string {
+    const b = this.block();
+    const run = b ? r5Run(this, b) : this.r5pre();
+    const party = (services().session.run?.party ?? []).slice(0, 6).map((m) => { const f = monFile(this, m.speciesId, 'icon', !!m.shiny); return f ? mini(f, 20) : ''; });
+    const lead = services().session.run?.party[0];
+    const leadFile = lead ? monFile(this, lead.speciesId, 'front', !!lead.shiny) : null;
+    const crew = [b ? this.memberTall(this.memberLook().look, b, 108) : '', bossPic(this.files?.boss.file ?? null, 200), leadFile ? mini(leadFile, 92) : ''].filter(Boolean);
+    return r5Title({
+      at: Math.min(this.titleAt, this.titleRows().length - 1),
+      rows: this.titleRows(),
+      cont: b ? { pic: this.bossFace(58), line: `${b.teamName ?? 'Unnamed Crew'} · Day ${b.day} · ${run.funds}`, party, goal: run.goalPct } : null,
+      initial: b?.team?.initial ?? b?.teamName?.[0]?.toUpperCase() ?? 'N',
+      goal: run.goalPct,
+      crew,
+    }, run);
+  }
+
+  private typeMons: Record<string, string> | null = null;
+  /** Four first-stage Kanto and Johto Pokémon of each type (the types rows' examples). Display only. */
+  private monsByType(): Record<string, string> {
+    if (this.typeMons) return this.typeMons;
+    const all = [...services().session.content.species.values()].filter((sp) => sp.dex <= 251 && sp.evolutionStage === 1 && !/-(?!f$|m$)/.test(sp.id)).sort((a, b) => a.dex - b.dex);
+    const out: Record<string, string> = {};
+    for (const t of typeGrid()) out[t] = all.filter((sp) => sp.types.some((x) => x.toLowerCase() === t)).slice(0, 4).map((sp) => sp.name).join(', ');
+    return (this.typeMons = out);
+  }
+
+  /** A Pokémon of the picked types (both if one has them), for the types page's detail. */
+  private typePic(types: readonly string[]): string {
+    const every = [...services().session.content.species.values()].filter((sp) => !/-(?!f$|m$)/.test(sp.id)).sort((a, b) => a.dex - b.dex);
+    const all = every.filter((sp) => sp.dex <= 251);
+    const has = (sp: (typeof all)[number], t: string): boolean => sp.types.some((x) => x.toLowerCase() === t);
+    // Both types if any Pokémon has them (Kanto/Johto first, then any region), else the first type.
+    const both = (x: (typeof all)[number]): boolean => types.length > 1 && types.every((t) => has(x, t));
+    const sp = all.find(both) ?? every.find(both) ?? all.find((x) => has(x, types[0] ?? 'poison'));
+    const f = sp ? monFile(this, sp.id, 'front') : null;
+    return f ? mini(f, 110) : '';
+  }
+
+  private setupPage(): string {
+    const f = this.files!, d = this.setup, D = DOMINION_DATA.start;
+    const grid = typeGrid();
+    const picked = d.types.length ? d.types : [grid[d.at] ?? 'poison'];
+    const look = D.members.admin.looks[d.look] ?? D.members.admin.looks[0]!;
+    const mem = d.member === 'grunt' ? D.members.grunt : D.members.admin;
+    const m: R5SetupModel = {
+      page: d.page,
+      problem: d.problem,
+      boss: { name: f.boss.name, pic: bossPic(f.boss.file, 190) },
+      starters: f.starters.map((x) => ({ name: x.name, level: x.level, pic: x.file ? mini(x.file, 64) : '' })),
+      funds: `₽${D.start.funds.toLocaleString('en-US')}`,
+      home: `${districtDef(DOMINION_DATA.field.hq)?.name ?? 'Pewter'} back streets`,
+      types: { rows: grid, banned: f.types.banned, at: d.at, picked: d.types, mons: d.page === 'types' ? this.monsByType() : {}, pic: d.page === 'types' ? this.typePic(picked) : '', hint: f.types.hint },
+      member: {
+        which: d.member, name: d.member === 'grunt' ? f.grunt.name : look.name, rank: look.cls,
+        pic: d.member === 'grunt' ? this.memberTall(D.members.grunt.look, null, 190) : tall(look.file, 190),
+        stats: Object.entries(mem.stats) as [string, number][], facts: d.member === 'grunt' ? f.grunt.facts : f.admin.facts, pitch: d.member === 'grunt' ? f.grunt.pitch : f.admin.pitch,
+        wage: mem.wage, lv: mem.monLevel, loyalty: mem.loyalty, look: d.look, looks: D.members.admin.looks.length,
+      },
+      charters: {
+        open: f.charters.open, lockLine: f.charters.lockLine, pickLine: f.charters.pickLine, at: d.cAt,
+        rows: f.charters.rows.map((c) => ({ id: c.id, team: c.team, initial: c.initial, colours: c.colours, question: c.question, patron: c.patron.name, motto: c.motto, from: c.from })),
+      },
+    };
+    return r5Setup(m, this.r5pre());
+  }
+
+  private openingPage(b: DominionBlock | null): string {
+    if (!b) return '';
+    const mb = b.members[0];
+    const look = this.memberLook().look;
+    const member: R5Actor = { name: mb?.name ?? 'Rook', role: mb?.rank === 'grunt' || !mb ? 'Your only Grunt' : 'Your first Admin', pic: this.memberTall(look, b, 250), face: facePic(look, b, 62), colour: '#3f7fd9' };
+    const boss: R5Actor = { name: this.files?.boss.name ?? 'Boss', role: 'The Boss', pic: `<span class="flip r5blk">${bossPic(this.files?.boss.file ?? null, 250)}</span>`, face: this.bossFace(62), colour: '#e0294a' };
+    return r5Cold(openingLines(b), this.shown, member, boss, r5Run(this, b));
+  }
+
+  private foundedPage(b: DominionBlock | null): string {
+    const c = b ? teamColours(b) : null;
+    const m = b?.members[0];
+    if (!b || !c || !m || !b.team) return '';
+    const lines = foundedLines(b);
+    const t = b.team;
+    const goal = DOMINION_DATA.founding.goals.find((g) => g.id === t.goal);
+    const changes = [
+      { up: true, b: 'Armbands', e: `${DOMINION_DATA.founding.colours.find((x) => x.id === t.primary)?.name ?? ''} and ${DOMINION_DATA.founding.colours.find((x) => x.id === t.secondary)?.name ?? ''}, with the ${t.initial}` },
+      { up: true, b: 'Crew', e: `${m.name} wears it first` },
+      { up: true, b: 'Goal', e: goal?.name ?? DOMINION_DATA.founding.noGoal.name },
+    ];
+    return r5Sign({ name: t.name, where: `Day ${b.day} · ${hqName(b)}`, changes, line: lines[Math.max(0, Math.min(this.foundedShown, lines.length) - 1)] ?? '', last: this.foundedShown >= lines.length, emblem: emblem(c, 70, 62, 42) }, r5Run(this, b));
   }
 
   /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. */
@@ -583,7 +724,7 @@ export class DominionScene extends Phaser.Scene {
   /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
   private render(): string {
     const fx = fxOf(services().session.settings);
-    const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
+    const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(this.block() ? r5Run(this, this.block()!) : null), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
     return `<div class="domfx ${fxClasses(fx)}">${page}${this.tut.overlay(this.screen)}</div>`;
   }
 
@@ -602,18 +743,17 @@ export class DominionScene extends Phaser.Scene {
     if (b && this.inRun() && (this.end.owns() || this.end.maybeOpen())) return this.end.render(this.notice);
     switch (this.screen) {
       case 'title':
-        return titleView({ at: this.titleAt, started: !!b, cont: b ? `${b.teamName ?? 'Unnamed Crew'} · Kanto · Day ${b.day}` : null, colours: b ? teamColours(b) : null });
-      case 'founding':
-        return this.founding ? foundingView(this.founding) : '';
-      case 'founded': {
-        const c = b ? teamColours(b) : null;
-        const m = b?.members[0];
-        return b && c && m ? foundedView(foundedLines(b), this.foundedShown, c, b.team!.name, { look: m.look, name: m.name }) : '';
+        return this.titlePage();
+      case 'founding': {
+        const f = this.founding;
+        return f && b ? r5Founding(foundingModel(f.d, f.row, f.typing, f.ideas, f.problem), r5Run(this, b)) : '';
       }
+      case 'founded':
+        return this.foundedPage(b ?? null);
       case 'setup':
-        return setupView(this.setup, this.files!);
+        return this.setupPage();
       case 'opening':
-        return openingView(b ? openingLines(b) : [], this.shown, this.memberLook());
+        return this.openingPage(b ?? null);
       case 'hq':
         if (b && this.chair.owns()) return this.chair.render(this.notice);
         if (b && this.crew.owns()) return this.crew.render(this.notice);
@@ -880,7 +1020,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.hq.key(a)) return void this.view?.refresh();
     if (a === 'back') return this.back();
     if (a === 'confirm') return this.confirm();
-    if (this.screen === 'title' && (a === 'up' || a === 'down')) this.titleAt = this.titleAt ? 0 : 1;
+    if (this.screen === 'title' && (a === 'up' || a === 'down')) { const n = this.titleRows().length; this.titleAt = (this.titleAt + (a === 'up' ? -1 : 1) + n) % n; }
     else if (this.screen === 'setup') this.setupMove(a);
     else if (this.screen === 'map' && this.meetPanel() && !this.notice && (a === 'up' || a === 'down')) {
       const n = this.meetPanel()!.choices.length;
@@ -901,7 +1041,8 @@ export class DominionScene extends Phaser.Scene {
       const n = DOMINION_DATA.charters.charters.length;
       if (a === 'up' || a === 'down') this.setup = { ...d, cAt: (d.cAt + (a === 'up' ? -1 : 1) + n) % n, problem: null };
     } else if (d.page === 'types') {
-      const n = typeGrid().length, dx = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -4 : 4;
+      // Redesign R1: the types are one list (mockup `setup`); every arrow walks it.
+      const n = typeGrid().length, dx = a === 'left' || a === 'up' ? -1 : 1;
       this.setup = { ...d, at: (d.at + dx + n) % n };
     } else if (d.page === 'member') {
       if (a === 'left' || a === 'right') this.setup = { ...d, member: d.member === 'grunt' ? 'admin' : 'grunt', problem: null };
@@ -915,8 +1056,12 @@ export class DominionScene extends Phaser.Scene {
   private confirm(): void {
     const b = this.block();
     if (this.screen === 'title') {
-      if (this.titleAt === 0 && !b) { if (!this.tut.begin()) this.screen = 'setup'; }
-      else if (this.titleAt === 1 && b) {
+      const id = this.titleRows()[this.titleAt]?.id;
+      if (id === 'leave') return this.leave();
+      if (id === 'lessons') this.menu.openFromTitle('replay');
+      else if (id === 'settings') this.menu.openFromTitle('settings');
+      else if (id === 'new' && !b) { if (!this.tut.begin()) this.screen = 'setup'; }
+      else if (id === 'continue' && b) {
         this.screen = !b.opened ? 'opening' : this.heroPending() ? 'interrupt' : 'hq';
         this.tk.maybeBroadcast(); // D14: a town taken while away is announced first
       }
@@ -1024,7 +1169,7 @@ export class DominionScene extends Phaser.Scene {
   private navHere(): PageId | null {
     const b = this.block();
     if (!b?.opened || !this.inRun()) return null;
-    if (this.menu.owns()) return this.menu.page === 'replay' ? 'menu' : this.menu.page!;
+    if (this.menu.owns()) { const mp = this.menu.page!; return mp === 'menu' || mp === 'settings' ? mp : 'menu'; }
     if (this.police.owns()) return 'police';
     if (this.end.owns()) return null;
     switch (this.screen) {

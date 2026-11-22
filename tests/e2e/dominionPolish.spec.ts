@@ -49,9 +49,9 @@ test('round 4: Nova livery on every screen, Q is free, arrows page the Crew File
   await start(page, 'ui=new');
   const s = await newDominion(page);
 
-  // The title card: the sigil sits in the centre (mockup s0).
-  await expect(s.locator('.sig4.c')).toHaveCount(1);
-  await expect(s.locator('.vl4')).toHaveCount(1);
+  // The title card wears the pass-50 redesign (R1: the crest and the Dominion logo, not the round-4 sigil).
+  await expect(s.getByTestId('r5-title')).toBeVisible();
+  await expect(s.locator('#r5 .cr50')).toHaveCount(1);
   await shot('s0-title');
   await s.getByTestId('dom-title-0').click();
   await s.getByTestId('dom-next').click();

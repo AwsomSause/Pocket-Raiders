@@ -58,3 +58,30 @@ export function r5RunOf(b: DominionBlock, party: readonly R5PartyMon[], o: { ope
     roster: `${b.members.length}/${b.rosterCap}`,
   };
 }
+
+/** Before a run has a Dominion block (the title, the setup, the help choice): the chrome shows how a new run starts
+ *  (the starting cash, Heat and Day 1) and the party the player brings. Display only. */
+export function r5PreRun(party: readonly R5PartyMon[]): R5Run {
+  const s = DOMINION_DATA.start.start;
+  const team = teamsHere()[0];
+  return {
+    funds: `₽${s.funds.toLocaleString('en-US')}`,
+    cleanPct: 100,
+    heat: s.heat,
+    day: 1,
+    orders: [0, DOMINION_DATA.start.clock.dayActions],
+    goalPct: 0,
+    regions: [false, false, false, false],
+    level: s.hqLevel,
+    xpPct: 0,
+    war: 50,
+    foe: team?.name ?? 'Rivals',
+    news: ['All quiet in Kanto'],
+    party,
+    startBadge: 0,
+    tabBadges: ['', '', '', '', '', ''],
+    wantWord: [],
+    side: 'Your crew',
+    initial: 'N',
+  };
+}

@@ -16,19 +16,23 @@ import { mini, tall } from '../../ui/redux/kit';
 import { pngSrc, tallTeam } from '../../ui/redux/screens/dominion/teamPic';
 import { START_ITEMS, type R5HubExtras } from '../../ui/redux/screens/dominion/r50/hub';
 import { R5_SIZES } from '../../ui/redux/screens/dominion/r50/sizes';
-import { r5RunOf } from '../../ui/redux/screens/dominion/r50/run';
+import { r5RunOf, type R5PartyMon } from '../../ui/redux/screens/dominion/r50/run';
 import { SP, type R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 
 /** Tabs open on the HQ (Operations is still shut). */
 export const R5_OPEN_TABS = [0, 1, 2, 3, 5] as const;
 
-export function r5Run(scene: Phaser.Scene, b: DominionBlock): R5Run {
+/** The key strip's party: each Pokémon's icon and HP. */
+export function r5Party(scene: Phaser.Scene): R5PartyMon[] {
   const { content, run } = services().session;
-  const party = (run?.party ?? []).slice(0, 6).map((m) => {
+  return (run?.party ?? []).slice(0, 6).map((m) => {
     const f = monFile(scene, m.speciesId, 'icon', !!m.shiny);
     return { html: f ? mini(f, 18) : '', hp: Math.round((m.hp / Math.max(1, maxHp(content, m))) * 100) };
   });
-  return r5RunOf(b, party, { open: R5_OPEN_TABS });
+}
+
+export function r5Run(scene: Phaser.Scene, b: DominionBlock): R5Run {
+  return r5RunOf(b, r5Party(scene), { open: R5_OPEN_TABS });
 }
 
 /** A face picture: a png look (team-coloured when the team is founded) or a trainer atlas, cropped to the head. */
