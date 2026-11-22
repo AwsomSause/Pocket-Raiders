@@ -80,7 +80,7 @@ export function memberPic(m: { look: string; atlas: boolean }, x = 404, y = 266,
 // ---------- A1: the title's FIRST TIME tag ----------
 
 export function titleTip(): string {
-  return overlay(`<div class="tu-new" style="left:226px;top:316px" data-testid="dom-tut-first">${esc(TUT.help.firstTime)}</div>${tip({ x: 352, y: 262, w: 320, text: TUT.help.titleTip, key: '' })}`);
+  return overlay(`<div class="tu-new" style="left:360px;top:172px" data-testid="dom-tut-first">${esc(TUT.help.firstTime)}</div>${tip({ x: 490, y: 176, w: 320, text: TUT.help.titleTip, key: '' })}`);
 }
 
 // ---------- A2: how much help? ----------

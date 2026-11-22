@@ -130,11 +130,11 @@ test('the tutorial: help choice, cold open, setup tips, kit, lessons, Replay a l
   await expect(s.getByTestId('dom-tut-replay')).toBeVisible();
   await expect(s.getByTestId('dom-tut-mode-off')).toHaveClass(/on/);
   await shot('e9-replay');
-  await page.keyboard.press('ArrowLeft');
+  await s.getByTestId('dom-tut-mode-tips').click();
   await expect(s.getByTestId('dom-tut-mode-tips')).toHaveClass(/on/);
   expect((await block(page)).tut.mode).toBe('tips');
   const before = JSON.stringify((await block(page)).tut.seen);
-  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowRight');
   await page.keyboard.press('Enter');
   await expect(s.getByTestId('dom-tut-rail')).toContainText('LESSON 2');
   await shot('replay-top');

@@ -181,6 +181,21 @@ export function pinned(b: DominionBlock): Waiting[] {
 
 // ---------- the board's keyboard cursor ----------
 
+/** The board's pages on a sheet, as the redesign lists them (pass 50, "How pages connect"): the back rooms leave out the
+ *  pages the main routes already list. */
+export function boardPins(sheet: 0 | 1): Pin[] {
+  const main = new Set(PINS.filter((p) => p.sheet === 0).map((p) => p.id));
+  return PINS.filter((p) => p.sheet === sheet && (sheet === 0 || !main.has(p.id)));
+}
+
+/** Arrows on the board's two columns of eight: up and down walk the list, left and right jump a column. */
+export function boardStep(n: number, at: number, dir: 'left' | 'right' | 'up' | 'down'): number {
+  if (n <= 0) return 0;
+  if (dir === 'up' || dir === 'down') return (at + (dir === 'up' ? -1 : 1) + n) % n;
+  const j = at + (dir === 'left' ? -8 : 8);
+  return j >= 0 && j < n ? j : at;
+}
+
 /** The photo the arrows move to from photo `at` on a sheet: the nearest one that lies that way. */
 export function boardMove(sheet: 0 | 1, at: number, dir: 'left' | 'right' | 'up' | 'down'): number {
   const pins = PINS.filter((p) => p.sheet === sheet);

@@ -3,11 +3,13 @@
 // the last pages, and asks the scene to jump. Nothing here is saved or rolled.
 
 import type Phaser from 'phaser';
-import { boardMove, hubLine, jumpable, PAGE_NAMES, PINS, pinned, pushLast, spotOf, SPOTS, turn, type PageId } from '../../core/dominion/nav';
+import { boardPins, boardStep, hubLine, jumpable, PAGE_NAMES, pinned, SHEETS, pushLast, spotOf, SPOTS, turn, type PageId } from '../../core/dominion/nav';
 import { DOMINION_DATA } from '../../core/dominion/data';
 import type { DominionBlock } from '../../core/dominion/schema';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
+import { boardRows, r5Board } from '../../ui/redux/screens/dominion/r50/guide';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 import { boardView, ghostOf, SHUTTER_MS, shutterMode, wheelView, withShutter, type Shutter } from '../../ui/redux/screens/dominion/navViews';
 
 /** The page the scene is showing: a Dominion page, the board, or null before the run opens (title, setup, opening). */
@@ -45,8 +47,11 @@ export class NavController {
   boardOn(): boolean {
     return !!this.board;
   }
-  boardRender(): string {
-    return boardView({ sheet: this.board!.sheet, at: this.board!.at });
+  boardRender(run?: R5Run | null): string {
+    const b = this.board!;
+    // Redesign R1 (pass 50, mockup `board`): How pages connect, two columns of rows per sheet.
+    if (run) return r5Board(boardRows(boardPins(b.sheet)), b.at, `${boardPins(b.sheet).length} pages · ${SHEETS[b.sheet]}`, SHEETS[b.sheet ? 0 : 1], run);
+    return boardView({ sheet: b.sheet, at: b.at });
   }
 
   /** Every draw passes through here: a new page starts the shutter, and the wheel draws over the page. */
@@ -111,7 +116,7 @@ export class NavController {
   openBoard(): void {
     this.close();
     const here = this.host.navHere();
-    const pins = PINS.filter((p) => p.sheet === 0);
+    const pins = boardPins(0);
     const at = Math.max(0, pins.findIndex((p) => p.id === here));
     this.board = { sheet: 0, at };
     this.host.setNotice(null);
@@ -205,7 +210,7 @@ export class NavController {
     }
     if (this.board) {
       if (a === 'left' || a === 'right' || a === 'up' || a === 'down') {
-        this.board.at = boardMove(this.board.sheet, this.board.at, a);
+        this.board.at = boardStep(boardPins(this.board.sheet).length, this.board.at, a);
         this.host.refresh();
       } else if (a === 'confirm') this.pin(this.board.at);
       else if (a === 'back') this.closeBoard();
@@ -220,7 +225,7 @@ export class NavController {
     this.host.refresh();
   }
   pin(i: number): void {
-    const p = this.board ? PINS.filter((x) => x.sheet === this.board!.sheet)[i] : undefined;
+    const p = this.board ? boardPins(this.board.sheet)[i] : undefined;
     if (p) this.go(p.id);
   }
 
@@ -234,6 +239,7 @@ export class NavController {
       navBoard: () => this.openBoard(),
       navPin: (i) => this.pin(Number(i)),
       navSheet: (s) => this.sheet(Number(s)),
+      navFlip: () => this.sheet(this.board?.sheet ? 0 : 1),
       navBoardClose: () => this.closeBoard(),
     };
   }

@@ -272,6 +272,13 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     const now = performance.now();
     el.style.setProperty('--now', `${Math.round(born - now)}ms`);
     el.innerHTML = html;
+    // A list longer than its box keeps the cursor's row in view: `data-scrollrow` names the row to show at the top.
+    if (html.includes('data-scrollrow="')) {
+      el.querySelectorAll<HTMLElement>('[data-scrollrow]').forEach((c) => {
+        const r = c.children[Number(c.dataset.scrollrow)] as HTMLElement | undefined;
+        if (r) c.scrollTop = r.offsetTop - (c.firstElementChild as HTMLElement).offsetTop;
+      });
+    }
     if (!html.includes('data-once="')) { firstSeen.clear(); return; }
     const seen = new Map<string, number>();
     el.querySelectorAll<HTMLElement>('[data-once]').forEach((n) => {
