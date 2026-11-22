@@ -12,6 +12,8 @@ export const BATTLE_UI_LABELS: Record<BattleUiStyle, string> = { aero: 'Aero Gla
 export interface GaugeLike {
   set(ratio: number, animate?: boolean): Promise<void>;
   addTo(container: Phaser.GameObjects.Container): void;
+  /** Danger pulse under a fifth of HP (pass 5); gauges without one ignore it. */
+  pulse?(on: boolean): void;
 }
 
 /** Where the databox art sits and where its gauge slot is, in the art's own pixels. */

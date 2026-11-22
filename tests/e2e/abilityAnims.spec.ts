@@ -41,7 +41,7 @@ test('ability and text animations play, finish and restore the Pokémon', async 
   for (const [i, cue] of cues.entries()) {
     const before = await page.evaluate((c) => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
-      const spots = ['player', 'enemy'].map((s) => { const v = b.fx.opts.sprite(s); return [v.x, v.y, v.scaleX, v.scaleY, v.alpha]; });
+      const spots = ['player', 'enemy'].map((s) => { const v = b.fx.opts.sprite(s); const r = v.getData?.('standBase'); return [v.x, r?.y ?? v.y, r?.sx ?? v.scaleX, r?.sy ?? v.scaleY, v.alpha]; });
       (window as any).__run = b.fx.play([c]);
       return spots;
     }, cue);
@@ -51,9 +51,10 @@ test('ability and text animations play, finish and restore the Pokémon', async 
       const b = (window as any).__pkr.game.scene.getScene('Battle');
       await (window as any).__run;
       await new Promise((r) => setTimeout(r, 1800));
-      return ['player', 'enemy'].map((s) => { const v = b.fx.opts.sprite(s); return [v.x, v.y, v.scaleX, v.scaleY, v.alpha]; });
+      return ['player', 'enemy'].map((s) => { const v = b.fx.opts.sprite(s); const r = v.getData?.('standBase'); return [v.x, r?.y ?? v.y, r?.sx ?? v.scaleX, r?.sy ?? v.scaleY, v.alpha]; });
     });
-    // Position (within 3 px: the idle animation moves a sprite about 1.4 px) and opacity come back; scale is only checked loosely because the idle breathing moves it.
+    // Position (within 3 px) and opacity come back; scale is only checked loosely. A Pokémon standing its own way (pass 11)
+    // hovers and breathes around its resting place, so that place is what is compared.
     for (const [k, spot] of after.entries()) {
       expect(Math.abs(spot[0]! - before[k]![0]!), `cue ${i} x of sprite ${k}`).toBeLessThan(3);
       expect(Math.abs(spot[1]! - before[k]![1]!), `cue ${i} y of sprite ${k}`).toBeLessThan(3);

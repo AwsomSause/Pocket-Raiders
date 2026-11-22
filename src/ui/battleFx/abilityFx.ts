@@ -28,6 +28,8 @@ export interface FxTools {
   /** The opposing sprite, for effects that land on the foe (Intimidate's recoil). */
   foeSprite?: Visual | null;
   shake: (px: number) => void;
+  /** The screen already shows the ability's flag (pass 8): no banner and no cinematic frame here. */
+  ownFlag?: boolean;
 }
 
 const col = (hex: string) => Phaser.Display.Color.HexStringToColor(hex).color;
@@ -167,9 +169,9 @@ function signature(t: FxTools): void {
 
 /** Plays one ability banner with its category flourish. Resolves when it has mostly played. */
 export function playAbilityAnim(t: FxTools): Promise<void> {
-  banner(t);
+  if (!t.ownFlag) banner(t);
   if (!t.plan.reduced) {
-    frame(t);
+    if (!t.ownFlag) frame(t);
     signature(t);
   }
   if (t.plan.sound) playSfxLazy(t.scene, t.plan.sound, 0.6);

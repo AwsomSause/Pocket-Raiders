@@ -124,22 +124,25 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraJewel } from '../ui/battleFx/teraJewel';
 import { megaGlass } from '../ui/battleFx/megaGlass';
 import { drawnBox, type GimmickPage } from '../ui/battleFx/gimmickStage';
-import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture } from '../ui/battleFx/cheerChip';
+import { HIT_RUN, stand, standStill, sway, twitch } from '../ui/battleFx/stance';
+import { bubblePicture, chevronPicture, ConditionLook, DizzyStars, flagPicture, flamePicture, glarePicture, pipPicture, putAbove, spikePicture, titlePicture } from '../ui/battleFx/conditionLook';
+import { BUBBLE_W, chevronWaves, condArriveClip, FLAG_HOLD, intimidateClip, condKind, condTickClip, FLAME_W, CONFUSE, endTurnParade, confusionHitClip, gustLeanClip, parCantClip, protectedClip, RECOIL, recoilClip, DRAIN, drainClip, CHARGE, chargeClip, SPENT, spentStarts, HAZARD, HAZARD_KINDS, contactClip, SPIKES, spikeSpot, SHIELD, SLUMP, STAT_COLOR, STAT_DOWN_STAMP, statClip, thawClip, wakeClip, type CondKind, type CondSpot } from '../core/presentation/motionConditions';
+import { CHEER_RING, cheerFace, cheerParts, cheerWordPicture, GLOW_SIZE, glowPicture, PICTURE_SCALE, plusPicture, shinyChipPicture, stampPicture, starPicture } from '../ui/battleFx/cheerChip';
 import { dynamaxPan } from '../ui/battleFx/dynamaxPan';
 import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
-import type { ClipLevel } from '../core/presentation/motionClip';
-import { aceLandClip, bigHit, foeHand, foeThrowClip, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
-import { playClip, type ClipHost, type ClipPart } from '../ui/battleFx/motionPlayer';
+import type { ClipLevel, MotionClip } from '../core/presentation/motionClip';
+import { aceLandClip, HEAL_PLUS_SIZE, HEAL_PLUSES, healClip, COMBO, comboPlan, comboScale, FIRST_TAG, OHKO_STAMP, type ComboStep, CRIT_FREEZE, critFreezeClip, HIT_LIGHT, HIT_STAMPS, hitStampSpot, hitClip, hitPower, levelUpClip, wildEntranceClip, WILD_BARS, bigHit, shinyClip, standKind, missClip, foeHand, foeThrowClip, FOE_TRAINER_OFF, CHEER_GAP, cheerClip, cheerWord, type CheerMoment, expLightsClip, faintClip, recallBallSpot, recallClip, sendClip, sendWeight, CRY, cryClip, FLINCH, flinchClip, WORN, WIN, winClip, TOUGH, toughClip, WAIT, waitClip, FOE_HEAL, foeHealClip, throwFromSpot, type Point } from '../core/presentation/motionBasics';
+import { playClip, type ClipHost, type ClipPart, type ClipRun } from '../ui/battleFx/motionPlayer';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
 import type { PlayerTrainerActor } from '../ui/playerTrainer';
 import { addMarks } from '../ui/battleFx/markAura';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
-import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
+import { COLORS, FONT_FAMILY, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
@@ -176,9 +179,16 @@ import { loadAssets, partySpecies, pokemonArtIds, preloadPokemon, queueAssets } 
 import { pickWipe, wipeAssetId } from '../ui/battleFx/ruleWipe';
 import { sosEntry } from '../core/battle/sos';
 import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
+import { WeatherLook, WX_KINDS, type WxKind } from '../ui/battleFx/weatherLook';
+import { TerrainLook } from '../ui/battleFx/terrainLook';
+import { EndTurnParade } from '../ui/battleFx/endTurnLook';
+import { HoldLook } from '../ui/battleFx/holdLook';
+import { HazardLook } from '../ui/battleFx/hazardLook';
+import { CONTACT_HURT } from '../core/battle/abilities';
+import { TERRAIN_KINDS, type TerrainKind } from '../core/presentation/motionWeather';
 import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
-import { planCues } from '../core/presentation/cues';
+import { planCues, STAT_WORDS } from '../core/presentation/cues';
 import { applyCueHooks } from '../core/presentation/hooks';
 import { DRAMA_LIBRARY, type DramaLine } from '../core/drama';
 import { wouldRefuse } from '../core/bond';
@@ -188,8 +198,8 @@ import { moveFlagLabels, moveFullDescription } from '../core/battle/moveText';
 import { BattleTabs, type BattlePage, type TabsPlace } from '../ui/battleTabs';
 import { animChoice, presentationFor } from '../core/presentation/moveAnims';
 import { moveAnims } from '../data/presentation';
-import { BattleFx } from '../ui/battleFx/battleFx';
-import { championGlow, levelUpBanner, platformEdgeLight } from '../ui/battleFx/transitions';
+import { BATTLE_FX_PLAY, BattleFx } from '../ui/battleFx/battleFx';
+import { championGlow, platformEdgeLight } from '../ui/battleFx/transitions';
 import { addAmbience, arenaType } from '../ui/battleFx/ambience';
 import { addEnvironment } from '../ui/battleFx/environment';
 import { environmentStory } from '../core/presentation/environmentStory';
@@ -216,7 +226,7 @@ import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
-import type { Move, TypeName } from '../core/contentSchema';
+import type { Move, TypeName, Weather } from '../core/contentSchema';
 import { rivalBossFor } from '../core/rivals/major';
 
 const MESSAGE_AUTO_ADVANCE_MS = 1400;
@@ -241,6 +251,8 @@ const TRAINER_POS = { x: 312, y: 400 };
 const FLOAT_LIFT = 14;
 /** The bottom message bar, and the command window on its right. */
 const MESSAGE_Y = 396;
+/** The wild entrance's dark bars cover everything on the screen, the menus too (pass 5). */
+const WILD_DEPTH = 4600;
 /** How long the first-time Hyper/Overdrive explanation ignores Continue, so it can't be skipped by accident. */
 const EXPLAIN_LOCK_MS = 1200;
 const COMMAND_X = 588;
@@ -261,6 +273,9 @@ const DUO_POS = {
   ],
 } as const;
 const DUO_SCALE = { player: 0.72, enemy: 0.85 } as const;
+/** A weather's turns for its chip: null when it lasts (a primal or a set field's weather). */
+const wxTurns = (turns: number): number | null => (turns >= 99 ? null : turns);
+
 const DUO_BOX = { scale: 0.6, enemy: [{ x: 4, y: 6 }, { x: 4, y: 72 }], player: [{ x: GAME_WIDTH - 236, y: 236 }, { x: GAME_WIDTH - 236, y: 316 }] } as const;
 /**
  * Triple battles (Kice's pick: Triple 2, the Essentials Kit with the long foe box): left, centre, right. Foe boxes stack down
@@ -309,6 +324,8 @@ interface InfoBox {
   xpBar?: GaugeLike;
   teamText?: Phaser.GameObjects.Text;
   statusBadge?: Phaser.GameObjects.Container;
+  /** The "SHINY" chip pinned to the plate of a shiny foe (pass 11). */
+  shinyChip?: Phaser.GameObjects.Image;
   /** "TERA WATER" while the Pokémon is Terastallized. */
   teraBadge?: Phaser.GameObjects.Container;
   /** Raid role (Tank / Striker / Support) of your Pokémon in front. */
@@ -318,6 +335,8 @@ interface InfoBox {
   formIcon?: Phaser.GameObjects.Image;
   /** A soft red glow behind the box while HP is low. */
   danger?: Phaser.GameObjects.Graphics;
+  /** The HP share the bar last showed (a drop jolts the plate). */
+  ratio?: number;
   /** A battle style's layout for this box (screens redesign); absent for the original look. */
   spec?: BoxSpec;
   /** What the New UI draws for this box; `hp` is the bar on screen, which follows the real HP as the canvas bar does. */
@@ -335,8 +354,34 @@ export class BattleScene extends Phaser.Scene {
   private message!: Phaser.GameObjects.Text;
   /** The Story Portrait message bar (default look only): its stripe and type tag follow the move being used. */
   private storyBar: StoryBar | null = null;
+  /** Counts the scene's starts (create): async work that began before a restart checks it and stops. */
+  private life = 0;
+  /** Alternates where a worn-out Pokémon's sweat drops land. */
+  private sweatN = 0;
+  /** Waiting on you (pass 11): the idle clock while the command menu is up, and the turn it last played on. */
+  private waitTimer: Phaser.Time.TimerEvent | null = null;
+  private waitedTurn = -1;
+  private waitSprite: Phaser.GameObjects.Sprite | null = null;
+  /** Enemy heal (pass 13): the heal pips on the foe's plate, and how many heals the screen has shown used. */
+  private healPips: Phaser.GameObjects.Arc[] = [];
+  private healsShown = 0;
+
+  /** Work begun in start `life` is stale: the scene has shut down since, is starting again (loading, before its
+   * create), or has started again. */
+  private stale(life: number): boolean {
+    const st = this.sys.settings.status ?? Phaser.Scenes.DESTROYED;
+    return life !== this.life || st < Phaser.Scenes.CREATING || st >= Phaser.Scenes.SHUTDOWN;
+  }
   /** Battle log (catalog #115): the last lines said, reopened with the H key. Presentation only. */
   private weatherLayer: WeatherLayer | null = null;
+  /** The redesign's rain, sun, sand and snow (pass 8); hail stays on the older layer. */
+  private wxLook: WeatherLook | null = null;
+  /** The redesign's terrain carpet and chip (pass 8). */
+  private trLook: TerrainLook | null = null;
+  /** The sandstorm gusts once a turn, however many Pokémon it hurts. */
+  private gustShown = false;
+  /** A move's weather boost stamps once, on its first hit. */
+  private boostShown = false;
   private history: string[] = [];
   private historyView: Phaser.GameObjects.Container | null = null;
   private menu: Menu | null = null;
@@ -476,6 +521,20 @@ export class BattleScene extends Phaser.Scene {
   private momentumText!: Phaser.GameObjects.Text;
   /** What the screen currently shows for each side (may lag the real state during playback). */
   private shown!: { player: PokemonInstance; enemy: PokemonInstance };
+  /** The status look each side's Pokémon wears (pass 8), or none. */
+  private conds: Record<Side, ConditionLook | null> = { player: null, enemy: null };
+  /** Confusion's circling stars, by side (pass 8). */
+  private dizzy: Record<Side, DizzyStars | null> = { player: null, enemy: null };
+  /** A state each side's Pokémon holds between turns (pass 12): charging up, or spent after Hyper Beam. */
+  private hold: Record<Side, HoldLook | null> = { player: null, enemy: null };
+  /** Each side's entry hazards on the field (pass 12). */
+  private hazardLooks: Record<Side, HazardLook | null> = { player: null, enemy: null };
+  /** The multi-hit combo counter on screen (pass 12). */
+  private comboText: Phaser.GameObjects.Text | null = null;
+  /** The first drawn row of each sprite frame (for where a head is). */
+  private readonly bodyTops = new Map<string, number>();
+  /** Each side's stat stages as the screen has shown them (for the pips; reset when a Pokémon comes in or Haze). */
+  private statStages: Record<Side, Record<string, number>> = { player: {}, enemy: {} };
   /** The opposing Pokémon shown as riled up (warned, not yet unleashed or calmed). Presentation only. */
   private riledUid: string | null = null;
   /**
@@ -537,6 +596,20 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create(): void {
+    this.life++;
+    this.waitTimer = null;
+    this.waitedTurn = -1;
+    this.waitSprite = null;
+    // Any key or tap restarts the idle clock (the New look's buttons are page elements, so listen on the page).
+    const kick = (): void => this.waitKick();
+    window.addEventListener('keydown', kick);
+    window.addEventListener('pointerdown', kick);
+    this.events.on(BATTLE_FX_PLAY, kick);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.events.off(BATTLE_FX_PLAY, kick);
+      window.removeEventListener('keydown', kick);
+      window.removeEventListener('pointerdown', kick);
+    });
     const { session, assets } = services();
     const run = session.run!;
     const battle = run.battle!;
@@ -623,6 +696,7 @@ export class BattleScene extends Phaser.Scene {
       if (assets.has(key) && this.textures.exists(key)) this.field.add(groundLayers[groundLayers.push(this.add.image(0, 0, key).setOrigin(0).setScale(PIXEL_SCALE)) - 1]!);
     }
     addParallax(this, backLayers, groundLayers, this.motion);
+    this.arenaLayers = [...backLayers, ...groundLayers];
     // League arenas build up with light: gym beams, Elite Four pillars, the champion's sunburst.
     if (boss) dressArena(this, this.field, this.field.length, boss.role, TYPE_COLORS[boss.types[0] ?? 'normal'] ?? 0xffffff, this.motion);
     // Drifting clouds, bubbles, snow or embers over the arena (EBDX scenery).
@@ -655,8 +729,28 @@ export class BattleScene extends Phaser.Scene {
     }), this.motion);
     if (boss?.role === 'champion') championGlow(this, this.field, this.motion);
     this.weatherLayer = new WeatherLayer(this, this.field, this.motion);
-    this.weatherLayer.set(run.battle?.weather?.id ?? null);
-    this.applyMood(run.battle?.weather?.id ?? null);
+    const groundCount = backLayers.length + groundLayers.length || 1;
+    this.wxLook = new WeatherLook({
+      scene: this,
+      field: this.field,
+      under: () => groundCount,
+      graded: () => [...backLayers, ...groundLayers],
+      level: () => this.clipLevel(),
+      shake: (px) => {
+        const st = services().session.settings;
+        if (st.battleScreenEffects) this.cameras.main.shake(300, (px / GAME_WIDTH) * capFlash(st.shakeIntensity, st.reducedFlash));
+      },
+      flash: (color, alpha, ms) => this.wxFlash(color, alpha, ms),
+    });
+    void this.setWeather(run.battle?.weather ?? null, false);
+    this.trLook = new TerrainLook({
+      scene: this,
+      field: this.field,
+      under: () => groundCount,
+      level: () => this.clipLevel(),
+      fxOpts: () => { const h = this.clipHost({}); return { flash: h.flash ?? 1, particles: h.particles ?? true, rate: h.rate ?? 1 }; },
+    });
+    void this.setTerrain(run.battle?.terrain ?? null, false);
     this.arenaLight = new ArenaLight(this, this.field, this.field.length, this.motion);
     this.arenaPhase = 0;
     // A battle style's floor, tint or whole backdrop, under the Pokémon.
@@ -673,10 +767,19 @@ export class BattleScene extends Phaser.Scene {
       sprite: (side) => (side === 'player' ? this.playerSprite : this.enemySprite),
       mastery: (moveId) => moveRank(session.profile.moveUses?.[moveId] ?? 0),
       fullScreen: (on) => this.rx?.visible(!on),
+      numbers: () => ({ show: services().session.settings.damageNumbers, scale: services().session.settings.popupScale }),
+      recoil: (side, cue) => this.hitMoment(side, cue),
+      stamp: (side, kind) => this.hitStamp(side, kind),
+      heal: (side) => this.healMoment(side),
+      condition: (side, status, at) => this.condition(side, status, at),
+      stat: (side, stat, change) => this.statMoment(side, stat, change),
+      ability: (side, ability, label) => this.abilityMoment(side, ability, label),
     });
 
     this.shown = { player: structuredClone(run.party[battle.activeIndex]!), enemy: structuredClone(currentEnemy(battle)) };
     this.duo = null;
+    this.conds = { player: null, enemy: null };
+    this.statStages = { player: {}, enemy: {} };
     this.cmdSpot = 0;
     this.commands = [];
     if (battle.doubles) {
@@ -709,6 +812,9 @@ export class BattleScene extends Phaser.Scene {
       this.enemyBox = this.skin ? this.makeSkinBox(this.skin.layout.foe, false) : this.makeInfoBox(0, 30, false);
       this.playerBox = this.skin ? this.makeSkinBox(this.skin.layout.player, true) : this.makeInfoBox(GAME_WIDTH - 390, MESSAGE_Y - 132, true);
     }
+    this.healPips = [];
+    this.healsShown = battle.enemyItemsUsed ?? 0;
+    if (!this.duo && battle.trainer) this.healPipsMake();
     this.header = this.add.text(GAME_WIDTH - 16, 10, '', textStyle(20, COLORS.textLight, { stroke: '#181818', strokeThickness: 4 })).setOrigin(1, 0);
     // Raid and Totem status sits under the enemy's box, away from the boss sprite.
     this.momentumText = this.add.text(GAME_WIDTH - 16, MESSAGE_Y - 160, '', textStyle(18, COLORS.textLight, { stroke: '#181818', strokeThickness: 4 })).setOrigin(1, 0);
@@ -1189,6 +1295,8 @@ export class BattleScene extends Phaser.Scene {
 
   /** What every motion clip gets from the settings: flash strength, particles and the animation speed. */
   private clipHost(parts: Record<string, ClipPart>, more: Pick<ClipHost, 'cue' | 'dim'> = {}): ClipHost {
+    // A moment is playing: the screen is not waiting on you yet.
+    this.waitKick();
     const st = services().session.settings;
     const look = animSettingsFrom(st);
     return { parts, ...more, flash: st.reducedFlash || !st.battleScreenEffects ? 0 : look.intensity, particles: !st.reduceParticles, rate: 1 / animationTimeScale(st) };
@@ -1222,18 +1330,78 @@ export class BattleScene extends Phaser.Scene {
       visual = this.showSprite(side, mon, true, false);
       ballOpenEffect(this, ballId, at.x, at.y - 50, this.motion);
     };
-    const run = playClip(this, sendClip({ x: at.x, y: at.y, h: 0, side }, start, level), this.clipHost({ mon: { kind: 'mon', get: () => visual }, ball: { kind: 'free', get: () => ball } }, {
+    const sp = getSpecies(services().session.content, mon.speciesId);
+    const weight = sendWeight(sp.dex, sp.types, sp.weight, !!mon.dynamaxed);
+    let cry: Promise<void> | null = null;
+    const run = playClip(this, sendClip({ x: at.x, y: at.y, h: 0, side }, start, level, weight), this.clipHost({ mon: { kind: 'mon', get: () => visual }, ball: { kind: 'free', get: () => ball } }, {
       cue: (name) => {
         if (name === 'throw') playSfx(this, 'se.ball_throw');
         if (name === 'open') show();
         if (name === 'plate') onPlate?.();
+        if (name === 'thud') this.thudMoment(side);
+        if (name === 'cry' && visual) cry = this.cryMoment(side, visual, mon, weight === 'heavy');
       },
     }));
     await run.done;
     ball?.destroy();
     show();
+    if (cry) await cry;
     const shown = visual as Visual | null;
-    if (shown?.active) breathe(this, shown, this.motion);
+    if (shown?.active) this.standUp(shown, mon);
+  }
+
+  /**
+   * A heavy Pokémon lands (redesign pass 11, Light and Heavy): the screen jolts, both plates rattle, and the Pokémon
+   * across the field is bounced off its feet. Presentation only.
+   */
+  private thudMoment(side: Side): void {
+    if (this.clipLevel() !== 'full') return;
+    this.wxShake(11, 350);
+    const rate = animationTimeScale(services().session.settings);
+    for (const box of [this.playerBox, this.enemyBox]) {
+      const c = box?.container;
+      if (!c?.visible) continue;
+      const a0 = c.angle;
+      this.tweens.chain({ targets: c, tweens: [{ angle: a0 + 0.8, duration: 40 * rate }, { angle: a0 - 0.8, duration: 40 * rate }, { angle: a0, duration: 200 * rate, ease: 'Elastic.easeOut' }] });
+    }
+    if (this.duo) return;
+    const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+    const other = this.condSprite(otherSide);
+    const otherMon = this.shown[otherSide];
+    if (!other?.visible || !otherMon || !(other instanceof Phaser.GameObjects.Sprite)) return;
+    standStill(this, other);
+    const y0 = this.spotXY(otherSide).y;
+    this.tweens.chain({
+      targets: other,
+      tweens: [{ y: y0 - 16, delay: 40 * rate, duration: 100 * rate, ease: 'Quad.easeOut' }, { y: y0, duration: 160 * rate, ease: 'Bounce.easeOut' }],
+      onComplete: () => other.active && other.visible && this.standUp(other, otherMon),
+    });
+  }
+
+  /**
+   * Its cry (redesign pass 11): as the send-out leans it back and forward, rings leave its mouth sized to it (wide
+   * rings and a shake for a heavy or very tall one). Resolves when the rings are gone.
+   */
+  private cryMoment(side: Side, visual: Visual, mon: PokemonInstance, heavy: boolean): Promise<void> {
+    const level = this.clipLevel();
+    if (level === 'off' || !visual.active) return Promise.resolve();
+    try {
+      // Its drawn body, not the padded frame: the top of its head above its feet, and about how wide it is.
+      const h = visual instanceof Phaser.GameObjects.Sprite ? this.headHeight(visual) : 120;
+      const w = visual instanceof Phaser.GameObjects.Sprite ? Math.max(60, visual.displayWidth * 0.6) : 120;
+      const big = heavy || h > CRY.bigH;
+      const sp = getSpecies(services().session.content, mon.speciesId);
+      const color = TYPE_COLORS[sp.types[0] ?? 'normal'] ?? 0xffffff;
+      const at = this.spotXY(side);
+      const run = playClip(this, cryClip({ x: at.x, y: at.y, h, side }, w, color, big, level), this.clipHost({}, {
+        cue: (name) => {
+          if (name === 'shake') this.wxShake(CRY.shake, CRY.shakeMs);
+        },
+      }));
+      return run.done;
+    } catch {
+      return Promise.resolve();
+    }
   }
 
   /**
@@ -1260,6 +1428,7 @@ export class BattleScene extends Phaser.Scene {
    * beam and the ball jolts as it catches. Reduced: red, the beam, a plain shrink. Off: it is just gone.
    */
   private async recallMoment(side: Side, sprite: Visual, hand: Point | null): Promise<void> {
+    if (sprite instanceof Phaser.GameObjects.Sprite) standStill(this, sprite);
     const level = this.clipLevel();
     const at = hand ?? recallBallSpot(side);
     const mon = this.shown[side];
@@ -1282,6 +1451,8 @@ export class BattleScene extends Phaser.Scene {
    * ground with dust and its base goes dark. Reduced: it only sinks. Off: it is just gone.
    */
   private async faintMoment(side: Side, sprite: Visual): Promise<void> {
+    // It falls from where it stands, not from the top of a hover or breath.
+    if (sprite instanceof Phaser.GameObjects.Sprite) standStill(this, sprite);
     this.tweens.killTweensOf(sprite);
     const ground = this.spotXY(side).y;
     const run = playClip(this, faintClip({ x: sprite.x, y: ground, h: 0, side }, this.clipLevel()), this.clipHost({ mon: { kind: 'mon', get: () => sprite } }, { dim: (fx) => this.dimBase(side, fx.d) }));
@@ -1502,7 +1673,7 @@ export class BattleScene extends Phaser.Scene {
       this.skin?.sprite?.(this.playerSprite);
       this.wearPink(this.playerSprite, pinkTint(mon));
       this.prefetchMoves(mon);
-      if (lively) this.liven(this.playerSprite, cry);
+      if (lively) this.liven(this.playerSprite, mon, cry);
       return this.playerSprite;
     }
     this.dropSprite(this.enemySprite);
@@ -1519,7 +1690,7 @@ export class BattleScene extends Phaser.Scene {
     const b = this.run.battle;
     if (b && this.boss() && b.enemyTeam.length > 1 && b.enemyIndex >= b.enemyTeam.length - 1) this.arenaLight?.set(Math.max(this.arenaPhase, 1), 0xff5030);
     this.prefetchMoves(mon);
-    if (lively) this.liven(this.enemySprite, cry);
+    if (lively) this.liven(this.enemySprite, mon, cry);
     return this.enemySprite;
   }
 
@@ -1541,10 +1712,45 @@ export class BattleScene extends Phaser.Scene {
     visual.destroy();
   }
 
-  /** A bouncy entrance (when it is sent out) and then a slow idle breath. */
-  private liven(visual: Visual, entering: boolean): void {
-    if (entering) bounceIn(this, visual, this.motion);
-    breathe(this, visual, this.motion, entering ? 450 : 0);
+  /** A bouncy entrance (when it is sent out) and then its own way of standing. */
+  private liven(visual: Visual, mon: PokemonInstance, entering: boolean): void {
+    const bounce = entering ? bounceIn(this, visual, this.motion) : null;
+    // It starts standing once the bounce has settled: standing takes its resting size from the size it has then, and
+    // a slow frame could otherwise catch it mid-overshoot and keep that size for good.
+    if (bounce) bounce.once(Phaser.Tweens.Events.TWEEN_COMPLETE, () => visual.active && this.standUp(visual, mon));
+    else this.standUp(visual, mon);
+  }
+
+  /** Standing (redesign pass 11): the Pokémon breathes and moves in place its own way (hover, float, heavy, twitch, sway). */
+  private standUp(visual: Visual, mon: PokemonInstance, delay = 0): void {
+    const sp = getSpecies(services().session.content, mon.speciesId);
+    // It stands on its own spot (the entrance may still be settling it there).
+    const restY = visual === this.playerSprite ? this.spotXY('player').y : visual === this.enemySprite ? this.spotXY('enemy').y : undefined;
+    // A status changes how it stands (pass 8): paralysis locks it up and it twitches, ice holds it still, sleep slumps it.
+    const side: Side | null = visual === this.playerSprite ? 'player' : visual === this.enemySprite ? 'enemy' : null;
+    const look = side ? this.conds[side] : null;
+    const kind = look && look.sprite === visual ? look.kind : null;
+    this.condPose(visual, kind);
+    if (side && visual instanceof Phaser.GameObjects.Sprite && (kind === 'par' || kind === 'frz' || kind === 'slp')) {
+      if (kind === 'frz') return standStill(this, visual);
+      if (kind === 'par') return twitch(this, visual, this.motion === 'full', this.spotXY(side).x);
+      standStill(this, visual);
+      this.slump(visual, side);
+      return stand(this, visual, 'steady', this.motion === 'full', delay, 2600, (restY ?? visual.y) + SLUMP.dy);
+    }
+    // Spent after Hyper Beam (pass 12): it sags and breathes slowly until it can act again.
+    const held = side ? this.hold[side] : null;
+    if (side && held && held.sprite === visual && held.kind === 'spent' && visual instanceof Phaser.GameObjects.Sprite) {
+      standStill(this, visual);
+      this.spentSag(visual, side, true);
+      return stand(this, visual, 'steady', this.motion === 'full', delay, 2600, (restY ?? visual.y) + SPENT.dy);
+    }
+    // Confused: it sways under its stars.
+    const dz = side ? this.dizzy[side] : null;
+    if (side && dz && dz.sprite === visual && this.motion === 'full') return sway(this, visual, true, this.spotXY(side).x, CONFUSE.sway.rot, CONFUSE.sway.dx, CONFUSE.sway.ms);
+    // A Pokémon in danger keeps its sag and its fast, shallow breath.
+    if (visual.getData('sag')) return stand(this, visual, 'steady', this.motion === 'full', delay, WORN.breathMs, (restY ?? visual.y) + (restY !== undefined ? WORN.dy : 0));
+    stand(this, visual, standKind(sp.dex, sp.types, !!mon.dynamaxed), this.motion === 'full', delay, undefined, restY);
   }
 
   /** Starts loading the animations of a Pokémon's moves while the player reads. */
@@ -1617,13 +1823,15 @@ export class BattleScene extends Phaser.Scene {
 
   /**
    * A burned, frozen, paralysed or poisoned Pokémon wears that status's pulsing pattern (Deluxe Battle Kit,
-   * via Pokémon Memories); it comes off when the status is cured. Tera and Dynamax patterns take precedence.
+   * via Pokémon Memories) in doubles and triples; singles show the condition look instead. It comes off when the status is cured. Tera and Dynamax patterns take precedence.
    * Presentation only.
    */
   private syncStatusPattern(side: 'player' | 'enemy', mon: PokemonInstance): void {
     const visual = side === 'player' ? this.playerSprite : this.enemySprite;
     if (!visual || mon.dynamaxed || mon.shadow || this.run.battle?.transform.teraTypes[mon.uid]) return;
-    const want = this.motion === 'off' ? null : statusPatternKey(mon.status?.id);
+    // In singles the redesign's own condition look (pass 8: the wash, embers, ice, slump) replaces the old pattern.
+    const ownLook = !this.duo && this.clipLevel() !== 'off' && condKind(mon.status?.id) !== null;
+    const want = this.motion === 'off' || ownLook ? null : statusPatternKey(mon.status?.id);
     const worn = wornPattern(visual);
     if (worn === want || (worn && !worn.startsWith('fx.status.'))) return;
     if (want) wearPattern(this, visual, want, this.motion, () => undefined, { pulse: STATUS_PULSE });
@@ -1807,6 +2015,10 @@ export class BattleScene extends Phaser.Scene {
     const pct = Math.ceil((Math.max(0, mon.hp) / max) * 100);
     box.hpText?.setText(spec?.hpText ? `${spec.hpText.prefix ?? ''}${spec.hpText.pct ? `${pct}%` : `${Math.max(0, mon.hp)}/${max}`}` : `${Math.max(0, mon.hp)}/${max}`);
     if (spec) this.refreshSkinParts(box, mon);
+    if (!mon.shiny) {
+      box.shinyChip?.destroy();
+      box.shinyChip = undefined;
+    }
     box.statusBadge?.destroy();
     box.statusBadge = undefined;
     if (mon.status) {
@@ -1893,9 +2105,18 @@ export class BattleScene extends Phaser.Scene {
       };
       this.tweens.killTweensOf(box.rx);
       // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
-      if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: Math.round(250 + 450 * Math.abs(to - from)), ease: 'Sine.easeOut' });
+      if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: to < from ? 280 : 800, ease: to < from ? 'Quad.easeOut' : 'Sine.easeInOut' });
     }
-    return box.hpBar.set(mon.hp / max, animate);
+    // A hit jolts the plate (pass 2): down 5 px and back with a spring.
+    const ratio = Math.max(0, mon.hp) / max;
+    const c = box.container;
+    if (animate && ratio < (box.ratio ?? ratio) && this.motion === 'full' && c.visible && !this.tweens.isTweening(c)) {
+      const y = c.y;
+      this.tweens.chain({ targets: c, tweens: [{ y: y + 5, duration: 40 }, { y, duration: 250, ease: 'Elastic.easeOut', easeParams: [1, 0.4] }], onStop: () => c.setY(y) });
+    }
+    box.ratio = ratio;
+    if (!this.duo) this.condSync(box === this.playerBox ? 'player' : 'enemy');
+    return box.hpBar.set(ratio, animate);
   }
 
   /** New UI: mounts the mock-ups' battle HUD over the canvas and stops the canvas drawing its own. */
@@ -2073,24 +2294,422 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** At a quarter of its HP or less, a box gets a gentle red pulse behind it (still with reduced motion). */
+  /**
+   * Danger (redesign pass 5): under a fifth of its HP the plate glows red in a slow 1 s pulse, the HP bar pulses
+   * brighter every half second, and the Pokémon sags and breathes faster. All of it stops the moment it is healed.
+   */
   private dangerGlow(box: InfoBox, ratio: number): void {
-    const low = ratio > 0 && ratio <= 0.25;
+    const low = ratio > 0 && ratio <= 0.2;
+    const side: Side = box.isPlayer ? 'player' : 'enemy';
     if (!low) {
-      box.danger?.destroy();
-      box.danger = undefined;
+      if (box.danger) {
+        box.danger.destroy();
+        box.danger = undefined;
+        box.hpBar.pulse?.(false);
+        if (box === this.playerBox || box === this.enemyBox) this.dangerSag(side, false, ratio > 0);
+      }
       return;
     }
-    if (box.danger) return;
+    if (box.danger) {
+      // A new Pokémon came in already in danger: it sags too.
+      if (this.motion === 'full' && (box === this.playerBox || box === this.enemyBox)) this.dangerSag(side, true);
+      return;
+    }
     const isPlayer = box.isPlayer;
     const g = this.add.graphics();
-    g.fillStyle(0xff3048, 0.35);
-    if (box.spec) {
-      const [px, py, pw, ph] = box.spec.panel;
-      g.fillRoundedRect(px - 8, py - 8, pw + 16, ph + 16, 16);
-    } else g.fillRoundedRect(isPlayer ? 8 : -2, -6, isPlayer ? 382 : 376, isPlayer ? 144 : 116, 26);
+    // A soft red glow about 14 px wide around the plate (the mockup's box-shadow), in rings that fade outward.
+    const [px, py, pw, ph, rad] = box.spec ? [...box.spec.panel, 8] : isPlayer ? [16, 2, 366, 128, 18] : [6, 2, 360, 100, 18];
+    for (const [grow, a] of [[16, 0.12], [12, 0.22], [8, 0.34], [4, 0.5]] as const) g.fillStyle(0xff3b30, a).fillRoundedRect(px! - grow, py! - grow, pw! + grow * 2, ph! + grow * 2, rad! + grow);
     box.container.addAt(g, 0);
     box.danger = g;
-    if (this.motion === 'full') this.tweens.add({ targets: g, alpha: 0.25, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    if (this.motion === 'full') {
+      g.setAlpha(0);
+      this.tweens.add({ targets: g, alpha: 1, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      box.hpBar.pulse?.(true);
+      if (box === this.playerBox || box === this.enemyBox) this.dangerSag(side, true);
+    }
+  }
+
+  /**
+   * Worn out (redesign passes 5 and 11): the Pokémon in danger slumps (lower, tipped, a little shorter and wider), its
+   * colour dulls, it breathes fast and shallow and sweat flicks off it. `false` ends it: `healed`, it hops, straightens
+   * with a shake and its colour comes back; otherwise (it fainted, it left) it is simply put back. Its looping breath
+   * is reset to the start first, so its size never drifts. Presentation only.
+   */
+  private dangerSag(side: Side, on: boolean, healed = false): void {
+    const v = side === 'player' ? this.playerSprite : this.enemySprite;
+    const mon = this.shown[side];
+    if (!(v instanceof Phaser.GameObjects.Sprite) || !v.active || !mon) return;
+    const sagged = v.getData('sag') as { sx: number; sy: number; angle: number; cm: Phaser.FX.ColorMatrix | null; sweat: Phaser.Time.TimerEvent | null } | undefined;
+    if (on === Boolean(sagged)) return;
+    standStill(this, v);
+    const full = this.motion === 'full';
+    const rate = animationTimeScale(services().session.settings);
+    const d = side === 'player' ? 1 : -1;
+    const home = this.spotXY(side);
+    const dull = (cm: Phaser.FX.ColorMatrix, k: number): void => {
+      if (!v.active) return;
+      cm.reset();
+      cm.brightness(1 - (1 - WORN.br) * k, true);
+      cm.saturate(-(1 - WORN.sat) * k, true);
+    };
+    if (on) {
+      const base = { sx: v.scaleX, sy: v.scaleY, angle: v.angle };
+      const cm = v.preFX ? v.preFX.addColorMatrix() : null;
+      const sweat = full ? this.time.addEvent({ delay: WORN.sweatEvery * rate, loop: true, callback: () => this.sweatDrop(v, side) }) : null;
+      v.setData('sag', { ...base, cm, sweat });
+      const to = { y: home.y + WORN.dy, angle: base.angle - WORN.tilt * d, scaleX: base.sx * WORN.sx, scaleY: base.sy * WORN.sy };
+      if (!full) {
+        v.setPosition(home.x, to.y).setAngle(to.angle).setScale(to.scaleX, to.scaleY);
+        if (cm) dull(cm, 1);
+        return;
+      }
+      const tw = this.tweens.add({ targets: v, ...to, duration: WORN.inMs * rate, ease: 'Sine.easeInOut', onComplete: () => v.active && v.getData('sag') && stand(this, v, 'steady', true, 0, WORN.breathMs, to.y) });
+      v.setData('sag', { ...base, cm, sweat, settle: () => (tw.stop(), v.active && v.setPosition(home.x, to.y).setAngle(to.angle).setScale(to.scaleX, to.scaleY)) });
+      if (cm) this.tweens.addCounter({ from: 0, to: 1, duration: WORN.inMs * rate, onUpdate: (c) => dull(cm, c.getValue() ?? 1) });
+      return;
+    }
+    const s = sagged!;
+    s.sweat?.remove();
+    v.setData('sag', undefined);
+    const undull = (): void => {
+      if (s.cm && v.active) v.preFX?.remove(s.cm as unknown as Phaser.FX.Controller);
+    };
+    this.tweens.killTweensOf(v);
+    if (!full || !healed) {
+      v.setPosition(home.x, v.getData('slumped') ? home.y + SLUMP.dy : home.y).setAngle(s.angle).setScale(s.sx, s.sy);
+      undull();
+      this.standUp(v, mon);
+      return;
+    }
+    // Healed: up it hops and straightens, lands, shakes it off, and its colour comes back.
+    if (s.cm) this.tweens.addCounter({ from: 1, to: 0, duration: WORN.outMs * rate, onUpdate: (c) => s.cm && dull(s.cm, c.getValue() ?? 0), onComplete: undull });
+    this.tweens.chain({
+      targets: v,
+      tweens: [
+        { y: home.y - WORN.hop, angle: s.angle, scaleX: s.sx, scaleY: s.sy, duration: 200 * rate, ease: 'Quad.easeOut' },
+        { y: home.y, duration: 200 * rate, ease: 'Bounce.easeOut' },
+        { x: home.x - WORN.shake, duration: 40 * rate },
+        { x: home.x + WORN.shake, duration: 40 * rate },
+        { x: home.x, duration: 200 * rate, ease: 'Elastic.easeOut' },
+      ],
+      onComplete: () => {
+        if (!v.active) return;
+        v.setPosition(home.x, home.y).setAngle(s.angle).setScale(s.sx, s.sy);
+        if (v.visible) this.standUp(v, mon);
+      },
+      onStop: () => v.active && v.setPosition(home.x, home.y).setAngle(s.angle).setScale(s.sx, s.sy),
+    });
+  }
+
+  /**
+   * Winner's moment (redesign pass 11): after a knock-out your Pokémon hops twice and spins, a note pops out with gold
+   * stars, then it leans toward you and a heart pops (a heavy one stamps once instead of hopping). Resolves once the
+   * battle may go on; the lean finishes while the EXP comes. Presentation only.
+   */
+  private winMoment(): Promise<void> {
+    const sprite = this.condSprite('player');
+    const mon = this.shown.player;
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || !mon || mon.hp <= 0 || level === 'off') return Promise.resolve();
+    try {
+      const sp = getSpecies(services().session.content, mon.speciesId);
+      const heavy = standKind(sp.dex, sp.types, !!mon.dynamaxed) === 'heavy';
+      const spot = { ...this.spotXY('player'), h: this.headHeight(sprite), side: 'player' as const };
+      const mid = this.midOf('player');
+      return new Promise<void>((free) => {
+        this.condPlay(sprite, winClip(spot, heavy, level), {}, (cut) => {
+          free();
+          if (cut || !sprite.active) return;
+          this.restAt(sprite, 'player');
+          if (sprite.visible) this.standUp(sprite, mon);
+        }, (name) => {
+          if (name === 'free') free();
+          if (name === 'stamp') this.wxShake(8, 300);
+          if (name === 'note') this.popGlyph('♪', mid.x + WIN.noteDx, mid.y + WIN.noteDy, '#ffcb05', 54, 500, 50);
+          if (name === 'heart') this.popGlyph('♥', mid.x + WIN.heartDx, mid.y + WIN.heartDy, '#ff8ab0', 44, 600, 40);
+        });
+      });
+    } catch {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * Toughed it out (redesign pass 11): your Pokémon's bar has caught at 1. It skids back and drops low, shaking; the
+   * bar sparks; then it plants its feet, glows gold for a heartbeat, HUNG ON! lands and a heart floats up toward you.
+   * Resolves once the battle may go on. Presentation only.
+   */
+  private toughMoment(): Promise<void> {
+    const sprite = this.condSprite('player');
+    const mon = this.shown.player;
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || !mon || level === 'off') return Promise.resolve();
+    try {
+      const spot = { ...this.spotXY('player'), h: this.headHeight(sprite), side: 'player' as const };
+      const mid = this.midOf('player');
+      const rate = animationTimeScale(services().session.settings);
+      return new Promise<void>((free) => {
+        this.condPlay(sprite, toughClip(spot, level), {}, (cut) => {
+          free();
+          if (cut || !sprite.active) return;
+          this.restAt(sprite, 'player');
+          if (sprite.visible) this.standUp(sprite, mon);
+        }, (name) => {
+          if (name === 'free') free();
+          if (name === 'stamp') {
+            const at = hitStampSpot('player', mid);
+            this.wxStamp('HUNG ON!', '#ffcb05', '#131c36', Phaser.Math.Clamp(at.x, 110, GAME_WIDTH - 110), at.y, false);
+          }
+          if (name === 'heart') this.popGlyph('♥', mid.x + TOUGH.heartDx, mid.y + TOUGH.heartDy, '#ff8ab0', 44, 800, 60);
+          if (name === 'spark') {
+            const c = this.playerBox?.container;
+            const at = c?.visible ? { x: c.x + 150, y: c.y + 68 } : { x: 212, y: 506 };
+            const star = this.add.star(at.x, at.y, 4, 4, 22, 0xffcb05).setDepth(4001).setScale(0);
+            this.tweens.chain({ targets: star, tweens: [{ scale: 1, angle: 45, duration: 150 * rate, ease: 'Back.easeOut' }, { scale: 0, alpha: 0, duration: 250 * rate }], onComplete: () => star.destroy() });
+            this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => star.active && star.destroy());
+          }
+          if (name === 'glow' && sprite.preFX) {
+            const glow = sprite.preFX.addGlow(TOUGH.glow, 0, 0, false, 0.1, 12);
+            const drop = (): void => void (sprite.active && sprite.preFX?.remove(glow as unknown as Phaser.FX.Controller));
+            this.tweens.chain({ targets: glow, tweens: [{ outerStrength: 4, duration: 200 * rate }, { outerStrength: 0, delay: 500 * rate, duration: 500 * rate }], onComplete: drop, onStop: drop });
+          }
+        });
+      });
+    } catch {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * Heal pips (pass 13): a row of four small lights on the foe trainer's plate, one for each healing item they may
+   * still use (the same count as the info panel's "N of 4"); a used one is dark.
+   */
+  private healPipsMake(): void {
+    const box = this.enemyBox;
+    if (!box?.container) return;
+    const most = services().session.content.balance.trainerAi.maxHealItems ?? FOE_HEAL.most;
+    const [px, py, pw, ph] = box.spec ? box.spec.panel : [6, 2, 360, 100];
+    const y = py! + ph! - 2;
+    const x0 = px! + pw! - 24 - (most - 1) * 18;
+    const label = this.add.text(x0 - 14, y, 'HEALS', { fontFamily: FONT_FAMILY, fontSize: '13px', color: '#ffffff', stroke: '#16203f', strokeThickness: 4 }).setOrigin(1, 0.5);
+    label.name = 'heal-label';
+    box.container.add(label);
+    for (let i = 0; i < most; i++) {
+      const pip = this.add.circle(x0 + i * 18, y, 6, FOE_HEAL.color).setStrokeStyle(2, 0x16203f);
+      pip.name = 'heal-pip';
+      box.container.add(pip);
+      this.healPips.push(pip);
+    }
+    this.healPipsSync(this.healsShown, false);
+    // The pictures of the items a trainer heals with, ready for the toss.
+    const items = services().session.content.items;
+    const ids = ['potion', 'super-potion', 'hyper-potion', 'max-potion', 'full-restore'].map((id) => items.get(id)?.iconAssetId).filter((id): id is string => Boolean(id) && services().assets.has(id!));
+    void loadAssets(this, ids).catch(() => null);
+  }
+
+  /** Lights the pips for `used` heals gone (from the right); `pop`: the one just used pops as it goes dark. */
+  private healPipsSync(used: number, pop: boolean): void {
+    const n = this.healPips.length;
+    const was = this.healsShown;
+    this.healsShown = Math.max(0, used);
+    this.healPips.forEach((pip, i) => {
+      if (!pip.active) return;
+      const dark = i >= n - this.healsShown;
+      const justNow = pop && dark && i < n - was;
+      if (!justNow) {
+        pip.setFillStyle(dark ? 0xffffff : FOE_HEAL.color, dark ? 0.2 : 1);
+        return;
+      }
+      const rate = animationTimeScale(services().session.settings);
+      this.tweens.chain({
+        targets: pip,
+        tweens: [{ scale: 1.6, duration: 100 * rate }, { scale: 1, duration: 200 * rate }],
+        onComplete: () => pip.active && pip.setScale(1),
+        onStop: () => pip.active && pip.setScale(1),
+      });
+      this.time.delayedCall(100 * rate, () => pip.active && pip.setFillStyle(0xffffff, 0.2));
+    });
+  }
+
+  /**
+   * Enemy heal (redesign pass 13): the foe trainer leans in from the edge and tosses the item; it arcs over their
+   * Pokémon and bursts into green light, the bar climbs (`refill`) while the Pokémon hops, and one heal pip goes dark.
+   * Resolves when the bar has filled. Presentation only: the HP comes from the battle's event.
+   */
+  private async foeHealMoment(mon: PokemonInstance, itemId: string, heal: boolean, refill: () => Promise<void>): Promise<void> {
+    const sprite = this.condSprite('enemy');
+    const level = this.clipLevel();
+    let filling: Promise<void> | null = null;
+    const fill = (): void => void (filling ??= refill());
+    if (!sprite || !sprite.visible || this.duo) {
+      fill();
+      if (heal) this.healPipsSync(this.healsShown + 1, false);
+      await filling;
+      return;
+    }
+    const temps: Phaser.GameObjects.GameObject[] = [];
+    try {
+      const spot = { ...this.spotXY('enemy'), h: this.headHeight(sprite), side: 'enemy' as const };
+      const art = level === 'full' ? this.trainerArt() : null;
+      let tr: Phaser.GameObjects.Sprite | null = null;
+      let hand: Point | null = null;
+      if (art) {
+        const v = trainerVisual(this, art.assetId, art.label, FOE_TRAINER_OFF, spot.y + 8, 2);
+        if (v instanceof Phaser.GameObjects.Sprite) {
+          const box = drawnBox(v);
+          v.setOrigin((box.x + box.w / 2) / Math.max(1, v.frame.cutWidth), (box.y + box.h) / Math.max(1, v.frame.cutHeight));
+          const k = Math.min(208 / Math.max(1, box.h), 176 / Math.max(1, box.w));
+          v.setScale(k);
+          this.field.addAt(v, this.fieldBase);
+          tr = v;
+          temps.push(v);
+          hand = foeHand({ x: FOE_HEAL.trX, y: spot.y }, box.h * k);
+        } else v.destroy();
+      }
+      // The item's own picture (loaded when the plate was made), or a green light until it is.
+      const icon = services().session.content.items.get(itemId)?.iconAssetId;
+      if (!this.textures.exists('heal.orb')) {
+        const g = this.make.graphics({}, false);
+        g.fillStyle(FOE_HEAL.color, 1).fillCircle(15, 15, 12).lineStyle(3, 0xffffff, 1).strokeCircle(15, 15, 12);
+        g.generateTexture('heal.orb', 30, 30);
+        g.destroy();
+      }
+      const it = icon && this.textures.exists(icon) ? (itemVisual(this, icon, 0, 0, 2) as Phaser.GameObjects.Image) : this.add.image(0, 0, 'heal.orb');
+      it.setDepth(3000).setAlpha(0);
+      temps.push(it);
+      await new Promise<void>((done) => {
+        this.condPlay(sprite, foeHealClip(spot, hand, level), { it: { kind: 'free' as const, get: () => it }, ...(tr ? { tr: { kind: 'free' as const, get: () => tr } } : {}) }, (cut) => {
+          done();
+          if (cut || !sprite.active) return;
+          this.restAt(sprite, 'enemy');
+          if (sprite.visible) this.standUp(sprite, mon);
+        }, (name) => {
+          if (name === 'burst') {
+            fill();
+            if (sprite.active) this.washSprite(sprite, FOE_HEAL.color, FOE_HEAL.tint, 600, 300);
+          }
+          if (name === 'pip' && heal) this.healPipsSync(this.healsShown + 1, true);
+        });
+      });
+    } catch {
+      /* presentation only */
+    } finally {
+      temps.forEach((t) => t.active && t.destroy());
+      fill();
+      await filling;
+    }
+  }
+
+  /** Waiting on you (pass 11): starts (or restarts) the idle clock, unless it already played this turn. */
+  private waitArm(): void {
+    const turn = this.run.battle?.turn ?? -1;
+    this.waitTimer?.remove();
+    this.waitTimer = null;
+    if (this.waitedTurn === turn || this.duo || this.clipLevel() === 'off') return;
+    this.waitTimer = this.time.delayedCall(WAIT.idleMs, () => {
+      this.waitTimer = null;
+      this.waitMoment(turn);
+    });
+  }
+
+  /** A key or a tap: the player is busy choosing, so the idle clock starts again. */
+  private waitKick(): void {
+    if (this.waitTimer && this.scene.isActive()) this.waitArm();
+  }
+
+  /** The turn is chosen: no more waiting, and a glance still playing ends where it stands. */
+  private waitDisarm(): void {
+    this.waitTimer?.remove();
+    this.waitTimer = null;
+    const v = this.waitSprite;
+    this.waitSprite = null;
+    if (v?.active) standStill(this, v);
+  }
+
+  /**
+   * Waiting on you (redesign pass 11): six seconds at the command menu with no input and your Pokémon notices: it
+   * glances round with a "?", then bounces on its feet twice and the message box nudges. Once a turn; it is only a
+   * look, so a choice made meanwhile goes straight through.
+   */
+  private waitMoment(turn: number): void {
+    if (this.busy || !this.menu || this.autoRunning || (this.run.battle?.turn ?? -1) !== turn || this.waitedTurn === turn) return;
+    const sprite = this.condSprite('player');
+    const mon = this.shown.player;
+    const level = this.clipLevel();
+    // Only when it stands idle: another moment playing on it means the screen is not waiting on you.
+    if (!sprite || !sprite.visible || !mon || mon.hp <= 0 || level === 'off' || sprite.getData(HIT_RUN)) return;
+    this.waitedTurn = turn;
+    try {
+      const spot = { ...this.spotXY('player'), h: this.headHeight(sprite), side: 'player' as const };
+      const mid = this.midOf('player');
+      const rate = animationTimeScale(services().session.settings);
+      this.waitSprite = sprite;
+      this.condPlay(sprite, waitClip(spot, level), {}, (cut) => {
+        if (this.waitSprite === sprite) this.waitSprite = null;
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, 'player');
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'ask') this.popGlyph('?', mid.x + WAIT.askDx, mid.y + WAIT.askDy, '#ffcb05', 54, 500, 30);
+        if (name === 'nudge' && this.message.visible && !this.tweens.isTweening(this.message)) {
+          const m = this.message;
+          const [sx, sy] = [m.scaleX, m.scaleY];
+          this.tweens.chain({
+            targets: m,
+            tweens: [
+              { scaleX: sx * WAIT.nudge, scaleY: sy * WAIT.nudge, duration: 80 * rate },
+              { scaleX: sx, scaleY: sy, duration: 300 * rate, ease: 'Elastic.easeOut', easeParams: [1, 0.4] },
+            ],
+            onStop: () => m.active && m.setScale(sx, sy),
+          });
+        }
+      });
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** A glyph (a note, a heart) springs out, holds, then floats up and fades. */
+  private popGlyph(glyph: string, x: number, y: number, color: string, size: number, hold: number, rise: number): void {
+    const rate = animationTimeScale(services().session.settings);
+    const t = this.add
+      .text(Phaser.Math.Clamp(x, 30, GAME_WIDTH - 30), Math.max(40, y), glyph, { fontFamily: FONT_FAMILY, fontSize: `${size}px`, color, stroke: '#16203f', strokeThickness: 6 })
+      .setOrigin(0.5)
+      .setDepth(3000)
+      .setScale(0);
+    this.tweens.chain({
+      targets: t,
+      tweens: [
+        { scale: 1, duration: 200 * rate, ease: 'Back.easeOut' },
+        { y: t.y - rise, alpha: 0, delay: hold * rate, duration: 400 * rate, ease: 'Sine.easeIn' },
+      ],
+      onComplete: () => t.destroy(),
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => t.active && t.destroy());
+  }
+
+  /** One sweat drop flicks off a worn-out Pokémon (pass 11): out and down in a small arc, then gone. */
+  private sweatDrop(v: Phaser.GameObjects.Sprite, side: Side): void {
+    if (!v.active || !v.visible || !v.getData('sag')) return;
+    const d = side === 'player' ? 1 : -1;
+    const home = this.spotXY(side);
+    const h = this.headHeight(v);
+    const x0 = home.x + d * 30;
+    const y0 = home.y - h * 0.75;
+    const x1 = x0 + d * (WORN.sweatDx + (this.sweatN++ % 2) * 30);
+    const y1 = y0 + WORN.sweatFall;
+    const drop = this.add.ellipse(x0, y0, 9, 13, 0xbfe6ff).setDepth(3000);
+    const u = { k: 0 };
+    const rate = animationTimeScale(services().session.settings);
+    this.tweens.add({
+      targets: u,
+      k: 1,
+      duration: WORN.sweatMs * rate,
+      onUpdate: () => drop.active && drop.setPosition(x0 + (x1 - x0) * u.k, y0 + (y1 - y0) * u.k - 4 * WORN.sweatArc * u.k * (1 - u.k)),
+      onComplete: () => drop.destroy(),
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => drop.active && drop.destroy());
   }
 
   /** The event's own song, key and ambience when this fight belongs to a Legendary world event. */
@@ -2208,7 +2827,8 @@ export class BattleScene extends Phaser.Scene {
   private updateSpectacleHud(): void {
     const battle = this.run.battle;
     if (battle && !this.hazards) this.hazards = new HazardFloor(this);
-    if (battle) this.hazards?.draw(battle.sideEffects, { player: PLAYER_POS, enemy: ENEMY_POS });
+    // The redesign's stones stand in for the floor's rock marks (pass 12) unless motion is off.
+    if (battle) this.hazards?.draw(battle.sideEffects, { player: PLAYER_POS, enemy: ENEMY_POS }, { rocks: this.clipLevel() === 'off' || !!this.duo });
     this.adaptMusic();
     const spec = battle?.spectacle;
     if (!battle || !spec || battle.doubles) {
@@ -2325,6 +2945,146 @@ export class BattleScene extends Phaser.Scene {
   private moodTint: Phaser.GameObjects.Rectangle | null = null;
 
   /** Aero panel mood (M120): a faint weather tint over the battle UI. Cosmetic; off with animations off. */
+  /** Whether the redesign's weather look draws this weather (rain, sun, sand, snow, with animations on). */
+  private wxHandles(id: string | null | undefined): id is WxKind {
+    return !!id && (WX_KINDS as readonly string[]).includes(id) && this.clipLevel() !== 'off' && !!this.wxLook;
+  }
+
+  /** A water move in rain or a fire move in sun (the 1.5x the engine gives them). */
+  private wxBoosts(type: string): boolean {
+    const k = this.wxLook?.current;
+    return (k === 'rain' && type === 'water') || (k === 'sun' && type === 'fire');
+  }
+
+  /** The weather now: the redesign's look for rain, sun, sand and snow (with its entrance when `arrive`), the older layer for hail. */
+  private async setWeather(w: { id: Weather; turns: number } | null, arrive: boolean): Promise<void> {
+    const id = w?.id ?? null;
+    const own = this.wxHandles(id);
+    this.weatherLayer?.set(own ? null : id);
+    this.applyMood(own ? null : id);
+    if (!own || !w) {
+      if (this.wxLook?.current) this.wxLook.clearNow();
+      this.trLook?.chipAt(48);
+      return;
+    }
+    const turns = wxTurns(w.turns);
+    this.trLook?.chipAt(84);
+    if (arrive) await this.wxLook!.arrive(id, turns);
+    else this.wxLook!.show(id, turns);
+  }
+
+  /** Whether the redesign's terrain carpet draws this terrain (with animations on). */
+  private trHandles(id: string | null | undefined): id is TerrainKind {
+    return !!id && (TERRAIN_KINDS as readonly string[]).includes(id) && this.clipLevel() !== 'off' && !!this.trLook;
+  }
+
+  /** The terrain now: its carpet and chip (rolled out from the last mover's feet when `arrive`). */
+  private async setTerrain(t: { id: string; turns: number } | null, arrive: boolean): Promise<void> {
+    if (!t || !this.trHandles(t.id)) {
+      if (this.trLook?.current) this.trLook.clearNow();
+      return;
+    }
+    this.trLook!.chipAt(this.wxLook?.current ? 84 : 48);
+    const turns = wxTurns(t.turns);
+    if (arrive) await this.trLook!.arrive(t.id, turns, this.spotXY(this.phLast?.side === 'enemy' ? 'enemy' : 'player'));
+    else this.trLook!.show(t.id, turns);
+  }
+
+  /** How many turns the terrain that just started has (the turn's end state; 5 when it has already moved on). */
+  private trTurnsNow(id: string): number {
+    const t = this.run.battle?.terrain;
+    return t && t.id === id ? t.turns : 5;
+  }
+
+  /** How many turns the weather that just started has (the turn's end state; 5 when it has already moved on). */
+  private wxTurnsNow(id: string): number {
+    const w = this.run.battle?.weather;
+    return w && w.id === id ? w.turns : 5;
+  }
+
+  /** The lightning flash of rain arriving: a sheet over the arena (under the boxes), softened by the flash settings. */
+  private wxFlash(color: number, alpha: number, ms: number): void {
+    const st = services().session.settings;
+    const k = st.reducedFlash || !st.battleScreenEffects ? 0 : capFlash(st.effectIntensity, st.reducedFlash);
+    if (k <= 0) return;
+    const sheet = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, color, alpha * Math.min(1, k)).setOrigin(0).setDepth(860);
+    this.tweens.add({ targets: sheet, alpha: 0, duration: ms, onComplete: () => sheet.destroy() });
+  }
+
+  /** A stamp at a fixed spot, as the mockups slam them: hard ones drop in big and tilted and shake the screen, soft ones
+   *  (the weather boost) grow in; both hold 750 ms and lift away. */
+  private wxStamp(word: string, fill: string, ink: string, x: number, y: number, soft = true, o: { from?: number; tilt?: number; inMs?: number; hold?: number; lift?: number } = {}): void {
+    const key = stampPicture(this, word, fill, ink);
+    if (!key) return;
+    const full = this.clipLevel() === 'full';
+    const st = this.add.image(x, y, key).setScale(PICTURE_SCALE * (full ? (soft ? 0.8 : (o.from ?? 2.2)) : 1)).setAngle(full && !soft ? (o.tilt ?? -7) : 0).setDepth(4000);
+    this.tweens.chain({
+      targets: st,
+      tweens: [
+        { scale: PICTURE_SCALE, duration: full ? (soft ? 200 : (o.inMs ?? 120)) : 1, ease: soft ? 'Quad.easeOut' : 'Cubic.easeIn' },
+        { y: y - (o.lift ?? 14), alpha: 0, duration: 200, delay: o.hold ?? 750 },
+      ],
+      onComplete: () => st.destroy(),
+    });
+    if (full && !soft) this.time.delayedCall(120, () => this.wxShake(4, 120));
+  }
+
+  /** A short screen shake (px), if screen effects are on. */
+  private wxShake(px: number, ms: number): void {
+    const st = services().session.settings;
+    if (st.battleScreenEffects) this.cameras.main.shake(ms, (px / GAME_WIDTH) * capFlash(st.shakeIntensity, st.reducedFlash));
+  }
+
+  /** An attack meets Protect (pass 8): rings where it lands, a shake, the PROTECTED stamp, the attacker pushed back. */
+  private protectedMoment(side: Side): void {
+    const level = this.clipLevel();
+    if (level === 'off' || this.duo) return;
+    const other: Side = side === 'enemy' ? 'player' : 'enemy';
+    const guard = this.condSprite(side);
+    const hitter = this.condSprite(other);
+    if (!guard || !hitter) return;
+    try {
+      const spot = (sd: Side, sp: Phaser.GameObjects.Sprite): CondSpot => ({ ...this.spotXY(sd), w: sp.displayWidth, h: sp.displayHeight * sp.originY, side: sd });
+      const g = spot(side, guard);
+      const a = spot(other, hitter);
+      const clip = protectedClip(a, g, level);
+      const toward = side === 'enemy' ? -1 : 1;
+      const cue = (name: string): void => {
+        if (name === 'shake') this.wxShake(5, 200);
+        // In front of the shield and up, clear of the info boxes (the mockup's spot sits where the game has your box).
+        if (name === 'stamp') this.wxStamp('PROTECTED', '#3ec46d', '#131c36', Phaser.Math.Clamp(g.x + toward * (SHIELD.ahead + 60), side === 'enemy' ? 470 : 110, 520), Math.max(60, g.y - g.h / 2 - SHIELD.up - 66), false);
+      };
+      const mon = this.shown[other];
+      if (!hitter.visible) return void playClip(this, clip, this.clipHost({}, { cue }));
+      this.condPlay(hitter, clip, { attacker: { kind: 'mon', get: () => hitter } }, (cut) => {
+        if (cut || !hitter.active) return;
+        this.restAt(hitter, other);
+        if (hitter.visible) this.standUp(hitter, mon);
+      }, cue);
+    } catch (err) {
+      console.warn('Protect moment failed', err);
+    }
+  }
+
+  /** The sandstorm's end-of-turn gust (pass 8): grit sweeps across and both Pokémon lean into it. */
+  private sandGust(): void {
+    if (this.wxLook?.current !== 'sand') return;
+    const level = this.clipLevel();
+    if (level === 'off') return;
+    this.wxLook.gust();
+    if (this.duo) return;
+    for (const side of ['player', 'enemy'] as const) {
+      const sprite = this.condSprite(side);
+      if (!sprite || !sprite.visible) continue;
+      const mon = this.shown[side];
+      this.condPlay(sprite, gustLeanClip(level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      });
+    }
+  }
+
   private applyMood(weather: string | null): void {
     const st = services().session.settings;
     const mood = aeroMood(weather, null);
@@ -2356,6 +3116,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private camBusy = false;
+  /** When the last critical-hit freeze played (pass 12): the old letterbox and camera push stay away for it. */
+  private critFrozeAt = -1e9;
+  /** The arena's back and ground pictures (the critical hit drains their colour). */
+  private arenaLayers: Phaser.GameObjects.Image[] = [];
   /** The foe trainer's name, picture and title, kept for the closing lines after the battle is over. */
   private lastFoe: { name: string; art: { assetId: string; label: string }; title: string | null; role?: string } | null = null;
   /** Real-clock time the camera has sat off the wide view with no move running (for the watchdog below); 0 = on the wide view or moving. */
@@ -2456,13 +3220,6 @@ export class BattleScene extends Phaser.Scene {
     const f = cameraFocus(kind, animationStrength(st));
     const cam = this.cameras.main;
     this.tweens.add({ targets: cam, zoom: 1 + f.zoom, duration: f.ms / 2, yoyo: true, ease: 'Sine.easeInOut' });
-  }
-
-  private floatDamage(sprite: { x: number; y: number } | null | undefined, amount: number): void {
-    if (!sprite || this.motion === 'off') return;
-    const text = this.add.text(sprite.x, sprite.y - 60, `-${amount}`, textStyle(24, '#ffe9a8')).setOrigin(0.5).setDepth(900).setScale(services().session.settings.popupScale);
-    text.setStroke('#201020', 4);
-    this.tweens.add({ targets: text, y: text.y - 36, alpha: 0, duration: this.motion === 'full' ? 900 : 500, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
   }
 
 
@@ -2792,13 +3549,19 @@ export class BattleScene extends Phaser.Scene {
 
   /** Plays the opening; if any part of the show fails, the Pokémon and boxes still appear and the battle goes on. */
   private async intro(): Promise<void> {
+    // The scene can be restarted while the intro is still playing (a new battle, a test): the old intro then stops
+    // instead of prompting on the new battle's screen.
+    const life = this.life;
     await this.flightNorthEntrance();
+    if (this.stale(life)) return;
     if (await this.rivalStepInScene()) return;
     try {
-      await this.introShow();
+      await this.introShow(life);
     } catch (e) {
+      if (this.stale(life)) return;
       console.warn('Battle intro failed; showing the fighters anyway', e);
       await this.recoverIntro().catch((e2) => console.warn('Battle intro recovery failed', e2));
+      if (this.stale(life)) return;
       this.busy = false;
       this.nextPrompt();
     }
@@ -2909,7 +3672,7 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private async introShow(): Promise<void> {
+  private async introShow(life = this.life): Promise<void> {
     const battle = this.run.battle!;
     const title = this.trainerTitle();
     if (battle.turn === 1 && !battle.needsSwitch) {
@@ -2924,13 +3687,15 @@ export class BattleScene extends Phaser.Scene {
       this.rxPkBand = this.pkBand();
       interactionLog.tell('stage', battle.trainer ? (title ?? battle.trainer.name) : `Wild ${this.speciesName(battle.enemyTeam[0]!)}`, 'Battle');
       await this.playIntro();
+      // A lone wild Pokémon gets the redesign's own entrance (pass 5); its bars stand in for the opening sweep.
+      const wildIn = !battle.trainer && !this.duo && !battle.raid && !battle.totem && !this.phCards();
       // The foe trainer waits on the platform (a black shape at first) while the camera sweeps over the arena.
       const openArt = this.trainerArt();
       const openTitle = this.trainerTitle();
       const foeTrainer = openTitle && openArt ? trainerVisual(this, openArt.assetId, openArt.label, ENEMY_POS.x, ENEMY_POS.y, 2.5) : null;
       // Every foe trainer stands the same height on the platform (the reference's Red and N are the yardstick).
       if (foeTrainer) fitTrainer(this, foeTrainer, ENEMY_POS.y);
-      await this.playBeat(openingReveal(this, this.motion, ENEMY_POS, foeTrainer));
+      if (!(wildIn && this.clipLevel() === 'full')) await this.playBeat(openingReveal(this, this.motion, ENEMY_POS, foeTrainer));
       await this.skin?.intro?.(this, this.frameInfo());
       const modeLine = modeBattleLine(this.run.rules.modeId, !!battle.trainer && isBossClass(battle.trainer.classId));
       if (modeLine) await this.say(modeLine);
@@ -2977,8 +3742,11 @@ export class BattleScene extends Phaser.Scene {
         await this.showDuoSide('enemy', true);
         await this.say(`Wild ${this.nameList([this.shown.enemy, ...this.otherMons('enemy')])} appeared!`);
       } else {
-        this.showSprite('enemy', this.shown.enemy);
-        await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
+        if (wildIn) await this.wildEntranceMoment(this.shown.enemy);
+        else {
+          this.showSprite('enemy', this.shown.enemy);
+          await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
+        }
         await this.say(battle.nemesis ? `Your nemesis, ${this.speciesName(this.shown.enemy)}, appeared!` : battle.monRival ? `Your ${this.speciesName(this.shown.enemy)} rival appeared!` : `A wild ${this.speciesName(this.shown.enemy)} appeared!`);
         // Shadow and Blissful foes announce themselves (a dark haze / soft motes) before the fight.
         if (this.shown.enemy.blissful) {
@@ -3053,6 +3821,7 @@ export class BattleScene extends Phaser.Scene {
       const events = session.beginBattle();
       await this.playEvents(events, before, title);
     }
+    if (this.stale(life)) return;
     this.busy = false;
     this.nextPrompt();
   }
@@ -4348,7 +5117,1095 @@ export class BattleScene extends Phaser.Scene {
       },
     }));
     await run.done;
-    if (visual.active) breathe(this, visual, this.motion);
+    if (visual.active) this.standUp(visual, mon);
+  }
+
+  /**
+   * Hit (pass 2): the target goes white, squashes, is thrown back away from the attacker (further for a super effective
+   * or critical hit) and springs home with dust. Full animations only; false when it can't play (the plain hit-stop shows).
+   */
+  private hitMoment(side: Side, cue: { amount: number; crit: boolean; effectiveness: number; color?: string }): boolean | { shake: number; heavy: boolean; hold?: number } {
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    if (!(sprite instanceof Phaser.GameObjects.Sprite) || !sprite.active || !sprite.visible || this.clipLevel() !== 'full') return false;
+    const at = this.spotXY(side);
+    // Something else is moving it (a move's own animation): leave it to that.
+    if (Math.abs(sprite.x - at.x) > 1) return false;
+    standStill(this, sprite);
+    const mon = this.shown[side];
+    const max = Math.max(1, maxHp(services().session.content, mon));
+    // Big: super effective, critical or 40% of its HP (pass 16, 18). Sharp: critical, super effective or 60% (pass 17).
+    const big = bigHit(cue.amount, max, cue.effectiveness, cue.crit);
+    const sharp = cue.crit || cue.effectiveness > 1 || cue.amount >= max * 0.6;
+    // Power tiers (pass 12): the more of its HP the hit takes, the further it throws the Pokémon and the harder it shakes.
+    const power = hitPower(cue.amount, max, cue.crit || cue.effectiveness > 1);
+    const h = sprite.displayHeight * sprite.originY;
+    const color = cue.color ? Phaser.Display.Color.HexStringToColor(cue.color).color : 0xffffff;
+    // The light: a glow on the body and a flat pool on the floor, in the move's colour, added over the arena.
+    const key = glowPicture(this);
+    const r = big ? HIT_LIGHT.bodyBig : HIT_LIGHT.body;
+    const rf = big ? HIT_LIGHT.floorBig : HIT_LIGHT.floor;
+    let cut = false;
+    const land = (): void => {
+      if (cut || !sprite.active) return;
+      const light = key ? this.add.image(at.x, at.y - h / 2, key).setScale((r * 2) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
+      const floor = key ? this.add.image(at.x, at.y - 4, key).setScale((rf * 2) / GLOW_SIZE, (rf * 2 * 0.26) / GLOW_SIZE).setTint(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0) : null;
+      if (floor) this.field.addAt(floor, this.fieldBase);
+      if (light) this.field.add(light);
+      const other = side === 'player' ? this.enemySprite : this.playerSprite;
+      const run = playClip(this, hitClip({ x: sprite.x, y: at.y, h }, side === 'enemy' ? 1 : -1, { big, sharp, p: power.p }, 'full'), {
+        ...this.clipHost({ mon: { kind: 'mon', get: () => sprite }, light: { kind: 'free', get: () => light }, floor: { kind: 'free', get: () => floor } }, {
+          cue: (name) => {
+            // A big hit lights the other Pokémon too: a wash of the colour over it that fades in half a second.
+            if (name !== 'glow' || !(other instanceof Phaser.GameObjects.Sprite) || !other.active || !other.visible) return;
+            const lit = this.add.sprite(other.x, other.y, other.texture.key, other.frame.name).setOrigin(other.originX, other.originY).setScale(other.scaleX, other.scaleY).setFlip(other.flipX, other.flipY).setTintFill(color).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.6);
+            if (other.parentContainer) other.parentContainer.addAt(lit, other.parentContainer.getIndex(other) + 1);
+            if (other.mask) lit.setMask(other.mask);
+            this.tweens.add({ targets: lit, alpha: 0, duration: 500, onComplete: () => lit.destroy() });
+          },
+        }),
+      });
+      sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
+      void run.done.then(() => {
+        light?.destroy();
+        floor?.destroy();
+        if (cut || !sprite.active) return;
+        sprite.setData(HIT_RUN, undefined);
+        run.rest('mon');
+        if (sprite === (side === 'player' ? this.playerSprite : this.enemySprite)) this.standUp(sprite, mon);
+      });
+    };
+    // The critical hit (pass 12): everything stops for a moment first, then the hit lands.
+    const freeze = cue.crit ? this.critFreeze(sprite, { x: at.x, y: at.y - h / 2 }) : null;
+    if (freeze) {
+      sprite.setData(HIT_RUN, { stop: () => ((cut = true), freeze.stop()) });
+      void freeze.done.then(() => {
+        if (!cut && sprite.active) freeze.rest('mon');
+        land();
+      });
+    } else land();
+    const st = services().session.settings;
+    return {
+      shake: st.battleScreenEffects ? Math.round(power.shake * Math.min(1, Math.max(0, st.shakeIntensity))) : 0,
+      heavy: power.tier === 'heavy',
+      ...(freeze ? { hold: CRIT_FREEZE.ms } : {}),
+    };
+  }
+
+  /** The target's middle, for things drawn beside it. */
+  private midOf(side: Side): Point {
+    const at = this.spotXY(side);
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    const h = sprite?.active ? sprite.displayHeight * sprite.originY : 100;
+    return { x: at.x, y: at.y - h / 2 };
+  }
+
+  /** Multi-hit (pass 12): hit `k` lands; the combo counter beside the target ticks up, pops and grows. */
+  private comboTick(side: Side, k: number): void {
+    const level = this.clipLevel();
+    const feet = this.spotXY(side);
+    const x = Phaser.Math.Clamp(feet.x + COMBO.dx, 50, GAME_WIDTH - 50);
+    const y = Phaser.Math.Clamp(feet.y + COMBO.dy, 50, GAME_HEIGHT - 50);
+    if (k === 1 || !this.comboText?.active) {
+      this.comboText?.destroy();
+      this.comboText = this.add
+        .text(x, y, '', { fontFamily: `"Jersey 15", ${FONT_FAMILY}`, fontSize: `${COMBO.size}px`, color: '#ffcb05', stroke: '#131c36', strokeThickness: 6, shadow: { offsetX: 3, offsetY: 3, color: '#131c36', fill: true, stroke: true, blur: 0 } })
+        .setOrigin(0.5)
+        .setDepth(3000)
+        .setAlpha(0);
+      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => (this.comboText = null));
+    }
+    const t = this.comboText;
+    const size = comboScale(k);
+    this.time.delayedCall(level === 'full' ? 60 : 0, () => {
+      if (!t.active) return;
+      this.tweens.killTweensOf(t);
+      t.setText(`×${k}`).setAlpha(1).setPosition(x, y);
+      if (level !== 'full') return void t.setScale(size.rest);
+      t.setScale(size.rest);
+      this.tweens.chain({ targets: t, tweens: [{ scale: size.pop, duration: COMBO.upMs }, { scale: size.rest, duration: COMBO.downMs, ease: 'Quad.easeOut' }] });
+      this.wxShake(COMBO.shake + k - 1, 80);
+    });
+  }
+
+  /** The multi-hit ends: the counter lifts away, HIT N TIMES! slams on and the total slams in as one number. */
+  private comboEnd(side: Side, count: number, total: number): void {
+    const t = this.comboText;
+    this.comboText = null;
+    if (t?.active) {
+      this.tweens.killTweensOf(t);
+      this.tweens.add({ targets: t, alpha: 0, y: t.y - COMBO.lift, duration: COMBO.outMs, onComplete: () => t.destroy() });
+    }
+    const mid = this.midOf(side);
+    const spot = side === 'enemy' ? { x: mid.x + COMBO.stampDx, y: COMBO.stampY } : hitStampSpot(side, mid);
+    this.wxStamp(`HIT ${count} TIMES!`, '#ffcb05', '#131c36', spot.x, spot.y, false);
+    if (total > 0) void this.fx.play([{ kind: 'number', side, amount: total, tone: 'crit', motion: this.clipLevel() === 'full' }]);
+  }
+
+  /** A hit's word stamp (pass 5): CRITICAL HIT!, SUPER EFFECTIVE!, Not very effective… or NO EFFECT beside the target. */
+  private hitStamp(side: Side, kind: string): boolean {
+    const look = HIT_STAMPS[kind];
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    if (!look || !sprite?.active || !sprite.visible) return false;
+    const at = this.spotXY(side);
+    const spot = hitStampSpot(side, { x: at.x, y: at.y - (sprite.displayHeight * sprite.originY) / 2 });
+    const show = (): void => this.wxStamp(look.word, look.fill, look.ink, spot.x, spot.y + look.dy, look.soft);
+    if (look.at > 0) this.time.delayedCall(look.at, show);
+    else show();
+    return true;
+  }
+
+  /**
+   * The critical hit's freeze (pass 12): the target goes white with a star and yellow rays, black bars close in from
+   * top and bottom, the camera jumps to it and the arena's colour drains for a moment.
+   */
+  private critFreeze(sprite: Phaser.GameObjects.Sprite, mid: Point): ClipRun {
+    const F = CRIT_FREEZE;
+    const st = services().session.settings;
+    this.critFrozeAt = this.time.now;
+    return playClip(this, critFreezeClip(mid, 'full'), {
+      ...this.clipHost({ mon: { kind: 'mon', get: () => sprite } }, {
+        cue: (name) => {
+          if (name !== 'freeze') return;
+          // The bars hold to the screen's edges while the camera jumps in (drawn in the world, so placed each frame).
+          const bars = [0, 1].map(() => this.add.rectangle(0, 0, GAME_WIDTH, F.bar, 0x05070f).setOrigin(0).setDepth(1400));
+          const slide = { k: 0 };
+          const place = (): void => {
+            const cam = this.cameras.main;
+            const v = cam.worldView;
+            const h = F.bar / cam.zoom;
+            bars.forEach((b, i) => b.active && b.setPosition(v.x - 2, i ? v.bottom - h * slide.k : v.y - h * (1 - slide.k)).setSize(v.width + 4, h));
+          };
+          place();
+          this.events.on(Phaser.Scenes.Events.POST_UPDATE, place);
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.events.off(Phaser.Scenes.Events.POST_UPDATE, place));
+          this.tweens.chain({
+            targets: slide,
+            tweens: [
+              { k: 1, duration: F.barIn, ease: 'Cubic.easeOut' },
+              { k: 0, duration: F.barOut, delay: F.barHold, ease: 'Quad.easeIn' },
+            ],
+            onComplete: () => {
+              this.events.off(Phaser.Scenes.Events.POST_UPDATE, place);
+              bars.forEach((b) => b.destroy());
+            },
+          });
+          if (st.battleScreenEffects && !this.camBusy) {
+            const cam = this.cameras.main;
+            this.camBusy = true;
+            cam.pan(mid.x, mid.y, F.camIn, 'Cubic.easeOut', true);
+            cam.zoomTo(F.zoom, F.camIn, 'Cubic.easeOut', true);
+            this.time.delayedCall(F.camIn + F.camHold, () => {
+              cam.pan(GAME_WIDTH / 2, GAME_HEIGHT / 2, F.camOut, 'Sine.easeInOut', true);
+              cam.zoomTo(1, F.camOut, 'Sine.easeInOut', true);
+              this.time.delayedCall(F.camOut, () => (this.camBusy = false));
+            });
+          }
+          // The arena's colour drains to grey and dims, then comes back.
+          const drains = this.arenaLayers.filter((img) => img.active && img.preFX).map((img) => ({ img, cm: img.preFX!.addColorMatrix() }));
+          if (!drains.length) return;
+          const paint = (k: number) => drains.forEach(({ img, cm }) => img.active && (cm.reset(), cm.brightness(1 - (1 - F.dim) * k, true), cm.saturate(-k, true)));
+          this.tweens.chain({
+            targets: { k: 0 },
+            tweens: [
+              { k: 1, duration: F.drainIn, onUpdate: (tw) => paint(Number(tw.getValue()) || 0) },
+              { k: 0, duration: F.drainOut, delay: F.drainHold, onUpdate: (tw) => paint(Number(tw.getValue()) || 0) },
+            ],
+            onComplete: () => drains.forEach(({ img, cm }) => img.active && img.preFX?.remove(cm as unknown as Phaser.FX.Controller)),
+          });
+        },
+      }),
+    });
+  }
+
+  // ---------- conditions (redesign pass 8): each status arrives, stays on the Pokémon and ticks each turn ----------
+
+  /** Where a side's Pokémon stands and how big it is drawn, for the condition clips. */
+  private condSpot(side: Side, sprite: Phaser.GameObjects.Sprite): CondSpot {
+    const at = this.spotXY(side);
+    return { x: at.x, y: at.y, w: Math.max(60, sprite.displayWidth * 0.6), h: Math.max(60, sprite.displayHeight * sprite.originY), side };
+  }
+
+  /** How far the top of the Pokémon's drawn body is above its feet (the frame's empty rows left out), px on screen. */
+  private headHeight(sprite: Phaser.GameObjects.Sprite): number {
+    const full = sprite.displayHeight * sprite.originY;
+    try {
+      const f = sprite.frame;
+      const key = `${sprite.texture.key}|${f.name}`;
+      let top = this.bodyTops.get(key);
+      if (top === undefined) {
+        top = 0;
+        scan: for (let y = 0; y < f.height; y++) {
+          for (let x = 0; x < f.width; x += 2) {
+            if (this.textures.getPixelAlpha(x, y, sprite.texture.key, f.name) > 40) {
+              top = y;
+              break scan;
+            }
+          }
+        }
+        this.bodyTops.set(key, top);
+      }
+      return Math.max(30, full - top * Math.abs(sprite.scaleY));
+    } catch {
+      return full;
+    }
+  }
+
+  /** The side's Pokémon, when it is one picture on the field that a look can sit on. */
+  private condSprite(side: Side): Phaser.GameObjects.Sprite | null {
+    const v = side === 'player' ? this.playerSprite : this.enemySprite;
+    return !this.duo && v instanceof Phaser.GameObjects.Sprite && v.active ? v : null;
+  }
+
+  /** Locked statuses stop its own picture moving; sleep slows it to a third and dims it. */
+  private condPose(visual: Visual, kind: CondKind | null): void {
+    if (!(visual instanceof Phaser.GameObjects.Sprite)) return;
+    const rate = kind === 'par' || kind === 'frz' ? 0 : kind === 'slp' ? 0.3 : 1;
+    if (rate !== 1 || visual.getData('condRate')) {
+      visual.anims.timeScale = rate;
+      visual.setData('condRate', rate !== 1);
+    }
+    const dim = kind === 'slp';
+    if (dim && !visual.getData('dimmed') && !visual.isTinted) {
+      visual.setTint(0xb8b8b8);
+      visual.setData('dimmed', true);
+    } else if (!dim && visual.getData('dimmed')) {
+      visual.clearTint();
+      visual.setData('dimmed', false);
+    }
+  }
+
+  /** Sleep's slump: it leans away from the other side, sinks 12 px and gets shorter. Once; `unslump` undoes it. */
+  private slump(sprite: Phaser.GameObjects.Sprite, side: Side): void {
+    if (sprite.getData('slumped')) return;
+    sprite.setAngle(SLUMP.rot * (side === 'enemy' ? 1 : -1)).setY(this.spotXY(side).y + SLUMP.dy).setScale(sprite.scaleX, sprite.scaleY * SLUMP.sy);
+    sprite.setData('slumped', true);
+  }
+
+  private unslump(sprite: Phaser.GameObjects.Sprite, side: Side): void {
+    if (!sprite.getData('slumped')) return;
+    standStill(this, sprite);
+    sprite.setAngle(0).setY(this.spotXY(side).y).setScale(sprite.scaleX, sprite.scaleY / SLUMP.sy);
+    sprite.setData('slumped', false);
+  }
+
+  /** Keeps the side's look in step with its status: a switch-in already burned wears it at once; a cure takes it off. */
+  private condSync(side: Side): void {
+    try {
+      const dz = this.dizzy[side];
+      if (dz && (dz.sprite !== this.condSprite(side) || this.clipLevel() === 'off')) this.dizzyOff(side, 0);
+      const sprite = this.condSprite(side);
+      const kind = condKind(this.shown[side]?.status?.id);
+      const level = this.clipLevel();
+      const cur = this.conds[side];
+      if (cur && (cur.sprite !== sprite || cur.kind !== kind || level === 'off')) {
+        cur.destroy(cur.sprite === sprite ? 250 : 0);
+        this.conds[side] = null;
+        if (sprite && cur.sprite === sprite) {
+          if (cur.kind === 'slp') this.unslump(sprite, side);
+          this.condPose(sprite, null);
+          if (sprite.visible) this.standUp(sprite, this.shown[side]);
+        }
+      }
+      if (!kind || !sprite || this.conds[side] || level === 'off' || !sprite.visible) return;
+      const look = new ConditionLook(this, sprite, kind, this.condSpot(side, sprite), level, false);
+      this.conds[side] = look;
+      look.start();
+      this.standUp(sprite, this.shown[side]);
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** BattleFx asks: show our own look for this status moment instead of the pack's animation? */
+  private condition(side: Side, status: string, at: 'arrive' | 'tick' | 'cant'): boolean {
+    if (status === 'cnf') return this.confusionMoment(side, at);
+    const kind = condKind(status);
+    const sprite = this.condSprite(side);
+    if (!kind || !sprite || !sprite.visible || this.clipLevel() === 'off') return false;
+    try {
+      if (at === 'arrive') return this.condArrive(side, kind, sprite);
+      const look = this.conds[side];
+      if (!look || look.sprite !== sprite || look.kind !== kind) return false;
+      if (at === 'tick') return kind === 'brn' || kind === 'psn' ? this.condTick(side, kind, sprite, look) : false;
+      if (kind === 'par') return this.parCant(side, sprite, look);
+      // Asleep or frozen: the look already says it.
+      return kind === 'slp' || kind === 'frz';
+    } catch {
+      return false;
+    }
+  }
+
+  /** Confusion (pass 8): stars arrive and circle its head while it sways; hurting itself swings, bonks and shakes. */
+  /** A side's hazard look, made when first needed. */
+  private hazardLook(side: Side): HazardLook {
+    const have = this.hazardLooks[side];
+    if (have) return have;
+    const look = new HazardLook(this, side, {
+      mid: () => this.midOf(side),
+      chipAt: () => {
+        const box = (side === 'enemy' ? this.enemyBox : this.playerBox)?.container.getBounds();
+        return side === 'enemy' ? { x: (box?.left ?? 20) + 70, y: (box?.bottom ?? 100) + 22 } : { x: (box?.left ?? 600) + 70, y: (box?.top ?? 280) - 16 };
+      },
+      layer: this.field,
+      full: this.clipLevel() === 'full',
+    });
+    this.hazardLooks[side] = look;
+    return look;
+  }
+
+  /** Brings a side's hazards on screen in line with the battle; `thrown` throws new stones from the other side. */
+  private async hazardSync(side: Side, thrown: boolean): Promise<void> {
+    try {
+      const fx = this.run.battle?.sideEffects?.[side];
+      if (!fx || this.duo || this.clipLevel() === 'off') return this.hazardLooks[side]?.destroy();
+      const setter: Side = side === 'player' ? 'enemy' : 'player';
+      const sp = this.condSprite(setter);
+      const mid = this.midOf(setter);
+      const mouth = thrown && sp ? { x: mid.x + (setter === 'player' ? 1 : -1) * sp.displayWidth * 0.3, y: mid.y - sp.displayHeight * sp.originY * 0.16 } : null;
+      const ms = this.hazardLook(side).sync(fx, mouth);
+      if (ms > 0) await new Promise<void>((r) => this.time.delayedCall(Math.min(ms, 1600), r));
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** A Pokémon comes in on hazards: the stones stab inward, it flashes white, squashes and the screen shakes. */
+  private async hazardHit(side: Side, hazard: string, amount: number, hpAfter: number): Promise<void> {
+    try {
+      const level = this.clipLevel();
+      const sprite = this.condSprite(side);
+      const mon = this.shown[side];
+      if (hazard === 'stealthRock' && !this.hazardLooks[side]?.hasRocks) await this.hazardSync(side, false);
+      const ms = hazard === 'stealthRock' ? (this.hazardLooks[side]?.stab() ?? 0) : 0;
+      if (ms > 0) await new Promise<void>((r) => this.time.delayedCall(ms, r));
+      if (sprite && sprite.visible && level === 'full') {
+        this.washSprite(sprite, 0xffffff, 1, 0, 200);
+        this.tweens.chain({ targets: sprite, tweens: [{ scaleY: sprite.scaleY * 0.85, duration: 50 }, { scaleY: sprite.scaleY, duration: 300, ease: 'Elastic.easeOut', easeParams: [1, 0.4] }] });
+        this.wxShake(HAZARD.shake, 200);
+      }
+      if (amount > 0) void this.fx.play([{ kind: 'number', side, amount, tone: 'damage', motion: level === 'full' }]);
+      if (mon && amount > 0) {
+        mon.hp = hpAfter;
+        void this.refreshInfoBox(side === 'enemy' ? this.enemyBox : this.playerBox, mon, true);
+      }
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** The battle's own conditions on a side's Pokémon (recharge, charging), as the finished turn left them. */
+  private volOf(side: Side): { recharge: boolean; charging: string | null } | null {
+    const b = this.run.battle;
+    if (!b) return null;
+    return side === 'player' ? b.playerVolatile : b.enemyVolatile;
+  }
+
+  /** Charge-up (pass 12): lights are pulled in from all over the arena, a glow grows, a CHARGING chip pops on. */
+  private async chargeMoment(side: Side): Promise<void> {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off') return;
+    try {
+      this.hold[side]?.destroy();
+      const look = new HoldLook(this, sprite, 'charge', this.headHeight(sprite), level === 'full');
+      this.hold[side] = look;
+      const run = playClip(this, chargeClip(this.midOf(side), level), this.clipHost({}, {
+        cue: (name) => {
+          if (name === 'glow') look.startGlow(CHARGE.glowMs);
+          if (name === 'chip') look.showChip();
+        },
+      }));
+      await run.done;
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** Spent (pass 12): it sags and greys, steam puffs off it and a RECHARGE chip hangs over it. */
+  private spentOn(side: Side): void {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off' || this.hold[side]?.kind === 'spent') return;
+    try {
+      this.hold[side]?.destroy();
+      const look = new HoldLook(this, sprite, 'spent', this.headHeight(sprite), level === 'full');
+      this.hold[side] = look;
+      look.startSpent(level === 'full' ? SPENT.inMs : 0);
+      look.showChip();
+      this.spentSag(sprite, side, true, () => {
+        const mon = this.shown[side];
+        if (mon && this.hold[side] === look && sprite.active && sprite.visible) this.standUp(sprite, mon);
+      });
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** Ends a side's held state: the chip goes, the glow or grey fades, a spent Pokémon stands back up. */
+  private async holdOff(side: Side): Promise<void> {
+    const look = this.hold[side];
+    this.hold[side] = null;
+    if (!look) return;
+    const sprite = look.sprite;
+    const spent = look.kind === 'spent';
+    const done = look.release();
+    if (spent && sprite.active) {
+      this.spentSag(sprite, side, false, () => {
+        const mon = this.shown[side];
+        if (mon && sprite.active && sprite.visible && sprite === this.condSprite(side) && !this.hold[side]) this.standUp(sprite, mon);
+      });
+    }
+    await done;
+  }
+
+  /** At the end of a turn: a held state ends when the battle says so, or when its Pokémon has left. */
+  private async holdSync(): Promise<void> {
+    for (const side of ['player', 'enemy'] as const) {
+      const look = this.hold[side];
+      const sprite = this.condSprite(side);
+      const vol = this.volOf(side);
+      if (look && (look.sprite !== sprite || !sprite?.visible)) {
+        look.destroy();
+        this.hold[side] = null;
+        continue;
+      }
+      if (look && ((look.kind === 'spent' && !vol?.recharge) || (look.kind === 'charge' && !vol?.charging))) await this.holdOff(side);
+      else if (!look && vol?.recharge) this.spentOn(side);
+    }
+  }
+
+  /**
+   * A spent Pokémon sags 90% tall and 4 px down (on), or springs back up to the height it stood at (off). `then` runs
+   * once it has got there (never from halfway: standing takes its size from the size it has then).
+   */
+  private spentSag(sprite: Phaser.GameObjects.Sprite, side: Side, on: boolean, then?: () => void): void {
+    if (!!sprite.getData('spentSag') === on) return;
+    standStill(this, sprite);
+    // The sag still settling in stops where it is: the spring back up goes to the height it stood at before.
+    const old = sprite.getData('spentTween') as Phaser.Tweens.Tween | Phaser.Tweens.TweenChain | undefined;
+    sprite.setData('spentTween', undefined);
+    old?.stop();
+    sprite.setData('spentSag', on);
+    if (on) sprite.setData('spentBase', sprite.scaleY);
+    const base = (sprite.getData('spentBase') as number | undefined) ?? sprite.scaleY / SPENT.sy;
+    const y = this.spotXY(side).y + (on ? SPENT.dy : 0);
+    const sy = on ? base * SPENT.sy : base;
+    if (this.clipLevel() !== 'full') {
+      sprite.setY(y).setScale(sprite.scaleX, sy);
+      then?.();
+      return;
+    }
+    // Arrives once: at the end, or when something else stops it (but not when the next sag replaces it).
+    let tw: Phaser.Tweens.Tween | Phaser.Tweens.TweenChain | undefined;
+    const arrive = (): void => {
+      if (!tw || sprite.getData('spentTween') !== tw) return;
+      sprite.setData('spentTween', undefined);
+      if (!sprite.active) return;
+      sprite.setY(y).setScale(sprite.scaleX, sy);
+      then?.();
+    };
+    tw = on
+      ? this.tweens.add({ targets: sprite, y, scaleY: sy, duration: SPENT.inMs, ease: 'Sine.easeInOut', onComplete: arrive, onStop: arrive })
+      : this.tweens.chain({ targets: sprite, tweens: [{ y, scaleY: sy * 1.05, duration: 200, ease: 'Back.easeOut' }, { scaleY: sy, duration: 200 }], onComplete: arrive, onStop: arrive });
+    sprite.setData('spentTween', tw);
+  }
+
+  /** Recoil (pass 12): a crack runs back from the target, the user flashes the move's colour, winces, RECOIL. */
+  private recoilMoment(side: Side): void {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off' || this.duo) return;
+    try {
+      const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+      const other = this.condSprite(otherSide);
+      const user = this.condSpot(side, sprite);
+      const target = other ? this.condSpot(otherSide, other) : { ...user, ...this.spotXY(otherSide), side: otherSide };
+      const color = TYPE_COLORS[this.lastMoveType] ?? 0xffffff;
+      const mon = this.shown[side];
+      const mid = this.midOf(side);
+      this.condPlay(sprite, recoilClip(user, target, color, level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'stamp') this.wxStamp('RECOIL', '#131c36', '#ffffff', Phaser.Math.Clamp(mid.x + (side === 'player' ? 1 : -1) * RECOIL.stampDx, 110, GAME_WIDTH - 110), Math.max(60, mid.y + RECOIL.stampDy), true);
+        if (name === 'tint') this.washSprite(sprite, color, RECOIL.tint, RECOIL.tintHold, RECOIL.tintOut);
+      });
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  /** Drain (pass 12): green lights cross from the target into the user, which glows; resolves when the last lands. */
+  private async drainMoment(side: Side): Promise<boolean> {
+    const sprite = this.condSprite(side);
+    if (!sprite || !sprite.visible || this.clipLevel() !== 'full' || this.duo) return false;
+    try {
+      const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+      const other = this.condSprite(otherSide);
+      const user = this.condSpot(side, sprite);
+      const target = other ? this.condSpot(otherSide, other) : { ...user, ...this.spotXY(otherSide), side: otherSide };
+      const run = playClip(this, drainClip(user, target, 'full'), this.clipHost({}, { cue: (name) => name === 'tint' && this.washSprite(sprite, DRAIN.glow, DRAIN.tint, DRAIN.tintHold, DRAIN.tintOut) }));
+      await run.done;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** A wash of one colour over a Pokémon (a solid copy on top of it) that holds, then fades. */
+  private washSprite(sprite: Phaser.GameObjects.Sprite, color: number, alpha: number, holdMs: number, outMs: number): void {
+    if (!sprite.active) return;
+    const lit = this.add.sprite(sprite.x, sprite.y, sprite.texture.key, sprite.frame.name).setOrigin(sprite.originX, sprite.originY).setScale(sprite.scaleX, sprite.scaleY).setFlip(sprite.flipX, sprite.flipY).setTintFill(color).setAlpha(alpha);
+    if (sprite.parentContainer) sprite.parentContainer.addAt(lit, sprite.parentContainer.getIndex(sprite) + 1);
+    if (sprite.mask) lit.setMask(sprite.mask);
+    const follow = (): void => {
+      if (!sprite.active || !lit.active) return;
+      lit.setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setFrame(sprite.frame.name);
+    };
+    this.events.on(Phaser.Scenes.Events.POST_UPDATE, follow);
+    this.tweens.add({ targets: lit, alpha: 0, delay: holdMs, duration: outMs, onComplete: () => (this.events.off(Phaser.Scenes.Events.POST_UPDATE, follow), lit.destroy()) });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.events.off(Phaser.Scenes.Events.POST_UPDATE, follow));
+  }
+
+  private confusionMoment(side: Side, at: 'arrive' | 'tick' | 'cant'): boolean {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off' || this.duo) return false;
+    try {
+      if (at === 'arrive') return this.dizzyOn(side, true);
+      // The "is confused!" check: the circling stars already say it.
+      if (at === 'cant') return this.dizzyOn(side, false);
+      if (!this.dizzy[side]) this.dizzyOn(side, false);
+      const mon = this.shown[side];
+      this.condPlay(sprite, confusionHitClip({ ...this.condSpot(side, sprite), h: this.headHeight(sprite) }, level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => name === 'shake' && this.wxShake(5, 150));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** Puts confusion's stars on the side's Pokémon (popping in when `pop`) and starts its sway. */
+  private dizzyOn(side: Side, pop: boolean): boolean {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || level === 'off' || this.duo) return false;
+    if (this.dizzy[side]?.sprite === sprite) return true;
+    this.dizzy[side]?.destroy();
+    this.dizzy[side] = new DizzyStars(this, sprite, this.headHeight(sprite), level === 'full' ? 'full' : 'reduced', pop && level === 'full');
+    if (sprite.visible && this.shown[side]) this.standUp(sprite, this.shown[side]);
+    return true;
+  }
+
+  /** It snaps out of confusion (or leaves): the stars go and it stands as before. */
+  private dizzyOff(side: Side, fadeMs = 200): void {
+    const dz = this.dizzy[side];
+    if (!dz) return;
+    this.dizzy[side] = null;
+    dz.destroy(fadeMs);
+    const sprite = dz.sprite;
+    if (sprite.active && sprite === this.condSprite(side) && sprite.visible && this.shown[side]) {
+      standStill(this, sprite);
+      this.restAt(sprite, side);
+      this.standUp(sprite, this.shown[side]);
+    }
+  }
+
+  /** Plays a condition clip on the Pokémon; `after` runs when it ends (or is cut short by another moment). */
+  private condPlay(sprite: Phaser.GameObjects.Sprite, clip: MotionClip, parts: Record<string, ClipPart>, after: (cut: boolean) => void, cue?: (name: string) => void): void {
+    // A slump still settling in finishes now, so it never stands up (and stops this) halfway through.
+    (sprite.getData('sag') as { settle?: () => void } | undefined)?.settle?.();
+    standStill(this, sprite);
+    const run = playClip(this, clip, this.clipHost({ mon: { kind: 'mon', get: () => sprite }, ...parts }, cue ? { cue } : {}));
+    let cut = false;
+    sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
+    void run.done.then(() => {
+      if (!cut) sprite.setData(HIT_RUN, undefined);
+      after(cut);
+    });
+  }
+
+  /** A status arrives (pass 8): flames climb, bubbles rise, bolts crawl, rings close in, ice grows. */
+  private condArrive(side: Side, kind: CondKind, sprite: Phaser.GameObjects.Sprite): boolean {
+    this.conds[side]?.destroy();
+    const level = this.clipLevel() === 'full' ? 'full' : 'reduced';
+    const spot = this.condSpot(side, sprite);
+    const look = new ConditionLook(this, sprite, kind, spot, level, true);
+    this.conds[side] = look;
+    const temps: Phaser.GameObjects.Image[] = [];
+    const parts: Record<string, ClipPart> = { tint: { kind: 'free', get: () => look.wash }, ice: { kind: 'free', get: () => look.ice } };
+    const key = level === 'full' ? (kind === 'brn' ? flamePicture(this) : kind === 'psn' ? bubblePicture(this) : null) : null;
+    if (key) {
+      for (let i = 0; i < 9; i++) {
+        const img = putAbove(sprite, this.add.image(spot.x, spot.y, key).setOrigin(0.5, kind === 'brn' ? 1 : 0.5).setScale(PICTURE_SCALE));
+        temps.push(img);
+        parts[`${kind === 'brn' ? 'f' : 'b'}${i}`] = { kind: 'free', get: () => img };
+      }
+    }
+    const mon = this.shown[side];
+    this.condPlay(sprite, condArriveClip(kind, spot, level), parts, () => {
+      temps.forEach((t) => t.destroy());
+      if (!sprite.active || this.conds[side] !== look) return;
+      // The slump is the clip's end state: it stays.
+      if (kind === 'slp') sprite.setData('slumped', true);
+      else this.restAt(sprite, side);
+      look.start();
+      if (sprite.visible) this.standUp(sprite, mon);
+    });
+    return true;
+  }
+
+  /** Puts a Pokémon back on its own spot, upright, at its own size (after a condition clip moved it). */
+  /**
+   * Flinch (redesign pass 11): it starts its lunge, jerks to a stop and pulls its head down with a shiver, a "!" pops
+   * over it and a sweat drop falls, the FLINCHED stamp lands, and it backs up two steps before settling. Reduced: a
+   * step back and the stamp. Presentation only.
+   */
+  private flinchMoment(side: Side): void {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off') return;
+    try {
+      const spot = { ...this.spotXY(side), h: this.headHeight(sprite), side };
+      const d = side === 'player' ? 1 : -1;
+      const mon = this.shown[side];
+      const mid = this.midOf(side);
+      const rate = animationTimeScale(services().session.settings);
+      this.condPlay(sprite, flinchClip(spot, level), {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'stamp') {
+          const at = hitStampSpot(side, mid);
+          this.wxStamp('FLINCHED', '#131c36', '#ffffff', Phaser.Math.Clamp(at.x, 110, GAME_WIDTH - 110), at.y, true);
+        }
+        if (name === 'bang') {
+          const bang = this.add
+            .text(spot.x + d * FLINCH.bangDx, Math.max(60, spot.y - spot.h - 10), '!', { fontFamily: `"Jersey 15", ${FONT_FAMILY}`, fontSize: '64px', color: '#ffffff', stroke: '#131c36', strokeThickness: 8 })
+            .setOrigin(0.5, 1)
+            .setDepth(3000)
+            .setScale(0);
+          this.tweens.chain({ targets: bang, tweens: [{ scale: 1, duration: 120 * rate, ease: 'Back.easeOut' }, { alpha: 0, delay: 400 * rate, duration: 150 * rate }], onComplete: () => bang.destroy() });
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => bang.active && bang.destroy());
+        }
+        if (name === 'sweat') {
+          const y0 = spot.y - spot.h * 0.85;
+          const drop = this.add.ellipse(spot.x + d * FLINCH.sweatDx, y0, 14, 20, 0xbfe6ff).setStrokeStyle(2, 0x131c36).setDepth(3000);
+          this.tweens.chain({ targets: drop, tweens: [{ y: y0 + FLINCH.drop, duration: FLINCH.sweatMs * rate, ease: 'Quad.easeIn' }, { alpha: 0, duration: 100 * rate }], onComplete: () => drop.destroy() });
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => drop.active && drop.destroy());
+        }
+      });
+    } catch {
+      /* presentation only */
+    }
+  }
+
+  private restAt(sprite: Phaser.GameObjects.Sprite, side: Side): void {
+    const at = this.spotXY(side);
+    sprite.setPosition(at.x, sprite.getData('slumped') ? at.y + SLUMP.dy : sprite.getData('sag') ? at.y + WORN.dy : at.y);
+  }
+
+  /** The turn's tick: burn's embers flare and it flinches white; poison swells a bubble over its head that bursts. */
+  private condTick(side: Side, kind: 'brn' | 'psn', sprite: Phaser.GameObjects.Sprite, look: ConditionLook): boolean {
+    look.hold();
+    const spot = this.condSpot(side, sprite);
+    const parts: Record<string, ClipPart> = {};
+    look.embers.forEach((e, i) => (parts[`e${i}`] = { kind: 'free', get: () => e }));
+    const key = kind === 'psn' && this.clipLevel() === 'full' ? bubblePicture(this) : null;
+    const big = key ? putAbove(sprite, this.add.image(spot.x, spot.y - spot.h - 16, key).setScale(40 / BUBBLE_W / 2)) : null;
+    if (big) parts.big = { kind: 'free', get: () => big };
+    const mon = this.shown[side];
+    this.condPlay(sprite, condTickClip(kind, spot, this.clipLevel()), parts, () => {
+      big?.destroy();
+      if (!sprite.active || this.conds[side] !== look) return;
+      this.restAt(sprite, side);
+      look.start();
+      if (sprite.visible) this.standUp(sprite, mon);
+    });
+    return true;
+  }
+
+  /** Paralysis stops it: a short lunge that locks up, a spark, and a dark CAN'T MOVE stamp. */
+  private parCant(side: Side, sprite: Phaser.GameObjects.Sprite, look: ConditionLook): boolean {
+    const spot = this.condSpot(side, sprite);
+    const level = this.clipLevel();
+    const mon = this.shown[side];
+    this.condPlay(sprite, parCantClip(spot, level), { tint: { kind: 'free', get: () => look.wash } }, () => {
+      if (!sprite.active) return;
+      this.restAt(sprite, side);
+      if (sprite.visible) this.standUp(sprite, mon);
+    });
+    const key = level === 'full' ? stampPicture(this, "CAN'T MOVE", '#131c36', '#ffffff') : null;
+    if (key) {
+      const y = Math.max(40, spot.y - spot.h - 30);
+      const st = this.add.image(spot.x, y, key).setScale(PICTURE_SCALE * 0.4).setAlpha(0).setDepth(4000);
+      this.tweens.chain({
+        targets: st,
+        tweens: [
+          { alpha: 1, duration: 1, delay: 350 },
+          { scale: PICTURE_SCALE, duration: 140, ease: 'Back.easeOut' },
+          { y: y - 40, alpha: 0, duration: 300, delay: 1000, ease: 'Quad.easeIn' },
+        ],
+        onComplete: () => st.destroy(),
+      });
+    }
+    return true;
+  }
+
+  /**
+   * A stat change (pass 8): chevrons in the stat's colour sweep its body (up for a boost, down for a drop; a wave a
+   * stage), the colour washes over it, it stretches or squashes; a stamp ("ATTACK ▲", "DEFENSE ▼▼") pops beside it
+   * and a row of six pips shows where the stat now stands. False when it can't play here (the pack's arrows show).
+   */
+  private statMoment(side: Side, stat: string, change: number): boolean {
+    const sprite = this.condSprite(side);
+    const level = this.clipLevel();
+    if (!sprite || !sprite.visible || level === 'off') return false;
+    try {
+      const at = this.spotXY(side);
+      const h = sprite.displayHeight * sprite.originY;
+      const spot: CondSpot = { x: at.x, y: at.y, w: sprite.displayWidth, h, side };
+      const color = STAT_COLOR[stat] ?? 0xffffff;
+      const up = change > 0;
+      const n = chevronWaves(change);
+      const clip = statClip(spot, change, color, level);
+      const mon = this.shown[side];
+      // The Pokémon's part (the stretch and the wash) may be cut short by the next moment; the chevrons fly on.
+      this.condPlay(sprite, clip, {}, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      });
+      const key = level === 'full' ? chevronPicture(this, n) : null;
+      if (key) {
+        const parts: Record<string, ClipPart> = {};
+        const chevs = Array.from({ length: n * 5 }, (_, j) => {
+          const c = putAbove(sprite, this.add.image(spot.x, spot.y, key).setScale(PICTURE_SCALE).setTint(color).setFlipY(!up).setAlpha(0));
+          parts[`c${j}`] = { kind: 'free', get: () => c };
+          return c;
+        });
+        void playClip(this, clip, this.clipHost(parts)).done.then(() => chevs.forEach((c) => c.destroy()));
+      }
+      // The stamp: the stat's word and an arrow a stage, in the stat's colour (a drop: sky blue), beside it.
+      const word = `${STAT_WORDS[stat] ?? stat.toUpperCase()} ${(up ? '▲' : '▼').repeat(n)}`;
+      const fill = `#${(up ? color : STAT_DOWN_STAMP).toString(16).padStart(6, '0')}`;
+      const sk = stampPicture(this, word, fill, '#ffffff');
+      const mid = spot.y - h / 2;
+      const sx = Phaser.Math.Clamp(spot.x + (side === 'enemy' ? -150 : 190), 90, this.scale.width - 90);
+      const sy = Math.max(40, mid - (side === 'enemy' ? 20 : 90));
+      const objs: Phaser.GameObjects.Image[] = [];
+      if (sk) {
+        const st = this.add.image(sx, sy, sk).setScale(PICTURE_SCALE * 0.4).setAlpha(0).setDepth(4000);
+        objs.push(st);
+        this.tweens.chain({
+          targets: st,
+          tweens: [
+            { alpha: 1, duration: 1, delay: level === 'full' ? 150 : 0 },
+            { scale: PICTURE_SCALE, duration: 140, ease: 'Back.easeOut' },
+            { y: sy - 40, alpha: 0, duration: 300, delay: 800, ease: 'Quad.easeIn' },
+          ],
+          onComplete: () => st.destroy(),
+        });
+      }
+      // Six pips under the stamp: one filled for each stage it now stands above (or below) normal.
+      const stage = Phaser.Math.Clamp((this.statStages[side][stat] ?? 0) + change, -6, 6);
+      const pk = pipPicture(this);
+      if (pk) {
+        for (let i = 0; i < 6; i++) {
+          const lit = stage > 0 ? i < stage : stage < 0 ? i >= 6 + stage : false;
+          const p = this.add.image(sx - 32.5 + i * 13, sy + 32, pk).setScale(0).setDepth(4000);
+          if (lit) p.setTint(stage > 0 ? color : STAT_DOWN_STAMP);
+          else p.setAlpha(0.2);
+          this.tweens.chain({
+            targets: p,
+            tweens: [
+              { scale: PICTURE_SCALE, duration: 200, delay: (level === 'full' ? 100 : 0) + i * 30, ease: 'Back.easeOut' },
+              { alpha: 0, duration: 200, delay: 1300 - i * 30 },
+            ],
+            onComplete: () => p.destroy(),
+          });
+        }
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * An ability (pass 8): a flag unrolls from its owner's side of the screen (the foe's from the left under its box, yours
+   * from the right over yours), holds 2 s and folds away. Intimidate is acted out too: it leans in, the field dims
+   * around it, its glare crosses the field and the other Pokémon shrinks back. Singles; null when it can't show here.
+   */
+  /** The pass 8 flag slides out from its owner's edge: "<Name>'s Ability" (or Item) over the name. */
+  private showFlag(side: Side, label: string, what: string): boolean {
+    const level = this.clipLevel();
+    const fromLeft = side === 'enemy';
+    const key = flagPicture(this, this.speciesName(this.shown[side]), label, fromLeft, what);
+    if (!key) return false;
+    const box = (side === 'enemy' ? this.enemyBox : this.playerBox)?.container.getBounds();
+    const flag = this.add.image(fromLeft ? 0 : this.scale.width, 0, key).setOrigin(fromLeft ? 0 : 1, 0).setScale(0, PICTURE_SCALE).setDepth(3900);
+    flag.setY(fromLeft ? (box ? box.bottom + 8 : 140) : Math.max(8, (box ? box.top : 270) - flag.displayHeight - 10));
+    this.tweens.chain({
+      targets: flag,
+      tweens: [
+        { scaleX: PICTURE_SCALE, duration: level === 'full' ? 250 : 1, ease: 'Back.easeOut' },
+        { scaleX: 0, duration: 200, delay: FLAG_HOLD, ease: 'Quad.easeIn' },
+      ],
+      onComplete: () => flag.destroy(),
+    });
+    return true;
+  }
+
+  /**
+   * Contact punish (pass 12): spikes jab out of the holder, the attacker bounces off with a star on its nose, the
+   * item's flag slides out (`item`; an ability's flag has already shown) and its number shows (`amount`).
+   */
+  private contactMoment(attackerSide: Side, item: string | null, amount: number): void {
+    const level = this.clipLevel();
+    const holderSide: Side = attackerSide === 'player' ? 'enemy' : 'player';
+    const sprite = this.condSprite(attackerSide);
+    const holderSprite = this.condSprite(holderSide);
+    const number = (): void => void (amount > 0 && this.fx.play([{ kind: 'number', side: attackerSide, amount, tone: 'damage', motion: level === 'full' }]));
+    if (!sprite || !sprite.visible || !holderSprite || this.duo) return number();
+    try {
+      const attacker = this.condSpot(attackerSide, sprite);
+      const holder = this.condSpot(holderSide, holderSprite);
+      const key = spikePicture(this);
+      const spikes = level === 'full' && key
+        ? Array.from({ length: SPIKES.n }, (_, i) => {
+            const p = spikeSpot(i, holder);
+            return putAbove(holderSprite, this.add.image(p.x, p.y, key).setOrigin(0.5, 1).setAngle(p.angle).setScale(PICTURE_SCALE));
+          })
+        : [];
+      const parts: Record<string, ClipPart> = {};
+      spikes.forEach((sp, i) => (parts[`s${i}`] = { kind: 'free', get: () => sp }));
+      const mon = this.shown[attackerSide];
+      this.condPlay(sprite, contactClip(attacker, holder, level), parts, (cut) => {
+        spikes.forEach((sp) => sp.destroy());
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, attackerSide);
+        if (sprite.visible) this.standUp(sprite, mon);
+      }, (name) => {
+        if (name === 'number') number();
+        if (name === 'flag' && item) this.showFlag(holderSide, item, 'Item');
+      });
+    } catch {
+      number();
+    }
+  }
+
+  private abilityMoment(side: Side, ability: string, label: string): { shown: 'all' | 'flag'; ms: number } | null {
+    const level = this.clipLevel();
+    const sprite = this.condSprite(side);
+    if (this.duo || level === 'off' || !sprite || !sprite.visible) return null;
+    try {
+      if (!this.showFlag(side, label, 'Ability')) return null;
+      const other = this.condSprite(side === 'player' ? 'enemy' : 'player');
+      if (ability !== 'intimidate' || level !== 'full' || !other || !other.visible) return { shown: 'flag', ms: 0 };
+      const spot = (s: Side, v: Phaser.GameObjects.Sprite): CondSpot => ({ ...this.spotXY(s), w: v.displayWidth, h: v.displayHeight * v.originY, side: s });
+      const otherSide: Side = side === 'player' ? 'enemy' : 'player';
+      const clip = intimidateClip(spot(side, sprite), spot(otherSide, other), level);
+      const gk = glarePicture(this);
+      // The glare points from its eyes at the other Pokémon's middle (the mockup's 24 degree tilt is that line on its stage).
+      const eyes = { x: clip.base.cone!.x!, y: clip.base.cone!.y! };
+      const aim = Phaser.Math.RadToDeg(Math.atan2(this.spotXY(otherSide).y - other.displayHeight * other.originY * 0.5 - eyes.y, this.spotXY(otherSide).x - eyes.x));
+      const cone = gk ? putAbove(sprite, this.add.image(0, 0, gk).setOrigin(1, 0.5).setAngle(aim - 180).setAlpha(0)) : null;
+      // The dim: a dark sheet over the field with the owner lifted above it while it lasts.
+      const field = this.field;
+      let sheet: Phaser.GameObjects.Rectangle | null = null;
+      let place = -1;
+      const undim = (): void => {
+        if (!sheet) return;
+        const sh = sheet;
+        sheet = null;
+        this.tweens.add({ targets: sh, alpha: 0, duration: 200, onComplete: () => sh.destroy() });
+        if (sprite.active && place >= 0 && sprite.parentContainer === field) field.moveTo(sprite, Math.min(place, field.list.length - 1));
+      };
+      const mon = this.shown[side];
+      const otherMon = this.shown[otherSide];
+      standStill(this, other);
+      const both = playClip(this, clip, this.clipHost({ cone: { kind: 'free', get: () => cone } }, {
+        cue: (name) => {
+          if (name === 'dim' && !sheet) {
+            sheet = this.add.rectangle(this.scale.width / 2, this.scale.height / 2, this.scale.width * 1.2, this.scale.height * 1.2, 0x000000, 0);
+            field.add(sheet);
+            if (sprite.parentContainer === field) {
+              place = field.getIndex(sprite);
+              field.bringToTop(sprite);
+            }
+            this.tweens.add({ targets: sheet, fillAlpha: 0.55, duration: 200 });
+          } else if (name === 'undim') undim();
+        },
+      }));
+      // Each Pokémon's own part, so a later moment can stop one without the other.
+      this.condPlay(sprite, clip, { owner: { kind: 'mon', get: () => sprite } }, (cut) => {
+        if (cut || !sprite.active) return;
+        this.restAt(sprite, side);
+        if (sprite.visible) this.standUp(sprite, mon);
+      });
+      const otherRun = playClip(this, clip, this.clipHost({ target: { kind: 'mon', get: () => other } }));
+      void otherRun.done.then(() => {
+        if (!other.active) return;
+        otherRun.rest('target');
+        this.restAt(other, otherSide);
+        if (other.visible) this.standUp(other, otherMon);
+      });
+      void both.done.then(() => {
+        undim();
+        cone?.destroy();
+      });
+      // The battle goes on ("Its Attack fell!") once the other Pokémon is back on its spot.
+      return { shown: 'all', ms: clip.length };
+    } catch {
+      return null;
+    }
+  }
+
+  /** Waking (it jumps up, the Z's pop, a "!") and thawing (cracks, the ice shatters): the look comes off. */
+  private condEnd(side: Side, how: 'wake' | 'thaw'): void {
+    const look = this.conds[side];
+    const sprite = this.condSprite(side);
+    if (!look || !sprite || look.sprite !== sprite || look.kind !== (how === 'wake' ? 'slp' : 'frz') || !sprite.visible) return;
+    const spot = this.condSpot(side, sprite);
+    const level = this.clipLevel();
+    const mon = this.shown[side];
+    const done = (): void => {
+      if (!sprite.active) return;
+      this.restAt(sprite, side);
+      this.condPose(sprite, null);
+      if (sprite.visible) this.standUp(sprite, mon);
+    };
+    if (how === 'wake') {
+      look.destroy();
+      this.conds[side] = null;
+      this.unslump(sprite, side);
+      this.condPlay(sprite, wakeClip(spot, level), {}, done, (name) => {
+        const key = name === 'bang' ? titlePicture(this, '!', 64, '#ffcb05') : null;
+        if (!key) return;
+        const y = spot.y - spot.h - 30;
+        const bang = this.add.image(spot.x + 20, y, key).setScale(PICTURE_SCALE * 0.4).setDepth(4000);
+        this.tweens.chain({ targets: bang, tweens: [{ scale: PICTURE_SCALE, duration: 140, ease: 'Back.easeOut' }, { y: y - 40, alpha: 0, delay: 500, duration: 300, ease: 'Quad.easeIn' }], onComplete: () => bang.destroy() });
+      });
+      return;
+    }
+    look.hold();
+    // The look is the clip's now: the cure that follows must not take it off mid-shatter.
+    this.conds[side] = null;
+    this.condPlay(sprite, thawClip(spot, level), { ice: { kind: 'free', get: () => look.ice }, tint: { kind: 'free', get: () => look.wash } }, () => {
+      look.destroy();
+      done();
+    });
+  }
+
+  /**
+   * Healing (pass 3): green plus-signs rise through the Pokémon, it glows green and hops once, a green ring on the
+   * ground. Plays by itself while the bar climbs. False when it can't play here (the pack's heal shows instead).
+   */
+  private healMoment(side: Side): boolean {
+    const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
+    const lv = this.clipLevel();
+    if (!(sprite instanceof Phaser.GameObjects.Sprite) || !sprite.active || !sprite.visible || lv === 'off') return false;
+    const at = this.spotXY(side);
+    if (Math.abs(sprite.x - at.x) > 1) return false;
+    standStill(this, sprite);
+    const mon = this.shown[side];
+    const key = lv === 'full' ? plusPicture(this, HEAL_PLUS_SIZE) : null;
+    const pluses = key ? HEAL_PLUSES.map(() => this.add.image(at.x, at.y, key).setScale(PICTURE_SCALE).setAlpha(0).setDepth(3000)) : [];
+    const parts: Record<string, ClipPart> = { mon: { kind: 'mon', get: () => sprite } };
+    pluses.forEach((p, i) => (parts[`plus${i}`] = { kind: 'free', get: () => p }));
+    const run = playClip(this, healClip({ x: at.x, y: at.y }, lv), this.clipHost(parts));
+    let cut = false;
+    sprite.setData(HIT_RUN, { stop: () => ((cut = true), run.stop()) });
+    void run.done.then(() => {
+      pluses.forEach((p) => p.destroy());
+      if (cut || !sprite.active) return;
+      sprite.setData(HIT_RUN, undefined);
+      run.rest('mon');
+      if (sprite === (side === 'player' ? this.playerSprite : this.enemySprite)) this.standUp(sprite, mon);
+    });
+    return true;
+  }
+
+  /**
+   * Level up (pass 2, EXP and Level Up): a pale blue flash, the plate jolts as the level ticks over, your Pokémon does
+   * two happy hops with dust, and a yellow LEVEL stamp springs out over it. It plays on while the battle goes on.
+   */
+  private levelUpMoment(level: number): void {
+    const sprite = this.playerSprite;
+    const mon = this.shown.player;
+    if (!sprite?.active || this.duo) return;
+    const lv = this.clipLevel();
+    const at = this.spotXY('player');
+    const h = sprite instanceof Phaser.GameObjects.Sprite ? sprite.displayHeight * sprite.originY : 120;
+    const key = lv === 'off' ? null : stampPicture(this, `LEVEL ${level}`);
+    const stamp = key ? this.add.image(at.x + 40, at.y - h / 2 - 120, key).setScale(PICTURE_SCALE).setAlpha(0).setDepth(4000) : null;
+    if (stamp) stamp.name = 'level-stamp';
+    if (sprite instanceof Phaser.GameObjects.Sprite) standStill(this, sprite);
+    const run = playClip(this, levelUpClip({ x: at.x, y: at.y, h }, lv), this.clipHost({ mon: { kind: 'mon', get: () => sprite }, stamp: { kind: 'free', get: () => stamp } }, {
+      cue: (name) => {
+        if (name !== 'tick' || lv !== 'full') return;
+        // The plate takes the level with a jolt: up 6 px and back with a spring.
+        const c = this.playerBox.container;
+        if (!c.visible || this.tweens.isTweening(c)) return;
+        const y = c.y;
+        this.tweens.chain({ targets: c, tweens: [{ y: y - 6, duration: 50 }, { y, duration: 300, ease: 'Elastic.easeOut', easeParams: [1, 0.4] }], onStop: () => c.setY(y) });
+      },
+    }));
+    void run.done.then(() => {
+      stamp?.destroy();
+      if (sprite.active && sprite === this.playerSprite) {
+        run.rest('mon');
+        this.standUp(sprite, mon);
+      }
+    });
+  }
+
+  /**
+   * A wild Pokémon appears (pass 5, Wild Encounter): two flashes, the screen splits into nine dark bars that pull
+   * apart, the Pokémon slides in as a dark shape, its colour floods in with its cry and a hop, then its plate flies in.
+   * Resolves when the plate is in (the clip's last beats play on while the line is read).
+   */
+  private async wildEntranceMoment(mon: PokemonInstance): Promise<void> {
+    const level = this.clipLevel();
+    const at = this.spotXY('enemy');
+    const visual = this.showSprite('enemy', mon, false, false);
+    const bars: Phaser.GameObjects.Image[] = [];
+    if (level === 'full') {
+      const key = 'wild.bar';
+      if (!this.textures.exists(key)) {
+        const g = this.make.graphics({ x: 0, y: 0 }, false);
+        g.fillStyle(0x0b0d14, 1).fillRect(0, 0, 980, 61);
+        g.generateTexture(key, 980, 61);
+        g.destroy();
+      }
+      for (let i = 0; i < WILD_BARS; i++) bars.push(this.add.image(480, 30 + i * 60, key).setDepth(WILD_DEPTH).setScrollFactor(0));
+    }
+    const parts: Record<string, ClipPart> = { foe: { kind: 'mon', get: () => visual } };
+    bars.forEach((bar, i) => (parts[`bar${i}`] = { kind: 'free', get: () => bar }));
+    let plateIn: () => void = () => undefined;
+    const plate = new Promise<void>((resolve) => (plateIn = resolve));
+    const species = getSpecies(services().session.content, mon.speciesId);
+    const host = this.clipHost(parts, {
+      cue: (name) => {
+        if (name === 'cry') playCry(this, species, 100);
+        if (name === 'plate') plateIn();
+      },
+    });
+    const h = visual instanceof Phaser.GameObjects.Sprite ? visual.displayHeight * visual.originY : 120;
+    const run = playClip(this, wildEntranceClip({ x: at.x, y: at.y, h }, level), { ...host, depth: WILD_DEPTH + 1 });
+    void run.done.then(() => {
+      bars.forEach((bar) => bar.destroy());
+      plateIn();
+      if (visual.active) this.standUp(visual, mon);
+    });
+    await plate;
+    await this.refreshInfoBox(this.enemyBox, mon, false);
   }
 
   /**
@@ -4384,6 +6241,27 @@ export class BattleScene extends Phaser.Scene {
         resolve(null);
       });
     });
+  }
+
+  /** Miss (pass 2): the attacker dashes and overshoots, the target side-steps, both spring back to their spots. */
+  private async missMoment(side: Side): Promise<void> {
+    const other: Side = side === 'player' ? 'enemy' : 'player';
+    const atk = side === 'player' ? this.playerSprite : this.enemySprite;
+    const tgt = other === 'player' ? this.playerSprite : this.enemySprite;
+    const level = this.clipLevel();
+    if (tgt && level !== 'off') {
+      // They stop standing their own way while they move (back at their resting place), and start again after.
+      for (const v of [atk, tgt]) if (v instanceof Phaser.GameObjects.Sprite) standStill(this, v);
+      // Feet below the message bar's top (your Pokémon stands in the foreground) count as standing on its edge, so the
+      // dust and the dash stay on the field.
+      const onField = (p: Point): Point => ({ x: p.x, y: Math.min(p.y, MESSAGE_Y - 8) });
+      const run = playClip(this, missClip(this.spotXY(side), onField(this.spotXY(other)), level), this.clipHost({ atk: { kind: 'mon', get: () => atk }, tgt: { kind: 'mon', get: () => tgt } }));
+      await run.done;
+      run.rest('atk');
+      run.rest('tgt');
+      if (atk && this.shown[side]) this.standUp(atk, this.shown[side]!);
+      if (this.shown[other]) this.standUp(tgt, this.shown[other]!);
+    }
   }
 
   /** When the last trainer face chip went up (scene clock); chips stay at least `CHEER_GAP` apart. */
@@ -4516,14 +6394,84 @@ export class BattleScene extends Phaser.Scene {
     await this.say(intro.line);
   }
 
+  /**
+   * Shiny entrance (redesign pass 11): six stars circle in and collapse onto the foe, a glint runs across it, the
+   * arena brightens for a beat, and a "SHINY" chip springs up and flies to its name plate, where it stays.
+   */
   private async shinySparkle(): Promise<void> {
     playSfx(this, 'se.shiny');
-    const stars = [0, 1, 2, 3, 4].map((i) =>
-      this.add.text(ENEMY_POS.x + Math.cos(i * 1.26) * 60, ENEMY_POS.y - 80 + Math.sin(i * 1.26) * 60, '✦', textStyle(32, '#fff4a0')).setOrigin(0.5),
-    );
-    await tween(this, { targets: stars, alpha: 0, scale: 2, duration: 700 });
-    stars.forEach((s) => s.destroy());
+    const v = this.enemySprite;
+    const box = this.enemyBox;
+    const level = this.clipLevel();
+    const h = v instanceof Phaser.GameObjects.Sprite ? v.displayHeight * v.originY : 120;
+    const mid = { x: v?.x ?? ENEMY_POS.x, y: (v?.y ?? ENEMY_POS.y) - h / 2 };
+    const starKey = starPicture(this);
+    const stars = starKey && level === 'full' ? Array.from({ length: 6 }, () => this.add.image(mid.x, mid.y, starKey).setScale(PICTURE_SCALE).setAlpha(0).setDepth(32)) : [];
+    const parts = Object.fromEntries(stars.map((st, i) => [`star${i}`, { kind: 'free' as const, get: () => st }]));
+    let chipFlight: Promise<void> = Promise.resolve();
+    const run = playClip(this, shinyClip(mid, level), this.clipHost(parts, {
+      cue: (name) => {
+        if (name === 'glint' && v instanceof Phaser.GameObjects.Sprite) this.shinyGlint(v);
+        if (name === 'chip' && box) chipFlight = this.shinyChip(box, mid, level);
+      },
+    }));
+    await run.done;
+    stars.forEach((st) => st.destroy());
+    await chipFlight;
     await this.say(`It's a shiny ${this.speciesName(this.shown.enemy)}!`);
+  }
+
+  /** The shiny's glint: a white band sweeps across the sprite while the arena behind it brightens and settles. */
+  private shinyGlint(v: Phaser.GameObjects.Sprite): void {
+    const copy = this.add.sprite(v.x, v.y, v.texture.key, v.frame.name).setOrigin(v.originX, v.originY).setScale(v.scaleX, v.scaleY).setFlipX(v.flipX).setTintFill(0xffffff).setBlendMode(Phaser.BlendModes.ADD);
+    if (v.parentContainer) v.parentContainer.addAt(copy, v.parentContainer.getIndex(v) + 1);
+    else copy.setDepth(v.depth + 0.5);
+    const band = { u: -0.3 };
+    const w = copy.width;
+    this.tweens.add({
+      targets: band,
+      u: 1.1,
+      duration: 500,
+      ease: 'Sine.easeInOut',
+      onUpdate: () => copy.setCrop(Math.max(0, band.u * w), 0, w * 0.22, copy.height),
+      onComplete: () => copy.destroy(),
+    });
+    const lit = this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH * 1.4, GAME_HEIGHT * 1.4, 0xffffff, 0).setBlendMode(Phaser.BlendModes.ADD);
+    this.field.addAt(lit, this.fieldBase);
+    this.tweens.chain({ targets: lit, tweens: [{ alpha: 0.3, duration: 100 }, { alpha: 0, duration: 600 }], onComplete: () => lit.destroy() });
+  }
+
+  /** The "SHINY" chip springs up over the foe, then flies to the top of its name plate and stays on it. */
+  private shinyChip(box: InfoBox, from: Point, level: ClipLevel): Promise<void> {
+    box.shinyChip?.destroy();
+    const key = shinyChipPicture(this);
+    if (!key) return Promise.resolve();
+    const c = box.container;
+    const [px, py, pw] = box.spec ? box.spec.panel : [6, 2, 360];
+    const local = { x: px! + pw! * 0.55, y: py! + 4 };
+    // The plate may be drawn smaller than 1:1; the chip keeps the mockup's own size on screen.
+    const k = Math.abs(c.scaleX) || 1;
+    const size = PICTURE_SCALE / k;
+    const chip = this.add.image(local.x, local.y, key).setScale(size);
+    c.add(chip);
+    box.shinyChip = chip;
+    if (level !== 'full') return Promise.resolve();
+    // It starts over the Pokémon (in the plate's own coordinates) at nothing and springs to twice its size.
+    chip.setPosition((from.x - c.x) / k, (Math.max(40, from.y - 150) - c.y) / k).setScale(0);
+    return new Promise((resolve) => {
+      this.tweens.chain({
+        targets: chip,
+        tweens: [
+          { scale: size * 2, duration: 200, ease: 'Back.easeOut', easeParams: [3.2] },
+          { x: local.x, y: local.y, scale: size, delay: 500, duration: 300, ease: 'Cubic.easeInOut' },
+        ],
+        onComplete: () => {
+          // The plate takes it with a little bump.
+          if (c.active) this.tweens.chain({ targets: c, tweens: [{ scale: k * 1.04, duration: 50 }, { scale: k, duration: 250, ease: 'Elastic.easeOut' }] });
+          resolve();
+        },
+      });
+    });
   }
 
   /** Shows the right prompt for the current state: forced switch or the action menu. */
@@ -5080,6 +7028,9 @@ export class BattleScene extends Phaser.Scene {
 
   private showRootMenu(): void {
     this.clearMenus();
+    this.waitArm();
+    // The heal pips agree with the battle once the turn is over (a Revive on the bench, say).
+    if (this.healPips.length) this.healPipsSync(this.run.battle?.enemyItemsUsed ?? this.healsShown, false);
     this.rxExp.clear();
     this.rxLevel = null;
     const content = services().session.content;
@@ -5740,6 +7691,7 @@ export class BattleScene extends Phaser.Scene {
   private async act(action: PlayerAction, auto = false): Promise<void> {
     if (this.busy) return;
     this.busy = true;
+    this.waitDisarm();
     this.clearMenus();
 
     const { session } = services();
@@ -6281,6 +8233,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private async playEvents(events: RunEvent[], before: RunState, trainer: string | null, storyCues: PresentationCue[] = [], drama: DramaLine[] = []): Promise<void> {
+    // Something is happening on screen: nobody is waiting yet.
+    this.waitKick();
     const { session } = services();
     const content = session.content;
     const { battleAnimations } = session.settings;
@@ -6293,7 +8247,29 @@ export class BattleScene extends Phaser.Scene {
     this.rxPin = null;
 
     this.fellAt = null;
+    this.gustShown = false;
+    // Pass 8 "End of Turn": the turn's end-of-turn effects as a row of chips that light as each plays.
+    const parade = this.clipLevel() !== 'off' && !this.duo ? endTurnParade(events as unknown as ({ type: string } & Record<string, unknown>)[], (id) => content.items.get(id)?.name ?? id.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())) : null;
+    const eotAt = parade && parade.chips.length > 0 ? [...parade.at.keys()] : [];
+    const eotFirst = eotAt.length ? Math.min(...eotAt) : -1;
+    const eotLast = eotAt.length ? Math.max(...eotAt) : -1;
+    let eot: EndTurnParade | null = null;
+    // Pass 12 "Multi-Hit": a combo counter for each multi-hit move, the total slammed in at the end.
+    const spentAt = this.clipLevel() !== 'off' && !this.duo ? spentStarts(events as unknown as ({ type: string } & Record<string, unknown>)[], (['player', 'enemy'] as const).filter((sd) => this.volOf(sd)?.recharge)) : new Map<number, Side[]>();
+    let contactBy: Side | null = null;
+    const combo = this.clipLevel() !== 'off' ? comboPlan(events as unknown as ({ type: string } & Record<string, unknown>)[]) : new Map<number, ComboStep>();
     for (const [index, e] of events.entries()) {
+      if (index === eotFirst && parade) {
+        try {
+          eot = new EndTurnParade(this, parade.chips, 48 + 36 * ((this.wxLook?.current ? 1 : 0) + (this.trLook?.current ? 1 : 0)), this.clipLevel());
+          this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => eot?.destroy());
+          await eot.open();
+        } catch {
+          eot = null;
+        }
+      }
+      const chipAt = parade?.at.get(index);
+      if (eot && chipAt !== undefined) eot.light(chipAt);
       // New UI: a Rally brace or a signature trait gets its callout for its own line and the stat lines that belong to it.
       if (this.rx) this.rxCall = this.calloutOf(events, index) ?? (keepsCallout(e) ? this.rxCall : null);
       // New UI: the level-up window stays through that Pokémon's level and move lines, then leaves.
@@ -6305,7 +8281,59 @@ export class BattleScene extends Phaser.Scene {
         this.phLast = { side: e.side, by: this.shown[e.side] ? this.speciesName(this.shown[e.side]!) : '', move: content.moves.get(e.moveId)?.name ?? '' };
         this.storyBar?.accent(this.lastMoveType);
       }
+      // Pass 8 weather: the redesign's entrance replaces the pack's weather picture; a sandstorm gusts once a turn;
+      // a move the rain or sun powers up gets its stamp as it hits.
+      if ((e.type === 'weather' && this.wxHandles(e.weather)) || (e.type === 'terrain' && this.trHandles(e.terrain))) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
+      if (e.type === 'move') this.boostShown = false;
+      if (e.type === 'damage' && !this.boostShown && this.wxBoosts(this.lastMoveType)) {
+        this.boostShown = true;
+        this.wxLook!.boost((word, fill, ink, x, y) => this.wxStamp(word, fill, ink, x, y));
+      }
+      if (e.type === 'weatherDamage' && e.weather === 'sand' && !this.gustShown) {
+        this.gustShown = true;
+        this.sandGust();
+      }
+      if (e.type === 'recoil') this.recoilMoment(e.side);
+      // Contact punish (pass 12): Rocky Helmet, or Rough Skin and friends hurting whoever touched them.
+      if (e.type === 'move') contactBy = null;
+      if (e.type === 'ability' && CONTACT_HURT.has(e.ability)) contactBy = e.side === 'player' ? 'enemy' : 'player';
+      if (e.type === 'damage' && e.side === contactBy) {
+        contactBy = null;
+        cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'impact' && c.kind !== 'number');
+        this.contactMoment(e.side, null, e.amount);
+      }
+      if (e.type === 'held' && e.what === 'helmet' && e.hpAfter !== undefined) this.contactMoment(e.side, content.items.get(e.itemId)?.name ?? 'Rocky Helmet', Math.max(0, (this.shown[e.side]?.hp ?? e.hpAfter) - e.hpAfter));
+      // Pass 12 "Priority Move": a FIRST! tag snaps onto the user before anything else on the turn.
+      if (e.type === 'move' && (content.moves.get(e.moveId)?.priority ?? 0) > 0 && this.clipLevel() !== 'off' && !this.duo) {
+        const mid = this.midOf(e.side);
+        this.wxStamp('FIRST!', '#ffcb05', '#131c36', Phaser.Math.Clamp(mid.x + (e.side === 'player' ? 1 : -1) * FIRST_TAG.dx, 80, GAME_WIDTH - 80), Math.max(40, mid.y + FIRST_TAG.dy), false, FIRST_TAG);
+      }
+      // Pass 12 "One-Hit KO": the red ONE-HIT KO! stamp (the ground cracking open is the move's own animation, not built).
+      // Pass 11 "Flinch": it starts its lunge, jerks to a stop and backs away; the move never comes.
+      if (e.type === 'cant' && e.reason === 'flinch') this.flinchMoment(e.side);
+      if (e.type === 'ohko' && this.clipLevel() !== 'off' && !this.duo) {
+        const mid = this.midOf(e.side);
+        const at = e.side === 'enemy' ? { x: mid.x + OHKO_STAMP.dx, y: OHKO_STAMP.y } : hitStampSpot(e.side, mid);
+        this.wxStamp('ONE-HIT KO!', '#e3350d', '#ffffff', at.x, at.y, false);
+      }
+      // Pass 12 "Entry Hazards": stones are thrown and stay; a switch-in meets them.
+      if (e.type === 'sideEffect' && (HAZARD_KINDS as readonly string[]).concat('hazards').includes(e.effect)) await this.hazardSync(e.side, e.on && e.effect === 'stealthRock');
+      if (e.type === 'hazard') await this.hazardHit(e.side, e.hazard, e.amount, e.hpAfter);
+      // The release turn of a two-turn move: the CHARGING chip and glow go before the move plays.
+      if (e.type === 'move' && this.hold[e.side]?.kind === 'charge') await this.holdOff(e.side);
+      // Drain: the lights carry the HP across; they take the pack's heal sparkle's place.
+      if (e.type === 'drain' && e.amount > 0 && (await this.drainMoment(e.side))) cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'commonAnim');
+      // Pass 13: the foe trainer's own item gets its toss and burst over the foe (the shared item sparkle is yours).
+      if (e.type === 'item' && this.shown.enemy && e.targetUid === this.shown.enemy.uid && !this.duo) cues[index] = (cues[index] ?? []).filter((c) => !(c.kind === 'storyAnim' && c.anim === 'interaction.item'));
+      const step = combo.get(index);
+      if (step && 'k' in step) {
+        cues[index] = (cues[index] ?? []).filter((c) => c.kind !== 'number');
+        this.comboTick(step.side, step.k);
+      } else if (step) this.comboEnd(step.side, step.count, step.total);
       await this.fx.play(cues[index] ?? []);
+      // Pass 12: the build-up of a charging move; the spent look once the turn's Hyper Beam has played out.
+      if (e.type === 'charge' && !e.semi) await this.chargeMoment(e.side);
+      for (const sd of spentAt.get(index) ?? []) this.spentOn(sd);
       this.reactPortrait(e);
       await this.stadium?.onEvent(e);
       const side = 'side' in e ? e.side : null;
@@ -6318,12 +8346,28 @@ export class BattleScene extends Phaser.Scene {
       else if (e.type === 'status') playSfxLazy(this, `se.${e.status}`, 0.7);
       switch (e.type) {
         case 'weather':
-          this.weatherLayer?.set(e.weather);
-          this.applyMood(e.weather);
+          await this.setWeather({ id: e.weather, turns: this.wxTurnsNow(e.weather) }, true);
           break;
         case 'weatherEnd':
-          this.weatherLayer?.set(null);
-          this.applyMood(null);
+          if (this.wxLook?.current) await this.wxLook.end();
+          await this.setWeather(null, false);
+          break;
+        case 'protected':
+          this.protectedMoment(e.side);
+          break;
+        case 'confused':
+          // Reduced (no picture cue): the stars still come.
+          if (!this.dizzy[e.side]) this.dizzyOn(e.side, false);
+          break;
+        case 'confusionEnd':
+          this.dizzyOff(e.side);
+          break;
+        case 'terrain':
+          await this.setTerrain({ id: e.terrain, turns: this.trTurnsNow(e.terrain) }, true);
+          break;
+        case 'terrainEnd':
+          if (this.trLook?.current) await this.trLook.end();
+          await this.setTerrain(null, false);
           break;
         case 'focus':
           this.focusOn(e.side, e.uid);
@@ -6356,12 +8400,14 @@ export class BattleScene extends Phaser.Scene {
           if (e.type === 'damage' && e.hpAfter > 0 && e.hpAfter < mon!.hp && bigHit(mon!.hp - e.hpAfter, maxHp(services().session.content, mon!), e.effectiveness, !!e.crit)) {
             this.cheer({ kind: 'hit', on: e.side === 'enemy' ? 'foe' : 'you', superEffective: e.effectiveness >= 2 }, 120);
           }
-          if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
+          // The number itself comes from the event's cue (BattleFx, one per hit: pass 5); this used to float a second one.
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp && this.trainerActor?.sprite.visible) void this.trainerActor.play('hit');
-          if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);
-          if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && e.side === 'enemy' && session.settings.skillPrompts)) this.cameraMove(e);
+          const froze = this.time.now - this.critFrozeAt < 1500;
+          if (e.type === 'damage' && e.crit && !froze) critLetterbox(this, session.settings.critLetterbox, this.motion);
+          if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && (froze || (e.side === 'enemy' && session.settings.skillPrompts)))) this.cameraMove(e);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
+          const hpWas = mon!.hp;
           mon!.hp = e.hpAfter;
           if (e.type !== 'drain' && e.type !== 'heal') {
             playSfx(this, e.type === 'damage' && e.effectiveness > 1 ? 'se.hit_strong' : e.type === 'damage' && e.effectiveness < 1 ? 'se.hit_weak' : 'se.hit');
@@ -6369,14 +8415,24 @@ export class BattleScene extends Phaser.Scene {
             if (sprite && e.type !== 'damage' && battleAnimations !== 'off') this.tweens.add({ targets: sprite, alpha: 0.2, yoyo: true, repeat: 2, duration: 70 });
           }
           await this.refreshInfoBox(box, mon!, true);
+          // Pass 11 "Toughed It Out": your Pokémon's bar caught at a single point; it hangs on for you.
+          if (e.type === 'damage' && e.side === 'player' && e.hpAfter === 1 && hpWas > 1) await this.toughMoment();
           break;
         case 'status':
           mon!.status = { id: e.status };
           void this.refreshInfoBox(box, mon!, false);
           break;
+        case 'stat':
+          // The screen's own count, for the stage pips (pass 8); the engine applied `change` exactly.
+          this.statStages[e.side][e.stat] = Phaser.Math.Clamp((this.statStages[e.side][e.stat] ?? 0) + e.change, -6, 6);
+          break;
+        case 'statsReset':
+          this.statStages[e.side] = {};
+          break;
         case 'wake':
         case 'thaw':
         case 'cured':
+          if (e.type !== 'cured' && !this.duo) this.condEnd(e.side, e.type);
           mon!.status = null;
           void this.refreshInfoBox(box, mon!, false);
           break;
@@ -6458,21 +8514,15 @@ export class BattleScene extends Phaser.Scene {
           if (sprite) {
             if (e.side === 'enemy') this.fellAt = { x: sprite.x, y: this.spotXY('enemy').y };
             await this.faintMoment(e.side, sprite);
+            // Pass 11 "Winner's Moment": your Pokémon gets a second to itself.
+            if (e.side === 'enemy') await this.winMoment();
           }
           if (e.side === 'enemy' && mon && this.phTurnCards()) await this.phKoCard(mon, before, trainer, events.slice(0, index + 1).filter((x) => x.type === 'faint' && x.side === 'enemy').length);
           break;
-        case 'miss': {
-          // The target slips aside and back (presentation only; the miss itself is already decided).
-          const target = e.side === 'player' ? this.enemySprite : this.playerSprite;
-          if (target && battleAnimations !== 'off') {
-            const dx = (e.side === 'player' ? 36 : -36) * (battleAnimations === 'full' ? 1 : 0.4);
-            const x = target.x;
-            await tween(this, { targets: target, x: x + dx, alpha: 0.6, duration: 130, yoyo: true, ease: 'Sine.easeOut' });
-            target.x = x;
-            target.setAlpha(1);
-          }
+        case 'miss':
+          // The target sees it coming (redesign pass 2). Presentation only; the miss itself is already decided.
+          await this.missMoment(e.side);
           break;
-        }
         case 'switchOut': {
           if (sprite) this.tweens.killTweensOf(sprite);
           // Your trainer leans in holding the ball out, takes the Pokémon back and steps away.
@@ -6507,6 +8557,7 @@ export class BattleScene extends Phaser.Scene {
           const incoming = this.findMon(before, e.uid);
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
+            this.statStages[e.side] = {};
             if (e.side === 'enemy') this.phHits = 0;
             const ace = e.side === 'enemy' && !!this.run.battle?.trainer && isEnemyAce(this.run.battle, e.uid);
             const hand = e.side === 'player' && this.trainerActor ? await this.throwMoment() : null;
@@ -6544,9 +8595,13 @@ export class BattleScene extends Phaser.Scene {
           const foeItem = this.shown.enemy && e.targetUid === this.shown.enemy.uid;
           preText = foeItem ? e.message : `You used the ${content.items.get(e.itemId)?.name ?? 'item'}!`;
           if (foeItem && this.shown.enemy) {
-            this.shown.enemy.hp = e.hpAfter;
-            await this.refreshInfoBox(this.enemyBox, this.shown.enemy, true);
-          }
+            // Pass 13: the trainer tosses it, it bursts green over their Pokémon and one heal pip goes dark.
+            const heal = e.hpAfter > this.shown.enemy.hp;
+            await this.foeHealMoment(this.shown.enemy, e.itemId, heal, async () => {
+              this.shown.enemy!.hp = e.hpAfter;
+              await this.refreshInfoBox(this.enemyBox, this.shown.enemy!, true);
+            });
+          } else if (e.itemId === 'revive' || e.itemId === 'max-revive') this.healPipsSync(this.healsShown + 1, false);
           break;
         }
         case 'held': {
@@ -6787,7 +8842,7 @@ export class BattleScene extends Phaser.Scene {
             this.shown.player.level = e.level;
             if (real && real.level === e.level) this.shown.player.hp = real.hp;
             void this.refreshInfoBox(this.playerBox, this.shown.player, false);
-            levelUpBanner(this, this.playerBox.container.x + 120, this.playerBox.container.y - 12, e.level, this.motion, services().session.settings.effectIntensity);
+            this.levelUpMoment(e.level);
           }
           break;
         default:
@@ -6838,7 +8893,18 @@ export class BattleScene extends Phaser.Scene {
       // What the trainer says about it (spoken lines, after the event's own text).
       for (const line of drama.filter((d) => d.at === index)) await this.sayTrainer(line);
       this.reskin();
+      if (eot && index === eotLast) {
+        const turn = this.run.battle?.turn;
+        if (turn) await eot.close(Math.max(1, turn - 1), turn);
+        else eot.destroy();
+        eot = null;
+      }
     }
+    eot?.destroy();
+    await this.holdSync();
+    if (!this.duo) for (const sd of ['player', 'enemy'] as const) await this.hazardSync(sd, false);
+    this.comboText?.destroy();
+    this.comboText = null;
     // Make sure the boxes match the real state at the end of the turn.
     const run = this.run;
     if (run.battle?.doubles && this.duo) await this.syncDuo();
@@ -6858,6 +8924,11 @@ export class BattleScene extends Phaser.Scene {
     }
     this.reskin();
     this.updateHeader();
+    // The weather chip counts down with the turns.
+    const wx = run.battle?.weather;
+    if (wx && this.wxLook?.current === wx.id) this.wxLook.chip(wxTurns(wx.turns));
+    const tr = run.battle?.terrain;
+    if (tr && this.trLook?.current === tr.id) this.trLook.chip(wxTurns(tr.turns));
   }
 
   /**
