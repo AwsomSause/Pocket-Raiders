@@ -89,3 +89,15 @@ export function bossMenuModel(b: DominionBlock, at: number, x: MenuExtras): Boss
     notice: x.notice ?? null,
   };
 }
+
+/** Redesign R0 (pass 50): the phone's cursor. Blade 0 (Back to work) is the bar under the apps; the rest are a
+ *  three-wide grid. Down from the bar goes to the first app, up from the top row (or down from the bottom) to the bar. */
+export function phoneMove(at: number, a: 'up' | 'down' | 'left' | 'right', n: number): number {
+  const apps = n - 1;
+  if (at === 0) return a === 'down' || a === 'right' ? 1 : a === 'up' ? apps - ((apps - 1) % 3) : apps;
+  const i = at - 1;
+  if (a === 'left') return i === 0 ? 0 : at - 1;
+  if (a === 'right') return i === apps - 1 ? 0 : at + 1;
+  const j = i + (a === 'up' ? -3 : 3);
+  return j < 0 || j >= apps ? 0 : j + 1;
+}

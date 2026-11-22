@@ -65,8 +65,8 @@ test('set up a Dominion in the New look, live a day round the clock, and it relo
   await expect(s.getByTestId('dom-heat')).toHaveText('5%');
   await expect(s.getByTestId('dom-roster')).toHaveText('1/3');
   await expect(s.getByTestId('dom-team')).toHaveText('UNNAMED CREW');
-  await expect(s.getByTestId('dom-member')).toContainText('YOUR ONLY GRUNT');
-  await expect(s.getByTestId('dom-member')).toContainText('ROOK');
+  // Redesign R0 (pass 50): Rook speaks in the HQ's text box.
+  await expect(s.getByTestId('dom-says')).toContainText('Rook');
   await shot('1-hq-evening');
   // Plan an order, then round the clock: Night (Rest) -> Morning (report) -> Day (do it) -> End Day.
   await s.getByTestId('dom-order-find-recruit').click();

@@ -62,11 +62,10 @@ test('round 4: Nova livery on every screen, Q is free, arrows page the Crew File
   for (let i = 0; i < 4; i++) await s.getByTestId('dom-opening').click();
   await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');
 
-  // The HQ: livery on, and the title banner wears the Nova eye (its ::before is the slit eye, not the old diamond).
-  await expect(s.locator('.sig4')).toHaveCount(1);
-  await expect(s.locator('.vl4')).toHaveCount(1);
-  const edge = await s.locator('.st').first().evaluate((e) => getComputedStyle(e).getPropertyValue('--blood').trim());
-  expect(edge).toBe('#c2183a');
+  // The HQ wears the pass-50 redesign (R0: its own crest, crimson title plate and key strip, not the round-4 stage).
+  await expect(s.getByTestId('r5-hq')).toBeVisible();
+  await expect(s.locator('#r5 .nb2')).toHaveCount(1);
+  await expect(s.locator('#r5 footer.keys')).toHaveCount(1);
   await shot('s1-hq');
 
   // Boundary: a quick Q tap opens and shuts the wheel (D28) and changes nothing (no page, no step).
