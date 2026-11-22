@@ -57,25 +57,24 @@ test('The ending: the books open by themselves, then close the run and pay it', 
   // The title's Continue leads to the HQ, and the ending opens over it.
   await pressUntil(page, 'Enter', () => s.getByTestId('dom-ending').isVisible());
   await expect(s.getByTestId('dom-ending')).toContainText('FOREVER');
-  await expect(s.getByTestId('dom-end-region-kanto')).toContainText('TAKEN');
-  await expect(s.getByTestId('dom-end-graph')).toBeVisible();
-  await expect(s.getByTestId('dom-end-crew')).toContainText('Rosa');
   await expect(s.getByTestId('dom-end-pay')).toContainText('Regions taken');
   for (const size of [{ width: 1280, height: 720 }, { width: 800, height: 600 }]) {
     await page.setViewportSize(size);
     await shot(`ending-${size.width}`);
   }
   await page.setViewportSize({ width: 1280, height: 720 });
-  // ▶ turns the crew page (five people, two to a page).
-  await page.keyboard.press('ArrowRight');
+  // Redesign R8: Enter rolls the Credits (mockup `credits`): the whole crew of five on one page.
+  await pressUntil(page, 'Enter', () => s.getByTestId('dom-end-crew').isVisible());
+  await expect(s.getByTestId('dom-end-crew')).toContainText('Rosa');
   await expect(s.getByTestId('dom-end-crew')).toContainText('Ivy');
 
-  // Esc goes back; K opens the Takeover page, and L there opens the books again.
-  await pressUntil(page, 'Escape', async () => !(await s.getByTestId('dom-ending').isVisible()));
+  // Esc goes back (from the Credits to the city, then off the page); K opens the Takeover page, and L there opens the books again.
+  await pressUntil(page, 'Escape', async () => !(await s.getByTestId('dom-ending').isVisible()) && !(await s.getByTestId('dom-end-crew').isVisible()));
   await pressUntil(page, 'KeyK', async () => (await s.getByTestId('dom-ending').isVisible()) || (await s.getByTestId('dom-takeover').isVisible()));
   await pressUntil(page, 'KeyL', () => s.getByTestId('dom-ending').isVisible());
 
-  // Enter closes the books: the run-end page, the profile pays and counts the run for the Charters.
+  // Enter rolls the Credits, and Enter there closes the books: the run-end page, the profile pays and counts the run for the Charters.
+  await pressUntil(page, 'Enter', () => s.getByTestId('dom-end-crew').isVisible());
   await page.keyboard.press('Enter');
   await waitForScene(page, 'GameOver');
   const after = await page.evaluate((id) => {

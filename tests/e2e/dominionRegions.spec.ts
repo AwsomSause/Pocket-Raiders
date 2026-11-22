@@ -69,6 +69,8 @@ test('Many regions: the Empire page on G, the Leaving page on L, and Johto\'s fi
 
   // L: the Leaving page. Rosa holds Kanto, Dale comes along.
   await pressUntil(page, 'KeyL', () => s.getByTestId('dom-leave').isVisible());
+  // Redesign R8: Pick the Holder (mockup `holder`), a second tap goes on to Sail (`sail`).
+  await s.getByTestId('dom-leave-holder-rosa').dispatchEvent('click');
   await s.getByTestId('dom-leave-holder-rosa').dispatchEvent('click');
   await s.getByTestId('dom-leave-bring-dale').dispatchEvent('click');
   await expect(s.getByTestId('dom-leave-go')).toContainText('Johto');
@@ -89,8 +91,8 @@ test('Many regions: the Empire page on G, the Leaving page on L, and Johto\'s fi
   expect(b.realm.held[0]).toMatchObject({ id: 'kanto', status: 'held', holder: { name: 'Rosa' } });
   expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].level)).toBe(15);
 
-  // Through the opening to the HQ, then G: Kanto is held and answers.
-  await pressUntil(page, 'Enter', () => s.getByTestId('dom-phase').isVisible());
+  // Through the opening (redesign R8: the arrival page, whose top bar also shows the phase) to the HQ, then G: Kanto is held and answers.
+  await pressUntil(page, 'Enter', async () => !(await s.getByTestId('dom-opening').isVisible()));
   await page.waitForTimeout(250);
   await pressUntil(page, 'KeyG', () => s.getByTestId('dom-empire').isVisible());
   await expect(s.getByTestId('dom-empire-card-kanto')).toContainText('Rosa');
@@ -102,7 +104,9 @@ test('Many regions: the Empire page on G, the Leaving page on L, and Johto\'s fi
   }
   await page.setViewportSize({ width: 1280, height: 720 });
 
-  // Orders: the sheet opens on the Kanto card and Esc closes it.
+  // Orders: the Kanto card opens its region page (redesign R8), the sheet opens from there and Esc closes it.
+  await s.getByTestId('dom-empire-card-kanto').dispatchEvent('click');
+  await s.getByTestId('dom-empire-card-kanto').dispatchEvent('click');
   await s.getByTestId('dom-empire-kanto-orders').dispatchEvent('click');
   await expect(s.getByTestId('dom-orders')).toBeVisible();
   await shot('s10-orders');

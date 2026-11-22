@@ -26,6 +26,8 @@ export interface NavHost {
   /** Go to a page the way its own key would. */
   navJump(p: PageId): void;
   setNotice(n: string | null): void;
+  /** Redesign R9: the pass-50 key strip's live data under the wheel (null before the run opens). */
+  r5run?(): R5Run | null;
 }
 
 const DIGITS: Record<string, number> = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4, Digit6: 5 };
@@ -71,7 +73,10 @@ export class NavController {
 
   private startShutter(was: { here: Here; html: string }, here: Exclude<Here, null>, level: 'full' | 'lighter' | 'calm'): void {
     const os = typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    const mode = shutterMode(level, os || services().session.settings.animationIntensity === 'reduced');
+    const st = services().session.settings;
+    // Redesign R9: Options · Page opener (Nova star is the blade; Fade; Cut is none). Calm always has none.
+    const wipe = st.expansion.dominionPrefs.look.wipe;
+    const mode = wipe === 'cut' ? 'off' : wipe === 'fade' && level !== 'calm' ? 'fade' : shutterMode(level, os || st.animationIntensity === 'reduced');
     if (mode === 'off') return void (this.shutter = null);
     const name = (h: Exclude<Here, null>): string => (h === 'board' ? 'The Board' : PAGE_NAMES[h]);
     const n = ++this.n;
@@ -87,14 +92,16 @@ export class NavController {
     const b = this.host.navBlock();
     const here = this.host.navHere();
     const spot = this.at === null ? null : SPOTS[this.at]!;
-    return wheelView({
+    const icon = (id: PageId): string => PINS.find((x) => x.id === id)?.icon ?? 'g-journal';
+    // Redesign R9 (pass 50, mockup `wheel`): the Nova Dial.
+    return r5Wheel({
+      spots: SPOTS.map((s) => ({ name: s.name, icon: s.icon, key: s.key, dim: s.id === 'ops' })),
       at: this.at,
       hubName: spot ? spot.name : here ? PAGE_NAMES[here] : 'Dominion',
       hubLine: spot && b ? hubLine(b, spot) : 'Point at a place, then let go of Q.',
-      last: this.last.map((id) => ({ id, name: PAGE_NAMES[id] })),
-      pins: b ? pinned(b) : [],
-      shut: SPOTS.map((s, i) => (s.id === 'ops' ? i : -1)).filter((i) => i >= 0),
-    });
+      last: this.last.map((id) => ({ go: id, name: PAGE_NAMES[id], icon: icon(id) })),
+      pins: (b ? pinned(b) : []).map((p) => ({ go: p.go, text: p.text, icon: p.icon })),
+    }, this.host.r5run?.() ?? null);
   }
 
   // ---------- opening and closing ----------

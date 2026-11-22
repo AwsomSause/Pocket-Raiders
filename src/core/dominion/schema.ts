@@ -2629,6 +2629,41 @@ export const DominionFxSchema = z.object({
 }).strict();
 export type DominionFx = z.infer<typeof DominionFxSchema>;
 
+/** Redesign R9 (pass-50 Settings pages): how the redesigned pages look and read. Presentation only, never read by a
+ *  rule. Settings v48 adds it (with every default), so old records keep the look they had. */
+export const DominionLookSchema = z.object({
+  /** Settings · Dominion / Sound: the siren and the heartbeat edge at Heat 70%+. */
+  heatWarn: z.boolean().default(true),
+  /** Settings · Screen: Funds, Heat and Day in one capsule, as separate chips, or hidden. */
+  status: z.enum(['capsule', 'chips', 'hidden']).default('capsule'),
+  /** Settings · Screen: the news ticker on news pages (Quiet: only on a day with fresh news). */
+  ticker: z.enum(['on', 'quiet', 'off']).default('on'),
+  /** Settings · Screen: the key strip's hints (Icons: the keys without their words). */
+  keyHints: z.enum(['full', 'icons', 'off']).default('full'),
+  /** Colour assist: owners and warnings also get a shape; High contrast darkens panels and brightens text. */
+  colour: z.enum(['off', 'shapes', 'contrast']).default('off'),
+  /** Read aloud: the browser's voice reads each new text box line; Highlight marks the word being read. */
+  readAloud: z.boolean().default(false),
+  voiceRate: z.enum(['slow', 'normal', 'fast']).default('normal'),
+  highlight: z.boolean().default(true),
+  /** Button feel: the mark on what you picked (the N badge, an arrow or a Poké Ball) and the press bounce. */
+  cursor: z.enum(['badge', 'arrow', 'ball']).default('badge'),
+  press: z.boolean().default(true),
+  /** Options: the colour every window's frame wears. */
+  frame: z.enum(['nova', 'gold', 'night', 'jade', 'plum', 'ash']).default('nova'),
+  /** Options: the page opener between pages (Nova star = the blade). Calm always uses none. */
+  wipe: z.enum(['blade', 'fade', 'cut']).default('blade'),
+  /** Region skin: follow the region you are in, or keep one; the skyline and the panels' glints. */
+  skin: z.enum(['region', 'kanto', 'johto']).default('region'),
+  skyline: z.boolean().default(true),
+  glints: z.boolean().default(true),
+  /** Ambience: the moving layers behind pages (lanterns, walkers, rain, fireworks) and the lightning flashes. */
+  ambience: z.enum(['full', 'off']).default('full'),
+  lightning: z.boolean().default(true),
+}).strict();
+export type DominionLook = z.infer<typeof DominionLookSchema>;
+export const LOOK_DEFAULT: DominionLook = DominionLookSchema.parse({});
+
 /** The Dominion tab of Settings, kept in the settings record (settings.expansion.dominionPrefs; optional, no bump). */
 export const DominionPrefsSchema = z.object({
   run: RunRulesSchema.default(() => ({ ...RUN_RULES_DEFAULT })),
@@ -2639,6 +2674,8 @@ export const DominionPrefsSchema = z.object({
   /** The tutorial's help level for the next run (the help page saves its pick here; Settings · Dominion · Tutorial). */
   tutorial: z.enum(['full', 'tips', 'off']).default('full'),
   fx: DominionFxSchema.default(() => ({ level: 'full' as const, particles: true, cutIns: 'show' as const, shake: true, flashes: 'on' as const })),
+  /** Redesign R9: the pass-50 pages' look (settings v48). */
+  look: DominionLookSchema.default(() => ({ ...LOOK_DEFAULT })),
 }).strict();
 export type DominionPrefs = z.infer<typeof DominionPrefsSchema>;
 

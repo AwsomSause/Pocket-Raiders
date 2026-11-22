@@ -2,14 +2,15 @@
 // (P), and the hijacked broadcast that plays once per town taken. Every choice goes through GameSession.dominionStep
 // (saved); a Moment, a storm or a Holding's fight starts the battle at once and comes back here.
 
-import { heroModel } from '../../core/dominion/heroScreens';
 import { dominionBlock } from '../../core/dominion/session';
 import type { DominionAction } from '../../core/dominion/schema';
 import { broadcastModel, holdingsModel, takeoverModel } from '../../core/dominion/takeoverScreens';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import type { MonFiles } from '../../ui/redux/screens/dominion/heroViews';
-import { broadcastView, holdingsView, takeoverView } from '../../ui/redux/screens/dominion/takeover';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
+import { r5Broadcast, r5Holdings, r5Takeover } from '../../ui/redux/screens/dominion/r50/empireR8';
+import { chairVoice } from './r8Bridge';
 
 type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
 interface Host {
@@ -23,6 +24,9 @@ interface Host {
   bossLook(): string | null;
   /** D15: the Leaving page (once the region is Taken). */
   openLeave(): void;
+  /** Redesign R8: the pass-50 chrome's run data and the Boss's picture at a height. */
+  r8(): { run: R5Run } | null;
+  r8Boss(h: number): string;
 }
 
 export class TakeoverController {
@@ -71,15 +75,14 @@ export class TakeoverController {
 
   render(notice: string | null): string {
     const b = this.block();
-    if (!b) return '';
+    const r = this.host.r8();
+    if (!b || !r) return '';
     if (this.host.screenName === 'broadcast') {
       const m = broadcastModel(b);
-      return m ? broadcastView(m, this.host.bossLook()) : '';
+      return m ? r5Broadcast(m, { boss: this.host.r8Boss(230) }, r.run) : '';
     }
-    if (this.page === 'holdings') return holdingsView(holdingsModel(b, this.at, this.notice ?? notice));
-    const run = services().session.run!;
-    const hero = b.hero ? heroModel(b, run) : null;
-    return takeoverView(takeoverModel(b), hero, hero ? this.host.monFilesOf(hero.legends.map((l) => l.id)) : {}, this.notice ?? notice);
+    if (this.page === 'holdings') return r5Holdings(holdingsModel(b, this.at, this.notice ?? notice), r.run);
+    return r5Takeover(takeoverModel(b), { who: chairVoice(b), notice: this.notice ?? notice }, r.run);
   }
 
   private step(a: DominionAction, back = true): void {
