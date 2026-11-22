@@ -1,0 +1,29 @@
+/* DOMINION redesign R4 (Jobs, Trainers, Gimmicks): the few pieces the game needs that the pass-50 mockups didn't draw.
+   Hand-written (r50.css is generated); same scope and look as the mockups. */
+/* The chance ring with words in it (an unscouted range, hidden odds): no count-up, the text as it is. */
+#rx #r5 .ring .cnt.txt4{--v:0;font-size:40px;white-space:nowrap}
+#rx #r5 .ring .cnt.txt4::after{content:none}
+#rx #r5 .c-odds .sc4{margin-top:4px;font-size:12px;font-weight:800;color:var(--yel);letter-spacing:.04em}
+/* The Card's choices (a Gym way, a bribe, a design) and what the chosen one means, above the odds. */
+#rx #r5 .cs4{display:flex;flex-direction:column;gap:4px;margin:0 0 6px}
+#rx #r5 .op4{display:flex;flex-wrap:wrap;gap:4px}
+#rx #r5 .op4 i{font-style:normal;font-size:12px;font-weight:800;padding:2px 8px;border-radius:3px 8px 3px 8px;background:var(--pn2);border:2px solid var(--line);cursor:pointer;white-space:nowrap}
+#rx #r5 .op4 i.on{border-color:var(--yel);color:var(--yel)}
+#rx #r5 .cs4 em{font-style:normal;font-size:12px;line-height:1.25;color:var(--mut);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#rx #r5 .c-parts.tight4 .part{padding:3px 10px;font-size:13px}
+#rx #r5 .c-who .facts dd{font-size:12px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* A choice that can't be made right now (no Smoke Ball, not enough for bail), and Do it while the Card says no. */
+#rx #r5 .ch.dim4,#rx #r5 .cta.off4{opacity:.55;filter:saturate(.4)}
+/* Pick the crew: picked members keep a gold edge; the line under the grid. */
+#rx #r5 .cell.pk4{box-shadow:0 0 0 3px var(--yel) inset}
+#rx #r5 .g-main .nt4{margin:6px 4px 0;font-size:13px;color:var(--mut)}
+#rx #r5 .r-lines .ln4{margin:8px 4px 0;font-size:12px;line-height:1.3;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#rx #r5 .ch23 .cta{position:relative}
+/* The Card: what a win and a loss mean, under the total. */
+#rx #r5 .c-parts .wl4{margin:4px 4px 0;font-size:12px;line-height:1.25;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#rx #r5 .c-parts .wl4 b{color:var(--ok)}
+#rx #r5 .c-parts .wl4.l b{color:var(--red2)}
+/* The Gym plan: up to five ways (the mockup drew four), each on one line under its name. */
+#rx #r5 .gw44 .o29{padding-top:5px;padding-bottom:5px}
+#rx #r5 .gw44 .o29 em{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#rx #r5 .gw44 .o29.w-bad{border-left-color:#e0294a;opacity:.7}

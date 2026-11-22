@@ -230,6 +230,8 @@ export const FieldFightSchema = z.object({
   wager: N0,
   /** Looker's case: the Racket he came for. */
   racket: S.nullable(),
+  /** Redesign R4: the foe's first Pokémon, set when the battle begins (the Snapshot names it). */
+  lead: S.optional(),
 }).strict();
 export type FieldFight = z.infer<typeof FieldFightSchema>;
 
@@ -371,6 +373,8 @@ const BlockSchema = z.object({
   annals: z.lazy(() => AnnalsSchema).optional(),
   /** The tutorial (tutorial.ts): the help level picked before the run and every lesson, page and card shown. Optional (none = no help); no bump. */
   tut: z.object({ mode: z.enum(['full', 'tips', 'off']), seen: z.array(S) }).strict().optional(),
+  /** Redesign R4 (jobs.ts): the calling card, the battle album, power gear. Optional; `jobxOf` fills it; no bump. */
+  jobx: z.lazy(() => JobXStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -389,6 +393,8 @@ export interface DominionSetup {
   tutorial?: 'full' | 'tips' | 'off';
 }
 
+/** Redesign R4: the answer to "something happens" on a stealth job (jobs.ts). */
+export type LiveAnswer = 'still' | 'smoke' | 'run';
 export type DominionAction =
   | { t: 'open' }
   /** The tutorial: a lesson/page shown, the help level, Replay a lesson, the Day 2 Rattata (tutorial.ts). */
@@ -406,7 +412,11 @@ export type DominionAction =
   | { t: 'toDay' }
   | { t: 'endDay' }
   /** D2: a Boss action from the Region Map (travel included), bringing up to two members. */
-  | { t: 'act'; action: string; target: string | null; district: string; bring: string[]; opt?: string | null }
+  | { t: 'act'; action: string; target: string | null; district: string; bring: string[]; opt?: string | null; live?: LiveAnswer }
+  /** Redesign R4 (jobs.ts): leave a calling card after a job; buy at the Black Market; keep or skip a snapshot. */
+  | { t: 'calling' }
+  | { t: 'market'; item: string }
+  | { t: 'snap'; keep: boolean }
   | { t: 'buy'; vehicle: string }
   /** D30 (m10): what to do about a member caught on a botched job. */
   | { t: 'jobCaught'; choice: 'bail' | 'break' | 'leave' }
@@ -2305,6 +2315,20 @@ export const VoicesStateSchema = z.object({
   papers: z.array(PaperSchema),
 }).strict();
 export type VoicesState = z.infer<typeof VoicesStateSchema>;
+
+// ---------- Redesign R4: the pass-50 pages' own rules (jobs.ts; the save block's `jobx`; optional, no block bump) ----------
+
+export const SnapSchema = z.object({ d: I.min(1), mine: S, foe: S, text: S }).strict();
+export type Snap = z.infer<typeof SnapSchema>;
+export const JobXStateSchema = z.object({
+  /** The paper job (its key) that got a calling card: one card a job. */
+  called: S.nullable(),
+  /** The battle album (Snapshot): kept moments, oldest first. */
+  album: z.array(SnapSchema).max(40),
+  /** A moment offered after a won fight, waiting on Save or Skip. */
+  snap: SnapSchema.nullable(),
+}).strict();
+export type JobXState = z.infer<typeof JobXStateSchema>;
 
 // ---------- D30: job moments and the morning paper (the save block's `paper`; optional, no block bump) ----------
 

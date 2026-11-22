@@ -181,6 +181,9 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'sSay':
     case 'sStop':
     case 'sEnd':
+    case 'calling':
+    case 'market':
+    case 'snap':
       // The Boss's hands need the run (party, bag): session.ts sends them to field.ts.
       return no(block);
     case 'toDay': {

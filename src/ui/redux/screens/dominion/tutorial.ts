@@ -4,6 +4,7 @@
 // the scene's TutorialController keeps the state. The text is data (src/data/dominion/tutorial.json, trusted HTML with
 // <b>); names that come from the run are escaped before they go in.
 
+import { r5CardLesson } from './r50/jobs';
 import './tutorial.css';
 import { act, esc, TYPE_COLORS } from '../../kit';
 import { rxUrl } from '../../assets';
@@ -193,7 +194,8 @@ export function lessonOverlay(d: LessonDraw): string {
       ? overlay(spot(646, 80, 310, 270) + arw(600, 200, 'right') + rail(5, 470) + t(150, 210, 430, st?.key))
       : overlay(spot(292, 92, 636, 76) + t(300, 330, 470, st?.key));
     case 'night': return overlay(rail(6, 470) + t(420, 320, 500, st?.key));
-    case 'card': return overlay(num(1, 140, 120) + num(2, 310, 120) + num(3, 640, 120) + t(16, 444, 560));
+    // Redesign R4 (mockup `lessonjob`): Rotom's coach over the pass-50 Card; the scene draws it inside the page.
+    case 'card': return r5CardLesson({ lesson: def.name, n, of: TUT.lessons.length, step: Math.max(0, d.step), steps: steps.length, items: (st?.inline ?? []) as [string, string][] });
     case 'heat': {
       const lad = (def.ladder ?? []).map(([a, b], i) => `<div class="${i === 0 ? 'on' : ''}"><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('');
       return overlay(spot(584, 4, 118, 70, 10) + `<div class="tu-ladder" style="left:500px;top:100px">${lad}</div>` + arw(626, 78, 'up') + rail(9, 470) + t(30, 120, 380));

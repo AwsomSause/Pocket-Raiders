@@ -19,8 +19,8 @@ import { R5_SIZES } from '../../ui/redux/screens/dominion/r50/sizes';
 import { r5RunOf, type R5PartyMon } from '../../ui/redux/screens/dominion/r50/run';
 import { SP, type R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 
-/** Tabs open on the HQ (Operations is still shut). */
-export const R5_OPEN_TABS = [0, 1, 2, 3, 5] as const;
+/** Tabs open on the HQ (Jobs opens the Job board, redesign R4). */
+export const R5_OPEN_TABS = [0, 1, 2, 3, 4, 5] as const;
 
 /** The key strip's party: each Pokémon's icon and HP. */
 export function r5Party(scene: Phaser.Scene): R5PartyMon[] {
