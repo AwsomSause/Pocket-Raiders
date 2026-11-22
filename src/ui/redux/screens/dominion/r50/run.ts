@@ -29,7 +29,8 @@ export function r5RunOf(b: DominionBlock, party: readonly R5PartyMon[], o: { ope
   const used = b.phase === 'day' ? Math.max(0, clock.dayActions - b.actions) : 0;
   const held = b.realm?.held.length ?? 0;
   const talks = b.crew?.talks.length ?? 0;
-  const news = (b.voices?.week ?? []).slice(-4).map((x) => x.l);
+  const week = b.voices?.week ?? [];
+  const news = week.slice(-4).map((x) => x.l);
   return {
     funds: `₽${b.funds.toLocaleString('en-US')}`,
     cleanPct: b.funds > 0 ? Math.round((100 * (b.funds - dirty)) / b.funds) : 100,
@@ -45,6 +46,7 @@ export function r5RunOf(b: DominionBlock, party: readonly R5PartyMon[], o: { ope
     coming,
     hero: g.hero ? { k: 't-redbig', where: `Hero · threat ${g.hero.threat}` } : undefined,
     news: news.length ? news : ['All quiet in Kanto'],
+    newsToday: week.some((x) => x.d === b.day),
     tod: TOD_OF[b.phase],
     party,
     startBadge: talks,
@@ -56,5 +58,32 @@ export function r5RunOf(b: DominionBlock, party: readonly R5PartyMon[], o: { ope
     initial: b.team?.initial ?? (b.teamName ? b.teamName[0]!.toUpperCase() : 'N'),
     phase: DOMINION_DATA.start.clock.phases.find((p) => p.id === b.phase)?.word,
     roster: `${b.members.length}/${b.rosterCap}`,
+  };
+}
+
+/** Before a run has a Dominion block (the title, the setup, the help choice): the chrome shows how a new run starts
+ *  (the starting cash, Heat and Day 1) and the party the player brings. Display only. */
+export function r5PreRun(party: readonly R5PartyMon[]): R5Run {
+  const s = DOMINION_DATA.start.start;
+  const team = teamsHere()[0];
+  return {
+    funds: `₽${s.funds.toLocaleString('en-US')}`,
+    cleanPct: 100,
+    heat: s.heat,
+    day: 1,
+    orders: [0, DOMINION_DATA.start.clock.dayActions],
+    goalPct: 0,
+    regions: [false, false, false, false],
+    level: s.hqLevel,
+    xpPct: 0,
+    war: 50,
+    foe: team?.name ?? 'Rivals',
+    news: ['All quiet in Kanto'],
+    party,
+    startBadge: 0,
+    tabBadges: ['', '', '', '', '', ''],
+    wantWord: [],
+    side: 'Your crew',
+    initial: 'N',
   };
 }

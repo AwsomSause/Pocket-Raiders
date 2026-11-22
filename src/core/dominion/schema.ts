@@ -230,6 +230,8 @@ export const FieldFightSchema = z.object({
   wager: N0,
   /** Looker's case: the Racket he came for. */
   racket: S.nullable(),
+  /** Redesign R4: the foe's first Pokémon, set when the battle begins (the Snapshot names it). */
+  lead: S.optional(),
 }).strict();
 export type FieldFight = z.infer<typeof FieldFightSchema>;
 
@@ -371,6 +373,8 @@ const BlockSchema = z.object({
   annals: z.lazy(() => AnnalsSchema).optional(),
   /** The tutorial (tutorial.ts): the help level picked before the run and every lesson, page and card shown. Optional (none = no help); no bump. */
   tut: z.object({ mode: z.enum(['full', 'tips', 'off']), seen: z.array(S) }).strict().optional(),
+  /** Redesign R4 (jobs.ts): the calling card, the battle album, power gear. Optional; `jobxOf` fills it; no bump. */
+  jobx: z.lazy(() => JobXStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -389,6 +393,8 @@ export interface DominionSetup {
   tutorial?: 'full' | 'tips' | 'off';
 }
 
+/** Redesign R4: the answer to "something happens" on a stealth job (jobs.ts). */
+export type LiveAnswer = 'still' | 'smoke' | 'run';
 export type DominionAction =
   | { t: 'open' }
   /** The tutorial: a lesson/page shown, the help level, Replay a lesson, the Day 2 Rattata (tutorial.ts). */
@@ -406,7 +412,11 @@ export type DominionAction =
   | { t: 'toDay' }
   | { t: 'endDay' }
   /** D2: a Boss action from the Region Map (travel included), bringing up to two members. */
-  | { t: 'act'; action: string; target: string | null; district: string; bring: string[]; opt?: string | null }
+  | { t: 'act'; action: string; target: string | null; district: string; bring: string[]; opt?: string | null; live?: LiveAnswer }
+  /** Redesign R4 (jobs.ts): leave a calling card after a job; buy at the Black Market; keep or skip a snapshot. */
+  | { t: 'calling' }
+  | { t: 'market'; item: string }
+  | { t: 'snap'; keep: boolean }
   | { t: 'buy'; vehicle: string }
   /** D30 (m10): what to do about a member caught on a botched job. */
   | { t: 'jobCaught'; choice: 'bail' | 'break' | 'leave' }
@@ -2306,6 +2316,20 @@ export const VoicesStateSchema = z.object({
 }).strict();
 export type VoicesState = z.infer<typeof VoicesStateSchema>;
 
+// ---------- Redesign R4: the pass-50 pages' own rules (jobs.ts; the save block's `jobx`; optional, no block bump) ----------
+
+export const SnapSchema = z.object({ d: I.min(1), mine: S, foe: S, text: S }).strict();
+export type Snap = z.infer<typeof SnapSchema>;
+export const JobXStateSchema = z.object({
+  /** The paper job (its key) that got a calling card: one card a job. */
+  called: S.nullable(),
+  /** The battle album (Snapshot): kept moments, oldest first. */
+  album: z.array(SnapSchema).max(40),
+  /** A moment offered after a won fight, waiting on Save or Skip. */
+  snap: SnapSchema.nullable(),
+}).strict();
+export type JobXState = z.infer<typeof JobXStateSchema>;
+
 // ---------- D30: job moments and the morning paper (the save block's `paper`; optional, no block bump) ----------
 
 /** How a job ended: done / big / botched settle at once; fight and hero wait on a battle, which turns them into won or lost. */
@@ -2605,6 +2629,41 @@ export const DominionFxSchema = z.object({
 }).strict();
 export type DominionFx = z.infer<typeof DominionFxSchema>;
 
+/** Redesign R9 (pass-50 Settings pages): how the redesigned pages look and read. Presentation only, never read by a
+ *  rule. Settings v48 adds it (with every default), so old records keep the look they had. */
+export const DominionLookSchema = z.object({
+  /** Settings · Dominion / Sound: the siren and the heartbeat edge at Heat 70%+. */
+  heatWarn: z.boolean().default(true),
+  /** Settings · Screen: Funds, Heat and Day in one capsule, as separate chips, or hidden. */
+  status: z.enum(['capsule', 'chips', 'hidden']).default('capsule'),
+  /** Settings · Screen: the news ticker on news pages (Quiet: only on a day with fresh news). */
+  ticker: z.enum(['on', 'quiet', 'off']).default('on'),
+  /** Settings · Screen: the key strip's hints (Icons: the keys without their words). */
+  keyHints: z.enum(['full', 'icons', 'off']).default('full'),
+  /** Colour assist: owners and warnings also get a shape; High contrast darkens panels and brightens text. */
+  colour: z.enum(['off', 'shapes', 'contrast']).default('off'),
+  /** Read aloud: the browser's voice reads each new text box line; Highlight marks the word being read. */
+  readAloud: z.boolean().default(false),
+  voiceRate: z.enum(['slow', 'normal', 'fast']).default('normal'),
+  highlight: z.boolean().default(true),
+  /** Button feel: the mark on what you picked (the N badge, an arrow or a Poké Ball) and the press bounce. */
+  cursor: z.enum(['badge', 'arrow', 'ball']).default('badge'),
+  press: z.boolean().default(true),
+  /** Options: the colour every window's frame wears. */
+  frame: z.enum(['nova', 'gold', 'night', 'jade', 'plum', 'ash']).default('nova'),
+  /** Options: the page opener between pages (Nova star = the blade). Calm always uses none. */
+  wipe: z.enum(['blade', 'fade', 'cut']).default('blade'),
+  /** Region skin: follow the region you are in, or keep one; the skyline and the panels' glints. */
+  skin: z.enum(['region', 'kanto', 'johto']).default('region'),
+  skyline: z.boolean().default(true),
+  glints: z.boolean().default(true),
+  /** Ambience: the moving layers behind pages (lanterns, walkers, rain, fireworks) and the lightning flashes. */
+  ambience: z.enum(['full', 'off']).default('full'),
+  lightning: z.boolean().default(true),
+}).strict();
+export type DominionLook = z.infer<typeof DominionLookSchema>;
+export const LOOK_DEFAULT: DominionLook = DominionLookSchema.parse({});
+
 /** The Dominion tab of Settings, kept in the settings record (settings.expansion.dominionPrefs; optional, no bump). */
 export const DominionPrefsSchema = z.object({
   run: RunRulesSchema.default(() => ({ ...RUN_RULES_DEFAULT })),
@@ -2615,6 +2674,8 @@ export const DominionPrefsSchema = z.object({
   /** The tutorial's help level for the next run (the help page saves its pick here; Settings · Dominion · Tutorial). */
   tutorial: z.enum(['full', 'tips', 'off']).default('full'),
   fx: DominionFxSchema.default(() => ({ level: 'full' as const, particles: true, cutIns: 'show' as const, shake: true, flashes: 'on' as const })),
+  /** Redesign R9: the pass-50 pages' look (settings v48). */
+  look: DominionLookSchema.default(() => ({ ...LOOK_DEFAULT })),
 }).strict();
 export type DominionPrefs = z.infer<typeof DominionPrefsSchema>;
 

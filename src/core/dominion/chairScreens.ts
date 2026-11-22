@@ -111,7 +111,7 @@ export function answerChips(b: DominionBlock, c: CourtCard, fx: CourtFx[], membe
   return out.filter((x, i) => out.findIndex((y) => y.text === x.text) === i).slice(0, 4);
 }
 
-function face(b: DominionBlock, c: CourtCard, memberId: string | null): Face {
+export function face(b: DominionBlock, c: CourtCard, memberId: string | null): Face {
   const m = memberOf(b, memberId);
   const crew = c.look === 'member' && m;
   const tag = b.chair?.tags[c.who === 'member' ? memberId ?? '' : c.who ?? ''] ?? null;

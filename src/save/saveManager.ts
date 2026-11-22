@@ -26,6 +26,7 @@ import {
 import { emptyTimelineStore, TimelineStoreSchema, type TimelineStore } from '../core/timeline/schema';
 import { freshEvil } from '../core/evil/schema';
 import { EXPANSION_SETTINGS_DEFAULTS } from '../core/expansion/schema';
+import { LOOK_DEFAULT } from '../core/dominion/schema';
 import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
 
@@ -42,7 +43,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 47, settings: 45, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 47, settings: 48, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -491,6 +492,18 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     43: (data) => { const d = data as Json & { expansion?: Json }; return { ...d, expansion: { ...(d.expansion ?? {}), blessingsEnabled: true, ultraBeastsEnabled: true } }; },
     // v45 (Kice 2026-11-17): Rewinds and Second Chance settings are gone (off); Extended Cut and Story event density Full are on; every UI look goes back to the default Raiders look once. Other keys unchanged.
     44: (data) => { const d = data as Json & { expansion?: Json; screenStyles?: Json }; return { ...d, uiStyle: 'new', reduxSkin: 'raiders', uiTheme: 'classic', eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', battleUi: 'aero', transitionStyle: 'fade', expansion: { ...(d.expansion ?? {}), climaxCut: 'extended', eventsDensity: 'full', rewinds: false, secondChancePct: 0 } }; },
+    // v46 and v47 belong to the ui-mockups branch (Phantom UI and its Phone page); here they change nothing, so a record
+    // saved there and one saved here meet again at v48.
+    45: (data) => data,
+    46: (data) => data,
+    // v48 (Dominion redesign R9, the pass-50 Settings pages): Dominion's look settings arrive with their defaults (the
+    // pages look as before). Every other key is unchanged.
+    47: (data) => {
+      const d = data as Json & { expansion?: Json & { dominionPrefs?: Json } };
+      const p = d.expansion?.dominionPrefs;
+      if (!p || typeof p !== 'object') return d;
+      return { ...d, expansion: { ...d.expansion, dominionPrefs: { ...p, look: { ...LOOK_DEFAULT, ...((p as { look?: Json }).look ?? {}) } } } };
+    },
   },
   meta: {},
   timeline: {},
