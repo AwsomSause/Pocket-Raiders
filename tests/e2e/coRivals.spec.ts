@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { pressUntil } from './helpers/pressUntil';
 
 // Catalog Overhaul rivals (row 12): three rebuilt rival scenes open in the New UI event screen, with every {token} filled
 // and the locked stall choice showing why. Kieran (R16), the inn (R21) and the race (R23).
@@ -12,7 +13,7 @@ async function waitForScene(page: Page, key: string, timeout = 20_000) {
 
 async function toMap(page: Page) {
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
-    await page.keyboard.press('Enter');
+    await pressUntil(page, 'Enter', async () => (await page.evaluate(() => (window as any).__pkr?.activeScene() ?? null)) === next);
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
