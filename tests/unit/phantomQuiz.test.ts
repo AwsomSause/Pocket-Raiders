@@ -108,8 +108,8 @@ describe('Phantom Seed & Codes page', () => {
     expect(html).toMatch(/class="blade ph-sd-b on"[^>]*data-act="btn" data-arg="apply">Confirm</);
     expect(html).toMatch(/class="blade ph-sd-b"[^>]*data-act="btn" data-arg="clear">Clear</);
     for (const [tag, name] of SEED_CODES) { expect(html).toContain(`<b>${tag}</b>`); expect(html).toContain(name); }
-    expect(html).toMatch(/class="key" data-act="btn" data-arg="apply"><b class="w">Enter<\/b>Confirm/);
-    expect(html).toMatch(/class="key" data-act="back" data-arg=""><b class="w">Esc<\/b>Desk/);
+    expect(html).toMatch(/class="key" data-act="btn" data-arg="apply"><b>Z<\/b>Confirm/);
+    expect(html).toMatch(/class="key" data-act="back" data-arg=""><b>X<\/b>Desk/);
   });
 
   it('what went wrong replaces the note and is escaped; no note, no box; no key lit before typing', () => {

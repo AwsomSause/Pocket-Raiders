@@ -5,7 +5,7 @@ import { freshEvil } from './core/evil/schema';
 import { hasSkinBackdrop } from './ui/screenSkins';
 import { ruleWipe, wipeAssetId, type WipeMask } from './ui/battleFx/ruleWipe';
 import { loadAssets } from './ui/lazyAssets';
-import { installTouchControls, setTouchLayout } from './ui/touchControls';
+import { installTouchControls, setTouchLayout, setTouchPrefs } from './ui/touchControls';
 import { playReaction, runInteractionPrompt } from './ui/interactionPrompt';
 import { promptById } from './core/interaction/prompt';
 import { sheenSweep } from './ui/battleFx/transitions';
@@ -65,7 +65,7 @@ import { installPointerFx } from './ui/pointerFx';
 import { installGamepad } from './ui/gamepad';
 import { installShareTools } from './ui/shareCard';
 import { interactionLog } from './core/presentation/uiPrefs';
-import { installOverlays, notify } from './ui/overlays';
+import { installOverlays, notify, showCaption } from './ui/overlays';
 import { showAchievementToasts } from './ui/achievementToast';
 import { enterTransition } from './ui/transitions';
 import { installErrorLog, packStore, registerOffline, watchForUpdates } from './game/deviceTools';
@@ -145,10 +145,12 @@ function start(): void {
         installGamepad(() => session.settings);
         installOverlays(g, () => session.settings);
         setTouchLayout(session.settings.oneHanded);
+          setTouchPrefs(session.settings);
         installShareTools(g, session);
         session.onChange(() => {
           applyUiSkin(session.settings);
           setTouchLayout(session.settings.oneHanded);
+          setTouchPrefs(session.settings);
           applyDisplaySettings(g, session.settings);
         applySoundPack(g, session.settings.soundPack);
           setUiMotion(uiMotionFrom(session.settings));
@@ -225,6 +227,8 @@ function start(): void {
     },
     /** Shows a notification bubble (browser tests and the debug panel). */
     notify: (text: string) => notify(text),
+    /** Shows a song caption along the bottom (browser tests and the debug panel). */
+    caption: (text: string, ms = 2200) => showCaption(text, ms),
     /** Shows the toast for the first achievements in the list, as when they are earned (browser tests and the debug panel). */
     achievementToast: (count = 1) => {
       const s = game.scene.getScenes(true)[0];

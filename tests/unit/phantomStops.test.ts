@@ -59,6 +59,22 @@ describe('Phantom reward draft', () => {
     expect(html).not.toContain('<b>Lucky Egg</b>');
     expect(count(html, '<p class="txt"></p>')).toBe(0);
   });
+
+  it('as in the mock-up: the money top right, the item kind over each card, and the notice box only for a step', () => {
+    const banded = reward().cards.map((c, k) => ({ ...c, kind: k === 1 ? 'Rare' : 'Common', band: ['Medicine', 'Held item', 'Money'][k] }));
+    const html = phReward(ph, reward({ cards: banded, head: { money: 3500, purse: 'your money · 2 candies', status: 'Encounter 4 cleared · Pick 1 of 3', notice: '' } }));
+    expect(html).toContain('<div class="prize ph-rw-money">₽3,500<small>your money · 2 candies</small></div>');
+    expect(html).toContain('<small>MEDICINE</small>');
+    expect(html).toContain('<small>HELD ITEM · RARE</small>');
+    expect(html).toContain('Encounter 4 cleared · Pick 1 of 3');
+    expect(html).not.toContain('ph-rw-say');
+    const step = phReward(ph, reward({ head: { money: 0, purse: '', status: '', notice: 'Choose the card to swap.' } }));
+    expect(step).toMatch(/ph-rw-say[\s\S]*Choose the card to swap\./);
+    // Five cards overlap as a hand, the lit one on top.
+    const five = phReward(ph, reward({ cards: Array.from({ length: 5 }, (_, k) => ({ name: `Gift ${k}`, kind: 'Common', text: '', art: null, notes: [] })), index: 4 }));
+    expect(five).toContain('margin-left:-10px');
+    expect(five).toMatch(/class="rc ph-rw on slim"[^>]*z-index:9/);
+  });
 });
 
 describe('Phantom shop', () => {

@@ -98,6 +98,11 @@ describe('the Phantom Hall of Fame team', () => {
     expect(html).toContain('8 of 8 regions · 64 badges · 2026-11-20');
     expect(html).toContain('data-act="back"');
     expect(html).toContain('ph-hf-solo');
+    // As in the mock-up the banners lean in turn and wear their Pokémon's type colour; one with no type keeps the default.
+    expect(html).toContain('style="--i:0;--r:-3deg"');
+    const typed = phHall(ph, hall({ mons: hall().mons.map((m, k) => ({ ...m, type: k ? 'electric' : 'fire' })) }));
+    expect(typed).toContain('--i:0;--r:-3deg;--tc:#ff6a2b');
+    expect(typed).toContain('--i:1;--r:2deg;--tc:#f7c400');
   });
 
   it('never shows more than six', () => {
@@ -143,6 +148,9 @@ describe('the Phantom blessing', () => {
     expect(html).toContain('XVII');
     expect(html).toContain('Lugia&#39;s Calm');
     expect(html).toContain('Lugia has blessed your journey.');
+    // As the mock-up: the card says what it does; the shouted headline is spoken under it.
+    expect(html).toMatch(/<p class="txt">Fire moves keep their full power in rain\.<\/p><small>LASTS THIS RUN/);
+    expect(phBlessing(ph, blessing({ headline: 'THE WORLD IS KINDER TO THE LOVELY' }))).toContain('<br>The world is kinder to the lovely.</p>');
     expect(html).toContain('LASTS THIS RUN');
     expect(html).toContain('>Accept<');
     expect(html).not.toContain('ph-bl-wait');

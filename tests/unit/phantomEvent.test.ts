@@ -107,7 +107,7 @@ describe('Phantom talk pages (prologue, story, tutorial)', () => {
     expect(html).toContain('Chapter 1');
     expect(html).not.toContain('sy-cd');
     expect(html).toMatch(/class="sy-box ph-ev-box[^"]*"[^>]*data-act="pick" data-arg="0"/);
-    expect(html).toMatch(/<kbd>↵<\/kbd><span>Continue<\/span>/);
+    expect(html).toMatch(/<kbd>Z<\/kbd><span>Continue<\/span>/);
     expect(html).not.toContain('Read back');
   });
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createPokemon } from '../../src/core/pokemon';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { POCKET, pocketOf, shopHint, shopUsers } from '../../src/ui/shopLook';
+import { POCKET, pocketOf, rewardBand, shopHint, shopUsers } from '../../src/ui/shopLook';
 import { content } from './helpers';
 
 const run = () => chooseStarter(content, createRun(content, { runId: 'r', seed: 'shop-look', archetypeId: 'red' }), 0);
@@ -31,5 +31,17 @@ describe('shop rows (Visual Bible shops)', () => {
     expect(hint).toMatch(/^Medicine: /);
     expect(hint).toContain('You have 2');
     expect(hint).toContain('₽750 to spend');
+  });
+});
+
+describe('reward card band', () => {
+  it('names the item pocket, or what kind of prize the card is', () => {
+    const band = (id: string) => rewardBand(content, content.rewards.get(id)!);
+    expect(band('potion')).toBe('Medicine');
+    expect(band('nugget')).toBe('Money');
+    expect(band('rare-candy')).toBe('Level up');
+    expect(band('hp-up')).toBe('Vitamin');
+    expect(band('power-band')).toBe('Training');
+    expect(['Bundle', 'Bargain', 'Gamble']).toContain(band('deal-field-bundle'));
   });
 });

@@ -27,12 +27,16 @@ export interface VersusModel {
   playerName: string;
   /** Your party's pictures (the card layout); its length is your ball count. */
   party: readonly (string | null)[];
+  /** Which of your party have fainted, in party order (the Phantom card draws those balls dark). */
+  fainted?: readonly boolean[];
   /** The arena picture behind the letterboxed shot, or null for a plain dark one. */
   backdrop: string | null;
   /** Where the battle is ("Stage 3 · Route 22"), for the Phantom card's heading. */
   where?: string;
   /** One true line on what the battle decides (the Phantom card's "What is at stake"); '' or none leaves the panel out. */
   stake?: string;
+  /** A rival: C opens what you have seen of its team (the Phantom card's "Scout their team" key). */
+  scout?: boolean;
   /** Pocket look: the card's playback state, set by the battle's playback (in, hold, out). Leave it out: it plays in. */
   cue?: 'in' | 'hold' | 'out';
   /** Pocket look: a boss's intro (mock-up `boss-intro`): where and what role, its type, and the chips (** ** marks bold). */

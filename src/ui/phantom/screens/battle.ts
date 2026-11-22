@@ -4,10 +4,10 @@
 // animation, so every battle style stays as it is. Pure drawing; BattleScene keeps the rules, the input and the state.
 
 import type { PhantomVersion } from '../../../core/presentation/phantom';
-import { rxUrl } from '../../redux/assets';
-import { BATTLE_LIST_ROWS, windowTitle, type BattleBox, type BattleEvolve, type BattleExp, type BattleGimmick, type BattleLevel, type BattleListModel, type BattleModel, type BattleOption, type BattlePanel } from '../../redux/screens/battle';
+import { rxAtlas, rxUrl } from '../../redux/assets';
+import { BATTLE_LIST_ROWS, windowTitle, type BattleBox, type BattleEvolve, type BattleExp, type BattleGimmick, type BattleInfoView, type BattleLevel, type BattleListModel, type BattleModel, type BattleOption, type BattlePanel } from '../../redux/screens/battle';
 import { figure, scrollStart } from '../../redux/templates';
-import { act, esc, mon, page, TYC, ty } from '../kit';
+import { act, esc, keys, mon, page, ransom, TYC, ty } from '../kit';
 import { phConfirm } from '../templates';
 
 /** The canvas is 960 wide and the Phantom page 1280: a place on the field, in page units. */
@@ -23,23 +23,30 @@ const lines = (t: string): string => esc(t).replace(/\n/g, '<br>');
 /** A foe's box: the name on a black slash, its marks, the HP slash with its percent, and the Trainer's team as balls. */
 const foeBox = (b: BattleBox, k: number, small: boolean): string =>
   `<div class="b3-foe ph-bt-foe${small ? ' sm' : ''}" style="top:${22 + k * 92}px" data-key="foe${k}"${tipOf(b)}><h3>${esc(b.name)} <span>${esc(b.level)}</span></h3>`
-  + (b.tags.length ? `<div class="r">${b.tags.map((t) => `<em class="st">${esc(t)}</em>`).join('')}</div>` : '')
+  + (b.tags.length || b.types?.length ? `<div class="r">${(b.types ?? []).map(ty).join('')}${b.tags.map((t) => `<em class="st">${esc(t)}</em>`).join('')}</div>` : '')
   + `<div class="r">${slash(b.hp, small ? '220px' : '300px')}<span class="num2">${pct(b.hp)}%</span></div>`
+  + (b.weak?.length && !small ? weakRow(b.weak) : '')
   + (b.team ? `<div class="r">${balls(b.team.n, b.team.out)}</div>` : '') + '</div>';
+
+/** The mock-ups' "Weak to" row: a badge per type that hits it super effectively, and the 4x ones named. */
+const weakRow = (w: readonly { type: string; times: number }[]): string => {
+  const four = w.filter((x) => x.times >= 4).map((x) => `${x.type.charAt(0).toUpperCase()}${x.type.slice(1)} ×${x.times}`);
+  return `<div class="r wk"><small>Weak to</small>${w.slice(0, 6).map((x) => `<img class="px" src="${rxUrl(`packs/story/badge/${x.type}.png`)}" alt="${esc(x.type)}" style="background:${TYC[x.type] ?? '#888'}">`).join('')}${four.length ? `<small class="x4">${esc(four.join(' · '))}</small>` : ''}</div>`;
+};
 
 /** Your Pokémon's card: name, HP in numbers, the HP slash, the Exp slash, its level and marks. */
 const mineBox = (b: BattleBox, k: number, small: boolean): string =>
-  `<div class="m on ph-bt-m${small ? ' sm' : ''}" style="--i:${k}" data-key="mine${k}"${tipOf(b)}><div><b>${esc(b.name)}<span>${esc(b.hpText || b.level)}</span></b>${slash(b.hp)}`
+  `<div class="m on ph-bt-m${small ? ' sm' : ''}${b.file && !small ? ' pic' : ''}" style="--i:${k}" data-key="mine${k}"${tipOf(b)}>${b.file && !small ? `<div class="pic">${mon(b.file, 0.75)}</div>` : ''}<div><b>${esc(b.name)}<span>${esc(b.hpText || b.level)}</span></b>${slash(b.hp)}`
   + (b.xp === null ? '' : slash(b.xp, '62%', 'xp'))
   + `<div class="ph-bt-mt"><u>${esc(b.level)}</u>${b.tags.map((t) => `<em>${esc(t)}</em>`).join('')}</div></div></div>`;
 
 const GIM: Record<BattleGimmick['kind'], string> = { mega: 'Mega Evolve', tera: 'Terastallize', dynamax: 'Dynamax', zmove: 'Z-Move' };
 
-/** A move card (mock-up `moves`): the type's band and badge, the name, and its small line (PP). */
-const moveCard = (o: BattleOption, k: number, on: boolean, small: boolean): string => {
+/** A move card (mock-up `moves`): the type's band and badge, the name, and its small line (kind · Power · PP). */
+const moveCard = (o: BattleOption, k: number, on: boolean, small: boolean, at = ''): string => {
   const t = (o.type ?? '').toLowerCase(), size = o.label.length > 16 ? 20 : o.label.length > 12 ? 24 : small ? 26 : 30;
-  return `<div class="b3-m ph-bt-mv${on ? ' on' : ''}${o.off ? ' off' : ''}${small ? ' sm' : ''}" style="--i:${k};--tc:${TYC[t] ?? '#888'}" data-key="mv${k}"${act('pick', k, 'over')}${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}>`
-    + `${on ? '<kbd>Z</kbd>' : ''}<div class="t">${t ? `<img class="px" src="${rxUrl(`packs/story/badge/${t}.png`)}" alt="${esc(t)}">` : ''}</div><h4 style="font-size:${size}px">${esc(o.label)}</h4><p>${esc(o.sub ?? '')}</p></div>`;
+  return `<div class="b3-m ph-bt-mv${at}${on ? ' on' : ''}${o.off ? ' off' : ''}${small ? ' sm' : ''}" style="--i:${k};--tc:${TYC[t] ?? '#888'}" data-key="mv${k}"${act('pick', k, 'over')}${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}>`
+    + `${on ? '<kbd>Z</kbd>' : ''}<div class="t">${t ? `<img class="px" src="${rxUrl(`packs/story/badge/${t}.png`)}" alt="${esc(t)}">` : ''}</div><h4 style="font-size:${size}px">${esc(o.label)}</h4><p>${esc(o.facts && o.sub ? `${o.facts} · ${o.sub}` : o.sub ?? '')}</p></div>`;
 };
 
 /** A plain choice (a target, an answer, a command): a slanted row; a whole sentence steps down a size. */
@@ -62,17 +69,40 @@ export function phLevel(d: BattleLevel): string {
   return `<div class="ph-shade" data-key="lv-shade"></div><div class="pn lt ph-bt-lv tilt" style="--r:-1.5deg" data-key="lv${d.to}"><span class="lab">Level up</span><div class="ph-bt-lvh">${d.file ? mon(d.file, 1.4, 'olk', '', true) : ''}<div><h3 class="tl1">${esc(d.name)}</h3><p class="ph-bt-lvn">Lv ${d.from}<i>▶</i><b>${d.to}</b></p></div></div>${rows}</div>`;
 }
 
+/** What the new form gained (mock-up `evolve`'s right card): its level, its types (the new ones marked) and each stat's rise. */
+export interface EvolveGain { level: number; types: readonly string[]; fresh: readonly string[]; stats: readonly (readonly [string, number])[] }
+
+const evBand = (): string => { const run = 'EVOLUTION · '.repeat(22); return `<div class="cine" aria-hidden="true"><i><u>${run}</u></i><i><u>${run}</u></i></div>`; };
+
 /**
- * An evolution (mock-up `evolve`): black page, the burst, the old form until the new one is out, the words under it.
- * `sil` false shows the form in colour before it changes (the evolution scene's first line); `tap`: a click anywhere moves on.
+ * An evolution (mock-up `evolve`). While it glows: black page, the burst, the old form (white while it changes), the
+ * words under it. Once the new form is out: the mock-up's page, the cut-out EVOLVED!, the old form's outline and its
+ * name, the chevrons, the new form large, and (with `gain`) a card of its level, types and stat rises.
+ * `sil` false shows the form in colour before it changes (the evolution scene's first line); `tap`: a click anywhere
+ * moves on; `names` bolds the two names in the words; `stop`: X (Esc) still stops it (only while it glows).
  */
-export function phEvolve(d: BattleEvolve & { sil?: boolean; tap?: boolean }, text: string): string {
-  const f = d.done ? d.to : d.from;
-  return page('evolve', '<div class="bgk"></div><div class="burst ph-bt-evb" style="--x:50%;--y:46%" aria-hidden="true"></div>'
-    + `<div class="ph-bt-ev${d.done ? ' done' : ''}" data-key="ev${d.done ? 1 : 0}">${f ? mon(f, 4.4, d.done || d.sil === false ? 'ol' : 'sil', '', true) : ''}</div>`
-    + (d.done ? '<div class="ph-bt-evt" aria-hidden="true">Evolved!</div>' : '')
-    + (text ? `<div class="say ph-bt-say" data-key="say">${lines(text)}</div>` : '')
-    + (d.tap ? `<div class="ph-ld-any" data-key="tap"${act('next')}></div>` : ''), false);
+export function phEvolve(d: BattleEvolve & { sil?: boolean; tap?: boolean; names?: { from: string; to: string } | null; gain?: EvolveGain | null; stop?: boolean }, text: string): string {
+  const tap = d.tap ? `<div class="ph-ld-any" data-key="tap"${act('next')}></div>` : '';
+  if (!d.done) {
+    const f = d.from;
+    return page('evolve', '<div class="bgk"></div><div class="burst ph-bt-evb" style="--x:50%;--y:46%" aria-hidden="true"></div>' + evBand()
+      + `<div class="ph-bt-ev" data-key="ev0">${f ? mon(f, 4.4, d.sil === false ? 'ol' : 'sil', '', true) : ''}</div>`
+      + (text ? `<div class="say ph-bt-say" data-key="say">${lines(text)}</div>` : '')
+      + tap + (d.tap ? keys(['Z', 'Next'], ...(d.stop ? [['Esc', 'Stops it while it glows'] as const] : [])) : ''), false);
+  }
+  const n = d.names;
+  let say = esc(text);
+  if (n) for (const w of [n.from, n.to]) if (w) say = say.split(esc(w)).join(`<b>${esc(w)}</b>`);
+  const g = d.gain;
+  const up = g && n ? `<div class="pn ev-up" data-key="evup"><span class="lab">${esc(n.to)} · Lv.${g.level}</span>`
+    + `<div class="ev-ty">${g.types.map((t) => ty(t)).join('')}${g.fresh.length ? '<em>New type</em>' : ''}</div>`
+    + `<dl>${g.stats.map(([s, v], k) => `<dt>${esc(s)}</dt><dd style="--i:${k}">${v >= 0 ? '+' : ''}${v}</dd>`).join('')}</dl></div>` : '';
+  return page('evolve', '<div class="bgr"></div><div class="burst" style="--x:58%;--y:46%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,34% 0,20% 100%,0 100%);inset:0" aria-hidden="true"></div>' + evBand()
+    + `<div class="ev-t">${ransom('EVOLVED!', 11)}</div>`
+    + (d.from ? `<div class="ev-old" data-key="evold">${mon(d.from, 3.2)}${n?.from ? `<span class="lab">${esc(n.from)}</span>` : ''}</div><div class="ev-arrow" aria-hidden="true"><i></i><i></i><i></i></div>` : '')
+    + `<div class="ev-new" data-key="ev1">${d.to ? mon(d.to, 5.4, 'ol', '', true) : ''}</div>` + up
+    + (text ? `<div class="pn ev-say" data-key="say"><p class="txt">${say.replace(/\n/g, '<br>')}</p><em aria-hidden="true">▼</em></div>` : '')
+    + tap + (d.tap ? keys(['Z', 'Next']) : ''), false);
 }
 
 const expRows = (rows: readonly BattleExp[]): string => {
@@ -95,30 +125,56 @@ export function phBattle(_ph: PhantomVersion, d: BattleModel): string {
   // The tray: the choices at the right (move cards two to a row, plain choices in a column or two), the words at the left.
   const cols = typed ? 2 : n > 4 ? 2 : 1, rows = Math.ceil(n / cols), small = rows > 2;
   const cellH = typed ? (small ? 62 : 84) : small ? 44 : 52, gap = typed ? (small ? 10 : 16) : 8;
-  const trayH = n ? rows * cellH + (rows - 1) * gap : 0;
-  const menu = n ? `<div class="ph-bt-menu${typed ? ' mvs' : ''}${cols === 2 ? ' two' : ''}" style="--h:${cellH}px;gap:${gap}px ${typed ? 22 : 10}px">${opts.map((o, k) => (typed ? moveCard(o, k, k === on, small) : choice(o, k, k === on, small))).join('')}</div>` : '';
-  const len = d.text.length, size = n ? (len > 150 ? 17 : len > 100 ? 19 : len > 44 ? 22 : 28) : len > 170 ? 19 : len > 110 ? 22 : len > 60 ? 25 : 30;
-  const say = d.text ? `<div class="say ph-bt-say${n ? ' half' : ''}" style="font-size:${size}px" data-key="say">${lines(d.text)}</div>` : '';
+  // The command menu (Fight, Bag, Pokémon...) stands in the fan round your Pokémon, as the mock-up draws it.
+  const cmd = !!d.tabs && d.tabs.index < 0 && n > 0 && !typed && opts.some((o) => /^fight$/i.test(o.label));
+  const cross = typed && n <= 4 && !duo && d.foes.length === 1 && d.tabs?.index === 0;
+  const trayH = n && !cmd && !cross ? rows * cellH + (rows - 1) * gap : 0;
+  // The Fight page of a single battle (mock-up `moves`): the field dims, up to four move cards stand on a cross,
+  // and the target's card at the right says who they hit. More moves (or two foes) keep the tray below.
+  const xMenu = cross ? `<div class="b3-x ph-bt-x">${opts.map((o, k) => moveCard(o, k, k === on, false, ` d${k}`)).join('')}<div class="b3-pad" aria-hidden="true"><i></i><i></i></div></div>` : '';
+  const foe0 = d.foes[0];
+  const target = cross && foe0 ? `<div class="pn b3-tg ph-bt-tg" data-key="tg"><span class="lab">Target</span><div class="b3-tp">${foe0.file ? mon(foe0.file, 2.2, 'ol') : ''}<div class="ring" aria-hidden="true"></div></div><h3 class="tl1">${esc(foe0.name)} <small>${esc(foe0.level)}</small></h3><div class="b3-hp" style="--hp:${foe0.hp <= 0.2 ? 'var(--red)' : foe0.hp <= 0.5 ? 'var(--gold)' : '#3fd16a'}"><i style="width:${pct(foe0.hp)}%"></i></div><p class="b3-est"><b>${pct(foe0.hp)}%</b>of its HP left</p>${d.text ? `<p class="txt">${lines(d.text)}</p>` : ''}</div>` : '';
+  const menu = n && !cmd && !cross ? `<div class="ph-bt-menu${typed ? ' mvs' : ''}${cols === 2 ? ' two' : ''}" style="--h:${cellH}px;gap:${gap}px ${typed ? 22 : 10}px">${opts.map((o, k) => (typed ? moveCard(o, k, k === on, small) : choice(o, k, k === on, small))).join('')}</div>` : '';
+  const len = d.text.length, size = n && !cmd ? (len > 150 ? 17 : len > 100 ? 19 : len > 44 ? 22 : 28) : len > 170 ? 19 : len > 110 ? 22 : len > 60 ? 25 : 30;
+  const say = d.text && !cross ? `<div class="say ph-bt-say${n && !cmd ? ' half' : ''}${cmd ? ' cmd' : ''}" style="font-size:${size}px" data-key="say">${lines(d.text)}</div>` : '';
   // The page tabs are the mock-up's fan; Q and E step along it.
   const tabs = d.tabs;
   const fanY = Math.round((d.me?.y ?? 428) * S) - 100;
   const fanAt = `left:${Math.round((d.me?.x ?? 312) * S)}px;top:${fanY}px`;
   // A wide menu (move cards, two columns) reaches under the fan: the last tab stays clear of its top edge.
-  const wide = n > 0 && cols === 2, room = 720 - 26 - trayH - 34 - fanY;
+  const wide = n > 0 && !cmd && cols === 2, room = 720 - 26 - trayH - 34 - fanY;
   const last = wide ? Math.max(-12, Math.min(22, Math.round((Math.asin(Math.max(-1, Math.min(1, room / FAN_R))) * 180) / Math.PI))) : 22;
   const info = !!d.panels?.length && d.panelAt !== 'tip';
-  const fan = tabs ? `<div class="b3-arc ph-bt-arc" style="${fanAt}" aria-hidden="true"></div><div class="b3-fan ph-bt-fan" style="${fanAt}">${tabs.labels.map((t, k) => {
-    const auto = t === 'Auto', m = tabs.labels.length, lit = k === tabs.index || (auto && tabs.auto) || (info && k === m - 1);
-    // Q and E step through the pages (all but Auto and Info, which have their own keys).
-    const pages = tabs.labels.filter((x, q) => x !== 'Auto' && q < m - 1).length || m, at = tabs.index;
-    const key = auto ? 'T' : k >= pages ? 'I' : k === at ? '' : k === (at < 0 ? 0 : (at + 1) % pages) ? 'E' : k === ((at < 0 ? 0 : at) + pages - 1) % pages ? 'Q' : '';
-    return `<div class="b3-c ph-bt-tab${lit ? ' on' : ''}${auto ? ' g' : ''}${auto && tabs.autoOff ? ' off' : ''}" style="--a:${fanAngles(m, last)[k]}deg;--i:${k}" data-key="tab${k}"${act('tab', k)}>${key ? `<kbd>${key}</kbd>` : ''}<b>${esc(t === 'i' ? 'Info' : t)}</b>${auto ? `<small>${tabs.auto ? 'ON' : tabs.autoOff ? 'N/A' : 'OFF'}</small>` : ''}</div>`;
-  }).join('')}</div>` : '';
+  // The key of page tab k: Q and E step through the pages (all but Auto and Info, which have their own keys).
+  const keyOf = (k: number): string => {
+    if (!tabs) return '';
+    const m = tabs.labels.length, pages = tabs.labels.filter((x, q) => x !== 'Auto' && q < m - 1).length || m, at = tabs.index;
+    return tabs.labels[k] === 'Auto' ? 'T' : k >= pages ? 'I' : k === at ? '' : k === (at < 0 ? 0 : (at + 1) % pages) ? 'E' : k === ((at < 0 ? 0 : at) + pages - 1) % pages ? 'Q' : '';
+  };
+  const tabItem = (k: number, a: number, i: number): string => {
+    const t = tabs!.labels[k]!, auto = t === 'Auto', m = tabs!.labels.length, lit = k === tabs!.index || (auto && tabs!.auto) || (info && k === m - 1), key = keyOf(k);
+    return `<div class="b3-c ph-bt-tab${lit ? ' on' : ''}${auto ? ' g' : ''}${auto && tabs!.autoOff ? ' off' : ''}" style="--a:${a}deg;--i:${i}" data-key="tab${k}"${act('tab', k)}>${key ? `<kbd>${key}</kbd>` : ''}<b>${esc(t === 'i' ? 'Info' : t)}</b>${auto ? `<small>${tabs!.auto ? 'ON' : tabs!.autoOff ? 'N/A' : 'OFF'}</small>` : ''}</div>`;
+  };
+  // In the command menu the fan holds Info, the commands (each with the page key that also opens it), then Auto.
+  const PAGE_OF: Record<string, string> = { fight: 'Attack', 'pokémon': 'Party', bag: 'Item' };
+  const fanItems = (): string => {
+    const lab = tabs!.labels, infoK = lab.length - 1, autoK = lab.indexOf('Auto');
+    const count = 1 + n + (autoK >= 0 ? 1 : 0), angles = fanAngles(count, 46);
+    const cmds = opts.map((o, k) => {
+      const page = lab.indexOf(PAGE_OF[o.label.toLowerCase()] ?? ''), key = k === on ? 'Z' : page >= 0 ? keyOf(page) : '';
+      return `<div class="b3-c ph-bt-op ph-bt-cmd${k === on ? ' on' : ''}${o.off ? ' off' : ''}" style="--a:${angles[k + 1]}deg;--i:${k + 1}" data-key="op${k}"${act('pick', k, 'over')}>${key ? `<kbd>${key}</kbd>` : ''}<b>${esc(o.label)}</b>${o.sub ? `<small>${esc(o.sub)}</small>` : ''}</div>`;
+    }).join('');
+    return tabItem(infoK, angles[0]!, 0) + cmds + (autoK >= 0 ? tabItem(autoK, angles[n + 1]!, n + 1) : '');
+  };
+  const fan = tabs && !cross ? `<div class="b3-arc ph-bt-arc" style="${fanAt}" aria-hidden="true"></div><div class="b3-fan ph-bt-fan${cmd ? ' cmd' : ''}" style="${fanAt}">${cmd ? fanItems() : tabs.labels.map((_, k) => tabItem(k, fanAngles(tabs.labels.length, last)[k]!, k)).join('')}</div>` : '';
   const above = trayH ? trayH + 40 : 96;
   const gimRow = d.gim?.length || d.gimPage;
-  const gim = gimRow ? `<div class="ph-bt-gims" style="bottom:${above}px">${(d.gim ?? []).map((g, k) => `<div class="gim ph-bt-gim${g.on ? ' on' : ''}" data-key="gim${k}"${act('gim', k)}>${esc(GIM[g.kind])}${g.on ? '<small>READY</small>' : ''}</div>`).join('')}${d.gimPage ? `<div class="gim ph-bt-gim all" data-key="gimall"${act('gims')}><kbd>G</kbd>Gimmicks</div>` : ''}</div>` : '';
-  const foes = d.foes.map((b, k) => foeBox(b, k, duo)).join('');
-  const mine = d.mine.length ? `<div class="stack ph-bt-stack" style="bottom:${above + (gimRow ? 62 : 0)}px">${d.mine.map((b, k) => mineBox(b, k, duo)).join('')}${d.party && !duo ? `<div class="ph-bt-party">${balls(d.party.n, d.party.out)}</div>` : ''}</div>` : '';
+  const gim = gimRow ? `<div class="ph-bt-gims${cross ? ' x' : ''}" style="bottom:${cross ? 22 : above}px">${(d.gim ?? []).map((g, k) => `<div class="gim ph-bt-gim${g.on ? ' on' : ''}" data-key="gim${k}"${act('gim', k)}>${esc(GIM[g.kind])}${g.on ? '<small>READY</small>' : ''}</div>`).join('')}${d.gimPage ? `<div class="gim ph-bt-gim all" data-key="gimall"${act('gims')}><kbd>G</kbd>Gimmicks</div>` : ''}</div>` : '';
+  const foes = cross ? '' : d.foes.map((b, k) => foeBox(b, k, duo)).join('');
+  // In the command menu your card stands at the top of the stack with the rest of the party under it (mock-up `battle`).
+  const bench = cmd && !duo && d.bench?.length ? d.bench.map((b, k) => `<div class="m ph-bt-bn${b.hp <= 0 ? ' out' : ''}" style="--i:${k + 1}"><div class="pic">${b.file ? mon(b.file, 0.55, '', b.hp <= 0 ? 'filter:grayscale(1)' : '') : ''}</div><div><b>${esc(b.name)}<span>${b.hp <= 0 ? 'KO' : esc(b.level)}</span></b>${slash(b.hp)}</div></div>`).join('') : '';
+  const mine = d.mine.length && !cross ? `<div class="stack ph-bt-stack${bench ? ' top' : ''}"${bench ? '' : ` style="bottom:${above + (gimRow ? 62 : 0)}px"`}>${d.mine.map((b, k) => mineBox(b, k, duo)).join('')}${bench}${d.party && !duo && !bench ? `<div class="ph-bt-party">${balls(d.party.n, d.party.out)}</div>` : ''}</div>` : '';
+  const ord = cmd && d.turn ? `<div class="b3-ord ph-bt-ord"><b>Turn ${d.turn}</b></div>` : '';
   // Small lines over the field. The run header gives its corner to the Exp rows, the level window and the budget.
   const rowsX = d.exp ?? [], f = d.fx ?? {};
   const level = d.level ? phLevel(d.level) : '';
@@ -147,8 +203,50 @@ export function phBattle(_ph: PhantomVersion, d: BattleModel): string {
   const dark = f.shadow ? `<div class="pn ph-bt-fx dark" style="bottom:${above + (gimRow ? 62 : 0)}px"><span class="lab">${esc(f.shadow.head)}</span>${f.shadow.plan ? `<p class="txt">${esc(f.shadow.plan)}</p>` : ''}</div>` : '';
   const pieces = level ? '' : budget + rally + rule + variant + trait + dark;
   const notice = d.notice ? phConfirm({ title: d.notice.title, body: d.notice.body, options: [d.notice.button], index: 0 }) : '';
+  if (d.log?.rows) return page('battle', '<div class="frame" aria-hidden="true"></div>' + blogPage(d.log) + notice, false);
+  if (d.binfo) return page('battle', '<div class="frame" aria-hidden="true"></div>' + binfoPage(d.binfo) + notice, false);
   return page('battle', (d.shadow ? '<div class="ph-bt-shadow" aria-hidden="true"></div>' : '') + '<div class="frame" aria-hidden="true"></div>'
-    + foes + fan + mine + say + menu + gim + marks + header + momentum + status + note + pin + exp + pieces + panels + tip + card + log + level + notice, false);
+    + (cross ? `<div class="dim ph-bt-dim" aria-hidden="true"></div><div class="hd ph-bt-hd"><small>${esc(d.mine[0]?.name ?? '')}${d.turn ? ` · Turn ${d.turn}` : ''}</small>Fight</div>` : '')
+    + foes + ord + fan + mine + say + menu + xMenu + target + gim + (cross ? keys(['Z', 'Use that move'], ['Q E', 'Page', 'tab', 1], ['I', 'Details', 'tab', (d.tabs?.labels.length ?? 1) - 1], ['X', 'Back', 'back']) : '') + marks + header + momentum + status + note + pin + exp + pieces + panels + tip + card + log + level + notice, false);
+}
+
+/** The battle log page (mock-up `blog`): a turn tag where each turn starts, who acted (the foe's in red) and what happened,
+ *  the move's name in gold; eight rows a screen, the newest lit. The filter tabs (All, Damage...) sit over it. */
+function blogPage(l: NonNullable<BattleModel['log']>): string {
+  const rows = l.rows ?? [], top = l.top ?? 0, shown = rows.slice(top, top + 8);
+  const body = (r: (typeof rows)[number]): string => {
+    const t = esc(r.text);
+    return r.move ? t.replace(esc(r.move), `<b>${esc(r.move)}</b>`) : t;
+  };
+  const list = shown.map((r, k) => {
+    const tag = r.who ?? (r.turn ? `Turn ${r.turn}` : '');
+    return `<div class="b3-l ph-lg-r${r.foe ? ' f' : ''}${r.who ? '' : r.turn ? ' t' : ' n'}${top + k === rows.length - 1 ? ' on' : ''}" style="--i:${k}"><b>${esc(tag)}</b><p class="txt">${body(r)}</p></div>`;
+  }).join('');
+  const share = rows.length > 8 ? 8 / rows.length : 1, at = rows.length > 8 ? top / (rows.length - 8) : 1;
+  const bar = `<div class="lg-bar ph-lg-bar" aria-hidden="true"><i style="height:${Math.round(share * 100)}%;top:${Math.round(at * (1 - share) * 100)}%;bottom:auto"></i></div>`;
+  const tabs = `<div class="ph-bi-tabs ph-lg-tabs">${l.tabs.map((t, k) => `<span class="${k === l.index ? 'on' : ''}"${act('log', k)}>${esc(t)}</span>`).join('')}</div>`;
+  return `<div class="dim ph-bi-dim" aria-hidden="true"></div><div class="hd ph-bt-hd"><small>${esc(l.head ?? '')}</small>Battle log</div>${tabs}<div class="b3-lg ph-lg">${list || '<div class="b3-l t"><b></b><p class="txt">Nothing here yet.</p></div>'}</div>${bar}`
+    + keys(['▲▼', 'Scroll'], ['Q', 'Battle info', 'binfoOpen'], ['X', 'Back', 'history']).replace('class="keys"', 'class="keys ph-bi-keys"');
+}
+
+/** The Battle info page (mock-up `binfo`): your side and the foe's (stat stages as ladders), the field and who moves first,
+ *  and a card with every other line the info panel holds, a page at a time (Q and E switch). A click or X closes it. */
+function binfoPage(b: BattleInfoView): string {
+  // Each Pokémon is drawn about as tall as the mock-up's (a small one is scaled up more).
+  const fit = (file: string): number => { const f = rxAtlas(file)?.f[0]; const big = f ? Math.max(f[2], f[3]) : 0; return big ? Math.max(1.2, Math.min(3, 140 / big)) : 2; };
+  const ladder = (n: number): string => Array.from({ length: 6 }, (_, k) => `<i class="${k < Math.abs(n) ? (n > 0 ? 'u' : 'd') : ''}"></i>`).join('');
+  const sides = b.sides.map((s, k) => {
+    const on = b.more.index === k ? ' on' : '';
+    const rows = s.stages.map((r) => { const c = r.n > 0 ? 'u' : r.n < 0 ? 'd' : ''; return `<div class="b3-sr"><span>${esc(r.stat)}</span><div class="b3-lad">${ladder(r.n)}</div><b class="${c}">${r.n > 0 ? `+${r.n}` : r.n < 0 ? r.n : '·'}</b></div>`; }).join('');
+    const hz = `<p class="txt hz">${k === 0 ? 'On your side' : 'On its side'}: ${s.side.length ? `<b>${esc(s.side.join(', '))}</b>` : 'nothing'}</p>`;
+    return `<div class="pn b3-side ph-bi-side ${k === 0 ? 'l' : 'r'}${on}${s.stages.length > 5 ? ' long' : ''}" data-key="bi${k}"${act('binfo', k)}><span class="lab">${esc(s.lab)}</span><div class="b3-sh">${s.file ? mon(s.file, fit(s.file), 'ol') : '<i class="spr ph-bi-q">?</i>'}<div><h3 class="tl1">${esc(s.name)}</h3><p class="txt">${esc(s.hp)} · ${s.status ? `<b>${esc(s.status)}</b>` : 'no status'}</p><p class="txt it">${esc(s.item)}</p></div></div>${rows}${hz}</div>`;
+  }).join('');
+  const f = b.field;
+  const fld = `<div class="pn lt b3-fld ph-bi-fld${b.more.index === 2 ? ' on' : ''}" data-key="bifld"><span class="lab">The field</span><h3 class="tl1">${esc(f.head)}</h3><p class="txt">${esc(f.text)}</p><span class="lab" style="margin-top:12px">Who moves first</span><p class="txt">${f.first.who ? `<b>${esc(f.first.who)}</b>, ${esc(f.first.why)}` : esc(f.first.why)}</p></div>`;
+  const m = b.more;
+  const more = `<div class="pn ph-bi-more" data-key="bimore"><div class="ph-bi-tabs">${m.tabs.map((t, k) => `<span class="${k === m.index ? 'on' : ''}"${act('binfo', k)}>${esc(t)}</span>`).join('')}</div>${m.lines.length ? m.lines.map((l) => `<p class="txt">${esc(l)}</p>`).join('') : '<p class="txt">Nothing more to tell.</p>'}</div>`;
+  return `<div class="dim ph-bi-dim" aria-hidden="true"${act('info')}></div><div class="hd ph-bt-hd"><small>Turn ${b.turn} · What is in play</small>Battle info</div>${sides}${fld}${more}`
+    + keys(['Q E', 'Switch side', 'binfoStep', 1], ['L', 'Battle log', 'history'], ['X', 'Back', 'info']).replace('class="keys"', 'class="keys ph-bi-keys"');
 }
 
 /** The battle's Party and Item windows (mock-ups `pocket` and the battle party list): a tilted list over the field's left. */

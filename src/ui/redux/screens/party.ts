@@ -2,6 +2,8 @@
 // (lead big and the rest as rows; a three-wide grid; or a list with a detail window). Summary: the Pokémon on the
 // left, tabs, and one window of facts for the tab. Pure drawing; ui/pokemonMenu.ts keeps the state and the input.
 
+import { crumbHtml } from '../../pauseRing';
+import { phInto } from '../../phantom/picker';
 import { rxUrl } from '../assets';
 import { act, type Area, B, esc, facts, H, hpb, mini, mon, TX, ty, TYPE_COLORS, W } from '../kit';
 import type { ReduxCtx } from '../stage';
@@ -51,7 +53,7 @@ const typeColor = (t: string): string => TYPE_COLORS[t.charAt(0).toUpperCase() +
 const pick = (k: number): string => `${act('pick', k)} data-over="over"`;
 
 export function partyView(c: ReduxCtx, d: PartyModel): string {
-  if (c.ph) return phParty(c.ph, d);
+  if (c.ph) return phInto(phParty(c.ph, d), crumbHtml());
   if (c.pk) return pkParty(d);
   const v = c.v(3), head = H(d.title, d.area ?? 'party', d.hints);
   const cls = (p: PartyCard, k: number): string => (k === d.index ? 'sel' : p.hp > 0 && !p.off ? '' : 'dim');
@@ -87,7 +89,7 @@ export interface SummaryFace {
   xpPct: number;
 }
 export type SummaryBody =
-  | { kind: 'overview'; ability: { name: string; text: string } | null; facts: [string, string][]; note: string; moves: { name: string; type: string }[] }
+  | { kind: 'overview'; ability: { name: string; text: string } | null; facts: [string, string][]; note: string; moves: { name: string; type: string; pp?: string }[] }
   | { kind: 'stats'; rows: { label: string; value: number; pct: number; iv: string; ev: number; up: boolean; perfect: boolean; delta: string }[]; foot: string; versus: string }
   | { kind: 'moves'; moves: { name: string; type: string; pp: string }[]; cursor: number; facts: [string, string][]; lines: string[] }
   | { kind: 'items'; summary: string; items: { name: string; art: Art | null; mode: string; text: string }[]; cursor: number; lines: string[]; takeOff: boolean }
@@ -153,7 +155,7 @@ function bodyOf(b: SummaryBody): string {
 }
 
 export function summaryView(c: ReduxCtx, d: SummaryModel): string {
-  if (c.ph) return phSummary(c.ph, d);
+  if (c.ph) return phInto(phSummary(c.ph, d), crumbHtml());
   if (c.pk) return pkSummary(d);
   const v = c.v(2), f = d.face;
   const backdrop = f.art ? `background:url(${rxUrl(f.art)}) 50% 60%/cover;image-rendering:pixelated` : '';

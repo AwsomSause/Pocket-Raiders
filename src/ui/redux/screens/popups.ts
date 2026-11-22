@@ -239,7 +239,8 @@ export function rollView(c: ReduxCtx, d: RollModel): string {
 // ---------- Pause menu ----------
 
 export interface PauseModel {
-  options: readonly { label: string; off?: boolean }[];
+  /** `sub`: the small tag beside the chosen button (Phantom look), such as "6 Pokémon · 1 fainted". */
+  options: readonly { label: string; off?: boolean; sub?: string }[];
   index: number;
   /** A line under the buttons (why one is closed, or "press again"); '' for none. */
   note: string;

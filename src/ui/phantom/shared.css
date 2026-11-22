@@ -101,5 +101,66 @@
   & .ph-acts .blade{cursor:pointer}
   & .slot{cursor:pointer}
   & .slot h4{white-space:nowrap}
+
+  /* the pops over every screen (screens/system.ts phPops): achievement toasts, notices, the song caption */
+  & .ph-nt-stack{position:absolute;right:26px;top:74px;width:430px;display:flex;flex-direction:column;align-items:flex-end;gap:10px;z-index:30}
+  & .ph-nt-t{width:400px;box-sizing:border-box;padding:12px 30px 14px 30px;cursor:pointer;border-left:10px solid var(--red);animation:ph-nt-in .36s cubic-bezier(.2,1.3,.4,1) both}
+  & .ph-nt-h{display:flex;align-items:center;gap:14px}
+  & .ph-nt-h>div{min-width:0}
+  & .ph-nt-h b{display:block;font:400 28px/1.05 var(--f-disp);text-transform:uppercase;white-space:nowrap;margin-top:3px}
+  & .ph-nt-art{flex:none;font-style:normal;animation:ph-nt-shine 1.6s ease-in-out .3s 2}
+  & .ph-nt-art .spr{animation:none}
+  & .ph-nt-t .txt{font-size:17px;margin-top:8px}
+  & .ph-nt-more{position:absolute;right:22px;bottom:8px;text-decoration:none;font:400 14px/1 var(--f-disp);color:var(--red);animation:ph-nt-nod 1s ease-in-out infinite}
+  & .ph-nt-n{width:380px;box-sizing:border-box;padding:9px 24px 11px;cursor:pointer;animation:ph-nt-in .32s cubic-bezier(.2,1.2,.4,1) calc(var(--i,0)*50ms) both}
+  & .ph-nt-n .lab{font-size:13px;color:var(--bone)}
+  & .ph-nt-n.new .lab{color:var(--red)}
+  & .ph-nt-n .txt{font-size:16px;line-height:1.18;margin-top:3px;overflow-wrap:anywhere}
+  & .ph-nt-t:hover,& .ph-nt-n:hover{translate:-8px 0}
+  & .ph-nt-song{position:absolute;left:0;right:0;bottom:64px;display:flex;justify-content:center;pointer-events:none;z-index:30}
+  & .ph-nt-song b{display:flex;align-items:center;gap:14px;background:var(--k);color:var(--w);font:400 24px/1 var(--f-disp);text-transform:uppercase;white-space:nowrap;padding:9px 30px 10px;clip-path:polygon(3% 0,100% 0,97% 100%,0 100%);animation:ph-nt-up .3s cubic-bezier(.2,1.3,.4,1) both}
+  & .ph-nt-song i{font-style:normal;color:var(--red);animation:ph-nt-nod .8s ease-in-out infinite}
+  & .ph-nt-song i:last-child{animation-delay:-.4s}
+
+  /* the interaction prompt's window (screens/prompt.ts) */
+  & .ph-pr-hit{z-index:21}
+  & .ph-pr-dim{pointer-events:none}
+  & .ph-pr-card{position:absolute;box-sizing:border-box;z-index:22;display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 34px 22px;text-align:center;pointer-events:none;box-shadow:inset 0 -8px 0 var(--red);animation:ph-pop .26s cubic-bezier(.2,1.3,.4,1) both}
+  & .ph-pr-lab{font:400 36px/1 var(--f-disp);text-transform:uppercase;color:var(--w);animation:ph-pr-beat .7s ease-in-out infinite}
+  & .ph-pr-res{font:400 44px/1 var(--f-disp);text-transform:uppercase;rotate:-4deg;animation:ph-pr-stamp .24s cubic-bezier(.2,1.4,.4,1) both}
+  & .ph-pr-card .txt{font-size:17px;color:var(--bone)}
+  & .ph-pr-card .txt span{opacity:.7}
+  & .ph-pr-bar{position:relative;align-self:stretch;height:18px;background:#3a3a3a;transform:skewX(-14deg)}
+  & .ph-pr-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--red);transition:none}
+  & .ph-pr-bar u{position:absolute;top:-6px;bottom:-6px;box-sizing:border-box;border:3px solid #ffd23f;background:rgba(255,210,63,.28)}
+  & .ph-pr-tap{display:flex;align-items:center;justify-content:center;gap:14px;opacity:.3}
+  & .ph-pr-tap.on{opacity:1;animation:ph-pr-stamp .2s cubic-bezier(.2,1.4,.4,1) both}
+  & .ph-pr-tap kbd{font:800 19px/1 var(--f-cond);text-transform:uppercase;background:var(--w);color:var(--k);padding:6px 12px;transform:skewX(-10deg)}
+  & .ph-pr-tap b{font:400 34px/1 var(--f-disp);text-transform:uppercase;color:#ffd23f}
+  & .ph-pr-beat{position:relative;align-self:stretch;height:6px;margin:14px 12px;background:#3a3a3a}
+  & .ph-pr-beat u{position:absolute;top:-7px;width:20px;height:20px;margin-left:-10px;background:#ffd23f;rotate:45deg}
+  & .ph-pr-beat i{position:absolute;top:-11px;width:28px;height:28px;margin-left:-14px;box-sizing:border-box;border:4px solid var(--w);rotate:45deg;transition:none}
+  & .ph-pr-beat i.hit{background:var(--red);scale:1.25}
+  & .ph-pr-mic{display:flex;align-items:flex-end;gap:6px;height:68px;align-self:stretch}
+  & .ph-pr-mic i{flex:1;background:var(--red);transition:none}
+  & .ph-pr-mic i:nth-child(odd){background:var(--w)}
+  & .ph-pr-shell{justify-content:flex-start;gap:0;padding:14px 26px 18px}
+  & .ph-pr-gap{flex:1}
+  & .ph-pr-field{position:absolute;z-index:23;background:#262626;pointer-events:none;box-shadow:0 0 0 3px var(--w)}
+  & .ph-pr-field svg{position:absolute;inset:0;width:100%;height:100%}
+  & .ph-pr-field line{stroke:#ffd23f;stroke-width:1.2}
+  & .ph-pr-field u{position:absolute;border-radius:50%}
+  & .ph-pr-field u.a{width:26px;height:26px;margin:-13px;background:var(--w);box-shadow:0 0 0 3px var(--k)}
+  & .ph-pr-field u.b{width:58px;height:58px;margin:-29px;box-sizing:border-box;border:4px solid #ffd23f;box-shadow:inset 0 0 0 12px transparent,inset 0 0 0 16px #ffd23f;animation:ph-pr-beat .9s ease-in-out infinite}
+  & .ph-pr-field u.c{width:20px;height:20px;margin:-10px;background:var(--red);box-shadow:0 0 0 2px var(--w)}
 }
+@keyframes ph-pr-beat{50%{scale:1.06}}
+@keyframes ph-pr-stamp{from{opacity:0;scale:2.2}}
+@keyframes ph-nt-in{from{opacity:0;translate:120% 0}}
+@keyframes ph-nt-up{from{opacity:0;translate:0 40px}}
+@keyframes ph-nt-nod{50%{translate:0 -4px}}
+@keyframes ph-nt-shine{50%{filter:brightness(1.8) drop-shadow(0 0 6px #fff)}}
 @keyframes phx-fade{from{opacity:0}to{opacity:1}}
+
+/* On the main menu the last-save card holds the top right (mock-up `menu`): news and notices stack low instead of over it. */
+.phx:has(.phs[data-scene="MainMenu"]) .phs .ph-nt-stack{top:auto;bottom:96px}

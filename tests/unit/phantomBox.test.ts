@@ -36,6 +36,13 @@ describe('the Phantom PC card', () => {
     expect(blades(phBox(ph, box()))).toEqual(['Move to party']);
   });
 
+  it('fills the wall and the party column with empty slots, as the mock-up draws a box that is not full', () => {
+    const html = phBox(ph, box({ party: [{ name: 'Pidove', level: 9, hp: 80, file: null, fainted: false } as never] }));
+    expect((html.match(/class="bxc ph-bxc/g) ?? []).length).toBe(30);
+    expect((html.match(/class="bxc ph-bxc e ph-bx-pad" aria-hidden="true"/g) ?? []).length).toBe(24);
+    expect((html.match(/class="bxc p e"/g) ?? []).length).toBe(5);
+  });
+
   it('a label is escaped (failure: markup in a name does not reach the page)', () => {
     const html = phBox(ph, box({ extras: [{ label: '<b>x</b>', key: '<', off: false }] }));
     expect(html).not.toContain('<b>x</b>');

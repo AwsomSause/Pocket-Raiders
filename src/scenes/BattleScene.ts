@@ -3,6 +3,7 @@
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
 import { falseSlotFor } from '../core/expansion/labyrinth';
+import { canSwapLead, nextLead } from '../core/battle/openingLead';
 import { waitOffered } from '../core/greenneedle/fifth';
 import { askButtons, askDue, askOf, askPassing, type AskView } from '../core/greenneedle/ask';
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
@@ -25,6 +26,8 @@ import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
 import { filterLog, LOG_TABS, type LogTab } from '../ui/logFilter';
+import { logRows, type LogRow } from '../ui/logRows';
+import { setLogKeyTaken } from '../ui/overlays';
 import { modeBattleLine } from '../core/modeObjectives';
 import { isUltimateBattle, ULTIMATE_EMBLEM } from '../core/rivals/ultimate';
 import { buildEpilogue } from '../core/ending';
@@ -48,7 +51,7 @@ import { doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, spotsOf
 import { isGuest } from '../core/battle/guests';
 import { commandPlan, shiftOptionProblem, targetChoices } from '../core/battle/fieldMenu';
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
-import { canDynamax, hasKeyItem, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, transformProblem, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
+import { battleTypes, canDynamax, hasKeyItem, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, transformProblem, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, lookSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
@@ -110,6 +113,7 @@ import { calmProblem } from '../core/blessings';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
+import { weaknesses } from '../core/presentation/weakness';
 import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
@@ -161,7 +165,7 @@ import { phTravel } from '../ui/phantom/screens/travel';
 import { phGimmickPick, phHit, phKo, phPhase, phResult, phRivalLoss, phSend, phSide, phWild, phWin, type GimmickSlot, type ResultRow, type SendSide } from '../ui/phantom/screens/moments';
 import type { PhantomVersion } from '../core/presentation/phantom';
 import { playEvolution } from '../ui/evolutionScene';
-import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
+import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleInfoView, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
 import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
@@ -183,7 +187,7 @@ import { applyCueHooks } from '../core/presentation/hooks';
 import { DRAMA_LIBRARY, type DramaLine } from '../core/drama';
 import { wouldRefuse } from '../core/bond';
 import { autoBattleProblem, autoProfile, chooseAutoAction, STANCES, STANCE_INFO, stanceOf, type Stance } from '../core/battle/autoBattle';
-import { battleConditions, type FoeReveals } from '../core/battle/conditions';
+import { battleConditions, battleInfo, type FoeReveals, type InfoSide } from '../core/battle/conditions';
 import { moveFlagLabels, moveFullDescription } from '../core/battle/moveText';
 import { BattleTabs, type BattlePage, type TabsPlace } from '../ui/battleTabs';
 import { animChoice, presentationFor } from '../core/presentation/moveAnims';
@@ -216,10 +220,13 @@ import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
+import { phRivalScout, type ScoutCard, type ScoutModel } from '../ui/phantom/screens/pops';
 import type { Move, TypeName } from '../core/contentSchema';
 import { rivalBossFor } from '../core/rivals/major';
 
 const MESSAGE_AUTO_ADVANCE_MS = 1400;
+/** Rows on one screen of the Phantom battle log. */
+const LOG_PAGE = 8;
 const MESSAGE_DELAYS = { short: 700, normal: 1400, long: 2400 } as const;
 /** Milliseconds per character for the typewriter text speeds. */
 const TEXT_MS = { faster: 6, fast: 12, normal: 28, slow: 50 } as const;
@@ -338,6 +345,10 @@ export class BattleScene extends Phaser.Scene {
   /** Battle log (catalog #115): the last lines said, reopened with the H key. Presentation only. */
   private weatherLayer: WeatherLayer | null = null;
   private history: string[] = [];
+  /** The turn each line of `history` was said on (Phantom battle log). */
+  private historyTurns: number[] = [];
+  /** Phantom battle log: the first row on the screen (null follows the newest). */
+  private logTop: number | null = null;
   private historyView: Phaser.GameObjects.Container | null = null;
   private menu: Menu | null = null;
   /** The Attack · Party · Item · Auto tab strip (spec §23). */
@@ -379,6 +390,9 @@ export class BattleScene extends Phaser.Scene {
   private rxPkWeather: BattleModel['pkWeather'] = null;
   private rxPkMove: BattleModel['pkMove'] = null;
   private rxPanelAt: 'left' | 'tip' = 'left';
+  /** Phantom UI: the info panel shows as the Battle info page; which of its extra pages is up (Q and E). */
+  private rxBinfo = false;
+  private rxBinfoAt = 0;
   /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
   /** Phantom UI: the move menu is the open menu (the gimmick page opens from it), and that page while it is up. */
@@ -388,8 +402,11 @@ export class BattleScene extends Phaser.Scene {
   private phMomentView: ReduxView | null = null;
   /** Phantom UI: the wild card's Pokédex key, while that card is up, and the page it opened. */
   private phWildKey: (() => void) | null = null;
+  /** Phantom UI: C on a rival's versus card opens (or closes) the scout page. */
+  private phVsScout: (() => void) | null = null;
   private phWildDex: DexInfo | null = null;
   private phGimInput: ((action: InputAction) => void) | null = null;
+  private phLeadInput: ((action: InputAction) => boolean) | null = null;
   /** New UI: the callout of the event being played (a boss's Rally brace, a signature trait going off). */
   private rxCall: { rally?: string; trait?: { file: string; name: string; text: string } } | null = null;
   /** New UI: the Shadow line of the Pokémon that is choosing (its tier, and what the shadow will do this turn). */
@@ -541,9 +558,14 @@ export class BattleScene extends Phaser.Scene {
     const run = session.run!;
     const battle = run.battle!;
     this.history = [];
+    this.historyTurns = [];
     this.historyView = null;
     this.startCameraWatchdog();
     this.input.keyboard?.on('keydown-H', () => this.toggleHistory());
+    // The Phantom UI opens the battle log with L (mock-up `binfo`; Shift+L still opens the run log); H stays.
+    this.input.keyboard?.on('keydown-L', (e: KeyboardEvent) => { if (phantomOn() && !e.shiftKey) this.toggleHistory(); });
+    setLogKeyTaken(() => phantomOn() && this.scene.isActive());
+    this.events.once('shutdown', () => setLogKeyTaken(null));
     this.input.keyboard?.on('keydown-P', () => {
       const id = this.bagIds[(this.picker as Picker | null)?.current ?? -1];
       if (id) this.toggleHotbar(id);
@@ -593,7 +615,9 @@ export class BattleScene extends Phaser.Scene {
     this.rxBag = null;
     this.rxRingTold = new Set();
     this.phWildKey = null;
+    this.phVsScout = null;
     this.phWildDex = null;
+    this.phLeadInput = null;
     this.advance = null;
     this.busy = true;
     this.riledUid = Object.entries(battle.hyper?.rage ?? {}).find(([, r]) => r.state === 'warned')?.[0] ?? null;
@@ -747,13 +771,14 @@ export class BattleScene extends Phaser.Scene {
     this.tabs = new BattleTabs(this, { motion: this.motion, onPage: (p) => this.gotoPage(p), onAuto: () => this.toggleAuto(), onInfo: () => this.toggleInfo() }, this.tabsAt.x, this.tabsAt.y);
     this.tabs.show(false);
     this.note = this.add.text(12, 6, '', textStyle(18, COLORS.textLight, { stroke: '#181818', strokeThickness: 4, wordWrap: { width: 560 } })).setOrigin(0, 0).setDepth(130).setAlpha(0);
-    this.input.keyboard?.on('keydown-Q', () => (this.phWildKey ? this.phWildKey() : this.gotoPage(this.tabs.neighbour(-1))));
-    this.input.keyboard?.on('keydown-E', () => this.gotoPage(this.tabs.neighbour(1)));
+    this.input.keyboard?.on('keydown-Q', () => (this.phWildKey ? this.phWildKey() : this.historyView && phantomOn() ? this.logToInfo() : this.rxBinfo && this.infoPanel ? this.binfoStep(-1) : this.gotoPage(this.tabs.neighbour(-1))));
+    this.input.keyboard?.on('keydown-E', () => (this.rxBinfo && this.infoPanel ? this.binfoStep(1) : this.gotoPage(this.tabs.neighbour(1))));
     this.input.keyboard?.on('keydown-I', () => this.toggleInfo());
     // Pocket look: O opens the battle Status page (or closes it).
     this.input.keyboard?.on('keydown-O', () => { if (pocketOn() && this.rx) this.toggleStatus(); });
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
     this.input.keyboard?.on('keydown-G', () => this.phOpenGimmicks());
+    this.input.keyboard?.on('keydown-C', () => this.phVsScout?.());
     onInputAction(this, (a) => this.handleInput(a));
     this.input.on('pointerdown', () => this.advance?.());
     this.rx = null;
@@ -1886,7 +1911,7 @@ export class BattleScene extends Phaser.Scene {
         xp: box.isPlayer ? xpShown : null,
         tags: [mon.status ? STATUS_LABELS[mon.status.id]?.label ?? '' : '', word(box.teraBadge), word(box.roleBadge), word(box.rageBadge)].filter(Boolean),
         team: !box.isPlayer && battle?.trainer ? { n: battle.enemyTeam.length, out: battle.enemyTeam.filter((m) => m.hp <= 0).length } : null,
-        types: this.foeHidden(mon) ? [] : getSpecies(content, mon.speciesId).types,
+        ...this.rxTypes(mon, box.isPlayer),
         file: box.isPlayer ? monFile(this, mon.speciesId, 'front', !!mon.shiny) : null,
         shiny: !box.isPlayer && !!mon.shiny && !this.foeHidden(mon),
         power: this.powerTag(mon.uid),
@@ -1898,6 +1923,14 @@ export class BattleScene extends Phaser.Scene {
     return box.hpBar.set(mon.hp / max, animate);
   }
 
+  /** Phantom UI: a box's types (none for a hidden foe) and, for a foe, what hits it super effectively. Display only. */
+  private rxTypes(mon: PokemonInstance, mine: boolean): { types: string[]; weak?: { type: string; times: number }[]; file?: string | null } {
+    const content = services().session.content, battle = this.run.battle;
+    if (!battle || (!mine && this.foeHidden(mon))) return { types: [] };
+    const types = battleTypes(content, battle, mon);
+    return { types: [...types], file: monFile(this, mon.speciesId, 'front', !!mon.shiny), ...(mine ? {} : { weak: weaknesses(content.typeChart, types) }) };
+  }
+
   /** New UI: mounts the mock-ups' battle HUD over the canvas and stops the canvas drawing its own. */
   private mountRx(): void {
     this.rx = mountRedux(this, {
@@ -1907,8 +1940,14 @@ export class BattleScene extends Phaser.Scene {
         pick: (i) => { if (!this.picker && !this.infoPanel && !this.autoRunning) this.menu?.press(Number(i)); },
         confirm: () => { if (this.rxNotice) this.advance?.(); },
         tab: (i) => this.tabs.press(Number(i)),
+        // The Fight page's Back key (Phantom UI): the same as Esc.
+        back: () => this.handleInput('back'),
         auto: () => this.toggleAuto(),
         info: () => { if (this.infoPanel) this.closePanel(); },
+        binfo: (i) => { if (this.infoPanel && this.rxBinfo) this.rxBinfoAt = Number(i); },
+        binfoStep: (i) => { if (this.infoPanel && this.rxBinfo) this.binfoStep(Number(i) || 1); },
+        history: () => this.toggleHistory(),
+        binfoOpen: () => this.logToInfo(),
         gims: () => this.phOpenGimmicks(),
         gim: (i) => {
           const pick = this.rxGim?.choices[Number(i)];
@@ -1967,7 +2006,7 @@ export class BattleScene extends Phaser.Scene {
     }
     const boxes = (list: InfoBox[], key: string): BattleBox[] => list.flatMap((b, k) => (b.container.visible && b.rx ? [{ ...b.rx, hp: Math.round(b.rx.hp * 200) / 200, tip: `${key}:${k}` }] : []));
     const moves = this.tabs.current === 'attack' && !!this.menu && !this.picker;
-    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o, k) => ({ ...(o.rx?.sub ?? o.detail ? { label: o.label, sub: o.rx?.sub ?? o.detail } : splitChoice(o.label)), type: o.rx?.type, off: !!o.disabled, ...(moves && this.activeMon().moves[k] ? { tip: `move:${k}` } : {}) })), index: this.menu.index } : null;
+    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o, k) => ({ ...(o.rx?.sub ?? o.detail ? { label: o.label, sub: o.rx?.sub ?? o.detail } : splitChoice(o.label)), type: o.rx?.type, ...(o.rx?.facts ? { facts: o.rx.facts } : {}), off: !!o.disabled, ...(moves && this.activeMon().moves[k] ? { tip: `move:${k}` } : {}) })), index: this.menu.index } : null;
     // A tooltip shows once the pointer has rested for the Tooltip delay setting (Off shows none); a pinned card stays.
     const wait = TOOLTIP_DELAY_MS[services().session.settings.tooltipDelay];
     const hot = this.rxHover && wait !== null && this.time.now - this.rxHover.at >= wait ? this.rxHover.key : null;
@@ -2009,6 +2048,8 @@ export class BattleScene extends Phaser.Scene {
       note: this.note.alpha > 0.05 ? this.note.text : '',
       auto: this.autoRunning,
       party: { n: this.run.party.length, out: this.run.party.filter((m) => m.hp <= 0).length },
+      turn: this.run.battle?.turn,
+      bench: this.duo ? null : this.run.party.filter((m) => m.uid !== this.shown.player.uid).map((m) => ({ name: this.speciesName(m), level: `Lv ${m.level}`, hp: m.hp <= 0 ? 0 : Math.round((m.hp / Math.max(1, maxHp(services().session.content, m))) * 200) / 200, file: monFile(this, m.speciesId, 'front', !!m.shiny) })),
       gimPage: this.rxMoves && !!menu && phantomOn(),
       gim: this.rxGim && menu ? this.rxGim.choices.map((c) => ({ kind: c.kind, on: this.transformChoice?.kind === c.kind, ...(c.kind === 'tera' ? { row: TERA_ICON_ROW[this.rxGim!.tera] ?? 0 } : {}) })) : null,
       marks: [...(this.rxAim && menu ? [{ ...this.rxAim, text: 'TARGET' }] : []), ...this.reachTags.filter((t) => t.active).map((t) => ({ x: t.x, y: t.y - 10, text: 'OUT OF REACH' }))],
@@ -2017,6 +2058,7 @@ export class BattleScene extends Phaser.Scene {
       level: this.rxLevel && !menu && !list ? this.rxLevel : null,
       evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
+      binfo: this.infoPanel && this.rxBinfo ? this.rxBinfoView() : null,
       pkInfo: this.infoPanel ? this.rxPkInfo : null,
       pkStatus: this.infoPanel ? this.rxPkStatus : null,
       pkWeather: this.infoPanel ? this.rxPkWeather : null,
@@ -2029,7 +2071,7 @@ export class BattleScene extends Phaser.Scene {
       panelAt: this.rxPanelAt,
       tip,
       card,
-      log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12) } : null,
+      log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12), ...(phantomOn() ? this.rxLogPage() : {}) } : null,
       fx: this.rxFx(!!menu, list),
       notice: this.rxNotice,
     };
@@ -2253,13 +2295,17 @@ export class BattleScene extends Phaser.Scene {
       this.phGimInput(action);
       return;
     }
+    // "Change who leads" while the send-out card or the lead line shows (◀▶ picks; the rest falls through).
+    if (this.phLeadInput?.(action)) return;
     if (this.phWildDex) {
       if (action === 'confirm' || action === 'back') this.phWildDex.close();
       else if (action === 'left' || action === 'right') this.phWildDex.flip();
       return;
     }
+    if (this.logInput(action)) return;
     if (this.infoPanel) {
       if (action === 'back' || action === 'confirm') this.closePanel();
+      else if (this.rxBinfo && (action === 'left' || action === 'right')) this.binfoStep(action === 'left' ? -1 : 1);
       return;
     }
     if (this.fx.busy && (action === 'confirm' || action === 'back')) {
@@ -2288,8 +2334,7 @@ export class BattleScene extends Phaser.Scene {
     const auto = autoLine || settings.autoAdvance;
     const delay = settings.autoAdvance ? MESSAGE_DELAYS[settings.messageDelay] : MESSAGE_AUTO_ADVANCE_MS;
     const typingMs = this.typeText(auto ? text : `${text} ▼`, settings.textSpeed);
-    this.history.push(text);
-    if (this.history.length > 60) this.history.shift();
+    this.logLine(text);
     return new Promise((resolve) => {
       const timer = auto ? this.time.delayedCall(delay + typingMs, () => done()) : null;
       const done = () => {
@@ -2504,12 +2549,43 @@ export class BattleScene extends Phaser.Scene {
 
   /** H: show or hide the last battle messages, with filter tabs (ideas W1 F3). */
   private logTab: LogTab = 'all';
+  /** Keeps a said line (and its turn) for the battle log; the oldest go after 60. */
+  private logLine(text: string): void {
+    this.history.push(text);
+    this.historyTurns.push(this.run?.battle?.turn ?? 0);
+    if (this.history.length > 60) {
+      this.history.shift();
+      this.historyTurns.shift();
+    }
+  }
+
+  /** Phantom battle log: the rows of the open tab, each name coloured by its side. */
+  private rxLogRows(): LogRow[] {
+    const battle = this.run.battle;
+    const mine = this.run.party.map((m) => this.speciesName(m));
+    const foes = battle ? battle.enemyTeam.map((m) => getSpecies(services().session.content, m.speciesId).name) : [];
+    const lines = this.history.flatMap((text, k) => (filterLog([text], this.logTab).length ? [{ text, turn: this.historyTurns[k] ?? 0 }] : []));
+    return logRows(lines, mine, foes);
+  }
+
+  /** Phantom battle log: ▲ ▼ scroll a row, Q opens Battle info, the rest close it. True when the key was the log's. */
+  private logInput(action: InputAction): boolean {
+    if (!this.historyView || !phantomOn()) return false;
+    const n = this.rxLogRows().length, top = this.logTop ?? Math.max(0, n - LOG_PAGE);
+    if (action === 'up' || action === 'down') this.logTop = Math.max(0, Math.min(Math.max(0, n - LOG_PAGE), top + (action === 'up' ? -1 : 1)));
+    else if (action === 'back' || action === 'confirm') this.toggleHistory();
+    return true;
+  }
+
   private toggleHistory(): void {
+    this.logTop = null;
     if (this.historyView) {
       this.historyView.destroy();
       this.historyView = null;
       return;
     }
+    // The Phantom log and the Battle info page take turns.
+    if (this.infoPanel && phantomOn()) this.closePanel();
     const bg = this.add.rectangle(0, 0, GAME_WIDTH - 80, 360, 0x0b1a2e, 0.92).setOrigin(0).setStrokeStyle(2, 0xbfe9ff);
     const title = this.add.text(16, 8, 'Battle log (H to close, 1-5 or tabs to filter)', textStyle(18, '#bfe9ff'));
     const body = this.add.text(16, 66, '', textStyle(16, COLORS.textLight, { lineSpacing: 4, wordWrap: { width: GAME_WIDTH - 112 } }));
@@ -2999,7 +3075,8 @@ export class BattleScene extends Phaser.Scene {
         await this.showDuoSide('player', true);
         await this.say(`Go! ${this.nameList([this.shown.player, ...this.otherMons('player')])}!`);
       } else {
-        await this.phSendCard();
+        if (this.phCards()) await this.phSendCard();
+        else await this.leadLine();
         // The camera looks across to your side while your trainer throws.
         const playerRow = partyBallRow(this, 'player', this.run.party.map((m) => m.hp > 0), this.motion, MESSAGE_Y - 46);
         this.camPinned = true;
@@ -3118,25 +3195,83 @@ export class BattleScene extends Phaser.Scene {
       player: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
       playerName: v2?.protagonist?.name || content.archetypes.get(this.run.archetypeId)?.name || 'You',
       party: this.run.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
+      fainted: this.run.party.map((m) => m.hp <= 0),
       backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
       where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
       // Kice's rule: a loss to a rival never ends the run.
-      stake: battle.rivalId || battle.rival ? 'Win and the rivalry grows. Lose and the run goes on: a loss to a rival never ends it.' : '',
+      stake: battle.rivalId || battle.rival || battle.firstRival ? 'Win and the rivalry grows. Lose and the run goes on: a loss to a rival never ends it.' : '',
       pkBoss: boss && !standIn && pocketOn() ? this.pkBossFacts(boss) : null,
     };
+    // Phantom UI: a rival's team can be scouted from the card (C), as the mock-up's `scout` page.
+    const scout = phantomOn() && (battle.rivalId || battle.rival || battle.firstRival) ? this.phScoutModel() : null;
+    if (scout) model.scout = true;
+    let scouting = false;
     let over = false;
     let finish!: () => void;
     const done = new Promise<void>((r) => (finish = r));
     const end = (): void => {
       if (over) return;
       over = true;
+      this.phVsScout = null;
       view.destroy();
       finish();
     };
-    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
+    // The card stays while you read the team; Back returns to it, and Battle (or Back on the card) goes on.
+    const look = (on: boolean): void => {
+      if (over || !scout || scouting === on) return;
+      scouting = on;
+      timer?.remove();
+      view.refresh();
+    };
+    const view = mountRedux(this, {
+      render: (c) => (scouting && scout && c.ph ? phRivalScout(c.ph, scout) : versusView(c, model)),
+      acts: { next: end, scout: () => look(true), back: () => (scouting ? look(false) : end()) },
+      card: true,
+    });
+    this.phVsScout = scout ? () => look(!scouting) : null;
     // The Phantom card has more on it to read (the line, the stake), so it stays a little longer.
-    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() || model.pkBoss ? 3400 : 2600, end);
-    return { done, skip: end };
+    const timer: Phaser.Time.TimerEvent | null = this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : phantomOn() || model.pkBoss ? 3400 : 2600, () => { if (!scouting) end(); });
+    return { done, skip: () => (scouting ? look(false) : end()) };
+  }
+
+  /** Phantom UI: what you have seen of this rival's team this run (its last fight with you), for the scout page. */
+  private phScoutModel(battle = this.run.battle, fought = false): ScoutModel | null {
+    if (!battle?.trainer || !battle.enemyTeam?.length) return null;
+    const { content } = services().session;
+    const rival = battle.rivalId ? this.run.story.rivals.find((r) => r.id === battle.rivalId) : undefined;
+    // Before a fight only what the last fight showed is known; after one (the rival-loss card), the whole team was seen.
+    const last = fought
+      ? { team: battle.enemyTeam.map((m) => m.speciesId), levels: battle.enemyTeam.map((m) => m.level), moves: battle.enemyTeam.map((m) => m.moves.map((v) => v.id)) }
+      : rival?.memory?.lastBattle;
+    const aceUid = battle.aceUid ?? battle.enemyTeam[battle.enemyTeam.length - 1]?.uid;
+    const cards = battle.enemyTeam.slice(0, 6).map((m, k): ScoutCard | null => {
+      const at = fought ? k : last ? last.team.indexOf(m.speciesId) : -1;
+      if (at < 0) return null;
+      const sp = content.species.get(m.speciesId);
+      return {
+        file: monFile(this, m.speciesId, 'front', !!m.shiny),
+        name: sp?.name ?? m.speciesId,
+        level: last?.levels?.[at] ?? m.level,
+        types: sp?.types ?? [],
+        moves: (last?.moves?.[at] ?? []).map((id) => content.moves.get(id)?.name ?? id).slice(0, 2),
+        note: fought ? 'Seen in this fight' : 'Seen in your last fight',
+        ace: m.uid === aceUid,
+      };
+    });
+    // Rotom's tip: what hits the ace hard, and how your lead stands against the moves you saw it use.
+    const aceAt = battle.enemyTeam.findIndex((m) => m.uid === aceUid);
+    const ace = aceAt >= 0 ? cards[aceAt] : null;
+    let tip = '';
+    if (ace) {
+      const weak = weaknessesOf(content, ace.types).map((t) => t[0]!.toUpperCase() + t.slice(1));
+      const lead = this.run.party.find((m) => m.hp > 0);
+      const leadSp = lead ? content.species.get(lead.speciesId) : undefined;
+      const moveTypes = [...new Set((last?.moves?.[last.team.indexOf(battle.enemyTeam[aceAt]!.speciesId)] ?? []).map((id) => content.moves.get(id)?.type).filter((t): t is NonNullable<typeof t> => !!t))];
+      const resisted = leadSp ? moveTypes.filter((t) => typeEffectiveness(content.typeChart, t, leadSp.types as never) < 1) : [];
+      tip = `Bzzt! ${weak.length ? `${weak.slice(0, 2).join(' and ')} moves hit their ace hard.` : 'Their ace has no weak spot I know of.'}`
+        + (leadSp && moveTypes.length ? ` Your ${leadSp.name} ${resisted.length ? `resists its ${resisted.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' and ')} moves.` : 'resists nothing it has.'}` : '');
+    }
+    return { name: battle.trainer.name, who: this.rxCast, cards, tip, index: Math.max(0, aceAt) };
   }
 
   /** The opening wipe or VS screen (EBDX transitions); any key skips it. */
@@ -3160,7 +3295,7 @@ export class BattleScene extends Phaser.Scene {
       const intro = bossIntroMoment({ role: rxBoss.role === 'elite' ? 'e4' : rxBoss.role });
       const plate = rxBoss.role === 'champion' ? 'Champion' : rxBoss.role === 'elite' ? 'Elite Four' : 'Gym Leader';
       const types = rxBoss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
-      await this.bigMoment(intro, `${intro}.${rxBoss.title}`, plate, rxBoss.title, false, { name: battle.rivalId ? battle.trainer!.name : rxBoss.name, role: plate, line: this.openingLine() || (types ? `${types} specialist.` : '') }, () => {
+      await this.bigMoment(intro, `${intro}.${rxBoss.title}`, plate, rxBoss.title, false, { name: battle.rivalId ? battle.trainer!.name : rxBoss.name, role: plate, line: this.openingLine() || (types ? `${types} specialist.` : ''), sub: types ? `${types} specialist` : '' }, () => {
         const s = services().session.settings;
         if (!s.skippedIntros.includes(rxBoss.title)) services().session.saveSettings({ ...s, skippedIntros: [...s.skippedIntros, rxBoss.title] });
       });
@@ -3265,6 +3400,7 @@ export class BattleScene extends Phaser.Scene {
       line: '',
       cast: battle?.trainer ? artOf(this, this.trainerArt()?.assetId) : this.rxCast,
       mon: showsMon && foe ? ((f) => (f ? { file: f, atlas: true } : null))(monFile(this, foe.speciesId, 'front', !!foe.shiny)) : null,
+      tags: showsMon && foe ? { level: foe.level, types: content.species.get(foe.speciesId)?.types ?? [] } : null,
       player: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
       backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
       evil: kind === 'evilTeam' || kind === 'evilBetrayal',
@@ -3272,7 +3408,13 @@ export class BattleScene extends Phaser.Scene {
       tag: title,
       where: this.header.text.split('\n')[0]!.replace(/\s+·\s+₽.*$/, '').split(/\s+·\s+/).slice(0, 2).join(' · '),
       // A Trainer's entrance says what they bring (the Phantom card's panel); only what is true of this fight.
-      brings: intro && battle?.trainer ? { team: battle.enemyTeam.length, notes: [...(battle.enemyTeam.some((m) => Object.keys(m.held ?? {}).length > 0) ? ['Their Pokémon hold items.'] : []), ...(this.boss() ? ['The ace is announced when it enters.'] : [])] } : null,
+      brings: intro && battle?.trainer ? {
+        team: battle.enemyTeam.length,
+        notes: this.boss() ? ['The ace is announced when it enters.'] : [],
+        gimmicks: battle.transform.enemyMechanics ?? [],
+        held: battle.enemyTeam.some((m) => Object.keys(m.held ?? {}).length > 0),
+        trained: battle.enemyTeam.some((m) => Object.values(m.evs ?? {}).some((v) => (v ?? 0) > 0)),
+      } : null,
       ...cut,
     };
   }
@@ -3523,7 +3665,7 @@ export class BattleScene extends Phaser.Scene {
    * Phantom UI: one full-screen card over the battle. It ends on a click or a key, or after `ms` (null: it waits for an
    * input, unless Settings > Auto-advance is on). Presentation only: a card that fails to draw is skipped.
    */
-  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, () => void>; held: () => boolean }): Promise<void> {
+  private async phMoment(draw: (ph: PhantomVersion) => string, ms: number | null, more?: { acts: Record<string, (arg: string) => void>; held: () => boolean; go?: () => void; /** A skip the page uses itself (true: handled, the card stays). */ back?: () => boolean }): Promise<void> {
     if (!this.rx || !phantomOn()) return;
     try {
       const st = services().session.settings;
@@ -3543,11 +3685,11 @@ export class BattleScene extends Phaser.Scene {
         }
         finish();
       };
-      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { ...more?.acts, next: () => end() }, card: true });
+      const view = mountRedux(this, { render: (c) => (c.ph ? draw(c.ph) : ''), acts: { ...more?.acts, next: () => { more?.go?.(); end(); } }, card: true });
       this.phMomentView = view;
       if (wait !== null) this.time.delayedCall(wait, () => end());
       this.events.once('shutdown', () => end(true));
-      await this.playBeat({ done, skip: () => end() });
+      await this.playBeat({ done, skip: () => { if (!more?.back?.()) end(); } });
     } catch (e) {
       console.warn('Phantom card failed', e);
     }
@@ -3920,7 +4062,10 @@ export class BattleScene extends Phaser.Scene {
       : battle.totem && tdef && tdef.phases.length > 0 ? { at: Math.max(1, battle.totem.phasesDone.length), of: tdef.phases.length } : null;
     const alive = battle.enemyTeam.filter((m) => m.hp > 0).length;
     const t = battle.transform;
-    const left = t.enemyMechanics.filter((k) => !t.used.enemy.includes(k)).length;
+    const unused = t.enemyMechanics.filter((k) => !t.used.enemy.includes(k));
+    const GIM: Record<string, string> = { mega: 'Mega Evolution', dynamax: 'Dynamax', tera: 'Terastallize', zmove: 'Z-Move' };
+    const names = unused.map((k) => GIM[k] ?? k);
+    const unusedLine = names.length > 2 ? `${names.length} gimmicks not used yet` : `${names.join(' and ')} not used yet`;
     const who = battle.trainer ? this.trainerTitle() ?? battle.trainer.name : this.speciesName(foe);
     await this.phMoment((ph) => phPhase(ph, {
       lab: [who, battle.raid ? 'Raid' : battle.totem ? 'Totem' : this.phWhere().split(' · ')[0]].filter(Boolean).join(' · '),
@@ -3930,7 +4075,8 @@ export class BattleScene extends Phaser.Scene {
       mon: this.phArt(foe)?.file ?? null,
       meter,
       left: battle.trainer ? { alive, total: battle.enemyTeam.length } : null,
-      chips: battle.trainer && t.enemyMechanics.length > 0 ? [left > 0 ? `${left} gimmick${left === 1 ? '' : 's'} not used yet` : 'No gimmick left'] : [],
+      chips: battle.trainer && t.enemyMechanics.length > 0 ? [unused.length > 0 ? unusedLine : 'No gimmick left'] : [],
+      chipIcon: battle.trainer ? unused[0] ?? null : null,
       go,
     }), go ? null : 2600);
     return true;
@@ -4172,14 +4318,25 @@ export class BattleScene extends Phaser.Scene {
   /** Phantom UI: lost to a rival (the mock-up's `rloss` page). Kice's rule: a loss to a rival never ends the run. */
   private async phRivalLossCard(before: RunState, after: RunState): Promise<boolean> {
     const battle = before.battle;
-    if (!battle?.trainer || !(battle.rivalId || battle.rival) || !this.rx || !phantomOn()) return false;
+    if (!battle?.trainer || !(battle.rivalId || battle.rival || battle.firstRival) || !this.rx || !phantomOn()) return false;
     const { content } = services().session;
     const name = battle.trainer.name;
     const win = content.trainers.get(battle.trainer.classId)?.lines?.win ?? '';
     let shown = false;
+    // C opens the team you just fought (the mock-up's "See his team"); Back or Z returns to the card.
+    const scout = this.phScoutModel(battle, true);
+    let scouting = false;
+    const look = (on: boolean): void => {
+      if (!scout || scouting === on) return;
+      scouting = on;
+      this.phMomentView?.refresh();
+    };
+    this.phVsScout = scout ? () => look(!scouting) : null;
     await this.phMoment((ph) => {
       shown = true;
+      if (scouting && scout) return phRivalScout(ph, { ...scout, done: 'Carry on' });
       return phRivalLoss(ph, {
+        scout: !!scout,
         name,
         cast: this.rxCast ?? artOf(this, this.lastFoe?.art.assetId),
         where: `${this.phWhere().split(' · ')[0]} · Rival battle lost`,
@@ -4187,7 +4344,8 @@ export class BattleScene extends Phaser.Scene {
         text: `Losing to a rival never ends a run. Your team is patched up, the story goes on, and ${name} will be waiting again further down the road.`,
         party: after.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
       });
-    }, null);
+    }, null, { acts: { scout: () => look(true), back: () => look(false) }, held: () => scouting, go: () => look(false), back: () => (scouting ? (look(false), true) : false) });
+    this.phVsScout = null;
     return shown;
   }
 
@@ -4239,16 +4397,74 @@ export class BattleScene extends Phaser.Scene {
   /** Phantom UI: both sides send out (the mock-up's `send` card), just before the throw. */
   private async phSendCard(): Promise<void> {
     const battle = this.run.battle;
-    const me = this.shown.player, foe = this.shown.enemy;
-    if (!battle || !me || !this.phCards()) return;
+    const foe = this.shown.enemy;
+    if (!battle || !this.shown.player || !this.phCards()) return;
     const { content } = services().session;
     const side = (m: PokemonInstance, by: string, pic: 'front' | 'back'): SendSide => ({ by, name: this.speciesName(m), level: m.level, types: getSpecies(content, m.speciesId).types, mon: this.phArt(m, pic) });
-    await this.phMoment((ph) => phSend(ph, {
-      me: side(me, this.phPlayerName(), 'back'),
-      foe: foe ? side(foe, battle.trainer ? this.trainerTitle() ?? battle.trainer.name : '', 'front') : null,
-      order: this.run.party.map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), on: m.uid === me.uid, ko: m.hp <= 0 })),
-      backdrop: this.phBackdrop(),
-    }), 1900);
+    // "Change who leads" (free before the first turn): ◀▶ or a click on the order picks another lead; the card then
+    // waits for Z. Nothing else changes, and the throw that follows sends out the new lead.
+    let changed = false, go = false;
+    const lead = (k: number): void => {
+      if (this.changeLead(k)) changed = true;
+      this.phMomentView?.refresh();
+    };
+    this.phLeadInput = (a) => {
+      if (a === 'left' || a === 'right') { lead(nextLead(this.run, a === 'left' ? -1 : 1)); return true; }
+      if (a === 'confirm') go = true;
+      return false;
+    };
+    try {
+      await this.phMoment((ph) => {
+        const me = this.shown.player!;
+        return phSend(ph, {
+          me: side(me, this.phPlayerName(), 'back'),
+          foe: foe ? side(foe, battle.trainer ? this.trainerTitle() ?? battle.trainer.name : '', 'front') : null,
+          order: this.run.party.map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), on: m.uid === me.uid, ko: m.hp <= 0 })),
+          backdrop: this.phBackdrop(),
+          lead: canSwapLead(this.run),
+          changed,
+        });
+      }, 1900, { acts: { lead: (arg) => lead(arg === 'next' ? nextLead(this.run, 1) : Number(arg)) }, held: () => changed && !go, go: () => { go = true; } });
+    } finally {
+      this.phLeadInput = null;
+    }
+  }
+
+  /** "Change who leads": party slot `k` leads this battle instead (free before the first turn). True when it changed. */
+  private changeLead(k: number): boolean {
+    if (!canSwapLead(this.run) || this.run.battle!.activeIndex === k) return false;
+    try {
+      services().session.swapOpeningLead(k);
+    } catch {
+      return false;
+    }
+    this.shown.player = structuredClone(this.run.party[this.run.battle!.activeIndex]!);
+    return true;
+  }
+
+  /**
+   * "Change who leads" in a look with no send-out card (New, Old, or the Phantom UI with motion turned down): a line
+   * that moves on by itself names the lead, and ◀▶ while it shows picks another one (it then waits for Enter).
+   */
+  private async leadLine(): Promise<void> {
+    if (!canSwapLead(this.run)) return;
+    let moved = false;
+    for (let n = 0; n < 24; n++) {
+      let dir: 1 | -1 | 0 = 0;
+      this.phLeadInput = (a) => {
+        if (a !== 'left' && a !== 'right') return false;
+        dir = a === 'left' ? -1 : 1;
+        this.advance?.();
+        return true;
+      };
+      try {
+        await this.say(`${this.speciesName(this.shown.player!)} leads. ◀▶ to change who leads.`, !moved);
+      } finally {
+        this.phLeadInput = null;
+      }
+      if (!dir) return;
+      moved = this.changeLead(nextLead(this.run, dir)) || moved;
+    }
   }
 
   /**
@@ -4262,7 +4478,8 @@ export class BattleScene extends Phaser.Scene {
       const mine = side === 'player';
       const art = (id: string, shiny: boolean): Art | null => ((f) => (f ? { file: f, atlas: true } : null))(monFile(this, id, 'front', shiny));
       const changes = kind === 'mega' || kind === 'primal' || kind === 'gigantamax';
-      const zMove = kind === 'zmove' ? (x.zMoveId ? (content.moves.get(x.zMoveId) ?? null) : x.zBase ? zMoveFor(content, x.zBase) : null) : null;
+      // From the base move where it is known: the Z-Move's power comes from it (the Z-Move's own entry has none).
+      const zMove = kind === 'zmove' ? (x.zBase ? zMoveFor(content, x.zBase, mine ? { speciesId: mon.speciesId, inventory: this.run.inventory } : undefined) : null) ?? (x.zMoveId ? (content.moves.get(x.zMoveId) ?? null) : null) : null;
       const crystal = kind === 'zmove' ? x.itemId ?? (x.zBase && mine ? ownedZCrystal(content, this.run.inventory, x.zBase.type) : null) : x.itemId;
       const max = calcStats(content, mon).hp;
       const big = kind === 'dynamax' || kind === 'gigantamax' ? calcStats(content, { ...mon, speciesId: x.to, dynamaxed: true }).hp : max;
@@ -4880,6 +5097,7 @@ export class BattleScene extends Phaser.Scene {
   /** A glass panel across the bar with up to three text columns (battle Info, move details, party summary). */
   private openPanel(columns: { head: string; text: string }[], onClose?: () => void, tip?: BattlePanel): void {
     this.panelClose = onClose ?? null;
+    this.rxBinfo = false;
     // New UI: the same words as the mock-ups' windows (one move's details as its tooltip).
     this.rxPanels = tip ? [tip] : columns.map((c) => panelOf(c.head, c.text));
     this.rxPanelAt = tip ? 'tip' : 'left';
@@ -4903,6 +5121,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private closePanel(): void {
+    this.rxBinfo = false;
     this.infoPanel?.destroy();
     this.infoPanel = null;
     const done = this.panelClose;
@@ -5004,7 +5223,7 @@ export class BattleScene extends Phaser.Scene {
     const c = battleConditions(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
     this.rxPkMove = null;
     if (pocketOn()) {
-      const info = battleInfo(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
+      const info = pkBattleInfo(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
       this.rxPkInfo = { ...info, foeFile: info.foe ? monFile(this, info.foe.speciesId, 'front', info.foe.shiny) : null, meFile: info.me ? monFile(this, info.me.speciesId, 'front', info.me.shiny) : null };
     } else this.rxPkInfo = null;
     this.openPanel([
@@ -5013,6 +5232,53 @@ export class BattleScene extends Phaser.Scene {
       { head: 'Opposing Pokémon', text: c.foe.join('\n') },
       ...(c.moves.length ? [{ head: 'Your moves vs the foe', text: c.moves.join('\n') }] : []),
     ]);
+    // The Phantom UI draws the same lines as its Battle info page (mock-up `binfo`).
+    this.rxBinfo = phantomOn();
+    this.rxBinfoAt = 0;
+  }
+
+  /** Q on the Phantom battle log: the log closes and Battle info opens (mock-up `blog`). */
+  private logToInfo(): void {
+    this.toggleHistory();
+    if (!this.infoPanel) this.toggleInfo();
+  }
+
+  /** Q / E (or ◀ ▶) on the Battle info page: the next page of extra lines. */
+  private binfoStep(dir: number): void {
+    const n = this.rxBinfoView()?.more.tabs.length ?? 1;
+    this.rxBinfoAt = (this.rxBinfoAt + dir + n) % n;
+  }
+
+  /** Phantom battle log: the rows, where the screen starts, and the header line (stage and kind of battle). */
+  private rxLogPage(): { rows: LogRow[]; top: number; head: string } {
+    const rows = this.rxLogRows(), battle = this.run.battle, stage = this.run.stage;
+    const kind = !battle ? 'Battle' : battle.rivalId ? 'Rival battle' : battle.kind === 'wild' ? 'Wild battle' : this.boss() ? 'Boss battle' : 'Trainer battle';
+    return { rows, top: this.logTop ?? Math.max(0, rows.length - LOG_PAGE), head: `${stage ? `Stage ${stage.index + 1} · ` : ''}${kind}` };
+  }
+
+  /** Phantom UI: the Battle info page as data. Every line of the old panel stays: what the cards don't show goes on the extra pages. */
+  private rxBinfoView(): BattleInfoView | null {
+    const battle = this.run.battle;
+    if (!battle) return null;
+    const content = services().session.content;
+    const reveals = this.foeReveals.get(currentEnemy(battle).uid);
+    const b = battleInfo(content, this.run, reveals);
+    if (!b) return null;
+    const c = battleConditions(content, this.run, reveals);
+    const side = (s: InfoSide, lab: string) => ({ lab, name: s.name, file: s.speciesId ? monFile(this, s.speciesId, 'front', s.shiny) : null, hp: s.hp, status: s.status, item: s.item, stages: s.stages, side: s.side });
+    // The cards already show HP, status, stat stages and items.
+    const shown = (s: InfoSide) => (l: string): boolean => !/^(HP \d|Stats:|Holding:|Held item seen:)/.test(l) && l !== s.status;
+    const fieldHead = battle.weather ? 'Weather:' : battle.terrain ? 'Terrain:' : null;
+    const field = c.field.filter((l) => !(fieldHead && l.startsWith(fieldHead)) && !/^(Your side|Foe side):/.test(l) && l !== 'Nothing special on the field.');
+    const pages: [string, string[]][] = [[`Your ${b.mine.name}`, c.yours.filter(shown(b.mine))], [b.foe.speciesId ? `The foe's ${b.foe.name}` : 'The foe', c.foe.filter(shown(b.foe))]];
+    if (c.moves.length || field.length) pages.push([c.moves.length ? 'Moves and field' : 'The field', [...c.moves, ...field]]);
+    const at = Math.min(this.rxBinfoAt, pages.length - 1);
+    return {
+      turn: battle.turn,
+      sides: [side(b.mine, 'Your side'), side(b.foe, 'Foe’s side')],
+      field: { head: b.field.head, text: b.field.text, first: b.first },
+      more: { tabs: pages.map((p) => p[0]), index: at, lines: pages[at]![1] },
+    };
   }
 
   /** Party page: what the selected Pokémon is like and what can be done with it (send out, summary, Auto-Battle stance). */
@@ -5419,7 +5685,7 @@ export class BattleScene extends Phaser.Scene {
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
           const styled = this.skin?.moveText?.({ name, type: move.type, category: move.category, power: String(move.power ?? fixedDamageLabel(move.effects.fixedDamage)), accuracy: move.accuracy === null || move.accuracy === undefined ? '-' : String(move.accuracy), pp: slot.pp, maxPp: maxPp(content, slot) });
-          return { label: styled?.label ?? name, detail: styled?.detail, disabled, rx: { type: move.type, sub: `PP ${slot.pp}/${maxPp(content, slot)}` } };
+          return { label: styled?.label ?? name, detail: styled?.detail, disabled, rx: { type: move.type, sub: `PP ${slot.pp}/${maxPp(content, slot)}`, facts: move.category === 'status' ? 'Status' : `${move.category.charAt(0).toUpperCase()}${move.category.slice(1)} · Power ${move.power || fixedDamageLabel(move.effects.fixedDamage)}` } };
         })
       : [{ label: 'Struggle' }];
     // Moves fill the message bar; the command window shows the focused move's details.
@@ -6239,8 +6505,7 @@ export class BattleScene extends Phaser.Scene {
     const boss = this.boss();
     const role = !isFoe ? undefined : !live && this.lastFoe ? this.lastFoe.role : boss ? (boss.title.replace(boss.name, '').trim() || undefined) : content.trainers.get(trainer?.classId ?? '')?.name;
     const plain = stripSpeechTags(text);
-    this.history.push(`${speaker}: “${plain}”`);
-    if (this.history.length > 60) this.history.shift();
+    this.logLine(`${speaker}: “${plain}”`);
     const cry = (): void => {
       const mon = this.shown.enemy;
       const species = mon ? content.species.get(mon.speciesId) : undefined;

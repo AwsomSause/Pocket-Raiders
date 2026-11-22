@@ -27,6 +27,8 @@ describe('the Phantom gimmick picker', () => {
     expect(count(html, 'class="gm-c ')).toBe(4);
     expect(html).toContain('gm-c gm-tera on');
     expect(html).toContain('gm-c gm-z off');
+    // The mock-up's four pictures.
+    for (const f of ['dbk/mega/icon.png', 'dbk/tera/icon.png', 'dbk/dynamax/icon.png', 'dbk/zpower/particle.png']) expect(html).toContain(f);
     expect(count(html, ' off"')).toBe(1);
     expect(html).toContain('CHARIZARD · ONE GIMMICK PER BATTLE');
     expect(html).toContain('READY · Tera type: Dragon');
@@ -66,6 +68,11 @@ describe('the Phantom phase card', () => {
     expect(count(html, 'class="ph-vs-ball out"')).toBe(4);
     expect(html).toContain('2 Pokémon left');
     expect(html).toContain('1 gimmick not used yet');
+    // As the mock-up: the unused gimmick's mark leads its fact; a Trainer's own words are quoted, a narrated line is not.
+    const marked = phPhase(ph, phase({ chips: ['Dynamax not used yet'], chipIcon: 'dynamax', said: true }));
+    expect(marked).toMatch(/<span class="bs-g">.*dynamax\/icon\.png.*<\/span>Dynamax not used yet/);
+    expect(marked).toContain('“You have earned this. See my true strength!”');
+    expect(html).not.toContain('“You have earned');
     expect(html).toContain('Face the champion');
     expect(html).toContain('data-act="next"');
   });

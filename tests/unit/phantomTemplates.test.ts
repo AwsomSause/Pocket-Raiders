@@ -146,6 +146,16 @@ describe('Phantom start of a run', () => {
     expect(count(blind, '???')).toBe(3);
   });
 
+  it('partner cards name the home region and your past runs with it, as the mock-up does', () => {
+    const picks = [{ name: 'Cyndaquil', region: 'Johto', past: '3 past runs · best 6 badges' }, { name: 'Mudkip', region: 'Hoenn', past: 'New to you' }].map((p) => ({ ...p, file: null, types: ['fire'], stats: 'HP 39', moves: 'Lv 5: Tackle' }));
+    const html = phStarter(ph, { title: 'x', picks, on: 0, sub: '' });
+    expect(html).toContain('<span class="lab">Johto · Remembrance</span>');
+    expect(html).toContain('<div class="ph-sc-past">3 past runs · best 6 badges</div>');
+    expect(html).toContain('<div class="ph-sc-past new">New to you</div>');
+    expect(html).toContain('<div class="sctk">Z · Choose</div>');
+    expect(phStarter(ph, { title: 'x', picks, on: 0, sub: '', blind: true })).not.toContain('ph-sc-past');
+  });
+
   it('rules: every desk row but the last is a row, and the last is the Begin blade', () => {
     const html = phSetup(ph, { title: 'Preparation Desk', items: [{ label: 'Campaign', note: 'Kanto' }, { label: 'Mode', note: 'Standard' }, { label: 'Depart', note: '' }], index: 2, art: null, card: [['Trainer', 'Red']], seed: 'ABC', text: 'Set the run up.' });
     expect(count(html, 'class="sr ph-sr')).toBe(2);

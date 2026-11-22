@@ -799,7 +799,8 @@ export class HubScene extends Phaser.Scene {
     const d = HUB_TOWN.districts[mapSpot.district]!;
     const inside = placesIn(d.id);
     const light = HUB_LIGHT[hubPeriod(new Date(Date.now()))];
-    const at = this.town?.tile();
+    // Walking, you stand where you are; otherwise where a walk starts (the mock-up's YOU at the gate).
+    const at = this.town?.tile() ?? HUB_TOWN.spawn;
     return {
       town: 'Hub Town',
       when: `${light.label}${light.lamps ? ', lamps on' : ''}`,

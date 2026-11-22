@@ -178,7 +178,7 @@ describe('Phantom bracket', () => {
     expect(html).not.toContain('data-act="bracketPage"');
     expect(html).toMatch(/class="ph-bk-x" data-act="bracketWatch"/);
     expect(html).toContain('Copy');
-    expect(html).toMatch(/data-act="bracket" data-arg=""><b[^>]*>Esc<\/b>Back/);
+    expect(html).toMatch(/data-act="bracket" data-arg=""><b[^>]*>X<\/b>Back/);
   });
 });
 

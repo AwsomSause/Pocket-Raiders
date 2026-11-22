@@ -33,11 +33,23 @@ export interface BattleBox {
   power?: { kind: 'mega' | 'tera' | 'dmax' | 'z'; text: string; turns?: number } | null;
   /** The Pokémon's types (none while it is hidden): the Pocket look colours its plate by them. */
   types?: readonly string[];
-  /** Its picture (front sprite file), for the speech panel's face. */
+  weak?: readonly { type: string; times: number }[];
+  /** Phantom UI: the Pokémon's picture (your card in the stack, the foe on the Fight page's target card). */
   file?: string | null;
 }
 
-export interface BattleOption { label: string; sub?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
+export interface BattleOption { label: string; sub?: string; /** A move's kind and power ("Special · Power 90"), drawn by the Phantom move cards before the PP. */ facts?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
+
+/** The Battle info page (Phantom UI, mock-up `binfo`): both sides, the field, and every other line the old panel held. */
+import type { LogRow } from '../../logRows';
+
+export interface BattleInfoView {
+  turn: number;
+  sides: readonly { lab: string; name: string; file: string | null; hp: string; status: string | null; item: string; stages: readonly { stat: string; n: number }[]; side: readonly string[] }[];
+  field: { head: string; text: string; first: { who: string | null; why: string } };
+  /** The rest, a page at a time (Q and E switch): your Pokémon, the foe, then the moves and the field. */
+  more: { tabs: readonly string[]; index: number; lines: readonly string[] };
+}
 
 export interface BattleModel {
   /** One box per Pokémon on the field, in field order (one in a single battle, up to three). */
@@ -57,6 +69,10 @@ export interface BattleModel {
   note: string;
   /** Auto-Battle is playing: the AUTO pin shows. */
   auto: boolean;
+  /** Phantom UI: the turn number, and your Pokémon not on the field (the mock-ups' stack at the right). */
+  turn?: number;
+  binfo?: BattleInfoView | null;
+  bench?: readonly { name: string; level: string; hp: number; file: string | null }[] | null;
   /** Your own party as balls (the top-bar layout shows them under your name): how many, and how many have fainted. */
   party: { n: number; out: number } | null;
   /** Tags over the field: "TARGET" over the Pokémon being aimed at, "OUT OF REACH" over one a move can't reach. */
@@ -81,7 +97,8 @@ export interface BattleModel {
   /** A Pokémon's Ability card over the field (hover on its box, or pinned by a click); `pinned` marks the pinned one. */
   card?: (BattlePanel & { pinned?: boolean }) | null;
   /** The battle log (H): its filter tabs and the lines of the open one. */
-  log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
+  /** The battle log. The Phantom page (mock-up `blog`) draws `rows` a screen at a time from `top`, under its `head`. */
+  log?: { tabs: readonly string[]; index: number; lines: readonly string[]; rows?: readonly LogRow[]; top?: number; head?: string } | null;
   /** Pocket look: the Battle Info page and the move card (structured), and the turn for the Battle Log. */
   pkInfo?: (BattleInfo & { foeFile: string | null; meFile: string | null }) | null;
   pkMove?: MoveInfo | null;

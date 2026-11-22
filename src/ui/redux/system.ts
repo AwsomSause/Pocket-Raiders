@@ -20,6 +20,10 @@ let logPage: PhLogModel | null = null;
 let onLogAt: (row: number) => void = () => undefined;
 let captionTimer: ReturnType<typeof setTimeout> | null = null;
 
+/** What is showing now. A versus or cutscene card fills the screen: notices and toasts wait behind it and show again when it leaves. */
+const pops = (none: boolean): Pick<OverlayModel, 'notices' | 'toasts' | 'caption'> =>
+  none ? { notices: [], toasts: [], caption: '' } : { notices: reduxCardUp() ? [] : state.notices, toasts: reduxCardUp() ? [] : state.toasts, caption: state.caption };
+
 function layer(game: Phaser.Game): { refresh(): void } {
   view ??= mountOverlay(game, {
     // A versus or cutscene card fills the screen: notices and toasts wait behind it and show again when it leaves.
@@ -49,7 +53,8 @@ function layer(game: Phaser.Game): { refresh(): void } {
       log: () => onLog(),
       logAt: (k) => onLogAt(Number(k)),
     },
-    page: (ph) => (logPage ? phLog(ph, logPage) : ''),
+    // The run log is a whole page: the pops wait behind it and show again when it shuts.
+    page: (ph) => (logPage ? phLog(ph, logPage) : phPops(ph, pops(false))),
   });
   return view;
 }

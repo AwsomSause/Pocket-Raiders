@@ -8,7 +8,7 @@ import type { EventModel } from '../../redux/screens/event';
 import type { RewardModel } from '../../redux/screens/stops';
 import { priceOf } from '../../redux/storeFloors';
 import type { ConfirmModel } from '../../redux/screens/saves';
-import { rxAtlas } from '../../redux/assets';
+import { rxAtlas, rxUrl } from '../../redux/assets';
 import { figure, pic as rxPic, scrollStart, type Art } from '../../redux/templates';
 import { act, esc, keys, mon, page, pic, ransom } from '../kit';
 import { phConfirm, phKeys } from '../templates';
@@ -21,20 +21,23 @@ export const phTeam = (party: readonly PartyChip[], cls = ''): string =>
 /** The reward draft. */
 export function phReward(_ph: PhantomVersion, d: RewardModel): string {
   const R = d.cards, n = R.length, inCards = d.index < n, mid = (n - 1) / 2;
-  const gap = n <= 3 ? 26 : n === 4 ? 14 : 8, w = n <= 3 ? 260 : Math.floor((852 - (n - 1) * gap) / n);
+  // Up to three cards sit apart as in the mock-up; more are dealt as an overlapping hand, the lit one on top.
+  const gap = n <= 3 ? 26 : n === 4 ? -6 : n === 5 ? -10 : -14, w = n <= 3 ? 260 : Math.floor((852 - (n - 1) * gap) / n);
   const cards = R.map((r, k) => {
     const on = inCards && k === d.index, long = r.text.length + r.notes.join(' ').length;
     const name = Math.max(15, Math.min(32, Math.floor(((w - 32) * 2) / Math.max(1, r.name.length) / 0.5)));
-    return `<div class="rc ph-rw${on ? ' on' : ''}${n > 4 ? ' slim' : ''}" data-key="rw${k}" style="--r:${((k - mid) * (n <= 3 ? 7 : n <= 5 ? 3 : 1.5)).toFixed(1)}deg;--i:${k};position:relative;width:${w}px"${act('pick', k, 'over')}><small>${esc(r.kind.toUpperCase())}</small><div class="pic">${rxPic(r.art, n > 4 ? 64 : 96)}</div><h4 style="font-size:${n > 4 ? Math.min(22, name) : name}px">${esc(r.name)}</h4><p style="font-size:${long > 150 ? 13 : long > 100 ? 15 : n > 3 ? 16 : 19}px">${esc(r.text)}${r.notes.map((t) => `<span class="ph-rw-n">${esc(t)}</span>`).join('')}</p>${on && !d.result ? `<div class="take"${act('take')}>↵ · TAKE IT</div>` : ''}</div>`;
+    return `<div class="rc ph-rw${on ? ' on' : ''}${n > 4 ? ' slim' : ''}" data-key="rw${k}" style="--r:${((k - mid) * (n <= 3 ? 7 : n <= 5 ? 4 : 2.5)).toFixed(1)}deg;--i:${k};position:relative;width:${w}px${n > 3 ? `;z-index:${on ? 9 : n - Math.round(Math.abs(k - mid))}${k ? `;margin-left:${gap}px` : ''}` : ''}"${act('pick', k, 'over')}><small>${esc((r.band ? (r.kind === 'Common' ? r.band : `${r.band} · ${r.kind}`) : r.kind).toUpperCase())}</small><div class="pic">${rxPic(r.art, n > 4 ? 64 : 96)}</div><h4 style="font-size:${n > 4 ? Math.min(22, name) : name}px">${esc(r.name)}</h4><p style="font-size:${long > 150 ? 13 : long > 100 ? 15 : n > 3 ? 16 : 19}px">${esc(r.text)}${r.notes.map((t) => `<span class="ph-rw-n">${esc(t)}</span>`).join('')}</p>${on && !d.result ? `<div class="take"${act('take')}>Z · TAKE IT</div>` : ''}</div>`;
   }).join('');
   const buttons = d.buttons.map((b, k) => `<div class="gim ph-gim${d.index === n + k ? ' on' : ''}" style="--i:${k}"${act('pick', n + k, 'over')}>${esc(b)}</div>`).join('');
+  const say = d.head ? d.head.notice : d.text;
   const result = d.result
-    ? `<div class="ph-shade" data-key="rwdone"${act('done')}></div><div class="ph-rw-res" data-key="rwres"${act('done')}><div class="ph-rw-yt">${ransom('YOURS', 9)}</div><div class="pn lt"><span class="lab">${esc(d.title)}</span>${d.result.filter(Boolean).map((t) => `<p class="txt">${esc(t)}</p>`).join('')}</div><div class="sy-wait"><i aria-hidden="true"></i><kbd>↵</kbd><span>Stays until you press Enter</span></div></div>`
+    ? `<div class="ph-shade" data-key="rwdone"${act('done')}></div><div class="ph-rw-res" data-key="rwres"${act('done')}><div class="ph-rw-yt">${ransom('YOURS', 9)}</div><div class="pn lt"><span class="lab">${esc(d.title)}</span>${d.result.filter(Boolean).map((t) => `<p class="txt">${esc(t)}</p>`).join('')}</div><div class="sy-wait"><i aria-hidden="true"></i><kbd>Z</kbd><span>Stays until you press Z</span></div></div>`
     : '';
   return page('reward', '<div class="bgr"></div><div class="burst" style="--x:60%;--y:55%" aria-hidden="true"></div><div class="dots" aria-hidden="true"></div><div class="shard" style="--cp:polygon(0 0,34% 0,16% 100%,0 100%);inset:0" aria-hidden="true"></div>'
-    + `<div class="ttl ph-rw-ttl">${ransom(n === 1 ? 'YOUR PRIZE' : 'PICK ONE', 3)}<small>${esc(d.title)}</small></div>`
-    + `<div class="rcs ph-rcs" style="gap:${gap}px">${cards}</div>`
-    + (d.text ? `<div class="pn ph-rw-say"><p class="txt" style="font-size:${d.text.length > 170 ? 14 : d.text.length > 110 ? 16 : 18}px">${esc(d.text)}</p></div>` : '')
+    + `<div class="ttl ph-rw-ttl">${ransom(n === 1 ? 'YOUR PRIZE' : 'PICK ONE', 3)}<small>${esc(d.head?.status ?? d.title)}</small></div>`
+    + (d.head ? `<div class="prize ph-rw-money">₽${d.head.money.toLocaleString('en-US')}<small>${esc(d.head.purse)}</small></div>` : '')
+    + `<div class="rcs ph-rcs" style="gap:${Math.max(0, gap)}px">${cards}</div>`
+    + (say ? `<div class="pn ph-rw-say"><p class="txt" style="font-size:${say.length > 170 ? 14 : say.length > 110 ? 16 : 18}px">${esc(say)}</p></div>` : '')
     + `<div class="ph-gims">${buttons}</div>` + phTeam(d.party, 'ph-rw-team') + result
     + keys(['◀▶', 'Look'], ['Enter', d.result ? 'Continue' : 'Take', d.result ? 'done' : 'take']));
 }
@@ -98,6 +101,8 @@ export function phShop(_ph: PhantomVersion, d: PhShopModel): string {
 }
 
 /** The nurse of a healing spot: the first frame of the overworld sheet the mock-ups drew theirs from. */
+/** The room behind the healing page (the mock-ups' blurred indoor backdrop, the Memories pack's event background). */
+export const HEAL_ROOM = 'packs/memories/eventbg/indoor.png';
 export const HEAL_NURSE: Art = { file: 'overworld/trainers/NPC_B2W2_Nurse.png', atlas: false, crop: [0, 0, 64, 64] };
 export interface PhHealModel {
   title: string;
@@ -114,7 +119,7 @@ export function phHeal(_ph: PhantomVersion, d: PhHealModel): string {
   // Each Pokémon is fitted to its slot: a small one is drawn larger, a tall one smaller.
   const fit = (file: string): number => { const f = rxAtlas(file)?.f[0]; return f ? Math.round(Math.min(1.5, 84 / Math.max(1, f[3]), 110 / Math.max(1, f[2])) * 100) / 100 : 1; };
   const slots = d.party.map((p, i) => `<div class="hc-s" style="--i:${i}" title="${esc(p.name)}"><div class="hc-p">${p.file ? mon(p.file, fit(p.file)) : ''}</div><div class="hc-b">${pic('pokeball/pb.png', 3)}</div><div class="hc-hp"><i style="--from:${Math.max(0, Math.min(100, Math.round(p.from)))}%"></i></div><small>${esc(p.hp)}</small></div>`).join('');
-  return page('heal', '<div class="bgk"></div><div class="burst" style="--x:70%;--y:40%" aria-hidden="true"></div><div class="dim" style="background:color-mix(in srgb,var(--k) 55%,transparent)"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,36% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>'
+  return page('heal', `<div class="art" style="background-image:url(${rxUrl(HEAL_ROOM)})"></div><div class="dim" style="background:color-mix(in srgb,var(--k) 55%,transparent)"></div><div class="shard" style="--c:var(--red);--cp:polygon(0 0,36% 0,22% 100%,0 100%);inset:0" aria-hidden="true"></div>`
     + `<div class="hd"><small>${esc(d.small)}</small>${esc(d.title)}</div><div class="hc-n" aria-hidden="true">${figure(HEAL_NURSE, 474)}</div>`
     + `<div class="pn hc-m"><span class="lab">Healing</span><div class="hc-row">${slots}</div></div>`
     + `<div class="hc-t" style="animation-delay:${(n * 0.28 + 0.6).toFixed(2)}s">${ransom('ALL', 4)}${ransom('BETTER!', 12)}</div>`

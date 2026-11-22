@@ -52,6 +52,8 @@ export function ransom(str: string, seed = 7, cls = ''): string {
   return `<span class="rs ${cls}" aria-label="${esc(str)}">` + [...str].map((ch) => (ch === ' ' ? '<i></i>' : `<b class="r${Math.floor(r() * 6)}" style="--a:${(r() * 12 - 6).toFixed(1)}deg;--y:${Math.round(r() * 10 - 5)}px;--s:${(0.86 + r() * 0.3).toFixed(2)}">${esc(ch)}</b>`)).join('') + '</span>';
 }
 /** Key hints: `[label, text, act?, arg?]`. A hint with an act is a button too. */
+// The mock-ups name the buttons Z (go on) and X (back); Enter and Esc do the same, so their caps read as the mock-ups'.
+const CAP: Record<string, string> = { Enter: 'Z', '↵': 'Z', Esc: 'X' };
 export const keys = (...k: readonly (readonly [string, string, string?, (string | number)?])[]): string =>
-  `<div class="keys">${k.map(([a, b, g, arg]) => `<span class="key"${g ? act(g, arg ?? '') : ''}><b${a.length > 1 ? ' class="w"' : ''}>${esc(a)}</b>${esc(b)}</span>`).join('')}</div>`;
+  `<div class="keys">${k.map(([key, b, g, arg]) => { const a = CAP[key] ?? key; return `<span class="key"${g ? act(g, arg ?? '') : ''}><b${a.length > 1 ? ' class="w"' : ''}>${esc(a)}</b>${esc(b)}</span>`; }).join('')}</div>`;
 export const hp = (cur: number, max: number, cls = ''): string => { const p = Math.round((cur / Math.max(1, max)) * 100); return `<span class="hpbar ${cls} ${p <= 20 ? 'low' : p <= 50 ? 'mid' : ''}"><i style="width:${p}%"></i></span>`; };

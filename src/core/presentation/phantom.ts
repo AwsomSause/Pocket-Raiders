@@ -47,5 +47,5 @@ export const PHANTOM_SETTINGS_PAGES = [
   { id: 'data', n: 'Save', letter: 'D', about: 'Export, import, credits, reset' },
 ] as const;
 export type PhantomSettingsPageId = (typeof PHANTOM_SETTINGS_PAGES)[number]['id'];
-/** The settings on the Phone page (ids in core/settingsRegistry.ts). */
-export const PHANTOM_PHONE_SETTINGS = ['oneHanded', 'haptics', 'holdToConfirm', 'uiScale', 'fontSize', 'skipGuard'] as const;
+/** The settings on the Phone page (ids in core/settingsRegistry.ts): the mock-up's six rows first, in its order. */
+export const PHANTOM_PHONE_SETTINGS = ['touchButtons', 'touchButtonSize', 'oneHanded', 'swipeToSwitch', 'holdForDetails', 'haptics', 'holdToConfirm', 'uiScale', 'fontSize', 'skipGuard'] as const;

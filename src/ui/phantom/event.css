@@ -172,7 +172,8 @@
 /* a healing spot (ui/phantom/screens/stops.ts) */
 .phx .phs{
   & .ph-hc-say{cursor:pointer;z-index:4}
-  & .s-heal .hc-n{filter:drop-shadow(8px 8px 0 var(--k))}
+  /* The nurse's frame is wider than she is: shift it so she stands where the mock-up's trimmed sprite does, outlined in white. */
+  & .s-heal .hc-n{left:-21px;filter:drop-shadow(6px 0 0 var(--w)) drop-shadow(-6px 0 0 var(--w)) drop-shadow(0 6px 0 var(--w)) drop-shadow(0 -6px 0 var(--w)) drop-shadow(8px 8px 0 var(--k))}
   & .s-heal .hc-t{z-index:3}
   & .s-heal .hc-p{height:88px;align-items:end;animation:ph-hc-glow .5s both;animation-delay:calc(var(--i)*.28s + .5s)}
   & .s-heal .hc-m{top:128px}

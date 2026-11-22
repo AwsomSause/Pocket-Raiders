@@ -93,8 +93,8 @@ export function phFiled(_ph: PhantomVersion, r: ResultLook, next: string): strin
     + `<span class="lab">Changed</span><div class="ph-fd-ch">${(r.changed.length ? r.changed : ['nothing']).map((t, i) => `<span style="--i:${i}">${esc(t)}</span>`).join('')}</div>`
     + `<div class="ph-fd-stamp" aria-hidden="true">${magma ? 'Filed' : 'Logged'}</div></div>`
     + (r.voice ? `<div class="ph-fd-voice"${act('next')}><p style="font-size:${fit(r.voice, 24, 17, 90)}px">${esc(r.voice)}</p></div>` : '')
-    + `<div class="sy-wait ph-ev-stay"${act('next')}><i aria-hidden="true"></i><kbd>↵</kbd><span>Stays until you press Enter</span></div>`
-    + keys(['Enter', next, 'next']) + '</div>');
+    + `<div class="sy-wait ph-ev-stay"${act('next')}><i aria-hidden="true"></i><kbd>Z</kbd><span>Stays until you press Z</span></div>`
+    + keys(['Z', next, 'next']) + '</div>');
 }
 
 /** 7.2: the rank-up as the mock-up's RANK UP page: who pins it on, the new rank over the old, what it opens, and the team in rows behind (rank 6 is the leader's office: no crowd). */
@@ -110,5 +110,5 @@ export function phTeamRank(_ph: PhantomVersion, r: RankUpLook, files: { leader: 
     + `<div class="ru-card tilt" style="--r:6deg"><span class="lab">${esc(r.team)}</span><div class="ru-pic">${who(giver, 250)}</div><h3 class="tl1" style="font-size:${fit(r.title, 34, 20, 14)}px">${esc(r.title)}</h3><span class="pips" aria-label="rank ${r.rank} of ${max}">${Array.from({ length: max }, (_, k) => `<i class="${k < r.rank ? 'f' : ''}"></i>`).join('')}</span></div>`
     + `<div class="ru-n"><s>${Math.max(0, r.rank - 1)}</s><b>${r.rank}</b></div>`
     + `<div class="pn ru-say tilt ph-ru-say" style="--r:-1.5deg"${act('next')}><span class="lab">${how}${r.bunkFront ? ' · your bunkmate in the front row' : ''}</span>${r.unlocks.length ? `<ul>${r.unlocks.map((u) => `<li>${esc(u)}</li>`).join('')}</ul>` : '<p class="txt">The team looks at you a little differently now.</p>'}<em aria-hidden="true">▼</em></div>`
-    + keys(['Enter', next, 'next']) + '</div>');
+    + keys(['Z', next, 'next']) + '</div>');
 }
