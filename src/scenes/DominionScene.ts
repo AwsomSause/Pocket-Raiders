@@ -727,7 +727,8 @@ export class DominionScene extends Phaser.Scene {
     if (id in TAB) return this.tab(TAB[id]!);
     if (id === 'start' && this.screen === 'hq') return this.start.open();
     if (id === 'menu') { this.menu.open(); return void this.view?.refresh(); }
-    if (id === 'set' || id === 'options') { this.menu.openSettings(); return void this.view?.refresh(); }
+    // Redesign R9: Settings, Options, Save and quit, Rotom and the vault are the Boss Menu controller's pages.
+    if (['set', 'options', 'save', 'rotom', 'vault', 'controls', 'calm', 'access', 'hud'].includes(id)) { this.menu.go(id); return void this.view?.refresh(); }
     if ((id === 'war' || id === 'rival' || id === 'rivals') && this.screen === 'hq') return void (this.rival.open() && this.view?.refresh());
     if (id === 'herotrack' && b.hero) return this.openHero();
     // R6: the party chip, the Start menu's Bag and the Summary are pages of the Pokémon tab.
@@ -1187,6 +1188,7 @@ export class DominionScene extends Phaser.Scene {
       navFree: () => this.navFree(),
       navJump: (p: PageId) => this.navJump(p),
       setNotice: (n: string | null) => { this.notice = n; },
+      r5run: () => { const b = this.block(); return b ? r5Run(this, b) : null; },
     };
   }
 
@@ -1228,7 +1230,7 @@ export class DominionScene extends Phaser.Scene {
     if (to === 'title') return this.leave();
     // D27: the Boss Menu and its Settings open over the page you are on (Rotom is a tab of Settings).
     if (to === 'menu') return this.menu.open();
-    if (to === 'settings' || to === 'rotom') return this.menu.openSettings(to === 'rotom' ? SETTINGS_CATS.findIndex((c) => c.id === 'rotom') : 0);
+    if (to === 'settings' || to === 'rotom') return this.menu.go(to === 'rotom' ? 'rotom' : 'set');
     this.menu.close();
     // Leave the page you are on the way its own keys would (overlays and sub-pages closed), from the HQ.
     if (this.voices.on) this.voices.close();

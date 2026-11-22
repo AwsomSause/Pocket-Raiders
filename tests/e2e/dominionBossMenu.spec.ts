@@ -74,57 +74,61 @@ test('Boss Menu on Esc, Settings with the Dominion and Effects & motion tabs', a
   await pressUntil(page, 'Escape', s.getByTestId('dom-phase'));
   await expect(s.getByTestId('dom-menu-title')).toHaveCount(0);
 
-  // S opens Settings · Dominion (m2): the run rows and the Effects & motion block side by side.
+  // S opens the Settings home (redesign R9); Enter on its first tile opens Settings · Dominion with the run rows.
   await pressUntil(page, 'Escape', s.getByTestId('dom-menu-title'));
-  await pressUntil(page, 'KeyS', s.getByTestId('dom-set-run'));
+  await pressUntil(page, 'KeyS', s.getByTestId('r5-set'));
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('r5-setdom')).toBeVisible();
   await expect(s.getByTestId('dom-set-title')).toContainText('Dominion');
-  await expect(s.getByTestId('dom-set-fx')).toBeVisible();
-  await expect(s.getByTestId('dom-set-row-1')).toContainText('Ruthless');
+  await expect(s.getByTestId('dom-set-preview')).toBeVisible();
+  await expect(s.getByTestId('dom-set-row-2')).toContainText('Ruthless');
   await shot('m2-settings-dominion');
 
-  // Arrows: Day pace (row 1) one step left; Show odds (row 4) and End the day (row 5) by tap.
+  // Arrows: Day pace (row 2) one step left; Show odds (row 6) and End the day (row 7) by tap once they scroll in.
   await page.keyboard.press('ArrowDown');
-  await expect(s.getByTestId('dom-set-row-1')).toHaveClass(/sel/);
+  await page.keyboard.press('ArrowDown');
+  await expect(s.getByTestId('dom-set-row-2')).toHaveClass(/\bon\b/);
   await page.keyboard.press('ArrowLeft');
   await expect.poll(async () => (await prefs(page)).run.pace).toBe('normal');
-  await s.getByTestId('dom-set-row-4').locator('.tg').click();
-  await s.getByTestId('dom-set-row-5').locator('.tg').click();
+  for (let i = 0; i < 4; i++) await page.keyboard.press('ArrowDown');
+  await s.getByTestId('dom-set-row-6').locator('.sw').click();
+  await page.keyboard.press('ArrowDown');
+  await s.getByTestId('dom-set-row-7').locator('.sw').click();
   await expect.poll(async () => [(await prefs(page)).showOdds, (await prefs(page)).autoEndDay]).toEqual([false, true]);
   // D12's Chair settings sit below (this run's, saved as a clock step): the list scrolls to them.
-  // (The taps left the cursor on row 5.)
+  // (The taps left the cursor on row 7.)
   for (let i = 0; i < 2; i++) await page.keyboard.press('ArrowDown');
-  await expect(s.getByTestId('dom-set-row-7')).toContainText('The Chair');
-  await expect(s.getByTestId('dom-set-row-7')).toHaveClass(/sel/);
+  await expect(s.getByTestId('dom-set-row-9')).toContainText('The Chair');
+  await expect(s.getByTestId('dom-set-row-9')).toHaveClass(/\bon\b/);
   const len = (await block(page)).chair?.opts.length ?? 'normal';
   await page.keyboard.press('ArrowLeft');
   await expect.poll(async () => (await block(page)).chair?.opts.length ?? 'normal').not.toBe(len);
-  for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowUp');
-  await expect(s.getByTestId('dom-set-row-1')).toHaveClass(/sel/);
+  for (let i = 0; i < 8; i++) await page.keyboard.press('ArrowUp');
+  await expect(s.getByTestId('dom-set-row-1')).toHaveClass(/\bon\b/);
   // Boundary: Six regions stay locked until the Crossing.
-  await s.getByTestId('dom-set-row-0').getByText('Six').click();
+  await s.getByTestId('dom-set-row-1').getByText('Six').click();
   expect((await prefs(page)).run.length).toBe('three');
   // The current run keeps the rules it began with.
   expect((await block(page)).rules.pace).toBe('ruthless');
 
-  // Calm: no motion on any Dominion page.
+  // Tab: Rotom, then Effects. Calm on the Show row: no motion on any Dominion page.
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await expect(s.getByTestId('r5-seteff')).toBeVisible();
+  await expect(s.getByTestId('dom-set-title')).toContainText('Effects');
   await s.getByTestId('dom-fx-calm').click();
   await expect.poll(async () => (await prefs(page)).fx).toEqual({ level: 'calm', particles: false, cutIns: 'skip', shake: false, flashes: 'off' });
   await expect(page.locator('#rx .domfx.fx-calm')).toHaveCount(1);
-  const anim = await s.locator('.ttl').first().evaluate((e) => getComputedStyle(e, '::before').animationName);
+  const anim = await s.locator('.srow').first().evaluate((e) => getComputedStyle(e).animationName);
   expect(anim).toBe('none');
-  await shot('m2-settings-calm');
-
-  // Tab: the Effects & motion tab with its preview; D resets the tab to Full show.
-  await page.keyboard.press('Tab');
-  await expect(s.getByTestId('dom-set-title')).toContainText('Effects');
-  await expect(s.getByTestId('dom-fx-preview')).toBeVisible();
   await shot('settings-effects-calm');
+  // D resets the tab to Full show.
   await page.keyboard.press('KeyD');
   await expect.poll(async () => (await prefs(page)).fx.level).toBe('full');
   await expect(page.locator('#rx .domfx.fx-full')).toHaveCount(1);
   await shot('settings-effects-full');
 
-  // The game's own categories live in the same list (Audio: a value row, ◀ ▶ changes it).
+  // The game's own rows live in the same lists (Sound, from the rail).
   await s.getByTestId('dom-set-cat-audio').click();
   await expect(s.getByTestId('dom-set-list')).toBeVisible();
   await shot('settings-audio');
@@ -133,7 +137,8 @@ test('Boss Menu on Esc, Settings with the Dominion and Effects & motion tabs', a
   await expect(s.getByTestId('dom-set-list')).toContainText('Rotom');
   await expect(view(page, 'Dominion')).not.toContainText(/Claude|\bAI\b/);
 
-  // Esc: rows -> categories -> Boss Menu -> the HQ.
+  // Esc: category -> Settings home -> Boss Menu -> the HQ.
+  await pressUntil(page, 'Escape', s.getByTestId('r5-set'));
   await pressUntil(page, 'Escape', s.getByTestId('dom-menu-title'));
   await pressUntil(page, 'Escape', s.getByTestId('dom-phase'));
 

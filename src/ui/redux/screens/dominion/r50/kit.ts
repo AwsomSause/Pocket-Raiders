@@ -10,6 +10,7 @@ import './r50.css';
 import './game.css';
 import { act, esc } from '../../../kit';
 import { R5_SIZES } from './sizes';
+import { LOOK_DEFAULT, type DominionLook } from '../../../../../core/dominion/schema';
 
 export { esc };
 
@@ -138,7 +139,23 @@ export interface R5Run {
   tipTestid?: string;
   /** Where the place sign says we are (pass 30), when the run knows better than the group. */
   place?: string;
+  /** A news line from today (Settings · Screen · News ticker: Quiet shows the ticker only then). */
+  newsToday?: boolean;
 }
+
+// ---------- the look (Redesign R9: Settings · Screen, Access, Options, Region skin, Ambience, Button feel) ----------
+
+let LOOK: DominionLook = LOOK_DEFAULT;
+let REGION: 'kanto' | 'johto' = 'kanto';
+/** The scene sets the player's look settings (and the region the run is in) before it draws. Presentation only. */
+export function r5SetLook(l: DominionLook | undefined, region: string = 'kanto'): void {
+  LOOK = l ?? LOOK_DEFAULT;
+  REGION = region === 'johto' ? 'johto' : 'kanto';
+}
+export const r5Look = (): DominionLook => LOOK;
+/** The skin the pages wear: the region's own, or the one the player keeps. */
+export const r5Skin = (): 'kanto' | 'johto' => (LOOK.skin === 'region' ? REGION : LOOK.skin);
+const lookAttrs = (): string => `data-status="${LOOK.status}" data-ticker="${LOOK.ticker}" data-keys="${LOOK.keyHints}" data-colour="${LOOK.colour}" data-cursor="${LOOK.cursor}" data-press="${LOOK.press ? 'on' : 'off'}" data-frame="${LOOK.frame}" data-amb="${LOOK.ambience}${LOOK.lightning ? '' : ' nolight'}${LOOK.glints ? '' : ' noglint'}${LOOK.skyline ? '' : ' nosky'}"`;
 
 // ---------- the page clock ----------
 
@@ -153,7 +170,7 @@ function clock(id: string): string {
 
 /** The page root: `.r50` (the mockups' #stage, carrying the group) and the `.scr` screen. */
 export function page(o: { id: string; g: R5Group; kind: string; body: string; nv?: boolean }): string {
-  return `<div class="r50" id="r5" data-g="${esc(o.g)}" data-scr="${esc(o.id)}" data-testid="r5-${esc(o.id)}" style="${clock(o.id)}"><div class="scr${o.nv === false ? '' : ' nv'} k-${esc(o.kind)}">${o.body}</div></div>`;
+  return `<div class="r50" id="r5" data-g="${esc(o.g)}" data-scr="${esc(o.id)}" data-testid="r5-${esc(o.id)}" ${lookAttrs()} style="${clock(o.id)}"><div class="scr${o.nv === false ? '' : ' nv'} k-${esc(o.kind)}${r5Skin() === 'johto' ? ' sk-johto' : ''}">${o.body}</div></div>`;
 }
 
 // ---------- background layers (passes 1, 3, 8, 15, 16, 24, 28, 29, 34, 36, 37, 39, 42) ----------
@@ -178,14 +195,14 @@ export function bg(b: string, g: R5Group, run: R5Run, o: { skin?: 'kanto' | 'joh
   return `<div class="bgx b-${esc(b || 'hq')} pl-${esc(pl)}" data-nocheck=""><i class="lite"></i><i class="beam a"></i><i class="beam b"></i></div>`
     // Like the mockup: the strolling grunt (pass 29) lands in the first w2 slot, which is the weather layer when one is shown.
     + (t ? `<div class="tod15 t-${t}" data-nocheck=""><i class="w1"></i><i class="w3">${SP('t-grunt', 46)}</i><i class="w2"></i></div>` : '')
-    + `<div class="hv16" style="--h:${(run.heat / 100).toFixed(2)}" data-nocheck=""></div>${g === 'Opposition' ? '<div class="sir16" data-nocheck=""><i></i><i></i></div>' : ''}`
+    + `<div class="hv16" style="--h:${(run.heat / 100).toFixed(2)}" data-nocheck=""></div>${g === 'Opposition' && LOOK.heatWarn ? '<div class="sir16" data-nocheck=""><i></i><i></i></div>' : ''}`
     + '<i class="nova24" data-nocheck=""></i><i class="iris24" data-nocheck=""></i>'
     + `<div class="stroll28" data-nocheck=""><i class="w1">${SP('c-gus', 46)}</i>${t ? '' : `<i class="w3">${SP('t-grunt', 46)}</i>`}<i class="w2">${SP('c-gruntb', 44)}</i></div>${g === 'Opposition' ? '<i class="tag29" data-nocheck="">R</i>' : ''}`
     + `<div class="lan34" data-nocheck="">${rep(11, (i) => `<i style="--i:${i};--c:${['#e0294a', '#ffd75a', '#ff8a3d'][i % 3]}"></i>`)}</div>`
     + (['night', 'roof', 'street'].includes(b) ? `<div class="fw34" data-nocheck="">${rep(4, (i) => `<i style="--x:${[18, 46, 72, 88][i]}%;--y:${[22, 14, 26, 12][i]}%;--c:${['#ffd75a', '#ff5d8a', '#5ad1ff', '#ffb86a'][i]};--d:${i * 0.7}s"></i>`)}</div>` : '')
-    + wipe + skyline(o.skin ?? 'kanto')
+    + wipe + skyline(o.skin ?? r5Skin())
     + '<div class="rn39" data-nocheck=""><i></i><i></i></div><i class="lt39" data-nocheck=""></i>'
-    + (run.heat > 70 ? '<i class="hb42" data-nocheck=""></i>' : '');
+    + (run.heat > 70 && LOOK.heatWarn ? '<i class="hb42" data-nocheck=""></i>' : '');
 }
 
 // ---------- the top bar and the strip under it (passes 2-48) ----------
@@ -228,7 +245,7 @@ export function top(g: R5Group, t: R5Top, run: R5Run): string {
     + `<u class="dy7 ic12${tod ? ' ck15' : ''}" ${go(NAV, 'clock')}><i class="cl39" data-nocheck=""><u></u></i>${run.festival ? `<i class="fl34" ${go(NAV, 'calendar')} title="${esc(run.festival)}"></i>` : ''}${tod ? `<i class="clk15 c-${tod}" style="--a:${TOD_ANGLE[tod]}deg"><i></i></i>` : ''}${run.phase ? `<span data-testid="dom-phase" style="${SR}">${esc(run.phase)}</span>` : ''}Day <b>${run.day}</b><span title="orders used">${rep(max, (i) => `<i class="${i < used ? 'on' : ''}"></i>`)}</span></u></span></header>`;
   const hero = run.hero ? `<i class="rp42" ${go(NAV, 'herotrack')} data-nocheck=""><u></u>${SP(run.hero.k, 14)}</i>` : '';
   const coming = run.coming ? esc(run.coming.toUpperCase()) : '';
-  const strip = NEWSG.includes(g)
+  const strip = NEWSG.includes(g) && LOOK.ticker !== 'off' && !(LOOK.ticker === 'quiet' && !run.newsToday)
     ? `<div class="tick18" ${go(NAV, 'papers')} data-nocheck=""><b>KANTO NEWS</b>${run.hero ? `<b class="rh42" ${go(NAV, 'herotrack')}>${esc(run.hero.where.toUpperCase())}</b>` : ''}${coming ? `<b class="tk36" ${go(NAV, 'siege')}>${coming}</b>` : ''}<span><i>${esc([...run.news, ...run.news].join(' ◆ '))}${run.news.length ? ' ◆' : ''}</i></span></div>`
     : `<div class="war30 fuse36" ${go(NAV, 'war')} data-nocheck="">${hero}${run.gyms ? `<u class="gc44" ${go(NAV, 'gymcase')}>${map(run.gyms, (x, i) => `<i class="g-${x.who}" style="--d:${i * 60}ms">${spr(x.k, 0.4)}</i>`)}</u>` : ''}<b>${esc((run.side ?? 'Nova').toUpperCase())} ${run.war}</b><span><i style="width:${run.war}%"></i><em class="sk36" style="left:${run.war}%"></em></span><b class="r">${100 - run.war} ${esc(run.foe.toUpperCase())}</b>${coming ? `<b class="bm36" ${go(NAV, 'siege')}><i>${esc(run.foe[0] ?? 'R')}</i>${coming}</b>` : ''}</div>`;
   return header + strip + (place ? `<div class="sign30" data-nocheck=""><i></i><b>${esc(place)}</b></div>` : '');
