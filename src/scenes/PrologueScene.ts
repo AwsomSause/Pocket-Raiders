@@ -13,6 +13,8 @@ import { Menu, type MenuOption } from '../ui/widgets';
 import { drawBackdrop } from '../ui/widgets';
 import { mountRedux, phantomOn, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
 import { phQuiz } from '../ui/phantom/screens/run';
+import { pkQuiz } from '../ui/pocket/screens/quiz';
+import { pkArtOf } from '../ui/pocket/templates';
 import { talkView } from '../ui/redux/screens/talk';
 import { cutBeat, cutView } from '../ui/redux/screens/cut';
 import { beatTag, formView, typeKey, vanceLine } from '../ui/redux/screens/prologue';
@@ -369,6 +371,13 @@ export class PrologueScene extends Phaser.Scene {
     const pages = this.rxPages(), at = Math.min(this.rxAt, pages.length - 1), page = pages[at]!;
     const { tag, name } = beatTag(m.title, BEATS.length);
     const index = this.menu?.index ?? 0;
+    // Pocket look: the mock-up's Starter Quiz page.
+    if (c.pk && m.quiz && !m.next && at >= pages.length - 1) {
+      return pkQuiz({
+        who: 'Prof. Vance', art: pkArtOf(vance(m.vance ?? 'explain')), intro: page.slice(0, -1).map((l) => l.text).join(' '), question: page[page.length - 1]!.text, at: m.quiz.at, of: m.quiz.of, back: m.quiz.back,
+        answers: m.options.map((o) => ({ label: o.label, off: !!o.disabled })), index,
+      });
+    }
     if (c.ph && m.quiz && !m.next && at >= pages.length - 1) {
       return phQuiz(c.ph, {
         who: 'Prof. Vance', bust: vance(m.vance ?? 'explain'), intro: page.slice(0, -1).map((l) => l.text).join(' '), question: page[page.length - 1]!.text, at: m.quiz.at, of: m.quiz.of, back: m.quiz.back,

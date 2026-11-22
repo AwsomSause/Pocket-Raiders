@@ -3,13 +3,14 @@
 // or changes game state, and nothing uses a random stream.
 
 import type Phaser from 'phaser';
-import { agoWord, noticeOf, overlayView, type LogRow, type NoticeRow, type OverlayModel, type ToastRow } from './screens/overlay';
-import { mountOverlay, reduxCardUp } from './stage';
-import { phLog, phPops, type PhLogModel } from '../phantom/screens/system';
+import { agoWord, noticeOf, overlayView, pkOverlay, type LogRow, type NoticeRow, type ToastRow } from './screens/overlay';
+import { mountOverlay, pocketOn, reduxCardUp } from './stage';
+import { pkHelp } from '../pocket/screens/help';
+import { phLog, type PhLogModel } from '../phantom/screens/system';
 
 interface Toast extends ToastRow { timer: ReturnType<typeof setTimeout> | null }
 
-const state = { notices: [] as NoticeRow[], toasts: [] as Toast[], log: null as LogRow[] | null, caption: '' };
+const state = { notices: [] as NoticeRow[], toasts: [] as Toast[], log: null as LogRow[] | null, caption: '', /** Pocket look: the Controls card is up, for this scene. */ help: null as string | null };
 let view: { refresh(): void } | null = null;
 let nextToast = 1;
 let onNotice: (id: number) => void = () => undefined;
@@ -25,11 +26,18 @@ const pops = (none: boolean): Pick<OverlayModel, 'notices' | 'toasts' | 'caption
 
 function layer(game: Phaser.Game): { refresh(): void } {
   view ??= mountOverlay(game, {
-    // The Phantom style draws the pops as its own page (`page` below); the New layer then keeps only its log.
-    render: (c) => overlayView(c, { ...pops(c.ph !== null), log: state.log }),
+    // A versus or cutscene card fills the screen: notices and toasts wait behind it and show again when it leaves.
+    // Pocket look: notices and toasts are drawn on the Pocket layer (pk below); the log and the song caption stay here.
+    render: (c) => overlayView(c, { notices: reduxCardUp() || pocketOn() ? [] : state.notices, toasts: reduxCardUp() || pocketOn() ? [] : state.toasts, log: state.log, caption: state.caption }),
+    pk: () => {
+      const help = state.help ? pkHelp(state.help) : '';
+      const stack = reduxCardUp() ? '' : pkOverlay({ notices: state.notices, toasts: state.toasts });
+      return help ? (stack ? stack.replace(/<\/div>$/, `${help}</div>`) : `<div class="scr gx-over">${help}</div>`) : stack;
+    },
     acts: {
       // A tap sends a notice away.
       notice: (id) => onNotice(Number(id)),
+      help: () => { state.help = null; view?.refresh(); },
       // A tap opens the story behind a toast and keeps it up; a second tap closes it.
       toast: (id) => {
         const t = state.toasts.find((x) => x.id === Number(id));
@@ -94,3 +102,12 @@ export function rxCaption(game: Phaser.Game, text: string, ms: number): void {
   }, ms);
   layer(game).refresh();
 }
+
+/** Pocket look: show or put away the Controls card (mock-up `help`) for the scene on screen. True when it is now up. */
+export function rxHelpToggle(game: Phaser.Game, scene: string | null): boolean {
+  state.help = state.help || !scene ? null : scene;
+  layer(game).refresh();
+  return state.help !== null;
+}
+/** The Controls card is up. */
+export const rxHelpUp = (): boolean => state.help !== null;

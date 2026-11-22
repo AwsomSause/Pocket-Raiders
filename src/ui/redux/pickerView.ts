@@ -15,6 +15,7 @@ import { boardProgress, type BoardRow, boardView, type GridModel, gridStart, gri
 import { bagCols, bagUseNote, bagView } from './screens/bag';
 import { battleListView, type BattleListRow, windowTitle } from './screens/battle';
 import { monFile, partyChips, partyStrip } from './game';
+import { pkReserve, type PkReserveMon } from '../pocket/screens/reserve';
 import { services } from '../../game/services';
 import { itemUseProblem } from '../../core/items';
 import { phChips, phEmpty, phInto, phSheet, phTabs } from '../phantom/picker';
@@ -46,7 +47,7 @@ export interface PickerBridge {
   canBack: boolean;
   backLabel?: string;
   /** The room's own page, drawn in place of the rows (the Trainer Card). Its `back` clicks close the room. */
-  page?: (c: ReduxCtx, index: number) => string;
+  page?: (c: ReduxCtx, index: number) => string | null;
   /** The header band's colour, when the title alone would pick the wrong one. */
   area?: Area;
   /** Columns the cursor moves across on the room's own page (1 unless said). */
@@ -163,6 +164,12 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const artOf = (file: string | null): { file: string; atlas: boolean } | null => (file ? { file, atlas: true } : null);
     const detail = said ? { title: said.title, body: said.body, art: said.off ? null : artOf(said.file) } : { title: cur!.label, body: cur!.note, facts: cur!.tag ? [['', cur!.tag] as const] : [], art: cur!.art };
     const wall: GridModel = { title: name, area, hints, n, cell: (i) => { const x = p.cell?.(i); if (x) return { art: artOf(x.file), label: x.off ? '' : x.title, off: x.off, sil: x.sil }; const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail, found, total: n, text };
+    // Pocket look: the PC is the Reserve page (party at the left, the boxed Pokémon as cards, the swap bar).
+    if (c.pk && /^PC\b/.test(name)) {
+      const mon = (i: number): PkReserveMon | null => { const x = p.cell?.(i); if (!x || x.off) return null; const lv = /Lv (\d+)/.exec(x.body ?? ''); return { name: x.title, file: x.file, level: lv ? Number(lv[1]) : null }; };
+      const party = partyChips(scene);
+      return pkReserve({ party: party.map((m) => ({ name: m.name, file: m.file, level: m.level, fainted: m.fainted })), box: Array.from({ length: n }, (_, i) => mon(i)), index, used: Array.from({ length: n }, (_, i) => mon(i)).filter(Boolean).length, room: n, say: text, back: p.canBack }) + back;
+    }
     body = c.ph && /^PC\b/.test(name) ? phBox(c.ph, { ...wall, party: partyChips(scene), extras: p.extras?.(index) ?? [] }) : gridView(c, wall);
   } else if (kind === 'bag') {
     const inRun = !!services().session.run, notes = bagNotes(p.item?.(index));
@@ -216,7 +223,9 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
     render: (c) => {
       // A room's own page has no list to steer across: the cursor steps one row at a time.
       cols = p.page ? p.pageCols ?? 1 : c.pk && kind !== 'window' && isDexWall(p) ? PK_DEX_COLS : c.pk && kind === 'window' && !p.center && p.rows > 0 && !p.mon?.(0) ? PK_BAG_COLS : pickerCols(kind, c);
-      return p.page ? p.page(c, p.index()) + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
+      // A room's page may be one look's only (null: the list is drawn as usual).
+      const own = p.page?.(c, p.index()) ?? null;
+      return own !== null ? own + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
     },
     acts: { pick: (i) => p.pick(Number(i)), tab, bracketPage: tab, back: () => p.back(), extra: (k) => p.extra?.(Number(k)) },
     overs: { over: (i) => p.hover(Number(i)) },

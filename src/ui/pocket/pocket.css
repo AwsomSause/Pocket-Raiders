@@ -661,3 +661,82 @@ html[data-pk-tr=battle]::view-transition-new(pk-stage){animation:pk-vt-iris .7s 
 .pkx .pks .gx-bt-page .lg-sum dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:4px 8px;font-size:14px}
 .pkx .pks .gx-bt-page .lg-sum dd{margin:0;font-weight:800}
 .pkx .pks .gx-bt-keys{z-index:5}
+/* Legendary cut-in: the mock-up's shine spiral, drawn as soft turning rays behind the Pokémon. */
+.pkx .pks .cleg .gx-spiral{position:absolute;left:330px;top:-80px;width:700px;height:700px;z-index:1;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(214,196,255,.38) 0 6deg,transparent 6deg 22deg);-webkit-mask:radial-gradient(circle,#000 0 20%,transparent 68%);mask:radial-gradient(circle,#000 0 20%,transparent 68%);animation:pk-spin 16s linear infinite}
+/* Boss battle panel: under the stage strip (the mock-up has no strip), heal dots in one row. */
+.pkx .pks .bb18 .boss18{top:132px}
+.pkx .pks .boss18 .hl{display:flex;flex-direction:row;align-items:center}
+.pkx .pks .boss18 .hl u{display:block;flex:none}
+/* League page: the lit room (the cursor). */
+.pkx .pks .lg-room.gx-on{outline:4px solid var(--yel);outline-offset:2px}
+.pkx .pks .lg-room i b{font:400 30px/1 var(--fd);color:#9aa6c0}
+/* Reserve: the cards start at the top of the wall; the swap bar's card stands on white like the wall's. */
+.pkx .pks .rs-box>b{flex:none}
+.pkx .pks .rs-box>div{align-content:start}
+.pkx .pks .rs-swap .pkm{background:#fff;border-radius:6px}
+/* Quick Wheel: a click outside the wheel shuts it; a slot that is off is grey; the glance's line for slots without a list. */
+.pkx .pks .gx-wh-dim{position:absolute;inset:0;z-index:0}
+.pkx .pks .wheel .app.gx-off{filter:grayscale(1);opacity:.55}
+.pkx .pks .glance .gx-gl-note{margin:4px 0 0;width:100%;font-size:16px;line-height:1.35}
+/* Achievement Hall: the kinds list scrolls inside its panel (nine kinds); the lit card's line under the grid. */
+.pkx .pks .ach .gx-ach-kinds{display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.pkx .pks .ach .gx-ach-kinds p{gap:2px;font-size:13px}
+.pkx .pks .ach .gx-ach-kinds small{font-weight:600;color:var(--mute)}
+.pkx .pks .ach .gx-ach-say{position:absolute;left:16px;width:620px;top:478px;font-size:13px;font-weight:700;color:var(--ink)}
+/* Use on: a Pokémon the item can't help is grey; the lit one's full line under the item. */
+.pkx .pks .bu.no{filter:grayscale(.8);opacity:.7}
+.pkx .pks .gx-bu-say{position:absolute;left:16px;width:230px;top:310px;padding:10px 12px;font-weight:700;line-height:1.35}
+.pkx .pks .wxi.gx-wx-q{display:inline-grid;place-items:center;font:800 18px/1 var(--fb);font-style:normal;color:#fff;background:rgba(255,255,255,.18);border:2px dashed rgba(255,255,255,.6)}
+.pkx .pks .gx-help{top:60px;cursor:pointer}
+.pkx .pks .gx-help small{display:block;margin-top:10px;font-size:12.5px;color:#cfd6e6}
+.pkx .pks .gx-qz-intro{font-size:13px;font-weight:700;line-height:1.35;color:#3c4766}
+.pkx .pks .gx-qz-many .qz-q{padding:12px 20px 14px;gap:5px}
+.pkx .pks .gx-qz-many .qz-a{top:auto;bottom:74px;gap:7px}
+.pkx .pks .gx-qz-many .qz-a .btn{min-height:38px}
+.pkx .pks .gx-qz-many .qz-pips{top:auto;bottom:46px}
+.pkx .pks .gx-qz-long .qz-pips i{width:18px;height:8px}
+
+/* Expedition draft and recruit: the lit card on offer (the taken ones are the mock-up's yellow "on"). */
+.pkx .pks .dk35 p.gx-lit { box-shadow: 0 0 0 4px var(--blu, #2a75bb), 0 6px 0 rgba(13, 21, 48, .25); translate: 0 -4px; }
+
+/* Totem and raid battles: the area strip and its steps over the battle (mock-up `tm-battle`); the wrapper only carries the area's colours. */
+.pkx .pks .gx-bt-area { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.pkx .pks .gx-bt-area .st38, .pkx .pks .gx-bt-area .fw50 { pointer-events: auto; }
+/* The tier-51 rules (pocket.gen.css) do not reach a tier-26 battle page, so the strip's own rules are copied here. */
+.pkx .pks .gx-bt-area.a-tm { --ac: #e8891a; --ad: #5a3004; }
+.pkx .pks .gx-bt-area.a-rd { --ac: #d9267d; --ad: #4a0c33; }
+.pkx .pks .gx-bt-area.a-ga { --ac: #2456c8; --ad: #0c2a66; }
+.pkx .pks .gx-bt-area .st38 { position: absolute; left: 14px; top: 170px; display: flex; align-items: center; gap: 8px; height: 54px; padding: 8px 8px 0 10px; color: #fff; background: #7b4e23; border: 2px solid #4a2a0c; border-top: 0; border-radius: 0 0 10px 10px; white-space: nowrap; box-shadow: 0 3px 0 rgba(0, 0, 0, .4); }
+.pkx .pks .gx-bt-area.a-rd .st38 { background: #3b1257; border-color: #ff7ac0; border-radius: 0 0 2px 18px; }
+.pkx .pks .gx-bt-area.a-ga .st38 { background: #0a1026; border-color: #59b7ff; border-radius: 0 0 4px 4px; }
+.pkx .pks .gx-bt-area .fav37 { flex: none; width: 90px; height: 10px; border-radius: 5px; background: #c1121f; border: 2px solid #fff; overflow: hidden; }
+.pkx .pks .gx-bt-area .fav37 s { display: block; height: 100%; background: #3ddc6c; }
+.pkx .pks .gx-bt-area .st38 > b { font: 400 13px/18px var(--fd); text-transform: uppercase; color: var(--ink); background: #fff; border-radius: 999px; padding: 0 10px; }
+.pkx .pks .gx-bt-area .st38 .n40 { display: grid; justify-items: center; gap: 1px; min-width: 60px; padding: 3px 9px 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; background: rgba(0, 0, 0, .4); border-radius: 6px; }
+.pkx .pks .gx-bt-area .st38 .n40 b { font: 400 28px/1 var(--fd); color: var(--yel); }
+.pkx .pks .gx-bt-area .st38 > u { text-decoration: none; display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; line-height: 18px; color: var(--ink); background: var(--yel); border-radius: 999px; padding: 0 10px 0 3px; cursor: pointer; }
+.pkx .pks .gx-bt-area .st38 > u kbd { font-size: 11px; }
+.pkx .pks .gx-bt-area .emb28 { flex: none; display: grid; width: 24px; height: 24px; margin-right: -4px; background: var(--ac); }
+.pkx .pks .gx-bt-area .emb28.tm { background: radial-gradient(circle 2px at 34% 44%, #fff 0 99%, transparent), radial-gradient(circle 2px at 66% 44%, #fff 0 99%, transparent), linear-gradient(180deg, transparent 0 66%, #fff 66% 74%, transparent 74%), var(--ac); clip-path: polygon(50% 0, 100% 30%, 86% 100%, 14% 100%, 0 30%); }
+.pkx .pks .gx-bt-area .emb28.rd { border-radius: 50%; border: 2px solid #fff; }
+.pkx .pks .gx-bt-area .emb28.ga { background: linear-gradient(90deg, transparent 0 44%, #fff 44% 56%, transparent 56%), linear-gradient(180deg, #e3350d 0 50%, var(--ac) 50%); clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%); border-radius: 0; }
+.pkx .pks .gx-bt-area .fw50 { position: absolute; left: 14px; top: 230px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.pkx .pks .gx-bt-area .fw50 i { font: 400 12px/18px var(--fd); font-style: normal; text-transform: uppercase; letter-spacing: .06em; color: #c9d3ee; background: rgba(13, 21, 48, .88); padding: 0 12px 0 16px; clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%, 7px 50%); }
+.pkx .pks .gx-bt-area .fw50 i:first-child { clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%); padding-left: 10px; }
+.pkx .pks .gx-bt-area .fw50 i.past { color: #8a93b4; }
+.pkx .pks .gx-bt-area .fw50 i.on { color: var(--ink); background: var(--yel); }
+
+/* A door with more than three ways (a raid den's approaches and Practice): tighter buttons so they fit above the line. */
+.pkx .pks .dr-ch.gx-dr-many { top: 84px; gap: 6px; }
+.pkx .pks .dr-ch.gx-dr-many .btn { padding: 6px 18px; }
+.pkx .pks .dr-ch.gx-dr-many .btn b { font-size: 20px !important; }
+.pkx .pks .dr-ch.gx-dr-many .btn span { font-size: 11px; max-width: 340px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Galar bracket: the round looked at with ←→ (the round you play next keeps the mock-up's gold frame). */
+.pkx .pks .br34 .mt34.gx-lit { outline: 3px dashed var(--yel); outline-offset: 4px; }
+
+/* Galar's Boss Intro (mock-up ga-intro): the pitch behind the rays, the red, white and blue edges. */
+.pkx .pks .cboss.gx-ga .ct-bg { position: absolute; inset: 0; width: 960px; height: 540px; object-fit: cover; filter: brightness(.55) saturate(1.2); }
+.pkx .pks .cboss.gx-ga .fr33 { position: absolute; top: 0; bottom: 0; width: 12px; z-index: 8; pointer-events: none; border: 0 solid var(--ink); background: linear-gradient(135deg, #c1121f 33%, #fff 33% 66%, #2456c8 66%) 0 0/12px 36px; }
+.pkx .pks .cboss.gx-ga .fr33.l { left: 0; border-right-width: 2px; }
+.pkx .pks .cboss.gx-ga .fr33.r { right: 0; border-left-width: 2px; background: linear-gradient(225deg, #c1121f 33%, #fff 33% 66%, #2456c8 66%) 0 0/12px 36px; }

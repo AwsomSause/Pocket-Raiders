@@ -526,6 +526,7 @@ export class SettingsScene extends Phaser.Scene {
     }, {
       rows: rows.map((r) => { const def = r.id ? SETTINGS.find((d) => d.id === r.id) : undefined; return { about: r.hint, ...(def?.values ? { opts: def.values } : {}) }; }),
       preview: this.page === 'display',
+      ...(search ? {} : { id: ({ display: 'set-display', audio: 'set-audio', gameplay: 'set-game', animations: 'set-anim', text: 'set-text', accessibility: 'set-access', controls: 'set-controls', story: 'set-story', data: 'set-save' } as Record<string, string>)[this.page] }),
       crumb: [from, 'Settings', search ? 'Search' : cat!.label],
       note: search && this.query && rows.length === 1 ? 'No setting matches.' : this.notice,
     });

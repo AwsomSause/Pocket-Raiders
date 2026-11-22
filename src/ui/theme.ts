@@ -59,6 +59,10 @@ export const FONT_FAMILY = '"PokemonMain", "Courier New", sans-serif';
 /** Everything else: the chunky Gen 3 battle font, drawn on an 8-px grid (falls back to FONT_FAMILY for symbols it lacks). */
 export const BOLD_FONT_FAMILY = '"PokemonBold", "PokemonMain", "Courier New", sans-serif';
 
+/** The mock-ups' display font (plans/ui-redesign `--fd`) and its size relative to the old fonts. */
+export const MOCKUP_FONT = 'Jersey 15';
+const MOCKUP_FONT_SCALE = 21 / 18;
+
 /** Sizes below this use the fine-print font; this size and up use the bold one. */
 const BOLD_FROM = 18;
 
@@ -93,6 +97,13 @@ export function pixelFont(requested: number): { family: string; size: number; gr
   const size = Math.max(requested * fontScale, boostSmall ? BOLD_FROM : 0);
   if (readingFont) return { family: readingFont, size: Math.max(12, Math.round(size * 0.9)), grid: 1 };
   if (lookFont) return { family: `"${lookFont.family}", ${FONT_FAMILY}`, size: Math.max(13, Math.round(size * 0.9 * lookFont.scale)), grid: 1 };
+  // Default lettering is the Pocket mock-ups' own display font (Jersey 15); the Gen 3 fonts stay as its fallback chain.
+  return { family: `"${MOCKUP_FONT}", ${BOLD_FONT_FAMILY}`, size: Math.max(14, Math.round(size * 0.9 * MOCKUP_FONT_SCALE)), grid: 1 };
+}
+
+/** The old Gen 3 pixel-grid sizing, kept for callers that want the classic look. */
+export function classicPixelFont(requested: number): { family: string; size: number; grid: number } {
+  const size = Math.max(requested * fontScale, boostSmall ? BOLD_FROM : 0);
   if (size < BOLD_FROM) return { family: FONT_FAMILY, size: 16, grid: 1 };
   const snapped = Math.max(16, Math.round((size * 0.75) / 8) * 8);
   return { family: BOLD_FONT_FAMILY, size: snapped, grid: snapped / 8 };

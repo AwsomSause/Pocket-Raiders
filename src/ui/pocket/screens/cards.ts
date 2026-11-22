@@ -5,9 +5,11 @@
 
 import type { CutModel } from '../../redux/screens/cut';
 import type { VersusModel } from '../../redux/screens/versus';
-import { ballArt, type PkArt } from '../art';
-import { act, esc, page, spr, sprH, ty, typeColour } from '../kit';
+import type { GimmickCard } from '../../phantom/screens/cutin';
+import { ballArt, itemArt, typeArt, type PkArt } from '../art';
+import { act, back, esc, page, spr, sprH, ty, typeColour } from '../kit';
 import { fit, fitPic, pkArtOf } from '../templates';
+import { rxUrl } from '../../redux/assets';
 
 /** A card's playback state (see the file's head). */
 export type PkCue = 'in' | 'hold' | 'out';
@@ -42,11 +44,43 @@ export function pkBoss(d: VersusModel & { pkBoss: NonNullable<VersusModel['pkBos
   const b = d.pkBoss, foe = pkArtOf(d.cast);
   const say = d.line ? `${d.name}: "${d.line}"` : `${d.role} ${d.name} wants to battle!`;
   const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-  return page('boss-intro', 26, cueRoot('cut cboss', 'boss', cue, `--c:${typeColour(b.type)}`)
-    + '<i class="ct-rays"></i>' + (foe ? `<div class="ct-mon" data-key="ct-mon">${sprH(foe, 300)}</div>` : '')
+  const ga = b.area === 'ga';
+  return page('boss-intro', 26, cueRoot(`cut cboss${ga ? ' gx-ga ar28 a-ga' : ''}`, 'boss', cue, `--c:${typeColour(b.type)}`)
+    + (ga ? back('arenas/grass_bg.png', 'ct-bg') : '') + '<i class="ct-rays"></i>' + (foe ? `<div class="ct-mon" data-key="ct-mon">${sprH(foe, 300)}</div>` : '')
     + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(b.where, 440, 13, 10, 0.62)}px">${esc(b.where)}</small><b style="font-size:${fit(d.name, 440, 88, 44, 0.5)}px">${esc(d.name)}</b></div>`
     + `<div class="ct-chips" data-key="ct-chips">${b.chips.map((c) => `<span>${bold(c)}</span>`).join('')}</div>`
     + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${esc(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + (ga ? '<i class="fr33 l"></i><i class="fr33 r"></i>' : '')
+    + `<div class="gx-hit"${act('next')}></div></div>`);
+}
+
+/** What the Legendary and Ultra Beast cut-ins show (mock-up pages `legend` and `ub`). Only true facts go in `chips`. */
+export interface PkCutIn {
+  page: 'legend' | 'ub';
+  /** The small line over the name: "Legendary Pokémon · Cerulean Cave", "Ultra Deep Sea · Ultra Beast". */
+  where: string;
+  type: string;
+  /** Chips; `**word**` is drawn bold. A chip starting with `ball:` draws the Beast Ball after its text. */
+  chips: readonly string[];
+  say: string;
+  /** The backdrop picture's file (under assets/images), or null for the card's own dark. */
+  backdrop: string | null;
+}
+
+/** A wild Legendary (`cleg`: rays, the shine spiral, the glowing Pokémon) or an Ultra Beast (`cub`: the wormhole). */
+export function pkCutIn(d: CutModel & { pkCut: PkCutIn }, cue: PkCue = 'in'): string {
+  const k = d.pkCut, mon = pkArtOf(d.mon);
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const chip = (t: string): string => (t.startsWith('ball:') ? `<span>${bold(t.slice(5))} ${spr(ballArt('ub'), 1.5)}</span>` : `<span>${bold(t)}</span>`);
+  const leg = k.page === 'legend';
+  return page(k.page, 26, cueRoot(leg ? 'cut cleg' : 'cut cub', 'boss', cue, `--c:${leg ? '#8a5cff' : '#7a4fd0'}`)
+    + (k.backdrop ? `<img class="px ct-bg" src="${esc(rxUrl(k.backdrop))}" alt="" data-key="ct-bg">` : '')
+    + (leg ? '' : '<i class="hole22" data-key="ct-hole"></i>') + '<i class="ct-rays"></i>'
+    + (leg ? '<i class="gx-spiral" data-key="ct-spiral"></i>' : '')
+    + (mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(mon, leg ? 340 : 260, leg ? 325 : 280, '', 4)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(k.where, 440, 13, 10, 0.62)}px">${esc(k.where)}</small><b style="font-size:${fit(d.name, 440, 88, 44, 0.5)}px">${esc(d.name)}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${k.chips.map(chip).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(k.say, 1500, 17, 13, 0.5)}px">${bold(k.say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
     + `<div class="gx-hit"${act('next')}></div></div>`);
 }
 
@@ -60,4 +94,59 @@ export function pkAce(d: CutModel & { types?: readonly string[]; facts?: readonl
     + `<div class="aceband" data-key="ace-band" style="--t:${colour}"><div class="ab-in">${who ? `<i class="ab-por" data-key="ace-por">${sprH(who, 148)}</i>` : ''}<div class="ab-t"><small>${esc(d.role || 'Ace')}</small><b data-key="ace-name" style="font-size:${fit(d.name, 520, 68, 34, 0.5)}px">${esc(d.name)}</b>${facts ? `<span data-key="ace-facts">${facts}</span>` : ''}</div></div></div>`
     + (mon ? `<div class="ab-mon" data-key="ace-mon">${fitPic(mon, 280, 250, '', 4)}<i class="ab-star" data-key="ace-star">★ Ace</i></div>` : '')
     + `<div class="gx-hit"${act('next')}></div></div>`, true);
+}
+
+/** What the Pocket gimmick cut-in adds to the shared card: the new form's types and Ability, the stats it raises, the Z-Move's base move. */
+export interface PkGimmickMore {
+  types?: readonly string[];
+  ability?: string;
+  ups?: readonly string[];
+  base?: string;
+  /** The player's own Pokémon: no Trainer's name before it. */
+  mine?: boolean;
+}
+
+const GIM_TITLE: Record<GimmickCard['kind'], string> = { mega: 'Mega Evolution', primal: 'Primal Reversion', tera: 'Terastallize', dynamax: 'Dynamax', gigantamax: 'Gigantamax', zmove: 'Z-Move' };
+
+/** A Mega Evolution, Terastallization, Dynamax or Z-Move cut-in (mock-up pages `g-mega`, `g-tera`, `g-dmax`, `g-z`). */
+export function pkGimmick(d: GimmickCard & { more?: PkGimmickMore }, cue: PkCue = 'in'): string {
+  const m = d.more ?? {}, k = d.kind, cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+  const bold = (t: string): string => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const who = d.trainer && !m.mine ? `${d.trainer}'s ${d.name}` : d.name;
+  const T = d.type ? cap(d.type) : '';
+  let cls = 'cmega', colour = '#ff8a3c', fx = '', small = '', chips: string[] = [], say = '', id = 'g-mega';
+  if (k === 'mega' || k === 'primal') {
+    small = [d.item, k === 'mega' ? 'Mega Bracelet' : 'Primal Reversion'].filter(Boolean).join(' · ');
+    fx = `<i class="ct-sigil" data-key="ct-sigil">${fitPic(itemArt('mega_bracelet'), 120, 120, '', 4)}</i>`;
+    chips = [m.types?.length ? `Type: **${m.types.map(cap).join(' / ')}**` : '', m.ability ? `Ability: **${m.ability}**` : '', m.ups?.length ? m.ups.map((u) => `${u} ▲`).join(' · ') : '', 'Stays until the battle ends'];
+    say = k === 'mega' ? `${d.item ? `The **${d.item}** answers the **Mega Bracelet**. ` : ''}${who} Mega Evolved!` : `${who} returned to its **Primal** form!`;
+  } else if (k === 'tera') {
+    cls = 'ctera'; colour = d.type ? typeColour(d.type) : '#39c8e8'; id = 'g-tera';
+    small = `Tera Orb${T ? ` · Tera Type ${T}` : ''}`;
+    fx = T ? `<i class="ct-crown" data-key="ct-crown">${spr(typeArt(d.type!), 4)}</i>` : '';
+    chips = [T ? `Now a **${T}** type` : '', T ? `${T} moves hit harder` : '', 'Old weaknesses are replaced', 'Stays until the battle ends'];
+    say = `${who} **Terastallized**${T ? ` into the **${T}** type` : ''}!`;
+  } else if (k === 'dynamax' || k === 'gigantamax') {
+    cls = 'cdmax'; colour = '#e0115f'; id = 'g-dmax';
+    small = `Dynamax Band${d.turns ? ` · ${d.turns} turns` : ''}`;
+    fx = `<img class="px ct-bg" src="${esc(rxUrl('arenas/raid_max_bg.png'))}" alt="" data-key="ct-bg">`;
+    const pips = d.turns ? `Turns left <i class="pips">${Array.from({ length: d.turns }, () => '<u></u>').join('')}</i>` : '';
+    chips = [d.hp ? `HP doubles: **${d.hp[0]} → ${d.hp[1]}**` : '', 'Moves become **Max Moves**', pips];
+    say = `${who} grew enormous!${k === 'gigantamax' ? ' It **Gigantamaxed**.' : ''} Its moves are Max Moves${d.turns ? ` for ${d.turns} turns` : ''}.`;
+  } else {
+    cls = 'cz'; colour = '#f2b600'; id = 'g-z';
+    small = ['Z-Ring', d.item].filter(Boolean).join(' · ');
+    fx = `<i class="ct-ring" data-key="ct-ring">${fitPic(itemArt('z_ring'), 96, 96, '', 4)}</i>`;
+    chips = [d.move ? (m.base ? `${m.base} becomes **${d.move.name}**` : `**${d.move.name}**`) : '', d.move?.power ? `Power **${d.move.power}**` : '', 'One all-out hit', 'Once per battle'];
+    say = `${who} surrounded itself with its **Z-Power**! ${d.name} unleashes its full-force Z-Move!`;
+  }
+  const mon = pkArtOf(d.mon);
+  const chip = (t: string): string => (t.startsWith('Turns left') ? `<span>${t}</span>` : `<span>${bold(t)}</span>`);
+  return page(id, 26, cueRoot(`cut ${cls}`, 'boss', cue, `--c:${colour}`)
+    + (k === 'dynamax' || k === 'gigantamax' ? fx : '') + '<i class="ct-rays"></i>' + (k === 'dynamax' || k === 'gigantamax' ? '' : fx)
+    + (mon ? `<div class="ct-mon" data-key="ct-mon">${fitPic(mon, k === 'dynamax' || k === 'gigantamax' ? 400 : 400, k === 'dynamax' || k === 'gigantamax' ? 330 : 350, '', 5)}</div>` : '')
+    + `<div class="ct-title" data-key="ct-title"><small style="font-size:${fit(small, 440, 13, 10, 0.62)}px">${esc(small)}</small><b style="font-size:${fit(GIM_TITLE[k], 440, 88, 44, 0.5)}px">${GIM_TITLE[k]}</b></div>`
+    + `<div class="ct-chips" data-key="ct-chips">${chips.filter(Boolean).map(chip).join('')}</div>`
+    + `<div class="vs-say" data-key="vs-say"><p style="font-size:${fit(say, 1500, 17, 13, 0.5)}px">${bold(say)}</p><div class="btn on nx"${act('next')}><b>Next</b></div></div>`
+    + `<div class="gx-hit"${act('next')}></div></div>`);
 }

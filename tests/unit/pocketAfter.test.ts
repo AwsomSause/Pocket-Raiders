@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { pkPageOf } from '../../src/ui/pocket/kit';
-import { pkCatchParts, pkEvolve, pkExp, pkLearn, pkLevel, pkVictory, type PkExpRow, type PkLearnModel } from '../../src/ui/pocket/screens/after';
+import { pkBadgeGet, pkCatchParts, pkEvolve, pkExp, pkLearn, pkLevel, pkRivalLoss, pkVictory, type PkExpRow, type PkLearnModel } from '../../src/ui/pocket/screens/after';
 import { pkBattle } from '../../src/ui/pocket/screens/battle';
+import { pkGimmick } from '../../src/ui/pocket/screens/cards';
 import type { BattleModel } from '../../src/ui/redux/screens/battle';
 import { versusView, type VersusModel } from '../../src/ui/redux/screens/versus';
+import { cutView, type CutModel } from '../../src/ui/redux/screens/cut';
 
 // The Pocket look's pages after a battle (mock-ups `victory`, `exp`, `levelup`, `movelearn`, `capture`).
 
@@ -145,5 +147,89 @@ describe('the Pocket Boss Intro and the shiny tag', () => {
     const m = (shiny: boolean): BattleModel => ({ foes: [{ name: 'Starly', level: 'Lv 4', hp: 1, hpText: '', xp: null, tags: [], team: null, shiny }], mine: [], text: '', menu: null, tabs: null, header: '', status: '', momentum: '', note: '', auto: false, party: null });
     expect(pkBattle(m(true))).toContain('★ Shiny');
     expect(pkBattle(m(false))).not.toContain('★ Shiny');
+  });
+});
+
+describe('the Pocket badge and rival-loss pages', () => {
+  it('Badge get: where, the badge name, the count, what else you get, Onward', () => {
+    const html = pkBadgeGet({ type: 'water', where: 'Kanto Gym · Leader Misty', title: "Misty's Badge", count: 'Badge 2 of 8 in Kanto', gets: [['amulet_coin', '₽ 3,600 prize money'], ['map', 'The road to the next stage opens']], say: "You earned **Misty's badge**!" });
+    expect(pkPageOf(html)?.id).toBe('badge-get');
+    expect(html).toContain('Badge 2 of 8 in Kanto');
+    expect(html.match(/<p><i>/g)?.length).toBe(2);
+    expect(html).toContain('<b>Misty&#39;s badge</b>');
+    expect(html).toContain('Onward');
+    expect(html).toContain('--t:#2980ef');
+  });
+  it('Rival loss: the run goes on, ticks for good news and "!" for the rest, Carry on', () => {
+    const html = pkRivalLoss({ cast: null, where: 'Stage 3 · Rival battle', name: 'Blue', line: 'Smell ya later!', list: [[true, 'Your team is patched up'], [false, 'Blue will be waiting']] });
+    expect(pkPageOf(html)?.id).toBe('rival-loss');
+    expect(html).toContain('Blue wins');
+    expect(html).toContain('Losing to a rival never ends a run.');
+    expect(html).toContain('<p class="ok"><i>✓</i>');
+    expect(html).toContain('<p><i>!</i>');
+    expect(html).toContain('Carry on');
+  });
+});
+
+describe('the Pocket Legendary and Ultra Beast cut-ins', () => {
+  const base: CutModel = { name: 'Mewtwo', role: 'Legendary Pokémon', line: '', cast: null, mon: null, backdrop: null, beat: 0, kind: 'aceEntrance' };
+  it('a wild Legendary: where, name, type and facts, the line and Next; no wormhole', () => {
+    const h = cutView({ pk: true } as never, { ...base, pkCut: { page: 'legend', where: 'Legendary Pokémon · Cerulean Cave', type: 'psychic', chips: ['Type: **Psychic**', 'Level **70**', 'It can be **caught**'], say: 'It goes silent. **Mewtwo** is watching you.', backdrop: null } });
+    expect(pkPageOf(h)?.id).toBe('legend');
+    expect(h).toContain('cut cleg');
+    expect(h).toContain('<b>Psychic</b>');
+    expect(h).toContain('It can be <b>caught</b>');
+    expect(h).toContain('<b>Mewtwo</b> is watching you.');
+    expect(h).toContain('gx-spiral');
+    expect(h).not.toContain('hole22');
+  });
+  it('an Ultra Beast: the wormhole, its rule, the Beast Ball and the setting; without pkCut the ace card stays', () => {
+    const h = cutView({ pk: true } as never, { ...base, name: 'Nihilego', pkCut: { page: 'ub', where: 'Ultra Deep Sea · Ultra Beast', type: 'rock', chips: ['Type: **Rock** and **Poison**', '**Host**: lead is possessed', 'ball:Only a **Beast Ball** catches it', 'Ultra Beasts are on'], say: 'The sky tears open.', backdrop: 'arenas/raid_ultra_bg.png' } });
+    expect(pkPageOf(h)?.id).toBe('ub');
+    expect(h).toContain('cut cub');
+    expect(h).toContain('hole22');
+    expect(h).toContain('raid_ultra_bg.png');
+    expect(h).toContain('Only a <b>Beast Ball</b> catches it');
+    expect(pkPageOf(cutView({ pk: true } as never, base))?.id).toBe('ace');
+  });
+});
+
+describe('the Pocket boss battle panel', () => {
+  it('a boss battle is its own page with the gold tag, power, heals left and badge', () => {
+    const base = { header: '', foes: [], mine: [], text: '', tabs: null, menu: null } as unknown as BattleModel;
+    const h = pkBattle({ ...base, pkBoss: { name: 'Leader Misty', tag: 'Gym Battle', power: { kind: 'dynamax', ready: true }, heals: [2, 4], badge: 'water' } });
+    expect(pkPageOf(h)?.id).toBe('boss-battle');
+    expect(h).toContain('bb18');
+    expect(h).toContain('Leader Misty');
+    expect(h).toContain('Ready');
+    expect(h).toContain('2 of 4');
+    expect((h.match(/<u class="on">/g) ?? []).length).toBe(2);
+    expect(h).toContain('Water');
+    expect(pkPageOf(pkBattle(base))?.id).toBe('battle');
+  });
+});
+
+describe('the Pocket gimmick cut-ins', () => {
+  const base = { name: 'Charizard', mon: null, trainer: 'Red', cast: null, more: { mine: true } } as const;
+  it('Mega: the stone and bracelet, types, Ability and the stats it raises', () => {
+    const h = pkGimmick({ ...base, kind: 'mega', item: 'Charizardite X', more: { mine: true, types: ['fire', 'dragon'], ability: 'Tough Claws', ups: ['Attack', 'Defense'] } });
+    expect(pkPageOf(h)?.id).toBe('g-mega');
+    expect(h).toContain('Charizardite X · Mega Bracelet');
+    expect(h).toContain('<b>Fire / Dragon</b>');
+    expect(h).toContain('Attack ▲ · Defense ▲');
+    expect(h).toContain('Charizard Mega Evolved!');
+  });
+  it('Tera, Dynamax and Z-Move pages', () => {
+    expect(pkGimmick({ ...base, kind: 'tera', type: 'dragon' })).toContain('Now a <b>Dragon</b> type');
+    const d = pkGimmick({ ...base, kind: 'dynamax', hp: [98, 196], turns: 3 });
+    expect(pkPageOf(d)?.id).toBe('g-dmax');
+    expect(d).toContain('<b>98 → 196</b>');
+    expect((d.match(/<u><\/u>/g) ?? []).length).toBe(3);
+    const z = pkGimmick({ ...base, kind: 'zmove', item: 'Firium Z', move: { name: 'Inferno Overdrive', power: 175 }, more: { mine: true, base: 'Flamethrower' } });
+    expect(pkPageOf(z)?.id).toBe('g-z');
+    expect(z).toContain('Flamethrower becomes <b>Inferno Overdrive</b>');
+  });
+  it("a foe's gimmick names its Trainer", () => {
+    expect(pkGimmick({ ...base, more: {}, trainer: 'Misty', kind: 'tera', type: 'water' })).toContain("Misty&#39;s Charizard");
   });
 });

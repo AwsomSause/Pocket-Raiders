@@ -3,7 +3,7 @@
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
 import type { PkCatch } from '../../pocket/screens/after';
-import type { BattleInfo, MoveInfo } from '../../../core/presentation/battleInfo';
+import type { BattleInfo, BattleStatus, MoveInfo, StatusMon } from '../../../core/presentation/battleInfo';
 import { act, esc, facts, foot, hpb, img, mini, mon, TX, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
@@ -29,7 +29,9 @@ export interface BattleBox {
   tip?: string;
   /** A shiny foe (the Pocket look tags its plate ★ Shiny). */
   shiny?: boolean;
-  /** Phantom UI: the Pokémon's types now (none while it is hidden), and for a foe what hits it super effectively. */
+  /** Pocket look: the battle power this Pokémon has used, as a tag on its bar (Mega, Tera Dragon, Max with turn pips, Z spent). */
+  power?: { kind: 'mega' | 'tera' | 'dmax' | 'z'; text: string; turns?: number } | null;
+  /** The Pokémon's types (none while it is hidden): the Pocket look colours its plate by them. */
   types?: readonly string[];
   weak?: readonly { type: string; times: number }[];
   /** Phantom UI: the Pokémon's picture (your card in the stack, the foe on the Fight page's target card). */
@@ -100,10 +102,19 @@ export interface BattleModel {
   /** Pocket look: the Battle Info page and the move card (structured), and the turn for the Battle Log. */
   pkInfo?: (BattleInfo & { foeFile: string | null; meFile: string | null }) | null;
   pkMove?: MoveInfo | null;
+  /** Pocket look: the Weather guide from the battle's weather card (mock-up `weather`). */
+  pkWeather?: { now: string; turns: number | null; index: number } | null;
+  /** Pocket look: the battle Status page (mock-up `b-status`), with picture files and the event's goal. */
+  pkStatus?: (Omit<BattleStatus, 'bench' | 'foes'> & { bench: (StatusMon & { file: string | null })[]; foes: (StatusMon & { file: string | null })[]; money: string | null; event: { name: string; goal: string; left: string } | null }) | null;
   /** Pocket look: the catch card after a ball holds (mock-up `capture`). */
   pkCatch?: PkCatch | null;
   /** Pocket look: a pseudo-stage's band while its battle opens (mock-up `ev-stage`). */
   pkBand?: { em: string; b: string; span: string } | null;
+  /** Pocket look: a boss battle's panel (mock-up `boss-battle`): its boss power, the healing items it has left, the badge at stake. */
+  pkBoss?: { name: string; tag: string; power: { kind: string; ready: boolean } | null; heals: readonly [number, number]; badge: string | null } | null;
+  /** Pocket look: a Totem's or a raid's strip at the top (its word, its numbers, the area's steps). */
+  pkArea?: { key: 'tm' | 'rd' | 'ga'; word: string; chips: readonly (readonly [string, string])[]; flow: readonly string[]; step: number; /** Galar: the crowd's share for you, 0-100. */ bar?: number } | null;
+  turn?: number;
   /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
   fx?: BattleFx | null;
   /** A notice over the field that waits for an input (the Extended Cut's Second Shot): the mock-ups' confirm box with one button. */

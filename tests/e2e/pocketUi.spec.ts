@@ -49,21 +49,23 @@ test('Pocket look: Title, Settings and Save Slots are drawn as the mock-ups, and
 
   // A category: the rows with their controls, and the preview on Display. Right changes the lit setting.
   await step(page, 'Enter');
-  await onPkPage(page, 'Settings', 'opts');
-  const opts = pkView(page, 'Settings', 'opts');
+  await onPkPage(page, 'Settings', 'set-display');
+  const opts = pkView(page, 'Settings', 'set-display');
   await expect(opts.locator('.srow.on b').first()).toHaveText('UI style');
   await expect(opts.locator('.preview .pv-scr')).toBeVisible();
   await expect(opts.locator('.srow.on .seg .on')).toHaveText('New');
   await step(page, 'ArrowRight');
   await expect(opts.locator('.srow.on .seg .on')).toHaveText('Pocket');
   expect(await page.evaluate(() => (window as any).__pkr.session.settings.uiStyle)).toBe('pocket');
-  await fits(page, 'Settings', 'opts');
+  await fits(page, 'Settings', 'set-display');
   // A click on a category opens it; a list without the preview is wide.
   await opts.locator('.set-cats .btn', { hasText: 'Audio' }).click();
-  await expect(opts.locator('.hdr-t')).toHaveText('Settings · Audio');
-  await expect(opts.locator('.srow .sld').first()).toBeVisible();
-  await expect(opts.locator('.srow .tog').first()).toBeVisible();
-  await fits(page, 'Settings', 'opts');
+  await onPkPage(page, 'Settings', 'set-audio');
+  const audio = pkView(page, 'Settings', 'set-audio');
+  await expect(audio.locator('.hdr-t')).toHaveText('Settings · Audio');
+  await expect(audio.locator('.srow .sld').first()).toBeVisible();
+  await expect(audio.locator('.srow .tog').first()).toBeVisible();
+  await fits(page, 'Settings', 'set-audio');
   await step(page, 'Escape');
   await onPkPage(page, 'Settings', 'settings');
 
@@ -409,12 +411,16 @@ test('Pocket look: Party is a hand of cards and Summary has every tab; neither c
 
   await step(page, 'Enter');
   await onPkPage(page, 'Map', 'summary');
-  const sum = pkView(page, 'Map', 'summary');
+  // The Moves and Bond tabs are pages of their own (summary-moves, summary-bond).
+  const sum = pkView(page, 'Map');
   const tabs = await sum.locator('.t12 .tab').count();
   expect(tabs).toBeGreaterThanOrEqual(5);
   for (let t = 0; t < tabs; t++) {
     await expect(sum.locator('.t12 .tab').nth(t)).toHaveClass(/\bon\b/);
-    await fits(page, 'Map', 'summary');
+    const name = ((await sum.locator('.t12 .tab').nth(t).textContent()) ?? '').trim().toLowerCase();
+    const id = name === 'moves' ? 'summary-moves' : name === 'bond' ? 'summary-bond' : 'summary';
+    await onPkPage(page, 'Map', id);
+    await fits(page, 'Map', id);
     await step(page, 'ArrowRight');
   }
   await step(page, 'Escape', 2);

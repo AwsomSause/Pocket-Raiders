@@ -295,7 +295,7 @@ function shield(el: HTMLElement): void {
  * One layer over every scene's view, for what belongs to no screen: notifications, toasts, the interaction log.
  * It lives as long as the game, wears the current look, takes clicks only on `[data-act]`, and draws nothing in Old.
  */
-export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' | 'acts'> & { page?: (ph: PhantomVersion) => string }): { refresh(): void; readonly el: HTMLElement } {
+export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' | 'acts'> & { page?: (ph: PhantomVersion) => string; /** Pocket look: what lies over every page (the notice stack), drawn on the Pocket layer. */ pk?: () => string }): { refresh(): void; readonly el: HTMLElement } {
   const root = ensureHost(game);
   const el = document.createElement('div');
   el.dataset.scene = 'overlay';
@@ -335,9 +335,32 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
     pel.toggleAttribute('data-calm', calm);
     morph(pel, html);
   };
+  // Pocket look: the notice stack on the Pocket layer, over every page, taking only its own clicks.
+  let kel: HTMLElement | null = null, klast = '';
+  const pkOver = (): void => {
+    const html = o.pk && reduxOn() && pocketOn() ? o.pk() : '';
+    const calm = !services().session.settings.menuAnimations || services().session.settings.disableAllAnimations;
+    const wear = html ? `${calm}|${html}` : '';
+    if (wear === klast) return;
+    klast = wear;
+    if (!html || !pkhost) { kel?.remove(); kel = null; return; }
+    if (!kel) {
+      kel = document.createElement('div');
+      kel.dataset.scene = 'overlay';
+      kel.style.zIndex = '60';
+      kel.addEventListener('click', click(kel));
+      shield(kel);
+    }
+    if (kel.parentElement !== pkhost) pkhost.append(kel);
+    kel.className = 'pks gx-overlay' + tierClass(26) + ' clear' + (calm ? ' still' : '');
+    kel.dataset.scr = 'toasts';
+    pkCssArt(pkhost);
+    morph(kel, html);
+  };
   let last = '';
   const redraw = (): void => {
     pageDraw();
+    pkOver();
     const k = reduxSkinIndex(services().session.settings.reduxSkin);
     el.className = `${lookClass(k, el)} clear noin`;
     // `ph` tells the view that the Phantom layer is drawing its page (so it does not draw the same thing twice).

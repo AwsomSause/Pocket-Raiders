@@ -40,7 +40,7 @@ export interface VersusModel {
   /** Pocket look: the card's playback state, set by the battle's playback (in, hold, out). Leave it out: it plays in. */
   cue?: 'in' | 'hold' | 'out';
   /** Pocket look: a boss's intro (mock-up `boss-intro`): where and what role, its type, and the chips (** ** marks bold). */
-  pkBoss?: { where: string; type: string; chips: readonly string[] } | null;
+  pkBoss?: { where: string; type: string; chips: readonly string[]; /** Galar's stadium: the pitch behind and the red, white and blue edges (mock-up `ga-intro`). */ area?: 'ga' } | null;
 }
 
 const balls = (n: number, b: number): string => `<div class="row" style="gap:5px">${Array.from({ length: Math.max(0, Math.min(6, Math.floor(n))) }, () => `<i class="ball" style="--b:${b}px"></i>`).join('')}</div>`;

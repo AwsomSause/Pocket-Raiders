@@ -7,7 +7,7 @@ import { act, AREA, bg, esc, foot } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, figure } from '../templates';
 import { phCut } from '../../phantom/screens/cutin';
-import { pkAce } from '../../pocket/screens/cards';
+import { pkAce, pkCutIn, type PkCutIn } from '../../pocket/screens/cards';
 
 export const CUT_BEATS = ['Situation', 'Anticipation', 'Moment', 'Reaction', 'Transition'] as const;
 
@@ -57,6 +57,8 @@ export interface CutModel {
   facts?: readonly string[];
   /** Pocket look: the card's playback state, set by the battle's playback (in, hold, out). Leave it out: it plays in. */
   cue?: 'in' | 'hold' | 'out';
+  /** Pocket look: a wild Legendary or Ultra Beast gets its own cut-in page (mock-ups `legend`, `ub`). */
+  pkCut?: PkCutIn | null;
 }
 
 const letter = (h: string): string => `<div class="bars" style="top:0"></div><div class="bars" style="bottom:0"></div>${h}`;
@@ -70,6 +72,7 @@ const size = (len: number, base: number): number => (len > 260 ? base - 6 : len 
 export function cutView(c: ReduxCtx, d: CutModel): string {
   if (c.ph) return phCut(c.ph, d);
   // Pocket look: the ace has the mock-ups' Ace Announcement; the other moments keep this card until their pages are built.
+  if (c.pk && d.pkCut) return pkCutIn({ ...d, pkCut: d.pkCut }, d.cue);
   if (c.pk && d.kind === 'aceEntrance') return pkAce(d, d.cue);
   const v = c.v(3), on = Math.max(0, Math.min(4, Math.floor(d.beat)));
   const hint = d.skip === null ? null : d.skip ?? (['Esc', 'skip'] as const);
