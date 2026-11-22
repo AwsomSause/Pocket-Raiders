@@ -109,7 +109,7 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
  * D6: the money it moved goes on the Ledger's line for it (the World Turn books its own),
  * the district the Boss worked in counts as this week's visit, and a new Notoriety step is announced.
  */
-export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null } {
+export function stepInRun(content: Content, run0: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null; bits?: string[] } {
   // D15: the data follows the region this block plays; leaving starts the next region's block outright.
   const b0 = run0.expansion?.dominion;
   useRegion(b0);
@@ -160,7 +160,7 @@ function visitOf(a: DominionAction): string | null {
 }
 
 /** Rest heals the Boss's team for free (Part 1 §2.1). */
-function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null } {
+function stepInner(content: Content, run: RunState, action: DominionAction): StepOut & { run: RunState; fight?: boolean; roll?: Roll | null; bits?: string[] } {
   const block = run.expansion?.dominion;
   if (!block) return { ok: false, block: block as never, notice: null, heal: false, run };
   // D24: while the police question someone, only answers go through.
@@ -340,7 +340,7 @@ function snatchInRun(content: Content, run: RunState, action: DominionAction): (
 }
 
 /** D9: the Rival File's answers (rivals.ts). A fight answered leaves `field.fight` for the scene to start. */
-function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: RunState; fight?: boolean }) | null {
+function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: RunState; fight?: boolean; roll?: Roll | null; bits?: string[] }) | null {
   const b = run.expansion!.dominion!;
   let out: RivalOut;
   switch (action.t) {
@@ -358,7 +358,8 @@ function rivalInRun(run: RunState, action: DominionAction): (StepOut & { run: Ru
   }
   if (!out.ok) return { ok: false, block: b, notice: out.notice, heal: false, run };
   const next = withBlock(run, DominionBlockSchema.parse(out.block));
-  return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight };
+  const extra = out as { roll?: Roll | null; bits?: string[] };
+  return { ok: true, block: next.expansion!.dominion!, notice: out.notice, heal: false, run: next, fight: out.fight, roll: extra.roll ?? null, bits: extra.bits };
 }
 
 /** D5: the HQ menu (hq.ts). The upgrade needs the run for the region's level cap (the Citadel's). */

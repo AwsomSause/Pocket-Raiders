@@ -25,7 +25,8 @@ import { mini, tall } from '../ui/redux/kit';
 import { monFile } from '../ui/redux/game';
 import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
-import { bossPic, facePic, r5Hub, r5Party, r5Run, R5StartMenu } from './dominion/r50Bridge';
+import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
+import { EventPages } from './dominion/r6Events';
 import { CrewController } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
@@ -108,6 +109,8 @@ export class DominionScene extends Phaser.Scene {
   private foundingFrom: Screen = 'hq';
   private foundedShown = 1;
   private res = new ReserveController(this);
+  /** R6: a street meeting played as an event (Talk, Choose, Result, Reward, the Text log). */
+  private ev = this.newEvents();
   /** D5: the HQ menu (mockup 6). */
   private hq = new HqController(this);
   /** D11: where the Hero's file (H) goes back to, and the m11 choice under the cursor. */
@@ -172,6 +175,7 @@ export class DominionScene extends Phaser.Scene {
     this.foundedShown = 1;
     this.hq = new HqController(this);
     this.res = new ReserveController(this);
+    this.ev = this.newEvents();
     this.rival = new RivalController(this);
     this.tk = new TakeoverController(this);
     this.em = new EmpireController(this);
@@ -273,8 +277,8 @@ export class DominionScene extends Phaser.Scene {
         bring: () => this.bring(),
         opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
-        townMeet: (i) => this.answerMeet(Number(i)),
-        dismiss: () => { this.notice = null; this.rival.dismiss(); this.debate.dismiss(); this.spy.dismiss(); this.tk.dismiss(); this.em.dismiss(); this.pt.dismiss(); this.view?.refresh(); },
+        ...this.ev.acts(),
+        dismiss: () => { this.notice = null; this.res.dismiss(); this.rival.dismiss(); this.debate.dismiss(); this.spy.dismiss(); this.tk.dismiss(); this.em.dismiss(); this.pt.dismiss(); this.view?.refresh(); },
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
         founding: () => this.openFounding(),
@@ -328,6 +332,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.crew.overs(),
         ...this.chair.overs(),
         ...this.res.overs(),
+        ...this.ev.overs(),
         ...this.rival.overs(),
         ...this.spy.overs(),
         ...this.tk.overs(),
@@ -373,6 +378,8 @@ export class DominionScene extends Phaser.Scene {
       if (this.inRun() && this.police.raw(e)) return;
       // D23: the questioning room reads its keys next (typing included).
       if (this.inRun() && this.snatch.raw(e)) return;
+      // R6: a street event reads L (its Text log) and 1-9 (answers) first.
+      if (this.inRun() && this.ev.raw(e.code)) return;
       if (this.screen === 'founding') return;
       if (this.screen === 'setup') return void (e.code === 'KeyC' && this.openCharters());
       if (this.debate.raw(e.code, e)) return;
@@ -717,6 +724,8 @@ export class DominionScene extends Phaser.Scene {
     if (id === 'set' || id === 'options') { this.menu.openSettings(); return void this.view?.refresh(); }
     if ((id === 'war' || id === 'rival' || id === 'rivals') && this.screen === 'hq') return void (this.rival.open() && this.view?.refresh());
     if (id === 'herotrack' && b.hero) return this.openHero();
+    // R6: the party chip, the Start menu's Bag and the Summary are pages of the Pokémon tab.
+    if (id === 'party' || id === 'summary' || id === 'bag') { this.notice = null; this.res.openPage(id); return void this.view?.refresh(); }
     if (id === 'save') { this.notice = 'Saved. Dominion saves every step.'; return void this.view?.refresh(); }
     if (id === 'base' && this.screen === 'hq') { this.hq.open(); return void this.view?.refresh(); }
   }
@@ -759,6 +768,7 @@ export class DominionScene extends Phaser.Scene {
         if (b && this.crew.owns()) return this.crew.render(this.notice);
         return b ? this.hqPage(b) : '';
       case 'map':
+        if (b && this.ev.owns()) return this.ev.render();
         return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage, this.meetPanel()) : '';
       case 'card': {
         const c = b && this.cursor ? this.cardOf() : null;
@@ -1006,6 +1016,7 @@ export class DominionScene extends Phaser.Scene {
       if (a === 'confirm') return this.heroCta();
       return;
     }
+    if (this.ev.key(a)) return void this.view?.refresh();
     if (this.chair.key(a)) return void this.view?.refresh();
     if (this.sq.key(a)) return void this.view?.refresh();
     if (this.res.key(a)) return void this.view?.refresh();
@@ -1591,6 +1602,11 @@ export class DominionScene extends Phaser.Scene {
     // D27 x D30: with job moments on, the Day can only end itself once the result page closes.
     this.autoEnd();
     this.view?.refresh();
+  }
+
+  /** R6: the event pages' host (the street meeting). */
+  private newEvents(): EventPages {
+    return new EventPages(this, { refresh: () => this.view?.refresh(), fight: () => this.fight('map'), block: () => this.block() ?? null, onMap: () => this.screen === 'map' && this.inRun() });
   }
 
   /** D6b: the street meeting waiting on the map, drawn as a panel. */
