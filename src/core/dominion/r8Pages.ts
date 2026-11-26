@@ -34,7 +34,8 @@ export function queueModel(b: DominionBlock): QueueModel | null {
 
 // ---------- the favour ledger ----------
 
-export interface FavourRow { name: string; look: string; why: string; size: 'Favour' | 'Grudge' | 'Deal'; colour: string }
+/** `who` is the tag's key on a Favour (what Call it in spends); null on Grudges and deals. */
+export interface FavourRow { name: string; look: string; why: string; size: 'Favour' | 'Grudge' | 'Deal'; colour: string; who: string | null }
 export interface FavoursModel { owe: FavourRow[]; owed: FavourRow[] }
 
 /** The card a tag came from: the last one seen whose answers tag that person. */
@@ -58,7 +59,7 @@ export function favoursModel(b: DominionBlock): FavoursModel {
     const src = tagCard(b, who, m);
     const f = m ? { name: m.name, look: m.look } : src ? face(b, src.c, null) : { name: who, look: '' };
     const row: FavourRow = {
-      name: f.name, look: f.look, size: tag === 'favour' ? 'Favour' : 'Grudge', colour: tag === 'favour' ? '#4caf50' : '#9a4fd0',
+      name: f.name, look: f.look, size: tag === 'favour' ? 'Favour' : 'Grudge', colour: tag === 'favour' ? '#4caf50' : '#9a4fd0', who: tag === 'favour' ? who : null,
       why: src ? `${tag === 'favour' ? 'You chose' : 'You said'}: ${unquote(src.label)}` : tag === 'favour' ? 'Owes you one' : 'Holds it against you',
     };
     (tag === 'favour' ? owe : owed).push(row);
@@ -67,7 +68,7 @@ export function favoursModel(b: DominionBlock): FavoursModel {
     const c = cardById(d.card);
     if (!c || !d.n) continue;
     const f = face(b, c, null);
-    const row: FavourRow = { name: f.name, look: f.look, size: 'Deal', colour: '#c9a24a', why: `${d.n > 0 ? 'Pays you' : 'You pay'} ₽${Math.abs(d.n).toLocaleString('en-US')} a week` };
+    const row: FavourRow = { name: f.name, look: f.look, size: 'Deal', colour: '#c9a24a', who: null, why: `${d.n > 0 ? 'Pays you' : 'You pay'} ₽${Math.abs(d.n).toLocaleString('en-US')} a week` };
     (d.n > 0 ? owe : owed).push(row);
   }
   return { owe, owed };

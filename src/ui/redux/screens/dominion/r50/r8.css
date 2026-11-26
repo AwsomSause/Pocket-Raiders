@@ -39,3 +39,6 @@
 #rx #r5 :is(.k-jo37,.k-sail22,.k-tk48,.k-wd22,.k-uw31,.k-gy44,.k-hi30,.k-q19,.k-fv19,.k-nt15,.k-res,.k-ch19) .foot p{white-space:normal;overflow-wrap:anywhere;line-height:1.2}
 /* Sail: the who-comes and order chips sit on their row, beside the label. */
 #rx #r5 .carry22 .chg .bc8{grid-column:3}
+/* Call it in: the picked Favour on the ledger */
+#rx #r5 .fv.on{box-shadow:inset 0 0 0 2px var(--yel)}
+#rx #r5 .fv .cta{margin-left:auto;flex:none}

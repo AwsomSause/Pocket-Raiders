@@ -149,19 +149,24 @@ export function r5Queue(m: QueueModel, x: { at: number; pics: R5Pics; who: { nam
 
 // ---------- the favour ledger (mockup `favours`) ----------
 
-function fv(r: FavourRow, i: number, pics: R5Pics): string {
+function fv(r: FavourRow, i: number, pics: R5Pics, on = false): string {
   const cls = r.size === 'Grudge' ? 'grudge' : r.size === 'Deal' ? 'big' : 'small';
-  return `<div class="fv" style="--i:${i};--d:${i * 60}ms" data-testid="r8-favour">${faceOf(pics.face(r.look, 38), 38, r.colour)}<span class="row-t"><b>${esc(r.name)}</b><em>${esc(r.why)}</em></span><i class="sz ${cls}">${esc(r.size)}</i></div>`;
+  const call = r.who ? `<button class="cta" ${go('r8CallIn', i)} data-testid="r8-callin-${i}">Call it in</button>` : '';
+  return `<div class="fv${on ? ' on' : ''}" style="--i:${i};--d:${i * 60}ms" data-testid="r8-favour">${faceOf(pics.face(r.look, 38), 38, r.colour)}<span class="row-t"><b>${esc(r.name)}</b><em>${esc(r.why)}</em></span><i class="sz ${cls}">${esc(r.size)}</i>${call}</div>`;
 }
 
-export function r5Favours(m: FavoursModel, x: { pics: R5Pics; who: { name: string; pic: string; colour: string } | null }, run: R5Run): string {
+/** The favour ledger. A Favour (a row with `who`) can be called in once: Enter on the picked row, or its button. */
+export function r5Favours(m: FavoursModel, x: { pics: R5Pics; who: { name: string; pic: string; colour: string } | null; at?: number; notice?: string | null }, run: R5Run): string {
   const none = (t: string): string => `<div class="fv"><span class="row-t"><b>Nobody yet</b><em>${esc(t)}</em></span></div>`;
-  const body = pn('fo19', 'They owe you', map(m.owe.slice(0, 5), (r, i) => fv(r, i, x.pics)) || none('Grant a favour at the Chair and they will owe you.'), 'panel')
+  const at = x.at ?? -1;
+  const body = pn('fo19', 'They owe you', map(m.owe.slice(0, 5), (r, i) => fv(r, i, x.pics, i === at && !!r.who)) || none('Grant a favour at the Chair and they will owe you.'), 'panel')
     + pn('fd19', 'You owe them', map(m.owed.slice(0, 5), (r, i) => fv(r, i, x.pics)) || none('Nobody holds a Grudge. Yet.'), 'det');
-  const big = m.owe[0];
-  const line = big ? `“${big.name} owes us. Save it for when the Hero comes.”` : m.owed[0] ? `“${m.owed[0].name} won’t forget, Boss. Watch your back.”` : '“Nobody owes anybody yet, Boss.”';
+  const big = m.owe.find((r) => r.who) ?? m.owe[0];
+  const line = x.notice ?? (big ? `“${big.name} owes us. Save it for when the Hero comes.”` : m.owed[0] ? `“${m.owed[0].name} won’t forget, Boss. Watch your back.”` : '“Nobody owes anybody yet, Boss.”');
+  const can = m.owe.some((r) => r.who);
   return frame({ id: 'favours', g: 'The Chair', kind: 'fv19', bg: 'chair', top: { title: 'Favour ledger', icon: 'g-card-key', sub: 'Who owes whom', crumb: ['HQ', 'hq'] }, body, run,
-    who: x.who, line, ctas: [['Back', 'r8FavoursBack', '', 'r8-favours-back']], keys: [['↑↓', 'favour'], ['Esc', 'back']] });
+    who: x.notice ? null : x.who, line, ctas: [['Back', 'r8FavoursBack', '', 'r8-favours-back']], footOpts: x.notice ? { testid: 'dom-notice' } : {},
+    keys: can ? [['↑↓', 'favour'], ['Enter', 'call it in'], ['Esc', 'back']] : [['Esc', 'back']] });
 }
 
 export { spr };

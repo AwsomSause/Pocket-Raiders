@@ -37,6 +37,8 @@ export class ChairController {
   /** Redesign R8: the waiting room (V) or the favour ledger (F) over the visitor, and the bench's cursor. */
   private side: 'queue' | 'favours' | null = null;
   private qAt = 0;
+  /** The favour ledger's cursor (a row of "They owe you"). */
+  private fAt = 0;
 
   constructor(private readonly host: Host) {}
 
@@ -61,7 +63,7 @@ export class ChairController {
     const { run, pics } = r;
     const who = chairVoice(b);
     if (m.kind !== 'visitor' || m.result) this.side = null;
-    if (this.side === 'favours') return r5Favours(favoursModel(b), { pics, who }, run);
+    if (this.side === 'favours') return r5Favours(favoursModel(b), { pics, who, at: this.fAt, notice }, run);
     if (this.side === 'queue') {
       const q = queueModel(b);
       if (q) return r5Queue(q, { at: this.qAt, pics, who, team: b.teamName ?? 'Your crew' }, run);
@@ -79,7 +81,17 @@ export class ChairController {
   private openSide(s: 'queue' | 'favours' | null): void {
     this.side = s;
     if (s === 'queue') this.qAt = 0;
+    if (s === 'favours') this.fAt = Math.max(0, favoursModel(this.block()!).owe.findIndex((r) => r.who));
+    this.host.setNotice(null);
     this.host.refresh();
+  }
+
+  /** Call it in: spend the Favour on that row of the ledger (it stays open to show what came back). */
+  private callIn(i: number): void {
+    const row = favoursModel(this.block()!).owe[i];
+    this.fAt = i;
+    if (!row?.who) return this.host.refresh();
+    this.host.step({ t: 'callIn', who: row.who });
   }
 
   private go(a: DominionAction): void {
@@ -137,6 +149,7 @@ export class ChairController {
       r8QueueClose: () => this.openSide(null),
       r8Favours: () => this.openSide('favours'),
       r8FavoursBack: () => this.openSide('queue'),
+      r8CallIn: (i) => this.callIn(Number(i)),
     };
   }
   overs(): Record<string, (arg: string) => void> {
@@ -177,7 +190,11 @@ export class ChairController {
   key(a: InputAction): boolean {
     if (!this.owns()) return false;
     if (this.side === 'favours') {
-      if (a === 'back' || a === 'confirm') this.side = 'queue';
+      const owe = favoursModel(this.block()!).owe;
+      const n = owe.length;
+      if ((a === 'up' || a === 'down') && n) this.fAt = (this.fAt + (a === 'up' ? n - 1 : 1)) % n;
+      else if (a === 'confirm' && owe[this.fAt]?.who) this.callIn(this.fAt);
+      else if (a === 'confirm' || a === 'back') this.openSide('queue');
       return true;
     }
     if (this.side === 'queue') {
