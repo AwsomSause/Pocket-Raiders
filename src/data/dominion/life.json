@@ -1,0 +1,116 @@
+{
+  "_source": "Dominion redesign R6 (pass 50 mockups clinic, care, festival, prize, blackout, chapter; redesign-50 passes 34, 39, 40, 41). The Region Event is 01_START_AND_THE_DAY.md §2.2 ('Monthly: a Region Event ... opens one special action for a few days'). Simple rules picked for the build while Kice was away (2026-11-21).",
+  "clinic": {
+    "perPct": 5,
+    "round": 5,
+    "fainted": 200,
+    "status": 50,
+    "doctor": "Doctor",
+    "sprite": "t-sci",
+    "lines": {
+      "ask": "“{n} Pokémon, ₽{cost}, cash. I never saw your faces.”",
+      "askOne": "“{mon}? ₽{cost}, cash. I never saw your face.”",
+      "fine": "“They’re all fine. Come back when someone bleeds.”",
+      "healed": "The Doctor patches up {who}: −₽{cost}.",
+      "broke": "Not enough money: that costs ₽{cost}.",
+      "low": "{mon} is at {hp}%.",
+      "allFine": "Everyone’s at full health."
+    }
+  },
+  "care": {
+    "tools": [
+      { "id": "brush", "name": "Brush", "icon": "i-soothe_bell", "friendship": 3, "cost": 0, "line": "“There. Shiny as a Moon Stone.”" },
+      { "id": "puff", "name": "Poké Puff", "icon": "i-candy", "friendship": 10, "cost": 100, "line": "“Good {mon}. You earned this one.”" },
+      { "id": "play", "name": "Play", "icon": "g-ball", "friendship": 5, "cost": 0, "line": "“Go on, fetch. Nobody’s watching.”" }
+    ],
+    "flavours": { "atk": "Spicy", "def": "Citrus", "spa": "Mint", "spd": "Mocha", "spe": "Sweet" },
+    "lines": {
+      "done": "{mon} likes that: friendship +{n}.",
+      "already": "{mon} has had its care today. Tomorrow.",
+      "fainted": "{mon} has fainted. The Clinic first.",
+      "broke": "A Poké Puff costs ₽{cost}.",
+      "ask": "“Who’s a good {mon}?”",
+      "moodCared": "Pleased",
+      "moodFainted": "Fainted",
+      "moodHurt": "Hurting",
+      "moodFine": "Content",
+      "fedToday": "Today",
+      "fedYesterday": "Yesterday",
+      "fedDays": "{n} days ago",
+      "fedNever": "Not yet",
+      "bonusTop": "Friendship evolutions are open",
+      "bonusLoaf": "May loaf around in battle",
+      "bonusMid": "Return grows with each heart",
+      "favourite": "{flavour} Poké Puffs",
+      "favouriteAny": "Any Poké Puff"
+    }
+  },
+  "events": {
+    "first": 14,
+    "every": 28,
+    "lasts": 3,
+    "list": ["festival", "blackout"],
+    "checkBase": 30,
+    "checkPer": 8
+  },
+  "festival": {
+    "name": "Fireworks Night",
+    "districts": ["celadon", "saffron", "vermilion"],
+    "line": "“Everybody’s looking up, Boss. Nobody’s watching their wallets.”",
+    "tip": "Crowds mean cover.",
+    "jobs": [
+      { "id": "pickpocket", "name": "Pickpocket the crowd", "stat": "stealth", "bonus": 10, "money": 900, "heat": 3, "failHeat": 8, "note": "Crowds give cover" },
+      { "id": "stall", "name": "Rob the fireworks stall", "stat": "brawn", "bonus": 0, "money": 1400, "heat": 8, "failHeat": 12, "note": "Loud but quick" },
+      { "id": "porygon", "name": "Swap the prize Porygon", "stat": "wits", "bonus": -10, "mon": "porygon", "level": 20, "heat": 4, "failHeat": 10, "note": "Game Corner prize room" }
+    ]
+  },
+  "blackout": {
+    "name": "Blackout",
+    "districts": ["celadon", "saffron", "vermilion"],
+    "line": "“Every alarm in {district} just died. We have {days}. Pick one.”",
+    "tip": "Dark buildings: alarms are off.",
+    "darkBonus": 25,
+    "targets": [
+      { "id": "store", "name": "{district} Dept. Store", "note": "Alarms off · power out", "dark": true, "stat": "stealth", "money": 1600, "heat": 6, "failHeat": 12, "sprite": "tw-mart2" },
+      { "id": "corner", "name": "Game Corner", "note": "Back-up power · cameras on", "dark": false, "stat": "wits", "money": 2400, "heat": 10, "failHeat": 18, "sprite": "tw-eventhall" },
+      { "id": "mansion", "name": "{district} Mansion", "note": "Lift stuck · doors open", "dark": true, "stat": "nerve", "money": 1200, "heat": 4, "failHeat": 10, "sprite": "tw-bank" }
+    ]
+  },
+  "jobLines": {
+    "passed": "It works.",
+    "missed": "It goes wrong.",
+    "over": "That’s over for this time.",
+    "notNow": "Nothing special is on today.",
+    "nobody": "Nobody in the crew is free for it."
+  },
+  "coins": {
+    "pack": 50,
+    "price": 1000,
+    "district": "celadon",
+    "line": "“Or we skip the coins and just take the {prize}. Tonight.”",
+    "swapStat": "stealth",
+    "swapBonus": -20,
+    "swapHeat": 10,
+    "prizes": [
+      { "id": "porygon", "name": "Porygon", "species": "porygon", "level": 20, "coins": 9999 },
+      { "id": "dratini", "name": "Dratini", "species": "dratini", "level": 15, "coins": 4600 },
+      { "id": "rare-candy", "name": "Rare Candy", "item": "rare-candy", "coins": 1200 },
+      { "id": "amulet-coin", "name": "Amulet Coin", "item": "amulet-coin", "coins": 3000 }
+    ],
+    "lines": {
+      "bought": "{n} coins for ₽{cost}.",
+      "broke": "Not enough money: {n} coins cost ₽{cost}.",
+      "few": "Not enough coins: the {prize} costs {coins}.",
+      "traded": "{coins} coins for the {prize}.",
+      "swapped": "The {prize} walks out under a coat. Nobody saw a thing.",
+      "caught": "The guard sees the swap: Heat +{heat}.",
+      "swapDone": "One swap a day. The guards are watching now."
+    }
+  },
+  "chapters": [
+    { "n": 1, "title": "Humble Beginnings", "line": "A warehouse, two Pokémon and a lot of nerve.", "when": "start", "at": 0 },
+    { "n": 2, "title": "A Name on the Door", "line": "{region} learns what to call you.", "when": "founded", "at": 0 },
+    { "n": 3, "title": "Making Noise", "line": "The papers start printing your colours.", "when": "peak", "at": 3 },
+    { "n": 4, "title": "The Siege", "line": "{region} falls, or you do.", "when": "peak", "at": 5 }
+  ]
+}

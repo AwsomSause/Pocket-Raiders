@@ -375,6 +375,8 @@ const BlockSchema = z.object({
   tut: z.object({ mode: z.enum(['full', 'tips', 'off']), seen: z.array(S) }).strict().optional(),
   /** Redesign R4 (jobs.ts): the calling card, the battle album, power gear. Optional; `jobxOf` fills it; no bump. */
   jobx: z.lazy(() => JobXStateSchema).optional(),
+  /** R6: care, Game Corner coins, Region Events done and seen, the chapter card shown (life.ts). Optional; no bump. */
+  life: z.lazy(() => LifeStateSchema).optional(),
 }).strict();
 export const DominionBlockSchema = z.preprocess(migrateDominion, BlockSchema);
 export type DominionBlock = z.infer<typeof BlockSchema>;
@@ -434,6 +436,13 @@ export type DominionAction =
   | { t: 'where'; member: string; district: string }
   // D6b: the answer to a street meeting (town.ts)
   | { t: 'townMeet'; choice: number }
+  // R6 (life.ts): the back-alley Clinic (one Pokémon by uid, or null for all), Care time, a Region Event's one special
+  // action (null lets it pass), the Prize Corner, and the chapter card read.
+  | { t: 'clinic'; uid: string | null }
+  | { t: 'care'; uid: string; tool: string }
+  | { t: 'regionEv'; id: string | null }
+  | { t: 'prize'; op: 'buy' | 'trade' | 'swap'; id?: string }
+  | { t: 'chapter' }
   // D12, the Chair: answer the visitor (0 or 1), hand the card to a member, read on, close the doors, the settings
   | { t: 'court'; choice: number }
   | { t: 'handOff'; member: string }
@@ -2936,3 +2945,48 @@ export type DomChartersFile = z.infer<typeof DomChartersFileSchema>;
 /** The Ledger across all days (Part 5 §7): funds after each night, from run day `from`, one point per `step` days. */
 export const AnnalsSchema = z.object({ from: I.min(1), step: I.min(1), funds: z.array(I).max(720), /** Collapses (Part 5 §8). */ falls: N0.optional() }).strict();
 export type Annals = z.infer<typeof AnnalsSchema>;
+
+// ---------- R6: the Clinic, Care time, Region Events, the Prize Corner and chapters (life.json, life.ts) ----------
+
+const LifeCheckSchema = { stat: z.enum(STAT_IDS), heat: N0, failHeat: N0 };
+export const LifeFileSchema = z.object({
+  _source: S,
+  clinic: z.object({ perPct: N0, round: I.min(1), fainted: N0, status: N0, doctor: S, sprite: S, lines: z.record(S, S) }).strict(),
+  care: z.object({
+    tools: z.array(z.object({ id: S, name: S, icon: S, friendship: N0, cost: N0, line: S }).strict()).min(1),
+    flavours: z.record(S, S),
+    lines: z.record(S, S),
+  }).strict(),
+  events: z.object({ first: I.min(1), every: I.min(1), lasts: I.min(1), list: z.array(z.enum(['festival', 'blackout'])).min(1), checkBase: N0, checkPer: N0 }).strict(),
+  festival: z.object({
+    name: S, districts: z.array(S).min(1), line: S, tip: S,
+    jobs: z.array(z.object({ id: S, name: S, bonus: I, money: N0.optional(), mon: S.optional(), level: I.min(1).optional(), note: S, ...LifeCheckSchema }).strict()).min(1),
+  }).strict(),
+  blackout: z.object({
+    name: S, districts: z.array(S).min(1), line: S, tip: S, darkBonus: N0,
+    targets: z.array(z.object({ id: S, name: S, note: S, dark: z.boolean(), money: N0, sprite: S, ...LifeCheckSchema }).strict()).min(1),
+  }).strict(),
+  jobLines: z.record(S, S),
+  coins: z.object({
+    pack: I.min(1), price: I.min(1), district: S, line: S, swapStat: z.enum(STAT_IDS), swapBonus: I, swapHeat: N0,
+    prizes: z.array(z.object({ id: S, name: S, species: S.optional(), level: I.min(1).optional(), item: S.optional(), coins: I.min(1) }).strict()
+      .refine((p) => !!p.species !== !!p.item, 'a prize is a Pokémon or an item')).min(1),
+    lines: z.record(S, S),
+  }).strict(),
+  chapters: z.array(z.object({ n: I.min(1), title: S, line: S, when: z.enum(['start', 'founded', 'peak']), at: N0 }).strict()).min(1),
+}).strict();
+export type LifeFile = z.infer<typeof LifeFileSchema>;
+
+export const LifeStateSchema = z.object({
+  /** Pokémon uid -> the day it last had its care, and the day it last had a Poké Puff. */
+  care: z.record(S, z.object({ day: N0, fed: N0.nullable() }).strict()),
+  coins: N0,
+  /** The day of the last Prize Corner swap (one a day). */
+  swapDay: N0,
+  /** Region Events (their keys) whose one special action is used or let pass, and the ones whose page has opened. */
+  done: z.array(S),
+  seen: z.array(S),
+  /** The last chapter card shown. */
+  chapter: N0,
+}).strict();
+export type LifeState = z.infer<typeof LifeStateSchema>;

@@ -10,7 +10,7 @@ import type { DominionBlock, Member } from '../../core/dominion/schema';
 import { DOMINION_DATA } from '../../core/dominion/data';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
-import { LOG_ROWS, r5EvChoose, r5EvLog, r5EvResult, r5EvReward, r5EvTalk, type R5Actor, type R5EvChoice, type R5RewardCard, type R5Said } from '../../ui/redux/screens/dominion/r50/events';
+import { LOG_ROWS, r5EvChoose, r5Press, r5EvLog, r5EvResult, r5EvReward, r5EvTalk, type R5Actor, type R5EvChoice, type R5RewardCard, type R5Said } from '../../ui/redux/screens/dominion/r50/events';
 import { PCOL } from '../../ui/redux/screens/dominion/r50/kit';
 import { facePic, r5Run } from './r50Bridge';
 import { personPic } from './r6Pokemon';
@@ -33,8 +33,11 @@ const WHO: readonly [RegExp, string][] = [
 ];
 export const whoSprite = (who: string): string => WHO.find(([re]) => re.test(who))?.[1] ?? 't-applicant';
 
+/** A media meeting (outside.json section J: a reporter, a camera crew, the radio) is asked on camera: the press page. */
+export const isPress = (m: Pick<MeetModel, 'section' | 'who'>): boolean => m.section === 'J' && /reporter|camera|radio|spokes|news|editor|columnist|pollster/i.test(m.who);
+
 const STAT_WORD = (s: string): string => s[0]!.toUpperCase() + s.slice(1);
-const nice = (s: string): string => s.replace(/\bRg\b/g, 'Regard').replace(/\bDr\b/g, 'Dread').replace(/\bH([+−-])/g, 'Heat $1').replace(/₽([+−-])/g, '$1₽').replace(/\s+/g, ' ').trim();
+const nice = (s: string): string => s.replace(/\bRg\b\s*/g, 'Regard ').replace(/\bDr\b\s*/g, 'Dread ').replace(/\bH([+−-])/g, 'Heat $1').replace(/₽([+−-])/g, '$1₽').replace(/\s+/g, ' ').trim();
 
 /** A reward line from the answer ("Regard +3", "+₽80", "a new lead") as a card. */
 function card(bit: string): R5RewardCard {
@@ -76,7 +79,8 @@ export class EventPages {
   }
 
   private begin(b: DominionBlock, m: MeetModel): void {
-    this.beat = 'talk';
+    // The press asks its question and waits for the answer on one page (mockup `press`).
+    this.beat = isPress(m) ? 'choose' : 'talk';
     this.meet = m;
     this.at = 0;
     this.log = false;
@@ -131,6 +135,11 @@ export class EventPages {
       return r5EvLog({ lines: this.said, first: this.logFirst, where: `Street event · ${m.district}` }, run);
     }
     if (this.beat === 'talk') return r5EvTalk({ left, right: this.crew(b), line: m.what }, run);
+    if (this.beat === 'choose' && isPress(m)) {
+      const ask = this.problem ?? (DOMINION_DATA.town.lines.pressAsk ?? '{what}').replace('{district}', m.district).replace('{what}', m.what);
+      const fx = (c: string): string => nice(/\((.*)\)/.exec(c)?.[1] ?? '');
+      return r5Press({ left: this.boss(), right: { ...left, sub: m.district }, line: ask, choices: m.choices.map((c) => ({ label: c.replace(/\s*\(.*$/, '').trim(), fx: fx(c) })), at: this.at }, run);
+    }
     if (this.beat === 'choose') {
       const crew = this.crew(b);
       const line = this.problem ?? DOMINION_DATA.town.lines.crewSays ?? 'Your call, Boss.';

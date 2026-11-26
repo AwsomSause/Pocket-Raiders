@@ -20,7 +20,8 @@
   "spyGone": "a rival spy loses your trail",
   "pick": "Pick with ▲ ▼, answer with Enter",
   "needRally": "Needs a rally first (Hold a Rally).",
-    "crewSays": "Your call, Boss."
+    "crewSays": "Your call, Boss.",
+    "pressAsk": "“Boss! A word for {district}? {what}, and the cameras are rolling.”"
  },
  "rows": {
   "O001": [{ "rg": 3 }, { "money": 80, "h": 1 }, { "lead": true }],

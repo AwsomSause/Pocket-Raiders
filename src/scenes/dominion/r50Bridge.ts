@@ -17,6 +17,7 @@ import { pngSrc, tallTeam } from '../../ui/redux/screens/dominion/teamPic';
 import { START_ITEMS, type R5HubExtras } from '../../ui/redux/screens/dominion/r50/hub';
 import { R5_SIZES } from '../../ui/redux/screens/dominion/r50/sizes';
 import { r5RunOf, type R5PartyMon } from '../../ui/redux/screens/dominion/r50/run';
+import { eventOpen, regionEvent } from '../../core/dominion/life';
 import { SP, type R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 
 /** Tabs open on the HQ (Jobs opens the Job board, redesign R4). */
@@ -32,7 +33,9 @@ export function r5Party(scene: Phaser.Scene): R5PartyMon[] {
 }
 
 export function r5Run(scene: Phaser.Scene, b: DominionBlock): R5Run {
-  return r5RunOf(b, r5Party(scene), { open: R5_OPEN_TABS });
+  // R6: the top bar's festival lantern while a Region Event's action is open.
+  const ev = regionEvent(b);
+  return { ...r5RunOf(b, r5Party(scene), { open: R5_OPEN_TABS }), ...(eventOpen(b, ev) ? { festival: ev.name } : {}) };
 }
 
 /** A face picture: a png look (team-coloured when the team is founded) or a trainer atlas, cropped to the head. */

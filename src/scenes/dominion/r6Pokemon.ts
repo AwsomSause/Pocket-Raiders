@@ -17,6 +17,9 @@ import { rxFileOf, rxUrl } from '../../ui/redux/assets';
 import { monFile } from '../../ui/redux/game';
 import { mini } from '../../ui/redux/kit';
 import { pngSrc, tallTeam } from '../../ui/redux/screens/dominion/teamPic';
+import { r5Care, r5Clinic } from '../../ui/redux/screens/dominion/r50/life';
+import { careModel, clinicCost } from '../../core/dominion/life';
+import { DOMINION_DATA } from '../../core/dominion/data';
 import { r5Bag, r5Give, r5Party, r5Summary, type R5BagItem, type R5GiveView, type R5ReserveView } from '../../ui/redux/screens/dominion/r50/pokemon';
 import { SP, type R5Run, type R5Speaker } from '../../ui/redux/screens/dominion/r50/kit';
 import { facePic, r5Run } from './r50Bridge';
@@ -107,7 +110,7 @@ export { r5Give };
 
 // ---------- the Party, the Summary and the Bag ----------
 
-type Page = 'party' | 'summary' | 'bag';
+type Page = 'party' | 'summary' | 'bag' | 'clinic' | 'care';
 
 const hpPct = (m: PokemonInstance): number => Math.round((m.hp / Math.max(1, maxHp(services().session.content, m))) * 100);
 
@@ -120,6 +123,8 @@ export class PokemonPages {
   /** An item from the Bag waiting for a Pokémon to use it on. */
   private using: string | null = null;
   private notice: string | null = null;
+  /** Care time's tool (Brush, Poké Puff, Play). */
+  private tool = 1;
 
   constructor(private readonly scene: Phaser.Scene, private readonly host: { refresh(): void; toReserve(): void; block(): DominionBlock | null }) {}
 
@@ -128,7 +133,12 @@ export class PokemonPages {
     this.swap = null;
     this.using = null;
     this.notice = null;
-    if (p !== 'summary') this.at = 0;
+    if (p === 'clinic') {
+      // The Clinic opens on whoever is hurt worst.
+      const party = this.party();
+      const worst = party.map((m, i) => ({ i, hp: hpPct(m) })).sort((a, c) => a.hp - c.hp)[0];
+      this.at = worst?.i ?? 0;
+    } else if (p !== 'summary' && p !== 'care') this.at = 0;
   }
   close(): void { this.page = null; this.using = null; this.swap = null; this.notice = null; }
 
@@ -163,6 +173,8 @@ export class PokemonPages {
       return r5Bag({ pocket: p ? POCKET_NAMES[p.id] : 'Items', pockets: Math.max(1, ps.length), pocketAt: this.pocketAt, items, at: this.item, initial: run.initial ?? 'N', notice: this.notice }, run);
     }
     this.at = Math.min(this.at, Math.max(0, party.length - 1));
+    if (this.page === 'clinic') return this.clinic(b, run, party);
+    if (this.page === 'care') return this.care(b, run, party);
     if (this.page === 'summary') {
       const mon = party[this.at];
       if (!mon) return '';
@@ -193,11 +205,66 @@ export class PokemonPages {
     return r5Party({ mons, at: this.at, swap: this.swap, using: useName, speaker: rotom, line, notice: this.notice }, run);
   }
 
+  private nameOf(m: PokemonInstance): string {
+    return m.care?.nickname || (services().session.content.species.get(m.speciesId)?.name ?? monName(m.speciesId));
+  }
+
+  /** The back-alley Clinic (mockup `clinic`): what each Pokémon costs to patch up, the worst one first on the tip. */
+  private clinic(b: DominionBlock, run: R5Run, party: PokemonInstance[]): string {
+    const content = services().session.content;
+    const C = DOMINION_DATA.life.clinic;
+    const costs = party.map((m) => clinicCost(content, m));
+    const total = costs.reduce((x, y) => x + y, 0);
+    const need = costs.filter((c) => c > 0).length;
+    const rows = party.map((m, i) => ({ name: this.nameOf(m), pic: monPic(this.scene, m.speciesId, 36, !!m.shiny), hp: hpPct(m), price: costs[i]! > 0 ? `₽${costs[i]!.toLocaleString('en-US')}` : 'Fine' }));
+    const worst = rows.map((r, i) => ({ r, i })).sort((a, c) => a.r.hp - c.r.hp)[0];
+    const sel = party[this.at];
+    const line = need === 0 ? C.lines.fine! : C.lines.ask!.replace('{n}', String(need)).replace('{cost}', total.toLocaleString('en-US'));
+    const tip = worst && worst.r.hp < 100 ? C.lines.low!.replace('{mon}', worst.r.name).replace('{hp}', String(worst.r.hp)) : C.lines.allFine!;
+    return r5Clinic({
+      rows, at: this.at, doctor: { name: C.doctor, k: C.sprite }, doc: SP(C.sprite, 120), line,
+      just: need && sel && costs[this.at]! > 0 ? this.nameOf(sel) : null, notice: this.notice,
+    }, { ...run, tip, place: 'Back alley' });
+  }
+
+  /** Care time (mockup `care`): one Pokémon, three tools, its friendship as hearts. */
+  private care(b: DominionBlock, run: R5Run, party: PokemonInstance[]): string {
+    const content = services().session.content;
+    const mon = party[this.at];
+    if (!mon) return '';
+    const L = DOMINION_DATA.life.care;
+    const tools = L.tools;
+    this.tool = Math.min(this.tool, tools.length - 1);
+    const t = tools[this.tool]!;
+    const m = careModel(content, b, mon);
+    const name = this.nameOf(mon);
+    const line = (m.caredToday ? t.line : L.lines.ask!).replace('{mon}', name);
+    const cta = t.id === 'puff' ? `Give a ${t.name}` : t.id === 'brush' ? 'Brush it' : t.name;
+    return r5Care({
+      name, pic: monPic(this.scene, mon.speciesId, 190, !!mon.shiny), tools: tools.map((x) => ({ name: x.name, icon: x.icon })), tool: this.tool,
+      hearts: m.hearts, rows: [['Mood', m.mood], ['Last fed', m.fed], ['Bonus', m.bonus], ['Favourite', m.favourite]],
+      speaker: { name: 'The Boss', k: 't-natebig' }, line, cta, notice: this.notice,
+    }, { ...run, tip: `A ${tools.find((x) => x.cost)?.name ?? 'treat'} costs ₽${tools.find((x) => x.cost)?.cost ?? 0}.` });
+  }
+
+  /** A Clinic or Care action through the session (the rules are core/dominion/life.ts). */
+  private step(a: Parameters<ReturnType<typeof services>['session']['dominionStep']>[0]): void {
+    const out = services().session.dominionStep(a);
+    this.say(out.notice);
+  }
+
   private say(n: string | null): void { this.notice = n; }
   dismiss(): void { this.notice = null; }
 
   private go(): void {
     const party = this.party();
+    if (this.page === 'clinic') return this.step({ t: 'clinic', uid: null });
+    if (this.page === 'care') {
+      const mon = party[this.at];
+      const t = DOMINION_DATA.life.care.tools[this.tool];
+      if (mon && t) this.step({ t: 'care', uid: mon.uid, tool: t.id });
+      return;
+    }
     if (this.page === 'party') {
       if (!party[this.at]) return;
       if (this.using) {
@@ -225,7 +292,7 @@ export class PokemonPages {
   }
 
   private back(): void {
-    if (this.page === 'summary') { this.page = 'party'; return; }
+    if (this.page === 'summary' || this.page === 'care') { this.page = 'party'; this.notice = null; return; }
     if (this.page === 'party' && this.using) { this.using = null; this.page = 'bag'; return; }
     this.close();
     this.host.toReserve();
@@ -251,7 +318,10 @@ export class PokemonPages {
     const n = this.party().length;
     if (a === 'back') this.back();
     else if (a === 'confirm') this.go();
-    else if (this.page === 'bag') {
+    else if (this.page === 'care' && (a === 'left' || a === 'right')) {
+      const k = DOMINION_DATA.life.care.tools.length;
+      this.tool = (this.tool + (a === 'left' ? -1 : 1) + k) % k;
+    } else if (this.page === 'bag') {
       const ps = this.pockets();
       if (a === 'left' || a === 'right') { this.pocketAt = (this.pocketAt + (a === 'left' ? -1 : 1) + Math.max(1, ps.length)) % Math.max(1, ps.length); this.item = 0; }
       else { const k = ps[this.pocketAt]?.rows.length ?? 0; if (k) this.item = (this.item + (a === 'up' ? -1 : 1) + k) % k; }
@@ -267,7 +337,16 @@ export class PokemonPages {
     if (!this.page) return false;
     if (code === 'KeyQ' || code === 'End' || code.startsWith('Digit')) return false;
     if (code === 'KeyS') this.doSwap();
+    // On the Party page C opens Care time and H the Clinic; on the Clinic J heals just the one picked.
+    else if (code === 'KeyC' && this.page === 'party' && !this.using && this.party()[this.at]) { this.page = 'care'; this.notice = null; }
+    else if (code === 'KeyH' && this.page === 'party' && !this.using) this.open('clinic');
+    else if (code === 'KeyJ' && this.page === 'clinic') this.clinicOne();
     return true;
+  }
+
+  private clinicOne(): void {
+    const mon = this.party()[this.at];
+    if (mon) this.step({ t: 'clinic', uid: mon.uid });
   }
 
   acts(): Record<string, (arg: string) => void> {
@@ -278,6 +357,11 @@ export class PokemonPages {
       partyBack: () => { this.back(); r(); },
       partySwap: () => { this.doSwap(); r(); },
       bagPocket: (d) => { const n = Math.max(1, this.pockets().length); this.pocketAt = (this.pocketAt + Number(d) + n) % n; this.item = 0; r(); },
+      clinicPick: (i) => { this.at = Number(i); r(); },
+      clinicOne: () => { this.clinicOne(); r(); },
+      clinicAll: () => { this.step({ t: 'clinic', uid: null }); r(); },
+      careTool: (i) => { const again = this.tool === Number(i); this.tool = Number(i); if (again) this.go(); r(); },
+      careGo: () => { this.go(); r(); },
       bagPick: (i) => { const again = this.item === Number(i); this.item = Number(i); if (again) this.go(); r(); },
     };
   }

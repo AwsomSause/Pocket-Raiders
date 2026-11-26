@@ -80,3 +80,13 @@ export function r5EvLog(o: { lines: readonly R5Said[]; first: number; where: str
 
 /** The ring colour for a sprite key (kit's person colours). */
 export const colourOf = (k: string): string => pc(k);
+
+// ---------- the press (mockup `press`): a media meeting (outside.json section J) asked on camera ----------
+
+export function r5Press(o: { left: R5Actor; right: R5Actor; line: string; choices: readonly { label: string; fx: string }[]; at: number }, run: R5Run): string {
+  const cs = map(o.choices, (c, i) => `<button class="ch${i === o.at ? ' on' : ''}" ${act('townMeet', i)} data-over="evOver" data-testid="dom-town-${i}" style="--i:${i};--d:${i * 90}ms"><kbd>${i + 1}</kbd><b>${esc(c.label)}${c.fx ? ` · ${esc(c.fx)}` : ''}</b></button>`);
+  const n = o.choices.length;
+  const ks: R5Key[] = [[`1-${n}`, 'answer'], ['Enter', 'your call'], ['L', 'log', 'evLog']];
+  return page({ id: 'press', g: 'Events', kind: 'scene sm-talk many pg-press', body: `${bg('street', 'Events', run)}\n  ${actor(o.left, 'l', true)}\n  ${actor(o.right, 'r', true)}\n  <nav class="chs" data-testid="dom-town">${cs}</nav>\n  `
+    + tbox(o.right, o.line, `<span class="tb-chips">${logChip}<i>Auto: off</i></span>`) + `\n  ${keys(ks, 'Events', run)}` });
+}

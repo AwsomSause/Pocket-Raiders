@@ -58,7 +58,7 @@ export class ReserveController {
   }
 
   /** R6: opens a page of the Pokémon tab (from the chrome: the party chip, the Start menu's Bag). */
-  openPage(p: 'party' | 'summary' | 'bag'): void {
+  openPage(p: 'party' | 'summary' | 'bag' | 'clinic' | 'care'): void {
     this.host.screenName = 'reserve';
     this.card = false;
     this.pages.open(p);

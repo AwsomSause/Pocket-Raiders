@@ -206,7 +206,7 @@ export function maybeMeet(block: DominionBlock, district: string, seed: string, 
 export interface MeetOdds { chance: number | null; stat: StatId | null; best: number; fight: boolean; money: number }
 
 /** What the map's street panel shows. */
-export interface MeetModel { what: string; who: string; district: string; choices: string[]; odds: MeetOdds[]; row: string }
+export interface MeetModel { what: string; who: string; district: string; choices: string[]; odds: MeetOdds[]; row: string; /** outside.json's section (J: media, the press page). */ section: string }
 export function meetModel(b: DominionBlock): MeetModel | null {
   const m = b.empire?.meet;
   const row = m ? townRow(m.row) : undefined;
@@ -218,7 +218,7 @@ export function meetModel(b: DominionBlock): MeetModel | null {
     if (c.check) return { chance: checkOdds(b, c.check), stat: c.check, best: bestStat(b, c.check), fight: false, money: c.money ?? 0 };
     return { chance: null, stat: null, best: 0, fight: false, money: c.money ?? 0 };
   });
-  return { what: row.what.replace(/\*\*/g, ''), who: row.who, district: districtDef(m.district)?.name ?? m.district, choices: row.choices, odds, row: m.row };
+  return { what: row.what.replace(/\*\*/g, ''), who: row.who, district: districtDef(m.district)?.name ?? m.district, choices: row.choices, odds, row: m.row, section: row.section };
 }
 
 /** The best member's stat (the Boss's crew does the talking). */
