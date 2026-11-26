@@ -47,7 +47,7 @@ test('the Region Map and the Card: pick Cerulean, read the Card, do an action, f
   // Cerulean, the Bike Shop, Extort: the Card (mockup 4).
   await s.getByTestId('dom-dz-cerulean').click();
   await expect(s.getByTestId('dom-file')).toContainText('Cerulean');
-  await expect(s.getByTestId('dom-grid')).toContainText('Bike Shop');
+  await expect(s.getByTestId('dom-targets')).toContainText('Bike Shop');
   await s.getByTestId('dom-act-extort').click();
   await expect(s.getByTestId('dom-cta')).toHaveText(/Extort the Bike Shop/);
   await shot('3-map-cerulean');
@@ -141,6 +141,6 @@ test('vehicles: V opens the list and the Bike can be bought', async ({ page }) =
   await page.keyboard.press('KeyV');
   await expect(s.getByTestId('dom-garage')).toBeVisible();
   await s.getByTestId('dom-buy-bike').click();
-  await expect(s.getByTestId('dom-notice')).toHaveText('Bought: Bike.');
+  await expect(s.getByTestId('dom-notice')).toHaveText(/^Bought: Bike\.▼?$/);
   expect((await block(page)).field.vehicles).toEqual(['bike']);
 });

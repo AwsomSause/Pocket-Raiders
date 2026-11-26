@@ -1,0 +1,66 @@
+/* DOMINION redesign R3 (The Day): the few pieces the game needs that the pass-50 mockups didn't draw. Hand-written
+   (r50.css is generated); same scope and look as the mockups. */
+/* A district on the board is a 0x0 anchor in the mockup; 1px gives it a box to tap (the circle sits over it). */
+#rx #r5 .tk12{width:1px;height:1px}
+/* The map's district file carries the game's targets and its nine actions (the mockup drew five chips). */
+#rx #r5 .m12 .own small{font:inherit;color:var(--mut)}
+#rx #r5 .m12 .chips{gap:4px;margin-top:6px}
+#rx #r5 .m12 .chips i{font-size:11px;padding:1px 8px;cursor:pointer}
+#rx #r5 .m12 .chips.tg50{margin-top:auto}
+#rx #r5 .m12 .chips.tg50 i{background:#2b2230;box-shadow:inset 0 0 0 1px var(--line)}
+#rx #r5 .m12 .chips.tg50 i.on{background:#fff8ea;color:var(--ink)}
+#rx #r5 .pg50{display:inline-flex;align-items:center;gap:6px;font-style:normal;font-size:11px;font-weight:800;color:var(--mut)}
+#rx #r5 .pg50 b{color:var(--yel);cursor:pointer;padding:0 4px}
+#rx #r5 .pg50 span{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* A long game line wraps to two smaller lines instead of being cut (the mockups' lines fit one). */
+#rx #r5 .foot.l2 p{white-space:normal;font-size:14px;line-height:1.18;padding-top:5px;padding-bottom:5px}
+#rx #r5 .foot.l2.nm30 p{padding-top:10px}
+/* R3 · the Morning report: the crew strip and the two buttons under the Today lines. */
+#rx #r5 .cs50{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:6px}
+#rx #r5 .cs50 button{display:flex;align-items:center;gap:6px;padding:2px 8px 2px 2px;background:var(--pn2);border:2px solid transparent;border-radius:18px;color:inherit;font:700 12px/1 var(--fb, inherit);cursor:pointer}
+#rx #r5 .cs50 button.on{border-color:var(--yel)}
+#rx #r5 .cs50 button.out{opacity:.5}
+#rx #r5 .cs50 em{font-style:normal}
+#rx #r5 .cb50{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:auto}
+#rx #r5 .cb50 .cta{margin-top:0}
+#rx #r5 .bdg50.hot .tag{background:var(--red);color:#fff}
+#rx #r5[data-scr="morning"] .scr:has(> .foot) .l-main,#rx #r5[data-scr="morning"] .scr:has(> .foot) .l-det{height:330px}
+#rx #r5[data-scr="morning"] .scr:has(> .foot) .l-det .plinth{transform:scale(.8);margin:-12px 0}
+/* Assign a task: the badges on a row. */
+#rx #r5 .row-t u{display:inline-block;margin-left:8px;padding:1px 6px;border-radius:8px;background:var(--yel);color:var(--ink);font:700 10px/1.3 var(--fb, inherit);text-decoration:none;vertical-align:middle}
+#rx #r5 .row-t u.on50{background:var(--ok);color:#10261a}
+/* The morning paper: the dateline, the glance rows and the wanted notice. */
+#rx #r5 .dl50{display:flex;justify-content:space-between;margin:4px 0 2px;font-size:12px;font-style:italic;color:#5a4a40}
+#rx #r5 .st50{letter-spacing:2px}
+#rx #r5 .st50 i{font-style:normal;opacity:.22}
+#rx #r5 .nr50{margin:8px 10px;font-size:13px;color:var(--mut)}
+#rx #r5 .wt50{flex-wrap:wrap;margin-top:auto}
+#rx #r5 .wt50 span{flex:1 1 60%;font-size:13px}
+#rx #r5 .wt50 em{flex-basis:100%;font-size:12px;color:var(--mut)}
+#rx #r5 .p-side{display:flex;flex-direction:column;gap:8px}
+/* The Evening: the clipping pinned over the city. */
+#rx #r5 .clip50{position:absolute;left:340px;top:300px;z-index:3;width:226px;padding:8px 12px;background:#f4ecd8;border:1px solid #b8a888;color:#1d1410;transform:rotate(-2deg);box-shadow:3px 3px 0 rgba(0,0,0,.4);font-family:Georgia,serif}
+#rx #r5 .clip50 small{display:block;padding-bottom:3px;border-bottom:1px solid #1d1410;font-size:11px}
+#rx #r5 .clip50 b{display:block;margin-top:3px;font:700 15px/1.1 Georgia,serif;text-transform:uppercase}
+#rx #r5 .clip50 em{display:block;margin-top:4px;font:700 11px/1 Georgia,serif;font-style:normal;color:#a0281e}
+/* The Ledger: the page tabs, the territory and crew tables. */
+#rx #r5 .lh40 b{text-transform:uppercase}
+#rx #r5 .lt50{display:flex;gap:4px;margin-left:auto}
+#rx #r5 .lt50 b{padding:3px 8px;border:2px solid #000;border-radius:8px;background:#fff;font:700 11px/1 var(--fb, inherit)!important;cursor:pointer}
+#rx #r5 .lt50 b.on{background:var(--yel)}
+#rx #r5 .lsk3{display:none}
+#rx #r5 .ltb3{display:flex;flex-direction:column;gap:3px;padding-left:44px;overflow:hidden}
+#rx #r5 .ltr3{display:grid;grid-template-columns:96px 92px 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;font-size:13px}
+#rx #r5 .ltr3 b{font-weight:800}
+#rx #r5 .ltr3 i{font-style:normal;font-size:12px}
+#rx #r5 .ltr3 span{height:8px;background:#ddd4c4;border:1px solid #000;border-radius:4px;overflow:hidden}
+#rx #r5 .ltr3 span u{display:block;height:100%;background:#2f9f4a}
+#rx #r5 .ltr3 em{grid-column:2/4;font-size:11px;font-style:normal;color:#4a3a50}
+#rx #r5 .ltr3.here b{color:#c1121f}
+#rx #r5 .ltr3.ft{grid-template-columns:auto 1fr;margin-top:4px}
+#rx #r5 .ltr3.ft em{grid-column:auto}
+#rx #r5 .nx50{margin:8px 10px 0;font-size:13px;color:var(--mut)}
+#rx #r5 .row40.on b{color:var(--yel)}
+#rx #r5 .wh50{font-size:13px}
+#rx #r5 .wh50 b{color:var(--yel)}
+#rx #r5 .wh50 kbd{margin-left:4px;padding:0 4px;border:1px solid var(--line);border-radius:3px;font-size:11px}

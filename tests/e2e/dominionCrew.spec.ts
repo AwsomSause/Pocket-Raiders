@@ -84,8 +84,9 @@ test('Crew File, Hire Grunt, then the Morning: answer a talk, assign a task, and
   // Assign Rook to Rest; the strip shows it and the save has it.
   await s.getByTestId('dom-strip-m1').click();
   await expect(s.getByTestId('dom-info-name')).toContainText('ROOK');
-  // D29: the row opens the Assign a task page (round-4 mockup m3) on Rest; Give the order assigns, Esc goes back.
-  await s.getByTestId('dom-task-rest').click();
+  // D29 / R3: Assign tasks opens the Assign a task page (pass-50 mockup `assign`); pick Rest, Give the order assigns, Esc goes back.
+  await s.getByTestId('dom-morning-assign').click();
+  await s.getByTestId('dom-as-task-rest').click();
   await expect(s.getByTestId('dom-as-task-rest')).toHaveClass(/\bon\b/);
   await s.getByTestId('dom-as-give').click();
   await expect(s.getByTestId('dom-as-task-rest')).toContainText('ON IT');

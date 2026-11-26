@@ -15,6 +15,9 @@ import { assignCount, assignModel, assignTaskAt, ASSIGN_PAGE } from '../../core/
 import { assignView } from '../../ui/redux/screens/dominion/assign';
 import { personaView } from '../../ui/redux/screens/dominion/persona';
 
+/** The Morning's and Assign's cursors (R3 draws the pages from them). */
+export interface CrewCursors { sel: number; taskAt: number; all: boolean; talkAt: number; asAt: number }
+
 interface Host {
   screenName: 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
   setNotice(n: string | null): void;
@@ -23,6 +26,10 @@ interface Host {
   /** D22: F opens the Confront room for this member. */
   confront(member: string): void;
   cache: { json: { get(k: string): unknown } };
+  /** Redesign R3: draws the Morning and Assign a task as the pass-50 pages (null: the old views). */
+  r5Crew?(page: 'morning' | 'assign', c: CrewCursors, notice: string | null): string | null;
+  /** Redesign R3: Enter on a row of the Morning report goes to its page. */
+  morningRow?(i: number): void;
 }
 
 export class CrewController {
@@ -63,14 +70,15 @@ export class CrewController {
     const b = this.block();
     if (!b) return '';
     this.sel = Math.min(this.sel, b.members.length - 1);
-    if (this.host.screenName === 'assign') return assignView(assignModel(b, this.sel, this.asAt, this.all), notice);
+    const c: CrewCursors = { sel: this.sel, taskAt: this.taskAt, all: this.all, talkAt: this.talkAt, asAt: this.asAt };
+    if (this.host.screenName === 'assign') return this.host.r5Crew?.('assign', c, notice) ?? assignView(assignModel(b, this.sel, this.asAt, this.all), notice);
     if (this.host.screenName === 'crew') {
       const seed = services().session.run!.seed;
       if (this.persona && !this.talking()) return personaView(personaModel(b, this.sel, seed, services().session.run?.ai), (s) => this.monFile(s));
       const overlay = this.overlay === 'hire' ? hireOverlay(hireModel(b, seed), this.pickAt) : this.overlay === 'leads' ? leadsOverlay(leadsModel(b, seed), this.pickAt, this.pitchAt) : '';
       return fileView(fileModel(b, this.sel), (s) => this.monFile(s), notice, overlay, this.talkAt);
     }
-    return morningView(morningModel(b, this.sel, this.taskAt, this.all), notice, this.talkAt);
+    return this.host.r5Crew?.('morning', c, notice) ?? morningView(morningModel(b, this.sel, this.taskAt, this.all), notice, this.talkAt);
   }
 
   private monFile(species: string): string | null {
@@ -142,6 +150,7 @@ export class CrewController {
     return {
       talk: (i) => this.answer(Number(i)),
       task: (i) => this.openAssign(Number(i)),
+      morningAssign: () => this.openAssign(0),
       asTask: (k) => this.asPick(Number(k)),
       asGive: () => this.give(),
       asAll: () => this.asToggleAll(),
@@ -229,6 +238,8 @@ export class CrewController {
     }
     if (this.owns() && code === 'KeyP' && !this.talking()) return this.cycleWhere(), true;
     if (this.owns() && code === 'KeyM' && !this.talking()) {
+      // R3: M opens Assign a task (the pass-50 Morning lists the report, not the tasks).
+      if (this.host.r5Crew) return this.openAssign(0), true;
       this.all = !this.all;
       this.taskAt = 0;
       this.host.refresh();
@@ -311,7 +322,9 @@ export class CrewController {
       return true;
     }
     // The Morning: ◀ ▶ pick the member, ▲ ▼ the task (from the Start button), Enter assigns or starts the day.
-    const n = this.tasks().length;
+    // R3: ▲ ▼ move over the Morning report's rows instead, and Enter on one goes to its page.
+    const rows = this.host.morningRow ? Math.max(1, morningModel(b, this.sel, -1, false).alerts.length) + 1 : 0;
+    const n = this.host.morningRow ? rows : this.tasks().length;
     if (a === 'left' || a === 'right') {
       const k = b.members.length;
       this.sel = (this.sel + (a === 'left' ? -1 : 1) + k) % k;
@@ -323,7 +336,8 @@ export class CrewController {
       return true;
     }
     if (a === 'confirm' && this.taskAt >= 0) {
-      this.openAssign(this.taskAt);
+      if (this.host.morningRow) this.host.morningRow(this.taskAt);
+      else this.openAssign(this.taskAt);
       return true;
     }
     if (a === 'back' && this.all) {

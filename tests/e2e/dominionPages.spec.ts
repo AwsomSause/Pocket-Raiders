@@ -38,17 +38,14 @@ test('Assign a task: the Morning opens it, cards show the odds, M pages the full
   await into(page, ['open', 'toNight', 'rest']);
   const s = view(page, 'Dominion');
   await expect(s.getByTestId('dom-phase')).toHaveText('MORNING');
-  // Morning: ▼ onto the first task, Enter opens the page on it.
-  await page.keyboard.press('ArrowDown');
-  await page.waitForTimeout(150);
-  await page.keyboard.press('Enter');
+  // Morning: M (Assign tasks, pass-50 mockup `morning`) opens the page on the first task.
+  await page.keyboard.press('KeyM');
   await expect(s.getByTestId('dom-as-grid')).toBeVisible();
-  await expect(s.getByTestId('dom-region')).toHaveText('Morning › Assign');
-  await expect(s.getByTestId('dom-as-grid').locator('.task')).toHaveCount(6);
+  await expect(s.getByTestId('dom-as-grid').locator('.row')).toHaveCount(6);
   await expect(s.getByTestId('dom-as-task-shake-down')).toHaveClass(/\bon\b/);
   await expect(s.getByTestId('dom-as-name')).toContainText('ROOK');
   await expect(s.getByTestId('dom-as-line')).toBeVisible();
-  await expect(s.getByTestId('dom-tab-3')).toHaveClass(/\bon\b/);
+  await expect(s.getByTestId('dom-tab-2')).toHaveClass(/\bon\b/); // pass 50: The Day's pages sit under the Region Map tab
   await shot('1-assign');
   // ▼ walks the cards; the last wraps round to the first.
   for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowDown');
@@ -83,7 +80,7 @@ test('Assign a task: the Morning opens it, cards show the odds, M pages the full
   await expect(s.getByTestId('dom-morning-report')).toBeVisible();
   await expect(s.getByTestId('dom-strip-m1')).toContainText('Train');
   // Tab 1 also goes back (the page sits under Roster).
-  await s.getByTestId('dom-task-rest').click();
+  await s.getByTestId('dom-morning-assign').click();
   await expect(s.getByTestId('dom-as-grid')).toBeVisible();
   await page.keyboard.press('Digit1');
   await expect(s.getByTestId('dom-morning-report')).toBeVisible();
