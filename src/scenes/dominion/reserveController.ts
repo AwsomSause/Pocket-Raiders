@@ -8,7 +8,6 @@ import { dominionBlock } from '../../core/dominion/session';
 import type { DominionAction } from '../../core/dominion/schema';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
-import { pyramidView } from '../../ui/redux/screens/dominion/reserve';
 import { r5Reserve } from '../../ui/redux/screens/dominion/r50/pokemon';
 import { giveData, PokemonPages, r5Give, reserveData } from './r6Pokemon';
 import { r5Run } from './r50Bridge';
@@ -16,6 +15,11 @@ import type Phaser from 'phaser';
 
 /** Columns of the Reserve's box grid (mockup `reserve`: 6 x 2). */
 const COLS = 6;
+import { r5Edge as r5EdgeModel, r5Member, r5Members, titleWord } from '../../core/dominion/crewR50';
+import { rankWord, withCrew } from '../../core/dominion/crew';
+import { teamColours } from '../../core/dominion/founding';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
+import { r5Edge, r5Promo, r5Pyramid } from '../../ui/redux/screens/dominion/r50/crew';
 
 type ScreenName = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
 interface Host {
@@ -24,6 +28,9 @@ interface Host {
   refresh(): void;
   step(a: DominionAction): boolean;
   cache: { json: { get(k: string): unknown } };
+  /** Redesign R5: the pass-50 chrome's live data, and the Boss's picture and name. */
+  r5run(): R5Run | null;
+  r5boss(h: number): { pic: string; name: string };
 }
 
 export class ReserveController {
@@ -42,6 +49,10 @@ export class ReserveController {
   private shown: string | null = null;
   /** R6: the Party, Summary and Bag pages of the Pokémon tab. */
   readonly pages: PokemonPages;
+  /** Redesign R5: the promotion just given (Promotion night, mockup `promo`): who and the rank they left. */
+  private promo: { id: string; from: string } | null = null;
+  /** Redesign R5: the Boss Edge page (mockup `levelup`) is up over the Pyramid (E, or a tap on the Boss). */
+  private edge = false;
 
   constructor(private readonly host: Host) {
     this.pages = new PokemonPages(this.scene(), { refresh: () => host.refresh(), toReserve: () => { host.screenName = 'reserve'; this.card = false; }, block: () => this.block() ?? null });
@@ -94,7 +105,24 @@ export class ReserveController {
     if (this.host.screenName === 'pyramid') {
       this.sel = Math.min(this.sel, Math.max(0, b.members.length - 1));
       const hq = DOMINION_DATA.start.start.hqName.replace(/^THE /, '');
-      return pyramidView(pyramidModel(b, this.sel, hq[0] + hq.slice(1).toLowerCase()), n);
+      const run = this.host.r5run();
+      if (!run) return '';
+      const ctx = { run, team: teamColours(b), monFile: () => null, notice: n };
+      const idx = (id: string): number => b.members.findIndex((m) => m.id === id);
+      const wb = withCrew(b);
+      if (this.edge) return r5Edge(r5EdgeModel(b), this.host.r5boss(230), ctx);
+      if (this.promo) {
+        const who = wb.members.find((m) => m.id === this.promo!.id);
+        if (who) {
+          const pm = r5Member(wb, who);
+          const row = DOMINION_DATA.pyramid.ranks[pm.rankN - 1];
+          const unlocks = `${row?.unlocks ?? ''}${pm.wage ? ` · wage ₽${pm.wage} a week` : ''}`;
+          return r5Promo({ m: pm, i: idx(pm.id), from: titleWord(this.promo.from), to: pm.rank, unlocks, crowd: r5Members(b).filter((x) => x.id !== pm.id), boss: this.host.r5boss(150).pic, line: `${pm.rank}. They'll be talking about tonight for weeks, Boss.` }, ctx);
+        }
+        this.promo = null;
+      }
+      const order = pyramidOrder(b).map((m) => r5Member(wb, wb.members.find((x) => x.id === m.id)!));
+      return r5Pyramid(pyramidModel(b, this.sel, hq[0] + hq.slice(1).toLowerCase()), { order, sel: this.sel, boss: this.host.r5boss(40), idx }, ctx);
     }
     if (this.pages.page) return this.pages.render();
     const m = this.model();
@@ -113,7 +141,27 @@ export class ReserveController {
   }
   private go(a: DominionAction): void {
     this.notice = null;
+    const before = a.t === 'promote' ? this.block()?.members.find((m) => m.id === a.member)?.rank ?? null : null;
     this.host.step(a);
+    // Redesign R5: a promotion that went through plays Promotion night (presentation only; the step already saved).
+    if (a.t === 'promote' && before) {
+      const now = this.block()?.members.find((m) => m.id === a.member)?.rank;
+      if (now && now !== before) this.promo = { id: a.member, from: rankWord(before) };
+    }
+  }
+  /** Redesign R5: the Boss Edge page from elsewhere (the emblem's level badge). */
+  openEdge(): void {
+    this.host.screenName = 'pyramid';
+    this.promo = null;
+    this.edge = true;
+    this.say(null);
+    this.host.refresh();
+  }
+  /** Leave Promotion night: back to the Pyramid, or (applause) to the roster. */
+  private endPromo(to: string): void {
+    this.promo = null;
+    if (to === 'roster') this.host.screenName = 'crew';
+    this.host.refresh();
   }
 
   // ---------- the Reserve ----------
@@ -180,6 +228,9 @@ export class ReserveController {
       autoFill: () => this.go({ t: 'autoFill' }),
       giveIt: () => this.give(),
       takeSlot: (i) => { if (Number(i) >= 100) return; if (this.focus === 'team' && this.slotAt === Number(i)) this.takeBack(Number(i)); else { this.focus = 'team'; this.slotAt = Number(i); this.host.refresh(); } },
+      r5promo: (to) => this.endPromo(to),
+      r5edge: (on) => { this.edge = on === 'on' && this.host.screenName === 'pyramid'; this.say(null); this.host.refresh(); },
+      r5pyr: (i) => { const k = Number(i); if (k === this.sel) { const id = this.member(); if (id) this.go({ t: 'promote', member: id }); } else this.sel = k; this.stripArmed = false; this.host.refresh(); },
       promoteIt: () => { const id = this.member(); if (id) this.go({ t: 'promote', member: id }); },
     };
   }
@@ -214,6 +265,8 @@ export class ReserveController {
   raw(code: string): boolean {
     if (this.host.screenName === 'crew' && code === 'KeyP') {
       this.host.screenName = 'pyramid';
+      this.promo = null;
+      this.edge = false;
       this.say(null);
       this.host.refresh();
       return true;
@@ -221,6 +274,9 @@ export class ReserveController {
     // Q (hold: the command wheel) and End (quit to title) belong to the whole scene, never to these screens.
     if (!this.owns() || code.startsWith('Digit') || code === 'KeyQ' || code === 'End') return false;
     if (this.host.screenName === 'reserve' && this.pages.raw(code)) return this.host.refresh(), true;
+    if (this.promo && this.host.screenName === 'pyramid') return true;
+    if (this.host.screenName === 'pyramid' && code === 'KeyE') { this.edge = !this.edge; this.say(null); this.host.refresh(); return true; }
+    if (this.edge && this.host.screenName === 'pyramid') return true;
     const b = this.block();
     if (!b) return true;
     if (this.host.screenName === 'pyramid') {
@@ -264,6 +320,15 @@ export class ReserveController {
     if (this.host.screenName === 'reserve' && this.shown && (a === 'confirm' || a === 'back')) {
       this.shown = null;
       this.say(null);
+      return true;
+    }
+    if (this.promo && this.host.screenName === 'pyramid') {
+      if (a === 'confirm') this.endPromo('roster');
+      else if (a === 'back') this.endPromo('pyramid');
+      return true;
+    }
+    if (this.edge && this.host.screenName === 'pyramid') {
+      if (a === 'confirm' || a === 'back') this.edge = false;
       return true;
     }
     if (a === 'back') {

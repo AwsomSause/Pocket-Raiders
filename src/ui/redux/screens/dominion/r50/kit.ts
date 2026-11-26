@@ -169,8 +169,8 @@ function clock(id: string): string {
 }
 
 /** The page root: `.r50` (the mockups' #stage, carrying the group) and the `.scr` screen. */
-export function page(o: { id: string; g: R5Group; kind: string; body: string; nv?: boolean }): string {
-  return `<div class="r50" id="r5" data-g="${esc(o.g)}" data-scr="${esc(o.id)}" data-testid="r5-${esc(o.id)}" ${lookAttrs()} style="${clock(o.id)}"><div class="scr${o.nv === false ? '' : ' nv'} k-${esc(o.kind)}${r5Skin() === 'johto' ? ' sk-johto' : ''}">${o.body}</div></div>`;
+export function page(o: { id: string; g: R5Group; kind: string; body: string; nv?: boolean; style?: string }): string {
+  return `<div class="r50" id="r5" data-g="${esc(o.g)}" data-scr="${esc(o.id)}" data-testid="r5-${esc(o.id)}" ${lookAttrs()} style="${clock(o.id)}"><div class="scr${o.nv === false ? '' : ' nv'} k-${esc(o.kind)}${r5Skin() === 'johto' ? ' sk-johto' : ''}"${o.style ? ` style="${esc(o.style)}"` : ''}>${o.body}</div></div>`;
 }
 
 // ---------- background layers (passes 1, 3, 8, 15, 16, 24, 28, 29, 34, 36, 37, 39, 42) ----------
@@ -304,7 +304,7 @@ export function keys(ks: readonly R5Key[], g: R5Group, run: R5Run, o: { testid?:
 }
 
 /** The whole frame most pages use: backdrop, top bar, page body, text box, tabs and keys. */
-export function frame(o: { id: string; g: R5Group; kind: string; bg?: string; top: R5Top; body: string; who?: R5Speaker | null; line?: string; ctas?: readonly R5Cta[]; footOpts?: R5FootOpts; keys: readonly R5Key[]; keysOpts?: { testid?: string; pre?: string }; run: R5Run; noTabs?: boolean; over?: string }): string {
+export function frame(o: { id: string; g: R5Group; kind: string; bg?: string; top: R5Top; body: string; who?: R5Speaker | null; line?: string; ctas?: readonly R5Cta[]; footOpts?: R5FootOpts; keys: readonly R5Key[]; keysOpts?: { testid?: string; pre?: string }; run: R5Run; noTabs?: boolean; over?: string; style?: string }): string {
   const box = o.line !== undefined ? foot(o.who ?? null, o.line, o.ctas ?? [], o.g, o.run, o.footOpts) : '';
-  return page({ id: o.id, g: o.g, kind: o.kind, body: bg(o.bg ?? 'hq', o.g, o.run) + top(o.g, { ...o.top, id: o.id }, o.run) + '\n  ' + o.body + '\n  ' + box + (o.noTabs ? '' : tabs(o.g, o.run)) + (o.over ?? '') + keys(o.keys, o.g, o.run, o.keysOpts) });
+  return page({ id: o.id, g: o.g, kind: o.kind, style: o.style, body: bg(o.bg ?? 'hq', o.g, o.run) + top(o.g, { ...o.top, id: o.id }, o.run) + '\n  ' + o.body + '\n  ' + box + (o.noTabs ? '' : tabs(o.g, o.run)) + (o.over ?? '') + keys(o.keys, o.g, o.run, o.keysOpts) });
 }

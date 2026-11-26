@@ -62,6 +62,8 @@ test('the Squads page: form Viper Unit, give it an order, reload', async ({ page
 
   // The Crew File names the page; U opens it. No squads yet: the builder has the keys.
   await press(page, 'Digit3');
+  await expect(s.getByTestId('r5-roster')).toBeVisible();
+  await press(page, 'Digit3');
   await expect(s.getByTestId('dom-file-keys')).toContainText('Squads');
   await page.keyboard.press('KeyU');
   await expect(s.getByTestId('dom-sq-builder')).toBeVisible();

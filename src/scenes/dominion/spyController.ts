@@ -19,6 +19,9 @@ import { teamsHere } from '../../core/dominion/rivals';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { spyView } from '../../ui/redux/screens/dominion/spy';
+import { memberColour, r5Confront } from '../../ui/redux/screens/dominion/r50/crew';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
+import { teamColours } from '../../core/dominion/founding';
 
 type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
 interface Host {
@@ -27,6 +30,9 @@ interface Host {
   refresh(): void;
   rivalStep(a: DominionAction): { ok: boolean; fight: boolean; notice: string | null };
   startFight(): void;
+  /** Redesign R5: the pass-50 chrome's live data, and the Boss's picture and name. */
+  r5run(): R5Run | null;
+  r5boss(h: number): { pic: string; name: string };
 }
 
 const TYPE = '[data-testid="dom-spy-type"]';
@@ -120,6 +126,12 @@ export class SpyController {
     const b = this.block();
     const m = b ? spyModel(b, services().session.run?.ai, this.waiting > 0) : null;
     if (!m) return '';
+    // Redesign R5: the Confront room as the pass-50 talk scene (mockups `interro` and `spy`).
+    const run = this.host.r5run();
+    if (run && b) {
+      const i = b.members.findIndex((x) => x.id === m.member);
+      return r5Confront(m, { boss: this.host.r5boss(250), at: this.at, draft: this.draft, colour: memberColour(i) }, { run, team: teamColours(b), monFile: () => null, notice: this.notice });
+    }
     return spyView(m, this.draft, this.at, this.notice);
   }
 

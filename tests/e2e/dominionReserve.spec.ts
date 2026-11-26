@@ -78,6 +78,8 @@ test('the Reserve: give Rook a Pokémon by hand; the Pyramid: promote him; both 
 
   // The Crew File, then P: the Rank Pyramid. Rook reaches member Lv 6 (as if he'd earned it): a Senior Grunt seat waits.
   await page.keyboard.press('Digit3');
+  await expect(s.getByTestId('r5-roster')).toBeVisible();
+  await page.keyboard.press('Enter');
   await expect(s.getByTestId('dom-file-keys')).toContainText('Pyramid');
   await page.evaluate(() => {
     const p = (window as any).__pkr;
@@ -95,7 +97,11 @@ test('the Reserve: give Rook a Pokémon by hand; the Pyramid: promote him; both 
   const after = await block(page);
   expect(after.members[0].rank).toBe('senior-grunt');
   expect(after.members[0].wage).toBe(130);
+  // Redesign R5: the promotion plays Promotion night; Esc goes back to the Pyramid, Esc again to the Crew File.
+  await expect(s.getByTestId('r5-promo')).toBeVisible();
   await shot('pyramid-promoted');
+  await page.keyboard.press('Escape');
+  await expect(s.getByTestId('r5-pyramid')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(s.getByTestId('dom-file-keys')).toBeVisible();
 
