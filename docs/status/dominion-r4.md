@@ -35,20 +35,31 @@ Differences left on purpose (live data, not looks): the Boss is the run's traine
 
 `battle`, `fight`, `vs`, `ace`, `mega`, `dyna`, `tera`, `zmove`: a Dominion fight runs in the main BattleScene, which already has its own VS intro (`ui/battleFx/vsScreens.ts`), ace announcement and Mega / Dynamax / Tera / Z scenes (`ui/battleFx/*Scene.ts`). The build plan keeps the main battle UI; no move animation was touched.
 
-## Needs a mechanic (not built, no placeholder)
+## Pages that got simple new rules (Director 2026-11-21: "don't leave the 'needs a mechanic' pages out")
 
-- `jobs` (Job board, three jobs side by side): the game's job board is the Region Map's action grid and the District file (R3's pages); there is no separate board.
-- `live` (Case it / Slip in / Grab / Get out with a "something happens" choice): a job is one roll in `field.ts act()`; the only mid-job choice is the Hero (`herohit`).
-- `calling` (leave a Calling card after a job): no such rule.
-- `market` (Black Market shop): the Fence action and Black Market contact exist, but no shop or buy rule (`core/grandArc/doom.ts` notes it isn't built).
-- `cargo` (Smuggling run, load the bus): Smuggle routes pay nightly (`growth.ts`), but there is no cargo or ticket-check choice.
-- `gymplan` (weak spots and a path in): a Gym's five ways are the Card's choices (shown on the Card); there is no weak-spot plan.
-- `gymtalk` (the Leader's choice: step aside / pay / battle): not a rule.
-- `crewin`, `teamup`, `phase`, `snap`, the Hideout raid's "turns to hold": the crew add odds, they don't fight turns; no team-up, no boss phase two in Dominion fights, no battle album.
-- `legend` (Archer betrays Giovanni, then Mewtwo): the Legendary fight exists from the Hero file (R7's page); the betrayal scene isn't a rule.
-- `power`, `gear` (Pick a power, Power gear unlocked per region): the main battle's gimmicks use Bag items; Dominion has no power-gear unlock rule.
+Rules and numbers live in `src/data/dominion/jobs.json` (`core/dominion/jobs.ts`) and `src/data/dominion/fights.json` (`core/dominion/bossFights.ts`). New block fields are optional (no save bump); no new random stream (live jobs and the market's stock use pure hashes of the seed).
+
+| Mockup | Rule | Where |
+|---|---|---|
+| `jobs` | The Job board (Jobs tab): the best three jobs you can do now, within one trip; Enter opens that job's Card. | `jobBoard`, `r5JobBoard` |
+| `live` | A stealth job may have "something happens" (35%): Stay still (odds down a little), Smoke Ball (clean escape, no take, uses the ball), Grab it and run (odds down more, Heat). | `liveOf`, `setLiveHook`, `r5Live` |
+| `calling` | C on Job done: leave a calling card once per job. Dread up, Regard down, Heat and rival Tension up. | `leaveCard`, `r5Calling` |
+| `market` | M on the board after dark with a Fence or Black Market contact: six items a day (from nine), bought with money into the Bag. | `marketStock`, `buy`, `r5Market` |
+| `cargo` | The Smuggle Card is the Smuggling run: load crates (each adds pay and risk; risk lowers the odds). | Card hook, `r5Cargo` |
+| `gymplan`, `gymtalk` | The Gym takeover Card is the Gym plan (the five ways as weak spots); Walk in shows the Leader's answer and your choices (Walk away changes nothing). | `r5GymPlan`, `r5GymTalk` |
+| `gear`, `power` | Power gear (Start menu): one power opens after Day 5 of the first region, one more each region (the main game's boss rule). Pick a power puts that gear's key item (Mega Ring, Tera Orb, Dynamax Band, Z-Ring) in the Bag, so the main battle offers it; a swap takes back only gear Dominion gave. Gym Leaders and Bosses who face you get their powers by the same rule. | `powerSlots`, `carry`, `setUpFight`, `r5Gear`, `r5Power` |
+| `crewin` | Before a fight at the HQ (a raid, the Hero's raid, a rival Boss at the door): pick a member to step in first. Their Pokémon loses 40% HP; the foe's lead starts up to 30% down. Esc: nobody. Once a fight. | `assistKind`, `assist`, `r5CrewIn` |
+| `teamup` | Before a big fight away (rival, Hero, takeover, Gym chain, realm, final stand) and before phase two: up to three free members hit first, 12% each (36% max) off the foe's lead. Once a fight. | `assist`, `r5TeamUp` |
+| `phase` | A rival Boss beaten at your door rallies once: the same fight waits again, the lead with Attack +1, your team not healed. Only the second win settles the raid. | `phaseTwo`, `r5Phase` |
+| `legend` | When that Boss falls for good, their admin turns (Rocket: Archer) and the team's Legendary waits (Mewtwo, Lv 70 at most, your best level + 5). A wild battle: it can be caught. Once a team. | Fight hook, `foe: 'betrayal'`, `r5Legend` |
+| `snap` | After a big win (Hero, Legendary, Gym, rival, takeover, realm, Betrayal) the Snapshot offers the moment: Save to album (40 at most) or Skip. The Boss card shows the album count. | Fight hook, `keepSnap`, `r5Snap` |
+
+The main battle screen is unchanged (rule 5): these pages come before or after a battle.
 
 ## Tests
+
+- `tests/unit/dominionJobs.test.ts` (14) and `tests/unit/dominionFights.test.ts` (11): the new rules (normal, boundary, refused) and the pages' test ids.
+- `tests/e2e/dominionJobs.spec.ts`, `tests/e2e/dominionFights.spec.ts`: every new page by keys, with shots.
 
 - `tests/unit/dominionR4.test.ts` (12): the Card's test ids, plain pay text, range and hidden odds, blocked Card, choices; the lesson coach inside the page; Pick the crew picks (solo swap, squad limit refused, drop) and cursor edges; order, done, botched (2 / 1 / 3 choices, dimmed bail), the Hero (cursor, no Smoke Ball), the Boss card.
 - `tests/e2e/dominionR4.spec.ts`: Card, Pick the crew (the run block unchanged, the odds change), order, done, botched, the Hero, the Boss card from the Start menu (block unchanged); no console errors; shots in its output folder.
