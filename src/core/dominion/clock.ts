@@ -152,6 +152,11 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     // D5: the HQ menu (hq.ts), sent there by session.ts.
     case 'upgrade':
     case 'build':
+    case 'buyPlot':
+    case 'floorSeen':
+    case 'staffPost':
+    case 'staffGear':
+    case 'staffSet':
     case 'tierUp':
     case 'sell':
     case 'rebuild':

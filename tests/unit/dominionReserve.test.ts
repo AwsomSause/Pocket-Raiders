@@ -19,6 +19,7 @@ import type { RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
+import { storageCap } from '../../src/core/dominion/hq';
 
 const PY = DOMINION_DATA.pyramid;
 const domRun = (seed = 'dm4'): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
@@ -182,7 +183,7 @@ describe('DOMINION D4: the Reserve (Part 7 §2-3)', () => {
     const b3 = withReserve(content, withCrew(structuredClone(blk(r))));
     expect(takeBack(b3, 'm1', rook(b3).team[0]!.uid).notice).toBe('Pokémon are taken back in the Evening.');
     const b4 = withReserve(content, withCrew(structuredClone(blk(started()))));
-    for (let i = 0; i < PY.reserve.size; i++) b4.reserve!.box.push({ ...b4.reserve!.box[0]!, uid: `x${i}` });
+    for (let i = 0; i < storageCap(b4); i++) b4.reserve!.box.push({ ...b4.reserve!.box[0]!, uid: `x${i}` });
     expect(takeBack(b4, 'm1', rook(b4).team[0]!.uid).notice).toMatch(/full/);
   });
   it('Auto-fill is off until pressed; pressing fills empty slots with the best fit, pressing again turns it off', () => {
@@ -210,7 +211,7 @@ describe('DOMINION D4: the Reserve (Part 7 §2-3)', () => {
     expect(placeMon(content, r, b, { species: 'ekans', level: 6, by: 'm1', src: 'stolen' })).toBe('Stolen Ekans: 5 days in the Pens.');
     const st = b.reserve!.box.at(-1)!;
     expect(b.reserve!.meta[st.uid]).toMatchObject({ trust: 2, pens: b.day + 5, src: 'stolen' });
-    for (let i = b.reserve!.box.length; i < PY.reserve.size; i++) b.reserve!.box.push({ ...st, uid: `f${i}` });
+    for (let i = b.reserve!.box.length; i < storageCap(b); i++) b.reserve!.box.push({ ...st, uid: `f${i}` });
     expect(placeMon(content, r, b, { species: 'rattata', level: 3 })).toMatch(/full/);
   });
   it('Catch "for themselves" through the night: the hunt setting reaches the crew step', () => {

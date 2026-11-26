@@ -8,11 +8,18 @@ import type { HqModel } from '../../../../../core/dominion/screens';
 import { art, bg, esc, faceOf, foot, keys, map, NAV, page, pn, SP, spr, tabs, top, type R5Cta, type R5Key, type R5Run } from './kit';
 
 /** One room of the building (core/dominion/hqScreens CellModel, as much as the hub needs). */
-export interface R5Room { name: string; icon: string | null; sprite: string | null; fx: string; row: number; span: number; state: string }
+export interface R5Room {
+  name: string; icon: string | null; sprite: string | null; fx: string; row: number; span: number; state: string;
+  /** R2 (floors): a figure to draw instead of the sprite, and the HQ page a tap opens (r5go). State 'fix' is the floor's
+   *  fixture, 'sale' a plot for sale, 'staff' the Staff Office desk. */
+  fig?: string; go?: string;
+}
 
 export interface R5HubExtras {
   rooms: readonly R5Room[];
   rows: number;
+  /** R2: the open floors top to bottom ([tag, name, r5go id]); without it the rows are named as R0 did. */
+  floors?: readonly [string, string, string][];
   level: number;
   /** The HQ's level name (the Hideout, the Fortress) and the building's own name. */
   levelName: string;
@@ -44,7 +51,7 @@ function floorNames(n: number): [string, string][] {
 }
 
 function building(x: R5HubExtras): string {
-  const names = floorNames(x.rows);
+  const names = x.floors ? x.floors.map(([t, n]) => [t, n] as [string, string]) : floorNames(x.rows);
   const tall = x.rows > 3;
   // The ground floor sits on the dirt line (mockup: 2F, G, B1 in slots f0-f2): fewer floors fill the lower slots.
   const slot = (r: number): number => (x.rows === 1 ? 1 : r);
@@ -53,14 +60,16 @@ function building(x: R5HubExtras): string {
   const floors = names.map(([f, sub], r) => {
     const rooms = x.rooms.filter((c) => c.row === r);
     const pos = tall ? `top:${topOf(r)}px;height:${Math.round(250 / x.rows) - 4}px;` : '';
-    return `<div class="fl11 f${Math.min(slot(r), 2)}" style="--i:${r};--d:${r * 140}ms;${pos}"><button class="ft11" ${act('base')}><b>${esc(f)}</b><em>${esc(sub)}</em></button>
+    return `<div class="fl11 f${Math.min(slot(r), 2)}" style="--i:${r};--d:${r * 140}ms;${pos}"><button class="ft11" ${x.floors ? act(NAV, x.floors[r]![2]) : act('base')}><b>${esc(f)}</b><em>${esc(sub)}</em></button>
     ${map(rooms, (c, j) => {
       const empty = c.state === 'empty';
-      const pic = c.sprite ? art(c.sprite, 38, 'who11') : c.icon ? art(c.icon, 26, 'pi') : SP('g-card-key', 26, 'pi');
-      return `<span class="rm11${empty ? ' plot' : j === 0 ? ' fix' : ''}" style="--j:${j}${c.span > 1 ? `;flex:${c.span}` : ''}" ${act('base')}>${pic}<b>${esc(empty ? 'Free slot' : title(c.name))}</b><em>${esc(empty ? 'Build here' : c.fx)}</em></span>`;
+      const plot = empty || c.state === 'sale';
+      const pic = c.fig ? c.fig : c.sprite ? art(c.sprite, 38, 'who11') : c.icon ? art(c.icon, 26, 'pi') : SP('g-card-key', 26, 'pi');
+      const fix = x.floors ? c.state === 'fix' : j === 0;
+      return `<span class="rm11${plot ? ' plot' : fix ? ' fix' : ''}" style="--j:${j}${c.span > 1 ? `;flex:${c.span}` : ''}" ${c.go ? act(NAV, c.go) : act('base')}>${pic}<b>${esc(empty ? 'Free slot' : c.state === 'sale' ? 'Plot for sale' : x.floors ? c.name : title(c.name))}</b><em>${esc(empty ? 'Build here' : c.fx)}</em></span>`;
     })}</div>`;
   }).join('');
-  const built = x.rooms.filter((c) => c.state !== 'empty').length, free = x.rooms.length - built;
+  const built = x.rooms.filter((c) => c.state !== 'empty' && c.state !== 'sale' && c.state !== 'fix' && c.state !== 'staff').length, free = x.rooms.filter((c) => c.state === 'empty').length;
   const roofTop = top0 - 30;
   const scaf = x.next ? `<div class="scaf11" style="top:${roofTop - 32}px"><b>${esc(x.next.name)}</b><em>${esc(x.next.building ? `Building · ready Day ${x.next.ready ?? '?'}` : `HQ Lv ${x.level + 1} · ${money(x.next.cost)}`)}</em></div>` : '';
   return `<section class="bld11" data-m="panel" data-testid="dom-building">${scaf}
@@ -89,7 +98,7 @@ function side(m: HqModel, x: R5HubExtras): string {
   } else {
     body = m.next.label === 'Turn in'
       ? '<div class="row sm"><b>Tonight’s action is done. Turn in: no Rest tonight.</b></div>'
-      : '<div class="row sm"><b>Rest: your Pokémon heal for free, the crew’s Morale +5, and +1 action tomorrow.</b></div><div class="row sm"><b>Or one Night action on the Region Map (key 2).</b></div>';
+      : `<button class="row sm" ${act(NAV, 'rest')} data-testid="r5-rest-open"><b>Rest: your Pokémon heal for free, the crew’s Morale +5, and +1 action tomorrow.</b></button>`+'<div class="row sm"><b>Or one Night action on the Region Map (key 2).</b></div>';
   }
   const extra = [
     x.desk === null ? '' : `<button class="row sm" ${act('desk')} data-testid="dom-desk"><b>APPLICATIONS · ${esc(x.desk ? `${x.desk} in the rain` : 'queue empty')}</b><i class="tag">I</i></button>`,

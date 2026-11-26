@@ -13,7 +13,7 @@ export const levelDef = (lv: number) => H().levels[Math.max(1, Math.min(6, lv)) 
 
 /** A save from before D5 has no `hq`: it starts empty, with no clean money (only a new run starts with clean money). */
 export function hqOf(b: DominionBlock): HqState {
-  return b.hq ?? { rooms: [], next: 1, upgrade: null, clean: 0, wash: [], loan: null, broke: false };
+  return b.hq ?? { rooms: [], next: 1, upgrade: null, clean: 0, wash: [], loan: null, broke: false, floorSeen: 1 };
 }
 export function withHq<T extends DominionBlock>(b: T, clean = 0): T {
   if (!b.hq) b.hq = { ...hqOf(b), clean: Math.max(0, Math.min(clean, b.funds)) };

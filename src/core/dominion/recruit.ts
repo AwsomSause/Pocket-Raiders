@@ -187,7 +187,10 @@ export function hireList(b: DominionBlock, seed: string): Hire[] {
   const fits = (t: GruntType): boolean => (!t.region || t.region === region) && !(t.once && (used.has(t.id) || b.day < h.onceFromDay)) && !(t.rarity === 'R' && b.day < h.rareFromDay);
   const out: Hire[] = [];
   const taken = new Set<string>();
-  for (let i = 0; i < h.count; i++) {
+  // The Staff Office's Auto-Checker with a Rotom Scanner or better scouts extra names (rolled after the usual ones).
+  const ck = b.hq?.staff?.checker;
+  const scouts = ck?.member && ck.on && ck.gear > 0 && b.members.some((m) => m.id === ck.member) ? DOMINION_DATA.hq.staff.roles[0].scouts[ck.gear - 1] ?? 0 : 0;
+  for (let i = 0; i < h.count + scouts; i++) {
     const w = h.rarityWeights;
     const roll = r.int(1, w.C + w.U + (b.day >= h.rareFromDay ? w.R : 0));
     const rarity = roll <= w.C ? 'C' : roll <= w.C + w.U ? 'U' : 'R';

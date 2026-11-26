@@ -14,7 +14,10 @@ import { stage, WHEEL_KEY } from './views';
 const img = (f: string): string => rxUrl(`dominion/${f}.png`);
 
 export interface DeskUi {
-  mode: 'ask' | 'inspect';
+  /** talk: the pass-50 talk scene (r50/deskTalk.ts); ask and inspect: the paperwork on the desk. */
+  mode: 'talk' | 'ask' | 'inspect';
+  /** The picked call in the talk scene. */
+  cAt?: number;
   /** The picked question (the last one is Type…). */
   qAt: number;
   /** The picked field in Inspect mode. */
@@ -167,7 +170,7 @@ export function deskView(m: DeskModel, ui: DeskUi, notice: string | null): strin
   const open = m.state === 'open' && m.a;
   const count = m.found ? `<div class="chipf" style="left:150px;top:256px;z-index:12;font-size:12px;background:linear-gradient(180deg,#ffb0a0,#ff5a4f);color:#fff" data-testid="desk-found">${m.found} MISMATCH${m.found === 1 ? '' : 'ES'}</div>` : '';
   const keys = open
-    ? `<span class="key"${act('deskInspect')}>Tab</span><span>${ui.mode === 'inspect' ? 'Questions' : 'Inspect'}</span><span class="key"${act('deskType')}>T</span><span>Type</span><span class="key"${act('back')}>Esc</span><span>HQ</span>`
+    ? `<span class="key"${act('deskInspect')}>Tab</span><span>${ui.mode === 'inspect' ? 'Questions' : 'Inspect'}</span><span class="key"${act('deskType')}>T</span><span>Type</span><span class="key"${act('back')}>Esc</span><span>${ui.mode === 'inspect' ? 'Questions' : 'Talk'}</span>`
     : `<span class="key"${act('back')}>Esc</span><span>HQ</span>`;
   return stage(`${booth(m)}
   <div class="ttl" style="--t1:#8a6a2a;--t2:#c79a3a">Applications <span class="sub" data-testid="desk-sub">· Day ${m.day}${open ? ` · ${m.place}` : ''}</span></div>
