@@ -5,6 +5,7 @@ import { tutStep } from './tutorial';
 import type { Content } from '../contentSchema';
 import { addLevels } from '../pokemon';
 import { healParty, newMon } from '../run';
+import { lifeInRun } from './life';
 import type { RunState } from '../state';
 import { step, type StepOut } from './clock';
 import { addMorale, freshCrewState, withCrew } from './crew';
@@ -223,6 +224,12 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (heroOut) return heroOut;
   const deskOut = deskInRun(content, run, action);
   if (deskOut) return deskOut;
+  // R6: the Clinic, Care time, a Region Event's action, the Prize Corner, the chapter card (life.ts).
+  const lifeOut = lifeInRun(content, run, action);
+  if (lifeOut) {
+    if (!lifeOut.ok) return { ok: false, block, notice: lifeOut.notice, heal: false, run };
+    return { ok: true, block: lifeOut.run.expansion!.dominion!, notice: lifeOut.notice, heal: false, run: lifeOut.run, roll: lifeOut.roll ?? null, bits: lifeOut.bits ?? [] };
+  }
   if (action.t === 'jobCaught') {
     const out = answerCaught(block, action.choice, run.seed);
     return { ok: out.ok, block: out.ok ? out.block : block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };

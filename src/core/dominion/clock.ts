@@ -164,6 +164,12 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'card':
     case 'ransom':
     case 'townMeet':
+    // R6 (life.ts, sent there by session.ts).
+    case 'clinic':
+    case 'care':
+    case 'regionEv':
+    case 'prize':
+    case 'chapter':
     case 'spyStart':
     case 'spyAsk':
     case 'spyAccuse':

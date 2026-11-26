@@ -23,6 +23,7 @@ import spiesRaw from '../../data/dominion/spies.json';
 import rivalActionsRaw from '../../data/dominion/rivalActions.json';
 import outsideRaw from '../../data/dominion/outside.json';
 import townRaw from '../../data/dominion/town.json';
+import lifeRaw from '../../data/dominion/life.json';
 import debateRaw from '../../data/dominion/debate.json';
 import policeRaw from '../../data/dominion/police.json';
 import growthRaw from '../../data/dominion/growth.json';
@@ -44,8 +45,8 @@ import {
   PartnersFileSchema, DomChartersFileSchema, type PartnersFile, type DomChartersFile,
   RegionsFileSchema, RegionPackSchema, type RegionsFile, type RegionPack,
   GrowthActionsSchema, GrowthFileSchema, SnatchFileSchema, TakeoverFileSchema, type TakeoverFile, type FieldFile as FieldFileT, type GrowthActions, type GrowthFile, type SnatchFile,
-  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, CourtFileSchema, CourtRulesSchema, DebateFileSchema, FoundingFileSchema, EmpireFileSchema, PoliceFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, SquadsFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, SpiesFileSchema, StartFileSchema, TasksFileSchema, TownFileSchema,
-  type ActionsFile, type ArmbandLook, type Building, type CourtCard, type CourtRules, type DebateFile, type FoundingFile, type EmpireFile, type PoliceFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type SquadsFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type SpiesFile, type StartFile, type Task, type TownFile,
+  ActionsFileSchema, ArmbandsFileSchema, BuildingsFileSchema, CourtFileSchema, CourtRulesSchema, DebateFileSchema, FoundingFileSchema, EmpireFileSchema, PoliceFileSchema, OutsideFileSchema, RivalActionsFileSchema, RivalsFileSchema, CrewFileSchema, DeskFileSchema, HqFileSchema, PyramidFileSchema, SquadsFileSchema, FieldFileSchema, GruntTypesFileSchema, HeroFileSchema, PersonalityFileSchema, SpiesFileSchema, StartFileSchema, TasksFileSchema, TownFileSchema, LifeFileSchema,
+  type ActionsFile, type ArmbandLook, type Building, type CourtCard, type CourtRules, type DebateFile, type FoundingFile, type EmpireFile, type PoliceFile, type OutsideRow, type RivalActionsFile, type RivalsFile, type CrewFile, type DeskFile, type HqFile, type PyramidFile, type SquadsFile, type FieldFile, type GruntType, type HeroFile, type PersonalityFile, type SpiesFile, type StartFile, type Task, type TownFile, type LifeFile,
 } from './schema';
 
 const growth = GrowthFileSchema.parse(growthRaw);
@@ -76,7 +77,7 @@ function withGrowth(f: FieldFileT): FieldFileT {
   };
 }
 
-type Data = { snatch: SnatchFile; takeover: TakeoverFile; growth: GrowthFile; growthActions: GrowthActions; start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; court: CourtCard[]; courtRules: CourtRules; hero: HeroFile; desk: DeskFile; squads: SquadsFile; founding: FoundingFile; armbands: Record<string, ArmbandLook>; police: PoliceFile; debate: DebateFile; spies: SpiesFile; town: TownFile };
+type Data = { snatch: SnatchFile; takeover: TakeoverFile; growth: GrowthFile; growthActions: GrowthActions; start: StartFile; actions: ActionsFile; field: FieldFile; crew: CrewFile; tasks: Task[]; gruntTypes: GruntType[]; empire: EmpireFile; hq: HqFile; buildings: Building[]; pyramid: PyramidFile; rivals: RivalsFile; rivalActions: RivalActionsFile; outside: OutsideRow[]; personality: PersonalityFile; court: CourtCard[]; courtRules: CourtRules; hero: HeroFile; desk: DeskFile; squads: SquadsFile; founding: FoundingFile; armbands: Record<string, ArmbandLook>; police: PoliceFile; debate: DebateFile; spies: SpiesFile; town: TownFile; life: LifeFile };
 const KANTO: Data = {
   start: StartFileSchema.parse(startRaw),
   actions: ActionsFileSchema.parse(actionsRaw),
@@ -101,6 +102,7 @@ const KANTO: Data = {
   debate: DebateFileSchema.parse(debateRaw),
   personality: PersonalityFileSchema.parse(personalityRaw),
   town: TownFileSchema.parse(townRaw),
+  life: LifeFileSchema.parse(lifeRaw),
   police: PoliceFileSchema.parse(policeRaw),
   founding: FoundingFileSchema.parse(foundingRaw),
   armbands: ArmbandsFileSchema.parse(armbandsRaw).looks,

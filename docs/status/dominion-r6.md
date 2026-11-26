@@ -14,19 +14,19 @@ Kice, 2026-11-21: "BUILD EVERYTHING AS CLOSE TO THE MOCKUPS AS YOU CAN." Slice R
 ## Rules kept
 
 - Pages never change the run: the Card's odds, the Choose page's odds and every row are display only. Changes go through `GameSession.dominionStep` (give, takeBack, townMeet), `moveParty` and `useItem`.
-- The answer's roll is the one `answerMeet` already made (same stream, same numbers): it is now returned with the answer (`MeetOut.roll`, `bits`) for the Result and Reward pages. No new RNG, no new save field, no save bump.
+- The answer's roll is the one `answerMeet` already made (same stream, same numbers): it is now returned with the answer (`MeetOut.roll`, `bits`) for the Result and Reward pages. No new RNG for meetings. (The last seven pages add the optional `life` block field and the `dominion-life` stream; no save bump.)
 - Event text stays until a key press; the reward appears only after the text is closed.
 
-## Needs a mechanic (not built, no placeholder)
+## The last seven pages (director answer, 2026-11-21: build them with simple real rules)
 
-| Page | Why |
-|---|---|
-| `clinic` | No paid healing exists. Pokémon heal for free on a rested night (Part 1 §2.1); a back-alley clinic is in no design doc. |
-| `care` | No affection, Poké Puffs or brushing in the game or the Evil Mode docs. |
-| `press` | No reporter interviews. The nearest are the Chair's court answers (R8) and Debates. |
-| `festival`, `prize` | Festivals are a monthly **Region Event** in `plans/evil-mode-rework/01_START_AND_THE_DAY.md` (line 63), which isn't built yet; there are no Game Corner coins. Building Region Events (a schedule, a block field, one special action for a few days) is its own slice with a save bump. |
-| `blackout` | The Blackout action exists (growth.json: cut a district's power, Heat −6), but the page's "pick a building in 40 minutes" has no mechanic. Also listed under Region Events. |
-| `chapter` | The Dominion has no chapters. |
+The first PR listed clinic, care, press, festival, prize, blackout and chapter as "needs a mechanic". Kice's answer while away: build every page, with simple real rules taken from the mockups and the design docs. Rules in `src/core/dominion/life.ts`, numbers in `src/data/dominion/life.json` (Zod: `LifeFileSchema`). New block field `life` (optional, no save bump, like `tut` and `desk`). New RNG stream `dominion-life` only.
+
+- **Clinic** (Party → H, or the Start menu): the back-alley Doctor heals for cash. ₽5 per missing HP %, rounded up to ₽5, +₽200 if fainted, +₽50 for a status. Heal them all (Enter) or just the one picked (J). The prices match the mockup (12% HP = ₽440).
+- **Care time** (Party → C): once a day per Pokémon, Brush (+3 friendship), Poké Puff (+10, ₽100) or Play (+5). It raises the game's own friendship, which already drives hearts, loafing, Return and friendship evolutions; the panel shows hearts, mood, last fed, the bonus that applies now, and the favourite flavour from the nature.
+- **Press**: street meetings with the media (outside.json section J: reporter, camera crew, radio) are asked on camera on the press page, answers on the right (1-3). Same rules as any street meeting.
+- **Region Events** (01_START_AND_THE_DAY.md §2.2, "every 28 days ... opens one special action for a few days"): from Day 14, every 28 days, for 3 days, alternating **Fireworks Night** and the **Blackout** in Celadon (or the region's first town). The page opens on its own on the morning it starts (once; the festival lantern on the top bar opens it again). One special action per event: a festival job (Pickpocket, Rob the stall, Swap the prize Porygon) or a blackout target (dark buildings +25% odds). Each is a check like a street meeting (30% + 8% x the best member's stat), with its odds on the page; money or a Pokémon on a pass, Heat either way. Just watch / Stay in lets it pass.
+- **Prize Corner** (Start menu, or P on the festival): 50 coins for ₽1,000 (B); trade coins for Porygon, Dratini, a Rare Candy or an Amulet Coin (Enter); or Swap it, a Stealth check at −20% once a day (a miss is Heat +10).
+- **Chapter card**: the run's chapter follows what it did: 1 Humble Beginnings (the opening), 2 A Name on the Door (founded), 3 Making Noise (Notoriety step 3), 4 The Siege (step 5). A new chapter's card shows on the next new day, until Enter.
 
 ## Mockup vs game (960x540)
 
@@ -42,11 +42,20 @@ Kice, 2026-11-21: "BUILD EVERYTHING AS CLOSE TO THE MOCKUPS AS YOU CAN." Slice R
 | Result | ![](dominion-r6/mock-evresult.jpg) | ![](dominion-r6/game-evresult.jpg) |
 | Reward | ![](dominion-r6/mock-reward.jpg) | ![](dominion-r6/game-reward.jpg) |
 | Text log | ![](dominion-r6/mock-log.jpg) | ![](dominion-r6/game-log.jpg) |
+| Clinic | ![](dominion-r6/mock-clinic.jpg) | ![](dominion-r6/game-clinic.jpg) |
+| Care time | ![](dominion-r6/mock-care.jpg) | ![](dominion-r6/game-care.jpg) |
+| Press | ![](dominion-r6/mock-press.jpg) | ![](dominion-r6/game-press.jpg) |
+| Fireworks Night | ![](dominion-r6/mock-festival.jpg) | ![](dominion-r6/game-festival.jpg) |
+| Prize Corner | ![](dominion-r6/mock-prize.jpg) | ![](dominion-r6/game-prize.jpg) |
+| Blackout | ![](dominion-r6/mock-blackout.jpg) | ![](dominion-r6/game-blackout.jpg) |
+| Chapter card | ![](dominion-r6/mock-chapter.jpg) | ![](dominion-r6/game-chapter.jpg) |
 
-Differences left on purpose (live data, not looks): a new run's box, party and bag are small; the person you meet is drawn from their job (Gentleman, Jenny, Scientist and so on); the Result page has no prize picture (meetings don't name one); the Choose page's crew line is "Your call, Boss." (meetings have no crew lines yet); there's no "Auto" text chip (no auto-advance in Dominion).
+Differences left on purpose (live data, not looks): a new run's box, party and bag are small; the person you meet is drawn from their job (Gentleman, Jenny, Scientist and so on); the Result page has no prize picture (meetings don't name one); the Choose page's crew line is "Your call, Boss." (meetings have no crew lines yet); there's no "Auto" text chip on most event pages (no auto-advance in Dominion). The Blackout's clock counts days, not minutes (Dominion has no real-time clock, 01 §2.3). The chapter shown is Chapter 2 (the test's run); the mockup shows Chapter 4.
 
 ## Tests
 
 - `tests/unit/dominionR6.test.ts` (8): the Choose odds equal the roll's chance; the answer's roll and bits are the same for the same seed; a sure answer has no roll and its reward is in the bits; a gone meeting / wrong index changes nothing; event pages (reward only on its own page, log window); the Reserve keeps its test ids and changes nothing; the Card's 100% / 0%; Party, Summary and Bag rows.
 - `tests/e2e/dominionR6.spec.ts` (2): Reserve, Card (Change crew, Esc without giving, give), Party, Summary, Bag (Potion used on the lead), three window sizes; a meeting through Talk, Choose, the log, Result and Reward, and a second one answered with key 1. No console errors.
+- `tests/unit/dominionLife.test.ts` (7): Clinic prices, healing and refusals; Care once a day, Puff costs and counts as fed, fainted waits; Region Events' days, kinds, same roll for the same seed, one action per event, letting it pass; the Blackout's dark bonus; coins, trades and one swap a day; chapters.
+- `tests/e2e/dominionLife.spec.ts` (1): Clinic (heal), Care (Puff, once a day), the press (answer with 1), Fireworks Night (a job rolled), the Prize Corner (coins, too dear), the Blackout (Esc, the lantern, Stay in), the Chapter 2 card. No console errors.
 - Updated for the new flow: `tests/e2e/dominionReserve.spec.ts` (Enter opens the Card first), `tests/e2e/dominionTown.spec.ts` (the meeting is an event).
