@@ -16,6 +16,9 @@ import { itemCount } from '../../src/core/items';
 import { STANDARD_CHOICE } from '../../src/core/rules';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
+import { r5CrewIn, r5Gear, r5Legend, r5Phase, r5Power, r5Snap, r5TeamUp } from '../../src/ui/redux/screens/dominion/r50/fights';
+import type { R5Person } from '../../src/ui/redux/screens/dominion/r50/jobs';
+import { r5RunOf } from '../../src/ui/redux/screens/dominion/r50/run';
 import { content } from './helpers';
 
 const domRun = (seed: string): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: DOMINION_MODE_ID } }), 0);
@@ -193,5 +196,38 @@ describe('R4 phase two and the Betrayal', () => {
     r = fightInRun(content, r)!;
     endDominionFight(content, r, 'win');
     expect(blk(r).field.fight).toBeNull();
+  });
+});
+
+describe('R4 the battle pages (display only)', () => {
+  const run = () => r5RunOf(blk(started()), []);
+  const person = (name: string): R5Person => ({ pic: '<i></i>', face: () => '<i></i>', name, role: 'r', colour: '#fff' });
+  it('Power gear and Pick a power: four rows and cards, the cursor on one, locked ones marked', () => {
+    const rows = GEAR.map((g, i) => ({ gear: g.gear, sub: g.name, tag: i ? `Region ${i + 1}` : 'Ready', icon: g.pic, ready: !i, carried: false }));
+    const gear = r5Gear({ rows, at: 1, open: 1, pic: '', lines: ['a', 'b', 'c'], note: null }, run());
+    expect(gear.match(/data-testid="dom-gear-\d"/g)).toHaveLength(4);
+    expect(gear).toContain('Power gear · 1 of 4 unlocked');
+    expect(gear).toContain('data-testid="dom-gear-pick"');
+    const cards = GEAR.map((g, i) => ({ kind: g.kind, name: g.name, about: g.about, tag: 'x', icon: g.pic, art: '', ready: !i }));
+    const power = r5Power({ cards, at: 0, sub: 'No gear carried', line: 'Bzzt!', verb: 'Mega Evolve' }, run());
+    expect(power.match(/class="pwc [^"]*lock/g)).toHaveLength(3);
+    expect(power.match(/class="pwc [^"]* on"/g)).toHaveLength(1);
+    expect(power).toContain('data-testid="dom-power-use"');
+  });
+  it('Phase two, the team-up, Who steps in, the Betrayal and the Snapshot keep their test ids', () => {
+    const r = run();
+    expect(r5Phase({ boss: 'Giovanni', role: 'Boss', pic: '', word: 'Phase two', sub: 's', changes: FIGHTS.phase.changes, speaker: { name: 'Giovanni' }, line: 'l' }, r)).toContain('data-testid="dom-phase2-go"');
+    const tu = r5TeamUp({ word: 'Nova Assault', sub: 's', crew: [{ name: 'Rosa', pic: '', mon: '' }], speaker: null, line: 'l', cut: 12 }, r);
+    for (const id of ['dom-teamup', 'dom-assist-yes', 'dom-assist-no', 'dom-teamup-cut']) expect(tu, id).toContain(`data-testid="${id}"`);
+    const ci = r5CrewIn({ foe: null, trainer: null, clock: { label: 'HQ raid', n: 3, unit: 'u' }, me: null, rows: [{ name: 'Rosa', mon: 'Weavile', face: '', colour: '#fff', text: 't', hp: 50 }, { name: 'Rook', mon: 'Houndour', face: '', colour: '#fff', text: 't', hp: 100 }], at: 1, head: 'Who steps in?', about: 'a' }, r);
+    expect(ci.match(/class="cw on"/g)).toHaveLength(1);
+    expect(ci).toContain('data-testid="dom-crewin-1"');
+    const lg = r5Legend({ small: 's', word: 'Betrayal', boss: person('Giovanni'), legend: person('Mewtwo'), admin: person('Archer'), line: 'l', face: 'Face Mewtwo' }, r);
+    expect(lg).toContain('BETRAYAL');
+    expect(lg).toContain('data-testid="dom-legend-go"');
+    const sn = r5Snap({ mine: '', foe: '', text: 'Houndoom vs Charizard · Day 18', count: 12, max: 40, note: 'n', line: 'l' }, r);
+    expect(sn).toContain('Album · 12 of 40');
+    expect(sn.match(/class="new"/g)).toHaveLength(1);
+    expect(sn).toContain('data-testid="dom-snap-keep"');
   });
 });

@@ -1717,6 +1717,8 @@ export class DominionScene extends Phaser.Scene {
         ['Best job', bestDef && best![1] > 0 ? `${bestDef.name} · Lv ${masteryLevel(best![1])} (${DOMINION_DATA.field.mastery.names[masteryLevel(best![1]) - 1] ?? ''})` : 'None yet'],
         ['Hero', g.hero ? `${g.hero.name} · Threat ${g.hero.threat}` : 'No Hero on your trail yet'],
         ['Gyms', `${owned.length} of ${DOMINION_DATA.growth.gyms.length} yours`],
+        // Redesign R4: the Snapshot album (mockup `snap`: "Snapshots show on your Boss card").
+        ['Album', `${b.jobx?.album.length ?? 0} of 40 snapshots`],
       ],
       speaker: m ? memberSpeaker(m, b) : null,
       line: owned.length ? `“${owned.length} Gym${owned.length === 1 ? '' : 's'} and counting. Not bad, Boss.”` : '“No Gyms yet, Boss. Give it time.”',
