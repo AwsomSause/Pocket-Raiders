@@ -9,6 +9,11 @@ import { DOMINION_DATA, useRegion } from './data';
 import { bookRest, weekSum } from './book';
 import { courtFightEnd } from './chair';
 import { hqFx } from './hqFx';
+import type { DominionBlock } from './schema';
+
+/** Redesign R4 (bossFights.ts registers it; run.ts imports this file, so no import back): phase two's rally. */
+let phaseHook: ((b: DominionBlock) => string[] | null) | null = null;
+export const setPhaseHook = (h: (b: DominionBlock) => string[] | null): void => { phaseHook = h; };
 
 const MODE = 'dominion';
 
@@ -70,6 +75,12 @@ export function endDominionFight(content: Content, run: RunState, outcome: 'win'
   const snagLines = outcome === 'win' || outcome === 'caught' ? snaggedToReserve(content, block, run) : [];
   run.battle = null;
   run.phase = 'map';
+  // Redesign R4: a rival Boss beaten at the door rallies once (phase two): the fight waits again, nothing settles yet.
+  const two = outcome === 'win' && phaseHook ? phaseHook(block) : null;
+  if (two) {
+    run.expansion = { ...(run.expansion ?? {}), dominion: block };
+    return [...snagLines, ...two];
+  }
   const funds = block.funds, sum = weekSum(block), why = block.field.fight?.why ?? 'fail';
   const lines = settle(content, block, run, outcome === 'caught' ? 'win' : outcome, caught);
   // D12: a Chair visitor's fight at the door: what was at stake.

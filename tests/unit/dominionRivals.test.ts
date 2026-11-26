@@ -294,7 +294,11 @@ describe('DOMINION D9: the Boss raid (Tension 80+)', () => {
     const r = beginDominionFight(content, atDoor('win'))!;
     const before = blk(r);
     const dread = before.field.districts[DOMINION_DATA.field.hq]!.dread;
-    const won = structuredClone(r);
+    let won = structuredClone(r);
+    // Redesign R4 (bossFights.ts): the Boss rallies once; phase two has to be won too.
+    expect(endDominionFight(content, won, 'win').join(' ')).toContain('Phase two');
+    expect(blk(won).field.fight).toMatchObject({ action: 'boss-raid', phase: 2, begun: false });
+    won = beginDominionFight(content, won)!;
     endDominionFight(content, won, 'win');
     const t = team(blk(won));
     expect(t.raid).toBeNull();

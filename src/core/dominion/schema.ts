@@ -217,8 +217,8 @@ export type DistrictState = z.infer<typeof DistrictStateSchema>;
 /** A battle an action (or the police) is waiting on. The fight bridge (fight.ts) starts it; fightEnd settles it. */
 export const FieldFightSchema = z.object({
   /** D11: 'hero' a job the Hero stepped into (m11), 'challenge' an encounter's battle, 'heroRaid' the Hero at the HQ, 'stand' the final stand, 'legend' a Heroic Legendary. D10: 'growth' a fight of a chain (Raid, a Gym). D12: 'court' a Chair visitor at the door (`target` the card id, `action` the answer). */
-  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'snatch', 'takeover', 'realm', 'partner']),
-  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover', 'realm', 'partner', 'town']),
+  why: z.enum(['fail', 'always', 'police', 'looker', 'raid', 'rival', 'hero', 'challenge', 'heroRaid', 'stand', 'legend', 'growth', 'court', 'spy', 'town', 'snatch', 'takeover', 'realm', 'partner', 'betrayal']),
+  foe: z.enum(['target', 'police', 'wild', 'ghost', 'member', 'looker', 'raid', 'rival', 'hero', 'sidekick', 'legend', 'growth', 'court', 'snatch', 'takeover', 'realm', 'partner', 'town', 'betrayal']),
   begun: z.boolean(),
   action: S.nullable(),
   target: S.nullable(),
@@ -232,6 +232,10 @@ export const FieldFightSchema = z.object({
   racket: S.nullable(),
   /** Redesign R4: the foe's first Pokémon, set when the battle begins (the Snapshot names it). */
   lead: S.optional(),
+  /** Redesign R4 (bossFights.ts): 2 once a rival Boss rallied for phase two. */
+  phase: I.min(1).max(2).optional(),
+  /** Redesign R4: the crew's help before the fight (team-up or steps in): who, and how much of the foe lead's HP it took. Null: turned down. */
+  assist: z.object({ by: z.array(S).max(3), cut: I.min(0).max(90) }).strict().nullable().optional(),
 }).strict();
 export type FieldFight = z.infer<typeof FieldFightSchema>;
 
@@ -417,6 +421,9 @@ export type DominionAction =
   | { t: 'calling' }
   | { t: 'market'; item: string }
   | { t: 'snap'; keep: boolean }
+  /** Redesign R4 (bossFights.ts): carry a power's gear; the crew's help before a fight (empty: not now). */
+  | { t: 'power'; kind: string }
+  | { t: 'assist'; by: string[] }
   | { t: 'buy'; vehicle: string }
   /** D30 (m10): what to do about a member caught on a botched job. */
   | { t: 'jobCaught'; choice: 'bail' | 'break' | 'leave' }
@@ -2327,6 +2334,10 @@ export const JobXStateSchema = z.object({
   album: z.array(SnapSchema).max(40),
   /** A moment offered after a won fight, waiting on Save or Skip. */
   snap: SnapSchema.nullable(),
+  /** The power the Boss carries (its key item was given by Dominion when `given`). */
+  power: z.object({ kind: S, item: S, given: z.boolean() }).strict().nullable().optional(),
+  /** Rival teams whose admin already turned on their Boss. */
+  betrayed: z.array(S).optional(),
 }).strict();
 export type JobXState = z.infer<typeof JobXStateSchema>;
 

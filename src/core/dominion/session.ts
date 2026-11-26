@@ -39,6 +39,7 @@ import { argueTyped, voiceTurn } from './debateTyped';
 import { answerQ, noteAct, releasedSeen, releaseQ, returnHeld } from './police';
 import './growth';
 import { jobxStep } from './jobs';
+import { fightsStep } from './bossFights';
 import './ending';
 import { settleCourt } from './growthCourt';
 import './growthOutside';
@@ -231,6 +232,13 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
   if (action.t === 'calling' || action.t === 'market' || action.t === 'snap') {
     const work = structuredClone(run);
     const out = jobxStep(work, action);
+    if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
+    return { ok: true, block: out.block, notice: out.notice, heal: false, run: withBlock(work, DominionBlockSchema.parse(out.block)) };
+  }
+  // Redesign R4 (bossFights.ts): carry a power's gear; the crew's help before a fight.
+  if (action.t === 'power' || action.t === 'assist') {
+    const work = structuredClone(run);
+    const out = fightsStep(content, work, action);
     if (!out.ok) return { ok: false, block, notice: out.notice, heal: false, run };
     return { ok: true, block: out.block, notice: out.notice, heal: false, run: withBlock(work, DominionBlockSchema.parse(out.block)) };
   }

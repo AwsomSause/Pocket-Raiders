@@ -228,7 +228,7 @@ addCardHook((_b, _run, c) => {
 // ---------- the battle album (mockup `snap`) ----------
 
 /** The fights worth a snapshot when won: the Hero, a Legendary, a Gym Leader, a rival Boss, a takeover. */
-const BIG: readonly FieldFight['why'][] = ['hero', 'heroRaid', 'stand', 'legend', 'growth', 'rival', 'takeover', 'realm'];
+const BIG: readonly FieldFight['why'][] = ['hero', 'heroRaid', 'stand', 'legend', 'growth', 'rival', 'takeover', 'realm', 'betrayal'];
 const nice = (id: string): string => id.replace(/-/g, ' ').replace(/\b\w/g, (x) => x.toUpperCase());
 
 addFightHook((b, run, fight, outcome) => {

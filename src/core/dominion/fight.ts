@@ -17,6 +17,7 @@ import { snatchSide } from './snatch';
 import { takeoverSide } from './takeover';
 import { realmSide } from './regions';
 import { partnerSide, snagsThisFight } from './partners';
+import { betrayalLevel, betrayalOf, setUpFight } from './bossFights';
 
 /** Starts `field.fight` and marks it begun. Returns null when there's nothing to start or nobody can fight. */
 export function beginDominionFight(content: Content, current: RunState): RunState | null {
@@ -64,6 +65,11 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
     if (!side) return null;
     team = side.species.map((s, i) => make(s, Math.max(2, side.level - (i ? 1 : 0)))).filter((m): m is PokemonInstance => !!m);
     trainer = { classId: side.classId, name: side.name, leaderId: null };
+  } else if (fight.foe === 'betrayal') {
+    // Redesign R4 (bossFights.ts): the rival team's Legendary, after their admin turned on the Boss. Wild: it can be caught.
+    const e = betrayalOf(fight.racket);
+    if (!e) return null;
+    team = [make(e.legend, betrayalLevel(e, run.party))].filter((m): m is PokemonInstance => !!m);
   } else if (fight.foe === 'member') {
     // A spar with the first member, or (D22) a confronted spy's own team.
     const m = (fight.target && b.members.find((x) => x.id === fight.target)) || b.members[0];
@@ -85,5 +91,7 @@ export function beginDominionFight(content: Content, current: RunState): RunStat
   run.phase = 'battle';
   fight.begun = true;
   fight.lead = team[0]!.speciesId;
+  // Redesign R4: the foe's powers by the main game's boss rule, phase two's rally, the crew's help.
+  setUpFight(content, b, run, trainer?.leaderId ?? null);
   return run;
 }

@@ -67,6 +67,7 @@ import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController
 import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
 import { JobsX } from './dominion/r4Jobs';
+import { FightsX } from './dominion/r4Fights';
 import type { LiveAnswer } from '../core/dominion/schema';
 import { TutorialController } from './dominion/tutorialController';
 import type { TutWhere } from '../core/dominion/tutorial';
@@ -161,6 +162,7 @@ export class DominionScene extends Phaser.Scene {
   });
   /** Redesign R4: the Job board, the live question, the calling card, the Black Market, the cargo and Gym pages. */
   private jx = this.newJx();
+  private fx = this.newFx();
   /** Redesign R4: Pick the crew over the Card (mockup `crewpick`). */
   private cp = new CrewPick();
   /** Redesign R4: the Boss card is up (mockup `tcard`, from the Start menu). */
@@ -207,6 +209,7 @@ export class DominionScene extends Phaser.Scene {
     this.cp = new CrewPick();
     this.bcard = false;
     this.jx = this.newJx();
+    this.fx = this.newFx();
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -246,6 +249,8 @@ export class DominionScene extends Phaser.Scene {
     if (blk?.opened && this.heroPending()) this.screen = 'interrupt';
     // D27: back from the battle that spent the Day's last action: the Day ends by itself when the setting says so.
     else if (back && blk?.opened && !ch) this.autoEnd();
+    // Redesign R4: back from a battle: the Snapshot of a big win, Phase two or the Betrayal (bossFights.ts).
+    if (blk?.opened) this.fx.afterFight(back);
     const archetype = getArchetype(session.content, run.archetypeId);
     const level = run.party[0]?.level ?? 5;
     const d = DOMINION_DATA.start;
@@ -294,6 +299,7 @@ export class DominionScene extends Phaser.Scene {
         crewBack: () => { this.cp.close(); this.view?.refresh(); },
         tcardBack: () => { this.bcard = false; this.view?.refresh(); },
         ...this.jx.acts(),
+        ...this.fx.acts(),
         opt: (id) => { if (this.cursor) this.cursor = { ...this.cursor, opt: String(id) }; this.view?.refresh(); },
         buy: (id) => this.buy(id),
         ...this.ev.acts(),
@@ -395,6 +401,7 @@ export class DominionScene extends Phaser.Scene {
       // Redesign R0: the Start menu over the HQ keeps every key (its moves come through key()).
       if (this.start.on || this.bcard) return;
       // Redesign R4: the Job board, the live question, the calling card and the Black Market keep their keys.
+      if (this.inRun() && this.fx.raw(e.code)) return;
       if (this.inRun() && this.jx.raw(e.code)) return;
       // D24: the interview room and the release page read their keys first (typing included).
       // D30: a job moment or the morning paper keeps every key while it is up (N is Next action on a result page).
@@ -752,6 +759,7 @@ export class DominionScene extends Phaser.Scene {
     if (id in TAB) return this.tab(TAB[id]!);
     if (id === 'start' && this.screen === 'hq') return this.start.open();
     if (id === 'tcard') { this.bcard = true; return void this.view?.refresh(); }
+    if (id === 'gear' || id === 'power') return this.fx.openGear();
     if (id === 'menu') { this.menu.open(); return void this.view?.refresh(); }
     // Redesign R9: Settings, Options, Save and quit, Rotom and the vault are the Boss Menu controller's pages.
     if (['set', 'options', 'save', 'rotom', 'vault', 'controls', 'calm', 'access', 'hud'].includes(id)) { this.menu.go(id); return void this.view?.refresh(); }
@@ -781,6 +789,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.menu.owns()) return this.menu.render();
     if (this.tut.ownsPage()) return this.tut.renderPage();
     const b = this.block();
+    if (b && this.inRun() && this.fx.owns()) return this.fx.render();
     if (b && this.inRun() && this.jx.owns()) return this.jx.render();
     if (b && this.inRun() && this.job.owns()) return this.job.render();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
@@ -1026,6 +1035,7 @@ export class DominionScene extends Phaser.Scene {
       if (a === 'back' || a === 'confirm') this.bcard = false;
       return void this.view?.refresh();
     }
+    if (this.inRun() && this.fx.key(a)) return;
     if (this.inRun() && this.jx.key(a)) return;
     if (this.end.key(a)) return;
     if (this.spy.key(a)) return void this.view?.refresh();
@@ -1714,6 +1724,17 @@ export class DominionScene extends Phaser.Scene {
   }
 
   /** People for the job moments (order, done, botched): the Boss and the member who went. */
+  private newFx(): FightsX {
+    return new FightsX({
+      block: () => this.block() ?? null,
+      refresh: () => this.view?.refresh(),
+      people: () => this.r4People(),
+      monPic: (sp, h) => monPic(this, sp, h),
+      fight: (from) => this.fight(from as Screen),
+      notice: (line) => { this.notice = line; },
+    });
+  }
+
   private newJx(): JobsX {
     return new JobsX({
       block: () => this.block() ?? null,
@@ -1956,6 +1977,8 @@ export class DominionScene extends Phaser.Scene {
 
   /** Starts the battle the block waits on; the scene comes back to `from` afterwards. */
   private fight(from: Screen): void {
+    // Redesign R4: the Betrayal, Phase two and the crew's help come first (bossFights.ts).
+    if (this.fx.preFight(from)) return;
     resume = from;
     if (services().session.dominionFight()) {
       this.leaving = true;

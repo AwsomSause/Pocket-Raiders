@@ -135,6 +135,7 @@ export const START_ITEMS: readonly R5StartItem[] = [
   { id: 'roster', icon: 'g-idcard', label: 'Crew', about: 'Your crew, their files and squads' },
   { id: 'reserve', icon: 'g-ball', label: 'Pokémon', about: 'The Reserve and the Pyramid' },
   { id: 'tcard', icon: 'g-badgecard', label: 'Boss card', about: 'Your card: level, money, gyms, the Hero' },
+  { id: 'gear', icon: 'g-megaring', label: 'Power gear', about: 'Mega, Tera, Dynamax, Z: what opens when' },
   { id: 'map', icon: 'g-town-map', label: 'Region map', about: 'Districts, targets and tonight’s jobs' },
   { id: 'rivals', icon: 'g-scope-lens', label: 'Rivals', about: 'The other teams in Kanto' },
   { id: 'save', icon: 'g-journal', label: 'Save', about: 'The game saves every step' },

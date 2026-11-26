@@ -1,0 +1,58 @@
+{
+  "_source": "Pass 50 of plans/evil-mode-rework/redesign-50 (pages gear, power, phase, teamup, crewin, legend, snap). Director 2026-11-21: give the mockups' pages simple real rules. Numbers are balance: tune here.",
+  "power": {
+    "gear": [
+      { "kind": "mega", "item": "mega-ring", "gear": "Key Stone", "name": "Mega Evolution", "about": "Becomes its Mega form", "verb": "Mega Evolve", "pic": "i-mega_bracelet" },
+      { "kind": "tera", "item": "tera-orb", "gear": "Tera Orb", "name": "Terastal", "about": "Becomes one pure type", "verb": "Terastallize", "pic": "i-tera_orb" },
+      { "kind": "dynamax", "item": "dynamax-band", "gear": "Dynamax Band", "name": "Dynamax", "about": "Giant for three turns", "verb": "Dynamax", "pic": "i-dynamax_band" },
+      { "kind": "zmove", "item": "z-ring", "gear": "Z-Ring", "name": "Z-Power", "about": "One huge move", "verb": "Use Z-Power", "pic": "i-z_ring" }
+    ],
+    "rules": [
+      "One power after Day {after} of the first region.",
+      "One more each region, four at most.",
+      "Bosses who face you follow the same rule."
+    ],
+    "pick": "Bzzt! More powers open in each new region.",
+    "picked": "{gear} on. {name} is ready for your next fight.",
+    "carried": "You carry the {gear}.",
+    "locked": "That one opens in Region {n}.",
+    "none": "No power yet. The first one opens after Day {after}."
+  },
+  "phase": {
+    "word": "Phase two",
+    "sub": "{boss} stops holding back",
+    "atk": 1,
+    "changes": [
+      { "tone": "dn", "icon": "▼", "title": "{his} team rallies", "text": "Back on its feet, the lead with Attack +{atk}" },
+      { "tone": "up", "icon": "♪", "title": "No rest for you", "text": "Your team stays as it is" },
+      { "tone": "up", "icon": "♪", "title": "{his} ace waits", "text": "Announced when it comes out" },
+      { "tone": "up", "icon": "▲", "title": "Your crew", "text": "{who} can call a team-up now" }
+    ],
+    "noCrew": "Nobody free to team up",
+    "lines": ["Impressive. Now see what {team} really is."],
+    "note": "{boss} isn't finished. Phase two."
+  },
+  "assist": {
+    "teamup": { "word": "{tag} Assault", "sub": "Crew team-up · once a battle", "per": 12, "max": 36, "lines": ["Together, now! Hit them from three sides!", "On three, Boss! We hit them first!"] },
+    "crewin": { "head": "Who steps in?", "cut": 30, "hurt": 40, "about": "A crew member fights first, then the Boss takes over.", "fresh": "Fresh", "hurtWord": "Hurt" },
+    "used": "{who} hit {mon} first: it starts at {hp}% HP."
+  },
+  "betrayal": {
+    "small": "The job is interrupted",
+    "word": "Betrayal",
+    "role": "Betrayed by {admin}",
+    "over": 5,
+    "teams": {
+      "rocket": { "admin": "archer", "legend": "mewtwo", "level": 70, "line": "You lost, {boss}. {team} answers to me now... and so does the thing in the cave." }
+    },
+    "face": "Face {legend}",
+    "won": "{legend} breaks free and is gone. {admin} runs with nothing.",
+    "caught": "{legend} is yours. {admin} runs with nothing.",
+    "lost": "{legend} tears through your team and vanishes. {admin} runs after it."
+  },
+  "snap": {
+    "line": "Bzzt! Click! That one is going on the wall.",
+    "note": "Snapshots show on your Boss card.",
+    "saved": "Saved to the album."
+  }
+}
