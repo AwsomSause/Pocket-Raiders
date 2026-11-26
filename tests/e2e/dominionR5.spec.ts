@@ -182,6 +182,76 @@ test('the pass-50 Crew pages', async ({ page }, info) => {
   await page.keyboard.press('Escape');
   await expect(s.getByTestId('dom-file-stats')).toBeVisible();
 
+  // M: the Crew pages list, and the seven pages with their own simple rules (set-up: a storm evening, money, Edge points).
+  await page.evaluate(() => {
+    const b = (window as any).__pkr.session.run.expansion.dominion;
+    Object.assign(b, { phase: 'evening', day: 3, funds: 5000 });
+    b.field.edge.stats.brawn += 2;
+  });
+  const dom = () => page.evaluate(() => (window as any).__pkr.session.run.expansion.dominion);
+  await page.keyboard.press('Digit1');
+  await page.keyboard.press('Digit3');
+  await page.keyboard.press('KeyM');
+  await expect(s.getByTestId('r5-crewmenu')).toBeVisible();
+  await shot('crewmenu');
+  const openRow = async (id: string) => {
+    await s.getByTestId(`r5m-${id}`).click();
+    await s.getByTestId(`r5m-${id}`).click();
+    await expect(s.getByTestId(`r5-${id}`)).toBeVisible();
+  };
+  const back = async () => {
+    await page.keyboard.press('Escape');
+    await expect(s.getByTestId('r5-crewmenu')).toBeVisible();
+  };
+  await openRow('bonds');
+  await expect(s.getByTestId('r5-bond-detail')).toBeVisible();
+  await shot('bonds');
+  await back();
+  await openRow('binder');
+  await expect(s.locator('[data-testid^="r5b-card-"]')).toHaveCount(7);
+  await shot('binder');
+  await back();
+  await openRow('downtime');
+  await shot('downtime');
+  await s.getByTestId('r5-off-send').click();
+  expect(Object.keys((await dom()).crewPages.off)).toHaveLength(1);
+  await back();
+  await openRow('shelter');
+  await shot('shelter');
+  await s.getByTestId('r5-storm-keep').click();
+  expect((await dom()).crewPages.shelter).toBe(3);
+  await back();
+  await openRow('disguise');
+  await page.keyboard.press('ArrowDown');
+  await shot('disguise');
+  await page.keyboard.press('Enter');
+  expect(Object.values((await dom()).crewPages.outfits)).toEqual(['hiker']);
+  await back();
+  await openRow('skills');
+  await shot('skills');
+  await s.getByTestId('r5-skill-learn').click();
+  expect((await dom()).crewPages.skills).toEqual(['glare']);
+  await back();
+  await openRow('graffiti');
+  await page.keyboard.press('KeyC');
+  await shot('graffiti');
+  await s.getByTestId('r5-tag-spray').click();
+  expect((await dom()).crewPages.tag.symbol).toBe('bolt');
+  await back();
+  await page.keyboard.press('Escape');
+  await expect(s.getByTestId('r5-roster')).toBeVisible();
+
+  // Let go (on the Crew File of the new hire): the first tap asks, the second lets the member go.
+  await s.getByTestId('r5-card-6').click();
+  await s.getByTestId('r5-card-6').click();
+  await expect(s.getByTestId('dom-file-stats')).toBeVisible();
+  await s.getByTestId('r5-letgo').click();
+  await expect(s.getByTestId('r5-letgo')).toContainText('Yes, let');
+  expect((await dom()).members).toHaveLength(7);
+  await s.getByTestId('r5-letgo').click();
+  await expect(s.getByTestId('r5-roster')).toBeVisible();
+  expect((await dom()).members).toHaveLength(6);
+
   // Confront (F on a suspected member's file): the talk scene. Gus is a Rocket mole with three clues (set-up only).
   await page.evaluate(() => {
     const b = (window as any).__pkr.session.run.expansion.dominion;
@@ -199,8 +269,10 @@ test('the pass-50 Crew pages', async ({ page }, info) => {
   await page.keyboard.press('Digit1');
   await page.keyboard.press('Digit3');
   await expect(s.getByTestId('r5-roster')).toBeVisible();
-  // M: the Mole hunt clue wall, Gus first (the most suspected).
+  // M, Mole hunt: the clue wall, Gus first (the most suspected).
   await page.keyboard.press('KeyM');
+  await s.getByTestId('r5m-mole').click();
+  await s.getByTestId('r5m-mole').click();
   await expect(s.getByTestId('r5-suspect-0')).toContainText('Gus');
   await shot('mole');
   await page.keyboard.press('Escape');

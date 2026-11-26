@@ -1,6 +1,7 @@
 // The clock (Part 1 §2): Morning (read the Night Report), Day (the Boss's actions), Evening (plan, menus), Night (one
 // action or Rest), then the World Turn and the next Morning. A day only passes when the player chooses. Pure.
 
+import { downtime, learn, shelter, spray, wear } from './crewPages';
 import { DOMINION_DATA } from './data';
 import type { DominionAction, DominionBlock } from './schema';
 import { addHeat, scoutHome, syncHeat } from './field';
@@ -222,6 +223,19 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'talk': {
       const out = answer(block, action.choice, seed);
       return out.ok ? ok(out.block, out.notice) : no(block);
+    }
+    // Redesign R5: the Crew pages' rules (crewPages.ts).
+    case 'downtime':
+    case 'shelter':
+    case 'outfit':
+    case 'skill':
+    case 'spray': {
+      const out = action.t === 'downtime' ? downtime(block, action.member, action.place)
+        : action.t === 'shelter' ? shelter(block, action.choice)
+          : action.t === 'outfit' ? wear(block, action.member, action.outfit)
+            : action.t === 'skill' ? learn(block, action.id)
+              : spray(block, action.symbol, action.colour, action.slogan);
+      return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
     }
     case 'evTalk': {
       const out = eveningTalk(block, action.member, seed);

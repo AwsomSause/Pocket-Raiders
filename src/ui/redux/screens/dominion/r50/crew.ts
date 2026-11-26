@@ -29,11 +29,11 @@ export const memberColour = (i: number): string => PAL[((i % PAL.length) + PAL.l
 
 /** Hidden from sight, read by screen readers and tests. */
 const SR = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap';
-const sr = (testid: string, text: string): string => `<span${testid ? ` data-testid="${testid}"` : ''} style="${SR}">${esc(text)}</span>`;
+export const sr = (testid: string, text: string): string => `<span${testid ? ` data-testid="${testid}"` : ''} style="${SR}">${esc(text)}</span>`;
 /** The command wheel's Q chip at the head of every Crew key strip (as R0's hub; the Nav spec taps it). */
 const QCHIP = `<span>${WHEEL_KEY.replace('<span>Wheel</span>', '')}</span>`;
-const KO = (o: { testid?: string; pre?: string } = {}): { testid?: string; pre: string } => ({ ...o, pre: QCHIP + (o.pre ?? '') });
-const money = (n: number): string => `₽${n.toLocaleString('en-US')}`;
+export const KO = (o: { testid?: string; pre?: string } = {}): { testid?: string; pre: string } => ({ ...o, pre: QCHIP + (o.pre ?? '') });
+export const money = (n: number): string => `₽${n.toLocaleString('en-US')}`;
 
 /** A member's picture `h` px tall in the team's colours with the armband (a png look or a trainer atlas). */
 export function crewPic(look: string, h: number, team: TeamColours | null, cls = '', extra = ''): string {
@@ -58,7 +58,7 @@ export const crewFace = (look: string, sz: number, colour: string, team: TeamCol
 
 /** A member speaking in the text box. */
 export const speaker = (m: { name: string; look: string }, colour: string, team: TeamColours | null): R5Speaker => ({ name: titleName(m.name), pic: crewFaceInner(m.look, 40, team), colour });
-const titleName = (s: string): string => (s === s.toUpperCase() ? s[0] + s.slice(1).toLowerCase() : s);
+export const titleName = (s: string): string => (s === s.toUpperCase() ? s[0] + s.slice(1).toLowerCase() : s);
 
 const bar = (l: string, v: number, max: number, i: number): string =>
   `<div class="bar" style="--i:${i};--d:${i * 60}ms"><span>${esc(l)}</span><i><u style="width:${Math.round((Math.max(0, Math.min(max, v)) / max) * 100)}%"></u></i><b>${v}</b></div>`;
@@ -96,7 +96,7 @@ export function r5Roster(v: R5RosterView, x: R5CrewCtx): string {
 
 // ---------- the Crew File (kind file, f6) ----------
 
-export function r5File(f: FileModel, m: R5Member, i: number, x: R5CrewCtx): string {
+export function r5File(f: FileModel, m: R5Member, i: number, x: R5CrewCtx, letGoArmed = false): string {
   const tc = f.colours;
   const mons = f.team.slice(0, 3);
   const ace = f.team.reduce<FileModel['team'][number] | null>((a, t) => (!a || t.level > a.level ? t : a), null);
@@ -121,7 +121,7 @@ export function r5File(f: FileModel, m: R5Member, i: number, x: R5CrewCtx): stri
     body,
     who: x.notice ? null : speaker({ name: f.name, look: f.look }, memberColour(i), tc), line: x.notice ?? (f.out ? f.out : f.now.line.replace(/^"|"$/g, '')),
     footOpts: { testid: x.notice ? 'dom-notice' : 'dom-file-now' },
-    ctas: [['Back', 'r5c', 'roster'], ['Assign', 'r5c', 'assign']],
+    ctas: [['Back', 'r5c', 'roster'], [letGoArmed ? `Yes, let ${titleName(f.name)} go` : 'Let go', 'r5letgo', '', 'r5-letgo'], ['Assign', 'r5c', 'assign']],
     keys: [['←→', 'member'], ...f.keys.slice(0, 3).map((k) => [k.key, k.label] as const), ['Esc', 'Back']],
     keysOpts: KO({ testid: 'dom-file-keys', pre: sr('', allKeys) }),
   });

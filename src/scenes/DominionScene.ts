@@ -27,7 +27,7 @@ import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
 import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
 import { EventPages } from './dominion/r6Events';
-import { CrewController } from './dominion/crewController';
+import { CrewController, R5_PAGES } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
 import { ChairController } from './dominion/chairController';
@@ -745,7 +745,7 @@ export class DominionScene extends Phaser.Scene {
   }
 
   /** Redesign R0: the pass-50 chrome's links (mockup page ids) go to the screens the game has; the rest wait for their slice. */
-  private r5go(id: string): void {
+  r5go(id: string): void {
     const b = this.block();
     if (!b) return;
     const TAB: Record<string, number> = { hq: 0, map: 1, roster: 2, reserve: 3, card: 4, jobs: 4, ledger: 5 };
@@ -760,7 +760,8 @@ export class DominionScene extends Phaser.Scene {
     // R6: the party chip, the Start menu's Bag and the Summary are pages of the Pokémon tab.
     if (id === 'party' || id === 'summary' || id === 'bag') { this.notice = null; this.res.openPage(id); return void this.view?.refresh(); }
     // Redesign R5: the Crew pages, the Pyramid and the Boss Edge (the emblem's level badge).
-    if (['file', 'idcard', 'loyalty', 'payday', 'uniform', 'school', 'mole', 'people'].includes(id)) return void (this.crew.openPage(id), this.view?.refresh());
+    if (R5_PAGES.includes(id) && id !== 'roster') return void (this.crew.openPage(id), this.view?.refresh());
+    if (id === 'squads') { this.tab(2); this.sq.raw('KeyU'); return void this.view?.refresh(); }
     if (id === 'pyramid') { this.screen = 'pyramid'; return void this.view?.refresh(); }
     if (id === 'levelup') return this.res.openEdge();
     if (id === 'save') { this.notice = 'Saved. Dominion saves every step.'; return void this.view?.refresh(); }
