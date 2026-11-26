@@ -1,5 +1,5 @@
 {
-  "_source": "plans/evil-mode-rework Part 3 §3 (tiers, rooms, outside buildings), Part 6 §3 (HQ menu), Part 9 A21 (clean money, Defense) and A22 (going broke, loans); lists/buildings.md §1 (building tiers)",
+  "_source": "plans/evil-mode-rework Part 3 §3 (tiers, rooms, outside buildings), Part 6 §3 (HQ menu), Part 9 A21 (clean money, Defense) and A22 (going broke, loans); lists/buildings.md §1 (building tiers); Kice 2026-11-21 (floors, plots, Staff Office: plans/evil-mode-rework/hq-floors/DESIGN.md)",
   "levels": [
     {
       "lv": 1,
@@ -330,7 +330,26 @@
     "face": "Your buildings work on the town: Regard +{rg}, Dread +{dr} in {where}.",
     "morale": "The crew likes the new rooms: Morale +{morale}, Loyalty +{loyalty}.",
     "items": "Made in the HQ: {list}.",
-    "repair": "The buildings are patched up: Condition +{n}."
+    "repair": "The buildings are patched up: Condition +{n}.",
+    "plotBought": "Plot bought on {floor}: {free} free there now. −₽{cost}.",
+    "plotNone": "No plots left for sale on {floor}.",
+    "plotLocked": "That floor opens at HQ Lv. {lv}.",
+    "floorFull": "No room on {floor} for that ({need} plot{s} needed). Pick another floor (F) or buy a plot (P).",
+    "floorNew": "A new floor opens: {floor} ({tag}). {plots} free plots; the {fixture} works now ({does}).",
+    "posted": "{name} is now the {role}.",
+    "unposted": "The {role} desk is empty.",
+    "postBusy": "{name} already holds another post.",
+    "gearBought": "The {role} gets the {gear} (gear {n}). −₽{cost}.",
+    "gearTop": "The {role} has the best gear already.",
+    "checkerHired": "{who} (Auto-Checker) hired {name} the {type} (₽{price}).",
+    "checkerMiss": "{who} (Auto-Checker) misjudged and took {name} the {type} instead.",
+    "checkerSkip": "{who} (Auto-Checker) skipped {name}: {why}.",
+    "checkerIdle": "The Auto-Checker desk had nobody worth hiring today.",
+    "booksWash": "{who} (Bookkeeper) washed ₽{amount} through the {front}.",
+    "booksRepay": "{who} (Bookkeeper) paid ₽{amount} off the Fence's loan.",
+    "booksNoFront": "{who} (Bookkeeper) has no Front to wash through.",
+    "careFix": "{who} (Caretaker) repaired {name} +{n} Condition (₽{cost}).",
+    "staffOut": "{who} is out, so the {role} desk sat empty."
   },
   "icons": {
     "groups": {
@@ -415,5 +434,241 @@
         "#342a40"
       ]
     }
+  },
+  "floors": [
+    {
+      "lv": 1,
+      "tag": "G",
+      "name": "Ground Floor",
+      "plots": 3,
+      "forSale": 1,
+      "plotCost": 1500,
+      "fixture": {
+        "name": "Loading Dock",
+        "does": "storage +5",
+        "fx": {
+          "storage": 5
+        }
+      }
+    },
+    {
+      "lv": 2,
+      "tag": "B1",
+      "name": "The Cellar",
+      "plots": 3,
+      "forSale": 2,
+      "plotCost": 2500,
+      "fixture": {
+        "name": "Bolt Hole",
+        "does": "HQ Heat −1 a day",
+        "fx": {
+          "heatDay": 1
+        }
+      }
+    },
+    {
+      "lv": 3,
+      "tag": "2F",
+      "name": "Upper Floor",
+      "plots": 4,
+      "forSale": 2,
+      "plotCost": 5000,
+      "fixture": {
+        "name": "Lookout Post",
+        "does": "Defense +1",
+        "fx": {
+          "defense": 1
+        }
+      }
+    },
+    {
+      "lv": 4,
+      "tag": "3F",
+      "name": "Arena Deck",
+      "plots": 5,
+      "forSale": 2,
+      "plotCost": 12000,
+      "fixture": {
+        "name": "Battle Arena",
+        "does": "Train +1 XP",
+        "fx": {
+          "trainXp": 1
+        }
+      }
+    },
+    {
+      "lv": 5,
+      "tag": "4F",
+      "name": "Sky Offices",
+      "plots": 6,
+      "forSale": 3,
+      "plotCost": 30000,
+      "fixture": {
+        "name": "Executive Lift",
+        "does": "income +5%",
+        "fx": {
+          "incomePct": 5
+        }
+      }
+    },
+    {
+      "lv": 6,
+      "tag": "TOP",
+      "name": "Throne Floor",
+      "plots": 7,
+      "forSale": 3,
+      "plotCost": 60000,
+      "fixture": {
+        "name": "Throne Room",
+        "does": "crew morale +3 a week",
+        "fx": {
+          "morale": 3
+        }
+      }
+    }
+  ],
+  "plotStepPct": 50,
+  "staff": {
+    "skillCap": 10,
+    "roles": [
+      {
+        "id": "checker",
+        "name": "Auto-Checker",
+        "stat": "wits",
+        "does": "Hires Grunts every morning by your rules.",
+        "costs": [
+          1500,
+          4000,
+          9000,
+          20000,
+          45000
+        ],
+        "gear": [
+          "Clipboard",
+          "Filing Cabinet",
+          "Background Checks",
+          "Rotom Scanner",
+          "Headhunter Network"
+        ],
+        "perDay": [
+          1,
+          2,
+          2,
+          3,
+          3
+        ],
+        "rarities": [
+          "C",
+          "CU",
+          "CU",
+          "CUR",
+          "CUR"
+        ],
+        "scouts": [
+          0,
+          0,
+          0,
+          1,
+          2
+        ],
+        "haggle": [
+          0,
+          0,
+          10,
+          10,
+          10
+        ],
+        "trained": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "wantFrom": 2,
+        "misjudge": {
+          "base": 40,
+          "perSkill": 5
+        }
+      },
+      {
+        "id": "books",
+        "name": "Bookkeeper",
+        "stat": "charm",
+        "does": "Launders dirty money every night.",
+        "costs": [
+          1500,
+          4000,
+          9000,
+          20000,
+          45000
+        ],
+        "gear": [
+          "Ledger Book",
+          "Adding Machine",
+          "Second Set of Books",
+          "Offshore Account",
+          "Golden Abacus"
+        ],
+        "wash": [
+          500,
+          1500,
+          4000,
+          10000,
+          25000
+        ],
+        "washPerSkill": 10,
+        "repayFrom": 2,
+        "keep": 1000
+      },
+      {
+        "id": "care",
+        "name": "Caretaker",
+        "stat": "brawn",
+        "does": "Repairs worn rooms every night.",
+        "costs": [
+          1500,
+          4000,
+          9000,
+          20000,
+          45000
+        ],
+        "gear": [
+          "Toolbox",
+          "Workbench",
+          "Maintenance Crew",
+          "Rotom Fix-It",
+          "Master Builder"
+        ],
+        "repair": [
+          5,
+          10,
+          15,
+          25,
+          40
+        ],
+        "pointCost": 10,
+        "upkeepOff": [
+          0,
+          0,
+          10,
+          10,
+          25
+        ]
+      }
+    ],
+    "budgets": [
+      500,
+      1000,
+      2000,
+      5000,
+      0
+    ],
+    "beds": [
+      0,
+      1,
+      2,
+      3
+    ]
   }
 }

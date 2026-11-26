@@ -106,10 +106,10 @@ describe('DOMINION D5: the lists as data', () => {
 });
 
 describe('DOMINION D5: the HQ on a new run', () => {
-  it('starts as the Warehouse: 3 slots, Defense 1, crew cap 3, and the ₽1,000 is clean', () => {
+  it('starts as the Warehouse: 3 slots, Defense 1, crew cap 3, the Loading Dock\'s +5 storage, and the ₽1,000 is clean', () => {
     const b = blk(started());
     expect(hqOf(b).clean).toBe(1000);
-    expect([b.hqLevel, b.rosterCap, b.levelCap, slotsFree(b), defense(b), storageCap(b)]).toEqual([1, 3, 15, 3, 1, 20]);
+    expect([b.hqLevel, b.rosterCap, b.levelCap, slotsFree(b), defense(b), storageCap(b)]).toEqual([1, 3, 15, 3, 1, 25]);
   });
   it('a D3 save (no `hq`) loads unchanged, then reads as an empty HQ with no clean money', () => {
     const r = started();
@@ -117,7 +117,7 @@ describe('DOMINION D5: the HQ on a new run', () => {
     delete old.hq;
     const parsed = DominionBlockSchema.parse(old);
     expect(parsed.hq).toBeUndefined();
-    expect(hqOf(parsed)).toEqual({ rooms: [], next: 1, upgrade: null, clean: 0, wash: [], loan: null, broke: false });
+    expect(hqOf(parsed)).toEqual({ rooms: [], next: 1, upgrade: null, clean: 0, wash: [], loan: null, broke: false, floorSeen: 1 });
     // It plays on: the first clean money (odd jobs) fills it in.
     const run = { ...r, expansion: { ...r.expansion, dominion: parsed } };
     const after = round(run);
@@ -322,18 +322,18 @@ describe('DOMINION D5: going broke and loans (A22)', () => {
     expect(blk(r).crew!.gone.at(-1)!.why).toBe('let go');
     expect(refused(r, { t: 'letGo', member: blk(r).members[0]!.id })).toContain('last member');
   });
-  it('the stores hold 20 Pokémon (more with Pokémon Storage): the rest are let go and the report says so', () => {
+  it('the stores hold 25 Pokémon (20, +5 from the Loading Dock; more with Pokémon Storage): the rest are let go and the report says so', () => {
     const r = withRun(started(), (b) => {
       const run = started();
-      for (let i = 0; i < 22; i++) b.crew!.stores.push(newMon(content, run, 'rattata', 3, 'p'));
+      for (let i = 0; i < 27; i++) b.crew!.stores.push(newMon(content, run, 'rattata', 3, 'p'));
       b.crew!.pending.push({ k: 'item', id: 'potion', n: 1 });
     });
     // D4 merged: the stores move into the Reserve (Day 1 already put one Pokémon there), which holds the same 20.
     const held = blk(r).reserve!.box.length;
     const out = settleCrew(content, r);
     expect(blk(out).crew!.stores).toHaveLength(0);
-    expect(blk(out).reserve!.box).toHaveLength(20);
-    expect(blk(out).report.join(' ')).toContain(`${22 + held - 20} Pokémon had to be let go`);
+    expect(blk(out).reserve!.box).toHaveLength(25);
+    expect(blk(out).report.join(' ')).toContain(`${27 + held - 25} Pokémon had to be let go`);
   });
 });
 

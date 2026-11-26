@@ -451,7 +451,13 @@ export type DominionAction =
   | { t: 'strip'; member: string }
   // D5, the HQ (hq.ts)
   | { t: 'upgrade' }
-  | { t: 'build'; building: string; district: string | null }
+  | { t: 'build'; building: string; district: string | null; floor?: number }
+  // HQ floors and the Staff Office (floors.ts, staff.ts)
+  | { t: 'buyPlot'; floor: number }
+  | { t: 'floorSeen' }
+  | { t: 'staffPost'; role: StaffRole; member: string | null }
+  | { t: 'staffGear'; role: StaffRole }
+  | { t: 'staffSet'; key: 'want' | 'budget' | 'beds' | 'on'; role?: StaffRole; d: number }
   | { t: 'tierUp'; room: string }
   | { t: 'sell'; room: string }
   | { t: 'rebuild'; room: string }
@@ -1194,6 +1200,29 @@ export const HqFileSchema = z.object({
   menu: z.array(z.object({ id: S, label: S, key: S }).strict()).min(6),
   lines: z.record(S, S),
   icons: z.object({ groups: z.record(S, S), ids: z.record(S, S), colours: z.record(S, Pair) }).strict(),
+  /** HQ floors (Kice 2026-11-21): one opens with each HQ level; free plots add up to the level's slots. */
+  floors: z.array(z.object({
+    lv: I.min(1).max(6), tag: S, name: S, plots: I.min(1), forSale: N0, plotCost: I.min(1),
+    fixture: z.object({ name: S, does: S, fx: z.lazy(() => BuildingFxSchema) }).strict(),
+  }).strict()).length(6),
+  /** Each plot bought on a floor costs this % more than the last. */
+  plotStepPct: N0,
+  /** The Staff Office's three posts (Auto-Checker, Bookkeeper, Caretaker): gear 1-5 per post. */
+  staff: z.object({
+    skillCap: I.min(1),
+    roles: z.tuple([
+      z.object({ id: z.literal('checker'), name: S, stat: STAT, does: S, costs: z.array(I.min(1)).length(5), gear: z.array(S).length(5),
+        perDay: z.array(I.min(1)).length(5), rarities: z.array(z.string().regex(/^C?U?R?$/)).length(5), scouts: z.array(N0).length(5),
+        haggle: z.array(Pct).length(5), trained: z.array(N0).length(5), wantFrom: I.min(1).max(5), misjudge: z.object({ base: Pct, perSkill: N0 }).strict() }).strict(),
+      z.object({ id: z.literal('books'), name: S, stat: STAT, does: S, costs: z.array(I.min(1)).length(5), gear: z.array(S).length(5),
+        wash: z.array(I.min(1)).length(5), washPerSkill: N0, repayFrom: I.min(1).max(5), keep: N0 }).strict(),
+      z.object({ id: z.literal('care'), name: S, stat: STAT, does: S, costs: z.array(I.min(1)).length(5), gear: z.array(S).length(5),
+        repair: z.array(I.min(1)).length(5), pointCost: N0, upkeepOff: z.array(Pct).length(5) }).strict(),
+    ]),
+    /** Auto-Checker daily budgets (0 = no limit) and beds kept free. */
+    budgets: z.array(N0).min(1),
+    beds: z.array(N0).min(1),
+  }).strict(),
 }).strict();
 export type HqFile = z.infer<typeof HqFileSchema>;
 
@@ -1264,6 +1293,8 @@ export const RoomSchema = z.object({
   ruined: z.boolean(),
   /** Outside buildings: the district it stands in (null inside the HQ). */
   at: S.nullable(),
+  /** The HQ floor it stands on (1 = Ground Floor ... 6 = Throne Floor). Missing on older saves: floors.ts packs those. */
+  floor: I.min(1).max(6).optional(),
 }).strict();
 export type Room = z.infer<typeof RoomSchema>;
 
@@ -1280,8 +1311,26 @@ export const HqStateSchema = z.object({
   loan: z.object({ owed: N0, weeks: N0 }).strict().nullable(),
   /** Broke at the last weekly bill (A22): Defense down, the costliest room shut until paid. */
   broke: z.boolean(),
+  /** Floors (Kice 2026-11-21): plots bought on each floor (index 0 = Ground Floor). Optional; no bump. */
+  plots: z.array(N0).max(6).optional(),
+  /** The highest floor whose "New floor" page was seen. */
+  floorSeen: I.min(1).max(6).optional(),
+  /** The Staff Office: who holds each post, its gear and the Auto-Checker's rules. */
+  staff: z.lazy(() => StaffStateSchema).optional(),
 }).strict();
 export type HqState = z.infer<typeof HqStateSchema>;
+
+export const STAFF_ROLES = ['checker', 'books', 'care'] as const;
+export type StaffRole = (typeof STAFF_ROLES)[number];
+const PostSchema = z.object({ member: S.nullable(), gear: I.min(0).max(5), on: z.boolean() }).strict();
+export const StaffStateSchema = z.object({
+  checker: PostSchema, books: PostSchema, care: PostSchema,
+  /** Auto-Checker rules: the stat it looks for (null: any), budget index, beds-kept-free index. */
+  want: STAT.nullable(), budget: N0, beds: N0,
+  /** The Day the Auto-Checker last worked, and what the posts did last (shown in the Staff Office). */
+  day: N0, log: z.array(S).max(12),
+}).strict();
+export type StaffState = z.infer<typeof StaffStateSchema>;
 
 
 // ---------- D11: the Hero and the Heroic Legendaries (Part 4 §7-8, Part 9 A8-A9; hero.json) ----------

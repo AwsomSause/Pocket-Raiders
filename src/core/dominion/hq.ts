@@ -10,6 +10,7 @@ import { addHeat, districtDef, statusOf, syncHeat } from './field';
 import { addClean, buildPrice, priceFor, buildingDef, clampClean, cleanOf, spend, dirtyOf, hqFx, hqOf, levelDef, scaled, withHq, working } from './hqFx';
 import type { Building, DominionBlock, HqState, Room } from './schema';
 import { addWorldStep, fill } from './worldTurn';
+import { firstFit, floorName, floorNewLine, freeOn, totalPlots } from './floors';
 
 const H = () => DOMINION_DATA.hq;
 const Ln = () => DOMINION_DATA.hq.lines;
@@ -46,7 +47,8 @@ export const feared = (b: DominionBlock): boolean => b.flags.includes('feared');
 /** Regions reached in the run (Part 5): the one played now and every one left behind (D15). */
 export const regionsReached = (b: DominionBlock): number => 1 + (b.realm?.held.length ?? 0);
 
-export const slotsOf = (b: DominionBlock): number => levelDef(b.hqLevel).slots;
+/** Every plot in the HQ: each open floor's free plots plus the plots bought (floors.ts). */
+export const slotsOf = (b: DominionBlock): number => totalPlots(b);
 /** HQ slots taken: rooms inside (outside buildings use none), works included, ruined ones too (rebuild or sell them). */
 export const slotsUsed = (b: DominionBlock): number =>
   hqOf(b).rooms.filter((r) => !r.at).reduce((a, r) => a + (buildingDef(r.id)?.slots ?? 1), 0);
@@ -144,9 +146,11 @@ function finishUpgrade(b: DominionBlock & { hq: HqState }): string[] {
   b.hqLevel = up.to;
   b.levelCap = Math.max(b.levelCap, up.cap);
   b.hq.upgrade = null;
+  // A save from before floors has seen every floor it had (so the new one gets its page).
+  b.hq.floorSeen ??= Math.max(1, b.hqLevel - 1);
   recompute(b);
   const L = levelDef(b.hqLevel);
-  return [fill(Ln().upgradeDone!, { name: L.name, lv: L.lv, cap: b.levelCap, crew: b.rosterCap, slots: L.slots })];
+  return [fill(Ln().upgradeDone!, { name: L.name, lv: L.lv, cap: b.levelCap, crew: b.rosterCap, slots: slotsOf(b) }), floorNewLine(b.hqLevel)];
 }
 
 // ---------- rooms and buildings ----------
@@ -165,8 +169,8 @@ export const tierCost = (def: Building, t: number): number => Math.round(def.cos
 
 export interface BuildRow { def: Building; cost: number; ok: boolean; why: string | null; outside: boolean; where: string | null }
 
-/** Why a building can't be bought now (null when it can). `district` for outside buildings. */
-export function buildWhy(b: DominionBlock, def: Building, district: string | null): string | null {
+/** Why a building can't be bought now (null when it can). `district` for outside buildings; `floor` for rooms (null: the lowest that fits). */
+export function buildWhy(b: DominionBlock, def: Building, district: string | null, floor: number | null = null): string | null {
   if (def.status === 'disabled') return fill(Ln().waits!, { slice: def.waits ?? 'later' });
   // D16: the Snag Desk and the Shadow Lab come with a partner's deal (partners.ts builds them); nobody sells them.
   if (def.deal) return `Comes with the ${def.deal === 'snagem' ? 'Snagem' : 'Cipher'} deal (Partners, J).`;
@@ -177,12 +181,14 @@ export function buildWhy(b: DominionBlock, def: Building, district: string | nul
     if (!district || !heldDistricts(b).includes(district)) return Ln().needsHeld!;
     if (hqOf(b).rooms.some((r) => r.id === def.id && r.at === district)) return 'You have one there.';
   } else if (def.slots > slotsFree(b)) return Ln().noSlot!;
+  else if (floor !== null && freeOn(b, floor) < def.slots) return fill(Ln().floorFull!, { floor: floorName(floor), need: def.slots, s: s(def.slots) });
+  else if (floor === null && firstFit(b, def.slots) === null) return fill(Ln().floorFull!, { floor: 'any one floor', need: def.slots, s: s(def.slots) });
   if (b.funds < buildPrice(b, def.cost, def.id)) return fill(Ln().noMoney!, { cost: buildPrice(b, def.cost, def.id) });
   return null;
 }
 
 /** The Buy Room list: the poster's seven first, then the rest in list order; disabled ones last. */
-export function buildRows(b: DominionBlock, district: string | null): BuildRow[] {
+export function buildRows(b: DominionBlock, district: string | null, floor: number | null = null): BuildRow[] {
   const all = DOMINION_DATA.buildings;
   const poster = H().poster.map((id) => all.find((x) => x.id === id)!);
   const rest = all.filter((x) => !H().poster.includes(x.id));
@@ -190,23 +196,24 @@ export function buildRows(b: DominionBlock, district: string | null): BuildRow[]
   const held = heldDistricts(b);
   return order.map((def) => {
     const where = def.outside ? (district && held.includes(district) ? district : held[0] ?? null) : null;
-    const why = buildWhy(b, def, where);
+    const why = buildWhy(b, def, where, def.outside ? null : floor);
     return { def, cost: buildPrice(b, def.cost, def.id), ok: !why, why, outside: def.outside, where };
   });
 }
 
 /** Buys a building's T1: inside it takes slots, outside it stands in a held district. Ready after the T1 build days. */
-export function build(block: DominionBlock, id: string, district: string | null): HqOut {
+export function build(block: DominionBlock, id: string, district: string | null, floor: number | null = null): HqOut {
   const def = buildingDef(id);
   if (!def) return no(block, null);
   const where = def.outside ? district : null;
-  const why = buildWhy(block, def, where);
+  const why = buildWhy(block, def, where, def.outside ? null : floor);
   if (why) return no(block, why);
   const b = copy(block);
   const days = H().tiers[0]!.days;
   const price = buildPrice(block, def.cost, def.id);
   spend(b, price);
-  b.hq.rooms.push({ uid: `r${b.hq.next++}`, id, tier: 1, cond: 100, spent: price, building: true, up: false, ready: b.day + days, shut: false, ruined: false, at: where });
+  const on = def.outside ? undefined : (floor ?? firstFit(block, def.slots) ?? 1);
+  b.hq.rooms.push({ uid: `r${b.hq.next++}`, id, tier: 1, cond: 100, spent: price, building: true, up: false, ready: b.day + days, shut: false, ruined: false, at: where, ...(on ? { floor: on } : {}) });
   recompute(b);
   return yes(b, fill(Ln().building!, { name: def.name, days, s: s(days) }));
 }
@@ -415,6 +422,12 @@ export function hqStep(block: DominionBlock): string[] {
   return out;
 }
 
+/** % off the weekly upkeep (staff.ts: the Caretaker's gear). */
+const UPKEEP_OFF: ((b: DominionBlock) => number)[] = [];
+export function addUpkeepOff(f: (b: DominionBlock) => number): void {
+  UPKEEP_OFF.push(f);
+}
+
 function weekly(b: DominionBlock & { hq: HqState }, fx: ReturnType<typeof hqFx>): string[] {
   const h = b.hq, R = H().rules, out: string[] = [];
   if (fx.weekly) {
@@ -460,8 +473,9 @@ function weekly(b: DominionBlock & { hq: HqState }, fx: ReturnType<typeof hqFx>)
     for (const r of h.rooms) if (!r.ruined) r.cond = Math.min(100, r.cond + fx.repair);
     out.push(fill(Ln().repair!, { n: fx.repair }));
   }
-  // Upkeep: 4% of what each building cost, every week; unpaid, every building loses Condition.
-  const upkeep = Math.round(h.rooms.filter((r) => !r.ruined).reduce((a, r) => a + r.spent, 0) * R.upkeepPct / 100);
+  // Upkeep: 4% of what each building cost, every week; unpaid, every building loses Condition. The Caretaker's gear cuts it.
+  const off = Math.min(90, UPKEEP_OFF.reduce((a, f) => a + f(b), 0));
+  const upkeep = Math.round((h.rooms.filter((r) => !r.ruined).reduce((a, r) => a + r.spent, 0) * R.upkeepPct * (100 - off)) / 10000);
   if (upkeep) {
     if (b.funds >= upkeep) {
       spend(b, upkeep);

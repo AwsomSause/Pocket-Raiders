@@ -1,0 +1,23 @@
+/* DOMINION redesign R2 (HQ): the few pieces the HQ pages need that the pass-50 mockups didn't draw (a free plot, a room
+   being built, a row you can't afford, the cursor on a post's rule). Hand-written; same scope and look as r50.css. */
+#rx #r5 .rb11.free5{border-color:rgba(255,248,234,.55);background:repeating-linear-gradient(45deg,rgba(255,248,234,.07) 0 6px,rgba(7,6,11,.85) 6px 14px)}
+#rx #r5 .rb11 .sale11.fr5{background:#fff8ea;color:#1d1622}
+#rx #r5 .rb11.s-work,#rx #r5 .rb11.s-up{background:repeating-linear-gradient(-45deg,rgba(232,178,58,.18) 0 8px,rgba(40,24,40,.9) 8px 16px)}
+#rx #r5 .rb11.s-ruined,#rx #r5 .rb11.s-shut{filter:saturate(.35) brightness(.8)}
+#rx #r5 .rb11 em{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#rx #r5 .rb11 b{max-width:100%;overflow-wrap:anywhere}
+#rx #r5 .cell.no5{opacity:.55}
+#rx #r5 .cell.no5.on{opacity:.8}
+#rx #r5 .row.lk5{opacity:.7}
+#rx #r5 .facts dt,#rx #r5 .facts dd{cursor:pointer}
+#rx #r5 .facts dt.on5{color:var(--yel)}
+#rx #r5 .lw32 .pd5{display:flex;flex-direction:column;gap:2px;margin:6px 12px 0;font-size:12px;color:var(--mut)}
+#rx #r5 .lw32 .pd5 em{font-style:normal}
+#rx #r5 .lift11 .ind11 i{cursor:pointer}
+#rx #r5 .nd23.on{outline:2px solid var(--yel)}
+/* An atlas look (kit's tall()) on a pass-50 page: the base UI's .rx rule doesn't reach inside #r5. */
+#rx #r5 .an{position:relative;display:block;flex:none}
+#rx #r5 .an b{position:absolute;display:block;image-rendering:pixelated;background-repeat:no-repeat}
+#rx #r5 .act .an{filter:drop-shadow(6px 6px 0 rgba(0,0,0,.45))}
+#rx #r5 .tbox .spk6 .face{display:flex;justify-content:center;align-items:flex-start}
+#rx #r5 .tbox .spk6 .face .an{margin-top:-4px}

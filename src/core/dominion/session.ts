@@ -27,6 +27,8 @@ import { hashSeed, Rng } from '../rng';
 import { autoFill, book, placeMon, reserveInRun, seedStart, withReserve } from './reserve';
 import { build, letGo, loan, rebuild, repay, sell, storageCap, tierUp, upgrade, launder, type HqOut } from './hq';
 import { withHq } from './hqFx';
+import { buyPlot, seeFloor } from './floors';
+import { autoCheck, buyGear, post as staffPost, setRule } from './staff';
 import { levelCap } from '../regions';
 import { hatchEggs, settleDojo, settleLesson } from './school';
 import './voices';
@@ -126,7 +128,7 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   if (!out.ok) return out;
   // What any step left for the run (the Chair's or a street meeting's items and Pokémon; hot goods sold, a heist's crate).
   // D9: the rival tier reads the Boss's best level; a night ambush (rival action 135) hurts the Boss's team.
-  const next = structuredClone(settleCourt(content, settleChair(content, out.run)));
+  let next = structuredClone(settleCourt(content, settleChair(content, out.run)));
   let b = next.expansion!.dominion!;
   noteTop(b, next);
   if (b.flags.includes('ambushed')) {
@@ -138,6 +140,13 @@ export function stepInRun(content: Content, run0: RunState, action: DominionActi
   if (back.length) b.report = [...b.report, ...back];
   // D21: the Day's applicants queue at the desk the first time the Day is seen (their own stream, so nothing else moves).
   rollQueue(content, b, run.seed);
+  // The Staff Office's Auto-Checker hires the first time the Day is seen (its own stream; new Pokémon get Reserve records).
+  const checked = autoCheck(content, withBlock(next, b), run.seed);
+  if (checked) {
+    next = checked.run;
+    b = withReserve(content, structuredClone(next.expansion!.dominion!));
+    b.report = [...b.report, ...checked.lines];
+  }
   // D19: anyone new gets their personality card.
   fillCards(b, run.seed);
   // D16: Snag Balls in or out of the bag, and a Chair dealer's Shadow Pokémon into the Reserve.
@@ -378,7 +387,12 @@ function hqInRun(content: Content, run: RunState, action: DominionAction): (Step
   let out: HqOut;
   switch (action.t) {
     case 'upgrade': out = upgrade(b, levelCap(content, run.regionIndex)); break;
-    case 'build': out = build(b, action.building, action.district); break;
+    case 'build': out = build(b, action.building, action.district, action.floor ?? null); break;
+    case 'buyPlot': out = buyPlot(b, action.floor); break;
+    case 'floorSeen': out = seeFloor(b); break;
+    case 'staffPost': out = staffPost(b, action.role, action.member); break;
+    case 'staffGear': out = buyGear(b, action.role); break;
+    case 'staffSet': out = setRule(b, action.key, action.role, action.d); break;
     case 'tierUp': out = tierUp(b, action.room); break;
     case 'sell': out = sell(b, action.room); break;
     case 'rebuild': out = rebuild(b, action.room); break;

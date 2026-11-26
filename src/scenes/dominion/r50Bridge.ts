@@ -4,7 +4,10 @@
 
 import type Phaser from 'phaser';
 import { DOMINION_DATA } from '../../core/dominion/data';
-import { cellsOf, baseModel } from '../../core/dominion/hqScreens';
+import { baseModel } from '../../core/dominion/hqScreens';
+import { floorModel, FLOOR_ORDER } from '../../core/dominion/floorScreens';
+import { floorDef, floorsOpen } from '../../core/dominion/floors';
+import { r5Pics } from './hqPagesBridge';
 import { hqName } from '../../core/dominion/hq';
 import { teamColours } from '../../core/dominion/founding';
 import { maxHp } from '../../core/pokemon';
@@ -62,12 +65,30 @@ export function r5Hub(b: DominionBlock, o: { look: string; bossFile: string | nu
   const run = services().session.run!;
   const cap = levelCap(services().session.content, run.regionIndex);
   const bm = baseModel(b, cap, 0, null, null);
-  const { cells, rows } = cellsOf(b, null);
+  // R2: one storey per open floor (top to bottom), each with its fixture, rooms, Staff Office desk and plots.
+  const order = FLOOR_ORDER.filter((f) => f <= floorsOpen(b));
+  const pics = r5Pics(b);
+  const cells: R5HubExtras['rooms'][number][] = [];
+  order.forEach((f, row) => {
+    const fm = floorModel(b, f, 0);
+    for (const t of fm.tiles) {
+      if (t.kind === 'free' && cells.filter((c) => c.row === row && c.state === 'empty').length >= 1) continue;
+      const fig = t.kind === 'room' || t.kind === 'staff' ? pics.tile(t, 38) : '';
+      cells.push({
+        name: t.name, icon: t.kind === 'sale' || t.kind === 'free' ? 'g-card-key' : t.icon, sprite: null, fx: t.kind === 'free' ? 'Build here' : t.sub, row, span: 1,
+        state: t.kind === 'fix' ? 'fix' : t.kind === 'sale' ? 'sale' : t.kind === 'free' ? 'empty' : t.kind === 'staff' ? 'staff' : t.state ?? 'ok',
+        fig: fig ? fig.replace('class="px who11', 'class="px who11') : undefined, go: t.kind === 'sale' ? 'plot' : t.kind === 'staff' ? 'staff' : `floor-${f}`,
+      });
+    }
+  });
+  const rows = order.length;
+  const floors = order.map((f) => [floorDef(f).tag, floorDef(f).name, `floor-${f}`] as [string, string, string]);
   const nx = bm.upgrading ? { name: bm.upgrading.to, cost: 0, ready: bm.upgrading.ready, building: true } : bm.next.to ? { name: bm.next.name, cost: bm.next.cost, ready: null, building: false } : null;
   const m = b.members[0];
   return {
-    rooms: cells.map((c) => ({ name: c.name, icon: c.icon, sprite: c.sprite, fx: c.fx, row: c.row, span: c.span, state: c.state })),
+    rooms: cells,
     rows,
+    floors,
     level: b.hqLevel,
     levelName: DOMINION_DATA.hq.levels[b.hqLevel - 1]?.name ?? '',
     hqName: hqName(b),

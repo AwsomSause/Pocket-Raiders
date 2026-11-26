@@ -12,6 +12,12 @@ import { VERDICTS, type DominionAction, type Verdict } from '../../core/dominion
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { deskView, type DeskUi } from '../../ui/redux/screens/dominion/desk';
+import { r5DeskTalk, talkCalls } from '../../ui/redux/screens/dominion/r50/deskTalk';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
+import { tall } from '../../ui/redux/kit';
+import { rxUrl } from '../../ui/redux/assets';
+import { postHolder } from '../../core/dominion/staff';
+import { memberFig, r5Pics } from './hqPagesBridge';
 import { closeTypeBox, openTypeBox, typeBoxOpen } from '../../ui/typeBox';
 
 interface Host {
@@ -19,12 +25,13 @@ interface Host {
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
+  r5run(): R5Run | null;
 }
 
 const STAMP_KEYS: Record<string, Verdict> = { KeyA: 'accept', KeyR: 'reject', KeyD: 'detain' };
 
 export class DeskController {
-  private ui: DeskUi = { mode: 'ask', qAt: 0, fAt: 0, stampAt: null };
+  private ui: DeskUi = { mode: 'talk', cAt: 0, qAt: 0, fAt: 0, stampAt: null };
   /** Rotom calls in flight (call ids). */
   private pending = new Set<string>();
   /** The last key code, so A and D (also ◀ ▶ in the game's key map) stamp here instead of moving. */
@@ -44,7 +51,7 @@ export class DeskController {
   open(): void {
     this.host.step({ t: 'desk' });
     this.host.screenName = 'desk';
-    this.ui = { mode: 'ask', qAt: 0, fAt: 0, stampAt: null };
+    this.ui = { mode: 'talk', cAt: 0, qAt: 0, fAt: 0, stampAt: null };
     this.host.setNotice(null);
     this.host.refresh();
   }
@@ -56,6 +63,17 @@ export class DeskController {
     const env = services().session.aiEnv();
     const m = deskModel(b, run.seed, run.ai, this.pending, !!env && env.tier !== 'off' && !!env.keys.active());
     this.ui.qAt = Math.min(this.ui.qAt, m.questions.length);
+    const r5 = this.host.r5run();
+    if (this.ui.mode === 'talk' && r5) {
+      const look = m.a?.look ?? '';
+      const clerk = postHolder(b, 'checker') ?? b.members[0] ?? null;
+      const pics = {
+        applicant: (h: number): string => (look.endsWith('.png') || !look ? `<img class="px" src="${rxUrl(look || 'dominion/t-applicant.png')}" alt="" draggable="false" style="height:${h}px;width:auto">` : tall(look, h)),
+        clerk: clerk ? { fig: memberFig(clerk, b, 250, 'flip'), name: clerk.name.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/\B\w+/g, (w) => w.toLowerCase()), colour: r5Pics(b).colour(clerk.id) } : null,
+      };
+      this.ui.cAt = Math.max(0, Math.min(this.ui.cAt ?? 0, talkCalls(m).length - 1));
+      return r5DeskTalk(m, this.ui.cAt, pics, r5, notice);
+    }
     return deskView(m, this.ui, notice);
   }
 
@@ -71,6 +89,7 @@ export class DeskController {
       deskField: (i) => { this.ui = { ...this.ui, mode: 'inspect', fAt: Number(i) }; this.inspectPicked(); },
       deskStamp: (v) => { if ((VERDICTS as readonly string[]).includes(v)) this.stamp(v as Verdict); },
       deskInspect: () => this.toggleInspect(),
+      deskPapers: () => { this.ui.mode = 'ask'; this.host.refresh(); },
       deskType: () => this.typeQuestion(),
     };
   }
@@ -112,6 +131,7 @@ export class DeskController {
     const m = deskModel(b, run.seed, run.ai, this.pending);
     if (a === 'back') {
       if (this.ui.mode === 'inspect') this.ui.mode = 'ask';
+      else if (this.ui.mode === 'ask' && m.state === 'open') this.ui.mode = 'talk';
       else {
         this.host.screenName = 'hq';
         this.host.setNotice(null);
@@ -120,7 +140,15 @@ export class DeskController {
     }
     if (m.state !== 'open') return true;
     const dir = a === 'left' || a === 'up' ? -1 : a === 'right' || a === 'down' ? 1 : 0;
-    if (this.ui.mode === 'inspect') {
+    if (this.ui.mode === 'talk') {
+      const calls = talkCalls(m);
+      if (dir && calls.length) this.ui.cAt = ((this.ui.cAt ?? 0) + dir + calls.length) % calls.length;
+      else if (a === 'confirm') {
+        const c = calls[this.ui.cAt ?? 0];
+        if (c?.act === 'deskPapers') this.ui.mode = 'ask';
+        else if (c?.act === 'deskStamp') this.stamp(c.arg as Verdict);
+      }
+    } else if (this.ui.mode === 'inspect') {
       const n = m.fields.length;
       if (dir) this.ui.fAt = (this.ui.fAt + dir + n) % n;
       else if (a === 'confirm') this.inspectPicked();
@@ -133,6 +161,8 @@ export class DeskController {
   }
 
   private toggleInspect(): void {
+    const b = this.block();
+    if (!b || !current(b)) return;
     this.ui.mode = this.ui.mode === 'inspect' ? 'ask' : 'inspect';
     this.host.refresh();
   }
@@ -188,6 +218,6 @@ export class DeskController {
   }
 
   private stamp(v: Verdict): void {
-    if (this.host.step({ t: 'deskStamp', stamp: v })) this.ui = { mode: 'ask', qAt: 0, fAt: 0, stampAt: null };
+    if (this.host.step({ t: 'deskStamp', stamp: v })) this.ui = { mode: 'talk', cAt: 0, qAt: 0, fAt: 0, stampAt: null };
   }
 }

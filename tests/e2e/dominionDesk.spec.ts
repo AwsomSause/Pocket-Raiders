@@ -75,8 +75,14 @@ test('the applications desk: paperwork, Inspect, questions with Rotom, stamps, a
   const queue = b0.desk.queue;
   expect(queue.length).toBeGreaterThanOrEqual(2);
   await expect(s.getByTestId('dom-desk')).toContainText(`${queue.length} in the rain`);
-  await pressUntil(page, 'KeyI', async () => (await s.getByTestId('desk-name').count()) > 0);
+  // The desk opens as a talk scene (pass 50 `apps`): the applicant, who's on the desk, and the calls.
+  await pressUntil(page, 'KeyI', async () => (await s.getByTestId('desk-calls').count()) > 0);
   const a = queue[0];
+  await expect(s.getByTestId('desk-talk-name')).toHaveText(a.name);
+  await expect(s.getByTestId('desk-talk-line')).toContainText(a.reason);
+  await shot('apps-talk');
+  // Check the papers: the paperwork on the desk.
+  await s.getByTestId('desk-papers').click();
   await expect(s.getByTestId('desk-name')).toHaveText(a.name.toUpperCase());
   await expect(s.getByTestId('desk-home')).toHaveText(a.homeShown);
   await expect(s.getByTestId('desk-idno')).toHaveText(a.idNo);
@@ -136,16 +142,18 @@ test('the applications desk: paperwork, Inspect, questions with Rotom, stamps, a
   });
   await waitForScene(page, 'Dominion');
   await s.getByTestId('dom-title-1').click();
-  await pressUntil(page, 'KeyI', async () => (await s.getByTestId('desk-name').count()) > 0);
+  await pressUntil(page, 'KeyI', async () => (await s.getByTestId('desk-calls').count()) > 0);
   expect((await block(page)).desk).toEqual(before.desk);
   expect(await aiLog(page)).toEqual(log);
+  // The talk scene's text box carries the stored reply and its tell.
   await expect(s.getByTestId('desk-reply')).toHaveAttribute('data-from', 'rotom');
+  await expect(s.getByTestId('desk-tell')).toBeVisible();
 
-  // Stamps: A accepts (they join), R rejects, D detains (Heat goes up).
+  // Stamps: A accepts (they join), R rejects, D detains (Heat goes up). The talk scene moves on to the next one.
   const members = before.members.length;
   await pressUntil(page, 'KeyA', async () => (await block(page)).members.length === members + 1);
   expect((await block(page)).members.at(-1).name).toBe(a.name);
-  await expect(s.getByTestId('desk-name')).toHaveText(queue[1].name.toUpperCase());
+  await expect(s.getByTestId('desk-talk-name')).toHaveText(queue[1].name);
   const heat = (await block(page)).field.districts.pewter.heat;
   await pressUntil(page, 'KeyD', async () => (await block(page)).desk.held.length === 1);
   expect((await block(page)).field.districts.pewter.heat).toBeGreaterThan(heat);

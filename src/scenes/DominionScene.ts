@@ -362,6 +362,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.sq.overs(),
         ...this.nav.overs(),
         ...this.menu.overs(),
+        ...this.hq.overs(),
         r5startOver: (i) => { this.start.at = Number(i); this.view?.refresh(); },
         crewOver: (i) => { this.cp.at = Number(i); this.view?.refresh(); },
       },
@@ -603,6 +604,12 @@ export class DominionScene extends Phaser.Scene {
     };
   }
 
+  /** Redesign R2: the pass-50 chrome's live data (the HQ pages draw with it). */
+  r5run(): R5Run | null {
+    const b = this.block();
+    return b ? r5Run(this, b) : null;
+  }
+
   /** Redesign R1: the chrome's data before the run has a Dominion block (the title, the setup, the help choice). */
   r5pre(): R5Run {
     return r5PreRun(r5Party(this));
@@ -731,8 +738,13 @@ export class DominionScene extends Phaser.Scene {
     return r5Sign({ name: t.name, where: `Day ${b.day} · ${hqName(b)}`, changes, line: lines[Math.max(0, Math.min(this.foundedShown, lines.length) - 1)] ?? '', last: this.foundedShown >= lines.length, emblem: emblem(c, 70, 62, 42) }, r5Run(this, b));
   }
 
-  /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. */
+  /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. R2: a New floor or a new region's base comes first. */
   private hqPage(b: DominionBlock): string {
+    const due = this.start.on ? null : this.hq.due(b);
+    if (due) {
+      this.hq.open(due);
+      return this.hq.render(this.notice);
+    }
     const m = hqModel(b);
     if (this.nightPage()) {
       const label = m.next.label === 'Rest' ? `Sleep to Day ${b.day + 1}` : `${m.next.label} · Day ${b.day + 1}`;
@@ -745,9 +757,12 @@ export class DominionScene extends Phaser.Scene {
   }
 
   /** Redesign R0: the pass-50 chrome's links (mockup page ids) go to the screens the game has; the rest wait for their slice. */
-  private r5go(id: string): void {
+  r5go(id: string): void {
     const b = this.block();
     if (!b) return;
+    // Redesign R2: the HQ's own pages (floors, plots, Staff Office, Laundromat, At a glance, The Mark, Lights out...).
+    if (id === 'apps') return this.desk.open();
+    if (this.hq.openId(id)) return void this.view?.refresh();
     const TAB: Record<string, number> = { hq: 0, map: 1, roster: 2, reserve: 3, card: 4, jobs: 4, ledger: 5 };
     if (id in TAB) return this.tab(TAB[id]!);
     if (id === 'start' && this.screen === 'hq') return this.start.open();
