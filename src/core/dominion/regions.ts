@@ -615,7 +615,7 @@ export function arrivalLines(b: DominionBlock): string[] | null {
 
 // ---------- answers on the Empire screen ----------
 
-export type RealmOp = 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo';
+export type RealmOp = 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo' | 'magnet';
 export interface RealmOut { ok: boolean; block: DominionBlock; notice: string | null; fight: boolean }
 
 export function realmStep(block: DominionBlock, op: RealmOp, region: string, arg: { member?: string; orders?: Orders; tribute?: number }, seed: string): RealmOut {
@@ -704,6 +704,23 @@ export function realmStep(block: DominionBlock, op: RealmOp, region: string, arg
       realmOf(b).trip = h.id;
       b.field.fight = { why: 'realm', foe: 'realm', begun: false, action: 'long-trip', target: h.id, district: F().hq, pass: true, big: false, wager: 0, racket: null };
       return yes(fill(L('reclaimOpen'), { region: v.region, traitor: h.traitor ?? h.holder.name }), true);
+    }
+    case 'magnet': {
+      // Redesign R8: the Magnet Train, a quick visit by rail between linked regions (Kanto and Johto). It costs the
+      // fare and the rest of the Day (nothing more in the Evening), and works like a short visit: Stability up,
+      // the away count reset, one grievance gone.
+      const M = RG().magnet;
+      if (h.status !== 'held' && h.status !== 'sellout') return no(L('noRegion'));
+      if (!b.realm || M.links[b.realm.at] !== h.id) return no(fill(M.lines.noLine, v));
+      if (b.phase !== 'day' && b.phase !== 'evening') return no(M.lines.late);
+      if (b.funds < M.fare) return no(fill(L('noFunds'), { cost: M.fare.toLocaleString('en-GB') }));
+      b.funds -= M.fare;
+      if (b.phase === 'day') b.actions = 0;
+      h.stability = clamp(h.stability + M.stab, 0, 100);
+      h.away = 0;
+      h.visited = runDay(b);
+      h.grievances = Math.max(0, h.grievances - 1);
+      return yes(fill(M.lines.ride, { ...v, stab: M.stab }));
     }
     case 'letGo': {
       if (h.status !== 'seceded' && h.status !== 'sellout') return no(L('noRegion'));

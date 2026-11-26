@@ -401,7 +401,7 @@ export type DominionAction =
   | { t: 'tut'; op: 'seen' | 'mode' | 'gift'; arg: string }
   /** D15: leave the Taken region (the Holder, standing orders, the one member brought), and the Empire screen's answers. */
   | { t: 'leave'; holder: string; orders: Record<string, string>; bring: string | null }
-  | { t: 'realm'; op: 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo'; region: string; member?: string; orders?: Record<string, string>; tribute?: number }
+  | { t: 'realm'; op: 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo' | 'magnet'; region: string; member?: string; orders?: Record<string, string>; tribute?: number }
   /** D16: the Partnership page (sign, the three ways out, the Shadow Machine on a Pokémon by uid). */
   | { t: 'partner'; op: 'sign' | 'cancel' | 'buyout' | 'purge' | 'shadow'; id: 'snagem' | 'cipher'; uid?: string }
   | { t: 'plan'; order: string }
@@ -439,6 +439,8 @@ export type DominionAction =
   | { t: 'handOff'; member: string }
   | { t: 'courtNext' }
   | { t: 'closeDoors' }
+  /** Redesign R8: spend a Favour someone owes you (the favour ledger's Call it in). */
+  | { t: 'callIn'; who: string }
   | { t: 'chairOpt'; key: 'length' | 'numbers' | 'speed' }
   // D4, the Reserve and the Rank Pyramid
   | { t: 'give'; uid: string; to: string }
@@ -1030,6 +1032,8 @@ export const CourtRulesSchema = z.object({
   leans: z.record(S, z.enum(LEANS)), leanWord: z.record(S, S), leanBar: z.record(S, I.min(0).max(100)), leanFamily: z.record(z.enum(LEANS), S),
   whisper: z.object({ honest: z.array(S).min(1), money: z.array(S).min(1), neutral: z.array(S).min(1), selfish: z.array(S).min(1) }).strict(),
   react: z.object({ happy: S, growl: S, sad: S, calm: S }).strict(),
+  /** Redesign R8: what calling in a Favour pays back. */
+  callIn: z.object({ funds: N0, heat: N0 }).strict(),
   lines: z.object({ handedWhy: z.record(S, S), closeLoss: I.min(0) }).catchall(z.union([S, I, z.record(S, S)])),
 }).strict();
 export type CourtRules = z.infer<typeof CourtRulesSchema>;
@@ -2750,6 +2754,11 @@ export const RegionsFileSchema = z.object({
   screen: z.object({
     buttons: z.record(S, S), leave: z.record(S, S),
   }).catchall(S),
+  /** Redesign R8: the Magnet Train, the fast link between two held regions (a visit by rail, Day or Evening). */
+  magnet: z.object({
+    fare: N0, stab: N0, seats: I.min(1), links: z.record(S, S), stations: z.record(S, S), leaves: S, arrives: S,
+    lines: z.object({ ride: S, noLine: S, late: S, conductor: S }).strict(),
+  }).strict(),
 }).strict();
 export type RegionsFile = z.infer<typeof RegionsFileSchema>;
 

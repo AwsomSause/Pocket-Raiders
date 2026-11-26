@@ -12,11 +12,11 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import type { R5Pics } from '../../ui/redux/screens/dominion/r50/chairR8';
 import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
-import { r5GymCase, r5Holder, r5Orders, r5Realm, r5Regions, r5Sail, r5Underworld, r5World, regionCards } from '../../ui/redux/screens/dominion/r50/empireR8';
+import { r5GymCase, r5Holder, r5Magnet, r5Orders, r5Realm, r5Regions, r5Sail, r5Underworld, r5World, regionCards } from '../../ui/redux/screens/dominion/r50/empireR8';
 import { chairVoice } from './r8Bridge';
 
 /** Redesign R8: the Empire's pages. `cards` is the mockup's `regions` grid; `realm` a held region's own page. */
-type Page = 'cards' | 'realm' | 'orders' | 'world' | 'holder' | 'sail' | 'underworld' | 'gymcase';
+type Page = 'cards' | 'realm' | 'orders' | 'world' | 'holder' | 'sail' | 'underworld' | 'gymcase' | 'magnet';
 
 type Screen = 'title' | 'setup' | 'opening' | 'hq' | 'map' | 'card' | 'crew' | 'reserve' | 'pyramid' | 'base' | 'rival' | 'ledger' | 'hero' | 'interrupt' | 'desk' | 'squads' | 'founding' | 'founded' | 'debate' | 'spy' | 'takeover' | 'broadcast' | 'assign' | 'district' | 'empire' | 'partners';
 interface Host {
@@ -49,6 +49,8 @@ export class EmpireController {
   private tapped = false;
   private uAt = 0;
   private gAt = 0;
+  /** The held region the Magnet Train page rides to. */
+  private magnetFor: string | null = null;
   private at = -1;
   private btn = 0;
   private notice: string | null = null;
@@ -110,6 +112,12 @@ export class EmpireController {
       return r5Underworld(m, { at: this.uAt, who, line: t ? `“${t.name}. ${t.where}. ${t.line}.”` : '“Nobody down here yet.”' }, rr);
     }
     if (this.page === 'gymcase') return r5GymCase(gymCaseModel(b), { at: this.gAt, who }, rr);
+    if (this.page === 'magnet' && this.magnetFor) {
+      const M = DOMINION_DATA.regions.magnet, here = b.realm?.at ?? 'kanto', to = this.magnetFor;
+      const people = [...b.members.slice(0, M.seats).map((x) => pics.body(x.look, 70)), this.host.r8Boss(70)];
+      return r5Magnet({ from: M.stations[here] ?? here, to: M.stations[to] ?? to, toRegion: DOMINION_DATA.regions.regions[to]?.name ?? to, region: to, team: b.teamName ?? 'Your crew',
+        seats: Math.min(M.seats, b.members.length), leaves: M.leaves, arrives: M.arrives, fare: M.fare, people, line: M.lines.conductor, notice: n, can: true }, rr);
+    }
     const m = this.model();
     if (this.page === 'orders' && m.orders) {
       const o = { region: m.orders.region, rows: m.orders.rows.map((x) => { const pick = x.options[x.at]; return { key: x.key, name: x.name, pick: pick?.name ?? '', text: pick ? policyOf(x.key as PolicyKey, pick.id)?.line ?? '' : '', on: x.on }; }) };
@@ -144,6 +152,12 @@ export class EmpireController {
       this.orderAt = 0;
       this.ordersFrom = this.page === 'orders' ? 'realm' : this.page;
       this.page = 'orders';
+      return this.host.refresh();
+    }
+    if (b.op === 'magnet') {
+      this.magnetFor = c.id;
+      this.page = 'magnet';
+      this.notice = null;
       return this.host.refresh();
     }
     if (b.op === 'tribute') {
@@ -255,6 +269,8 @@ export class EmpireController {
       r8Team: (i) => { this.uAt = Number(i); this.host.refresh(); },
       r8Gym: (i) => { const again = this.gAt === Number(i); this.gAt = Number(i); if (again) this.planGym(this.gAt); else this.host.refresh(); },
       r8GymPlan: (i) => this.planGym(Number(i)),
+      r8MagnetGo: () => this.ride(),
+      r8MagnetBack: () => { this.page = 'realm'; this.notice = null; this.host.refresh(); },
     };
   }
 
@@ -265,6 +281,15 @@ export class EmpireController {
     else if (p !== 'cards') this.goPage(p);
     if (p === 'world') this.wAt = Math.max(0, this.model().at);
     return true;
+  }
+
+  /** The Magnet Train: ride to the held region (a short visit by rail); back on its page with the result. */
+  private ride(): void {
+    if (!this.magnetFor) return;
+    const out = this.host.takeoverStep({ t: 'realm', op: 'magnet', region: this.magnetFor });
+    this.notice = out.notice;
+    if (out.ok) this.page = 'realm';
+    this.host.refresh();
   }
 
   private saveOrders(): void {
@@ -315,6 +340,11 @@ export class EmpireController {
       } else if (a === 'left' || a === 'right') this.cycleOrder(POLICY_KEYS[lv.orderAt]!, a === 'left' ? -1 : 1, lv.orders);
       else if (a === 'confirm') this.sail();
       else if (a === 'back') this.page = 'holder';
+      return true;
+    }
+    if (this.page === 'magnet') {
+      if (a === 'confirm') this.ride();
+      else if (a === 'back') this.page = 'realm';
       return true;
     }
     if (this.page === 'underworld' || this.page === 'gymcase') {

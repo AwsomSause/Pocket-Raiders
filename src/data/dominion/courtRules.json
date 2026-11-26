@@ -47,8 +47,11 @@
     "selfish": ["{label}, Boss. Definitely.", "Pick {label}. Trust me on this one."]
   },
   "react": { "happy": "{mon} hops happily.", "growl": "{mon} growls at the door.", "sad": "{mon} turns away.", "calm": "{mon} watches quietly." },
+  "callIn": { "funds": 1500, "heat": 10 },
   "lines": {
     "title": "The Chair",
+    "calledIn": "{name} pays the favour back: ₽{funds}, and Heat −{heat}.",
+    "noFavour": "Nobody here owes you that.",
     "you": "You: {label}",
     "tally": "The Tally",
     "lastVisitor": "Someone will be back…",

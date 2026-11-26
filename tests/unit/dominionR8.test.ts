@@ -1,10 +1,12 @@
 // DOMINION redesign R8 (pass 50): the Empire's and the Chair's page models (r8Pages.ts) read the block and never change
 // it, and the pages built from them keep the test ids the browser tests use.
 import { describe, expect, it } from 'vitest';
-import { atDoor } from '../../src/core/dominion/chair';
+import { atDoor, freshChair } from '../../src/core/dominion/chair';
 import { chairModel } from '../../src/core/dominion/chairScreens';
 import { withCrew } from '../../src/core/dominion/crew';
-import { DOMINION_DATA } from '../../src/core/dominion/data';
+import { DOMINION_DATA, setActiveRegion } from '../../src/core/dominion/data';
+import { defaultOrders } from '../../src/core/dominion/regions';
+import { freshTakeover } from '../../src/core/dominion/takeover';
 import { favoursModel, gymCaseModel, nightRows, queueModel, underworldModel } from '../../src/core/dominion/r8Pages';
 import { empireModel } from '../../src/core/dominion/regionsScreens';
 import { DominionBlockSchema, type DominionAction, type DominionBlock } from '../../src/core/dominion/schema';
@@ -139,5 +141,105 @@ describe('redesign R8: the Empire pages', () => {
     const world = r5World(m, { order: DOMINION_DATA.regions.order, at: 0, who: null, notice: null }, run5(b));
     expect(world).toContain('data-testid="r8-island-kanto"');
     expect(world).toContain('data-testid="dom-world-leave"');
+  });
+});
+
+describe('redesign R8: Call it in (a Favour spent from the ledger)', () => {
+  const C = DOMINION_DATA.courtRules.callIn;
+  const withFavour = (r: RunState, tag: 'favour' | 'grudge' = 'favour'): RunState => edit(r, (b) => { b.chair!.tags = { [b.members[0]!.id]: tag }; });
+
+  it('pays back the money, cools the HQ and spends the tag; the ledger row carries who to call', () => {
+    const r = withFavour(edit(sitting(), (b) => { b.field.districts[DOMINION_DATA.field.hq]!.heat = 40; }));
+    const b = blk(r);
+    const who = b.members[0]!.id;
+    expect(favoursModel(b).owe[0]).toMatchObject({ size: 'Favour', who });
+    const out = stepInRun(content, r, { t: 'callIn', who });
+    expect(out.ok, String(out.notice)).toBe(true);
+    const nb = blk(out.run);
+    expect(nb.funds).toBe(b.funds + C.funds);
+    expect(nb.field.districts[DOMINION_DATA.field.hq]!.heat).toBeLessThan(40);
+    expect(nb.chair!.tags[who]).toBeUndefined();
+    expect(out.notice).toContain(b.members[0]!.name);
+    expect(favoursModel(nb).owe).toEqual([]);
+  });
+
+  it('a Favour is spent once; Grudges, strangers and shut doors can\'t be called in', () => {
+    const r = withFavour(sitting());
+    const who = blk(r).members[0]!.id;
+    const once = stepInRun(content, r, { t: 'callIn', who });
+    expect(once.ok).toBe(true);
+    expect(stepInRun(content, once.run, { t: 'callIn', who }).ok).toBe(false);
+    expect(stepInRun(content, withFavour(sitting(), 'grudge'), { t: 'callIn', who }).ok).toBe(false);
+    expect(stepInRun(content, r, { t: 'callIn', who: 'nobody' }).ok).toBe(false);
+    const shut = edit(r, (b) => { b.chair!.open = false; });
+    const no = stepInRun(content, shut, { t: 'callIn', who });
+    expect(no.ok).toBe(false);
+    expect(no.notice).toBe(DOMINION_DATA.courtRules.lines.noFavour);
+  });
+
+  it('Heat never goes below zero', () => {
+    const r = withFavour(edit(sitting(), (b) => { for (const d of Object.values(b.field.districts)) d.heat = 0; b.heat = 0; }));
+    const out = stepInRun(content, r, { t: 'callIn', who: blk(r).members[0]!.id });
+    expect(out.ok).toBe(true);
+    expect(blk(out.run).field.districts[DOMINION_DATA.field.hq]!.heat).toBe(0);
+  });
+});
+
+describe('redesign R8: the Magnet Train (Johto to a held Kanto)', () => {
+  const M = DOMINION_DATA.regions.magnet;
+  /** Kanto Taken and held by Rosa, the Boss now in Johto with money. */
+  const inJohto = (): RunState => {
+    setActiveRegion('kanto');
+    let r = edit(started('r8m'), (b) => {
+      b.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } };
+      b.takeover = { ...freshTakeover(), won: { path: 'shadow', day: b.day }, paths: ['shadow'], taken: { path: 'shadow', day: b.day } };
+      const m0 = b.members[0]!;
+      b.members.push({ ...structuredClone(m0), id: 'rosa', name: 'Rosa', rank: 'executive', loyalty: 80 }, { ...structuredClone(m0), id: 'dale', name: 'Dale', rank: 'executive' });
+      for (const d of Object.values(b.field.districts).slice(0, 4)) d.control = 90;
+    });
+    r.party[0]!.level = 36;
+    r = go(go(r, { t: 'leave', holder: 'rosa', orders: defaultOrders(), bring: 'dale' }), { t: 'open' });
+    return edit(r, (b) => { b.phase = 'day'; b.actions = Math.max(1, b.actions); b.funds = 5000; b.chair = { ...freshChair(), opts: { length: 'off', numbers: 'arrows', speed: 'normal' } }; b.realm!.held[0]!.stability = 50; b.realm!.held[0]!.grievances = 2; });
+  };
+
+  it('a ride costs the fare and the rest of the Day, and steadies the region like a short visit', () => {
+    const r = inJohto();
+    expect(blk(r).realm!.at).toBe('johto');
+    expect(blk(r).phase).toBe('day');
+    const card = empireModel(blk(r), r).cards.find((c) => c.id === 'kanto')!;
+    expect(card.buttons.some((x) => x.op === 'magnet')).toBe(true);
+    const out = stepInRun(content, r, { t: 'realm', op: 'magnet', region: 'kanto' });
+    expect(out.ok, String(out.notice)).toBe(true);
+    const h = blk(out.run).realm!.held[0]!;
+    expect(blk(out.run).funds).toBe(5000 - M.fare);
+    expect(blk(out.run).actions).toBe(0);
+    expect(h.stability).toBe(50 + M.stab);
+    expect(h.grievances).toBe(1);
+    expect(h.away).toBe(0);
+    expect(blk(out.run).realm!.away).toBe(blk(r).realm!.away);
+    setActiveRegion('kanto');
+  });
+
+  it('no money, the Night, or a region with no line: no ride', () => {
+    const r = inJohto();
+    const broke = edit(r, (b) => { b.funds = M.fare - 1; });
+    expect(stepInRun(content, broke, { t: 'realm', op: 'magnet', region: 'kanto' }).ok).toBe(false);
+    const night = edit(r, (b) => { b.phase = 'night'; });
+    const late = stepInRun(content, night, { t: 'realm', op: 'magnet', region: 'kanto' });
+    expect(late.ok).toBe(false);
+    expect(late.notice).toBe(M.lines.late);
+    const off = edit(r, (b) => { b.realm!.at = 'hoenn'; });
+    const none = stepInRun(content, off, { t: 'realm', op: 'magnet', region: 'kanto' });
+    expect(none.ok).toBe(false);
+    expect(none.notice).toContain('No Magnet Train');
+    setActiveRegion('kanto');
+  });
+
+  it('the Evening ride keeps the Evening going', () => {
+    const r = edit(inJohto(), (b) => { b.phase = 'evening'; });
+    const out = stepInRun(content, r, { t: 'realm', op: 'magnet', region: 'kanto' });
+    expect(out.ok, String(out.notice)).toBe(true);
+    expect(blk(out.run).phase).toBe('evening');
+    setActiveRegion('kanto');
   });
 });

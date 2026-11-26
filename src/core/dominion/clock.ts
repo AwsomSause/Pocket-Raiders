@@ -11,6 +11,7 @@ import { assign, bail } from './crew';
 import { payPatron } from './recruit';
 import { setWhere } from './empire';
 import { answer, eveningTalk } from './talk';
+import { callIn } from './favours';
 import { answerCard, chairDue, closeDoors, courtNext, cycleOpt, endSitting, handOff, inTally, lockedTask, openSitting } from './chair';
 
 export interface StepOut {
@@ -134,6 +135,10 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'closeDoors': {
       const out = closeDoors(block);
       return out.ok ? ok(out.block, out.notice) : no(block);
+    }
+    case 'callIn': {
+      const out = callIn(block, action.who);
+      return out.ok ? ok(out.block, out.notice) : { ...no(block), notice: out.notice };
     }
     case 'chairOpt':
       return ok(cycleOpt(block, action.key));

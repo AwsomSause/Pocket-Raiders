@@ -111,7 +111,7 @@ export function r5Regions(m: EmpireModel, x: { more: readonly string[]; notice: 
 // ---------- one region's page (the regions card opened) ----------
 
 export function r5Realm(c: RealmCard, x: { at: number; i: number; holder: string; notice: string | null }, run: R5Run): string {
-  const rows = map(c.buttons, (b, k) => `<button class="row${k === x.at ? ' on' : ''}" ${go('emBtn', `${x.i}:${k}`)} data-testid="${b.op === 'tribute' ? `dom-empire-${c.id}-tribute` : `dom-empire-${c.id}-${b.op}`}" style="--i:${k};--d:${k * 50}ms">${SP(b.op === 'tribute' ? 'g-big-nugget' : b.op === 'orders' ? 'g-journal' : b.op === 'spy' ? 'g-scope-lens' : b.op === 'visit' ? 'g-town-map' : 'g-idcard', 30)}<span class="row-t"><b>${esc(b.op === 'tribute' ? `Tribute · ${b.label}` : b.label)}</b></span>${b.tone ? `<i class="tag">${b.tone === 'r' ? '!' : '•'}</i>` : ''}</button>`)
+  const rows = map(c.buttons, (b, k) => `<button class="row${k === x.at ? ' on' : ''}" ${go('emBtn', `${x.i}:${k}`)} data-testid="${b.op === 'tribute' ? `dom-empire-${c.id}-tribute` : `dom-empire-${c.id}-${b.op}`}" style="--i:${k};--d:${k * 50}ms">${SP(b.op === 'tribute' ? 'g-big-nugget' : b.op === 'orders' ? 'g-journal' : b.op === 'spy' ? 'g-scope-lens' : b.op === 'visit' ? 'g-town-map' : b.op === 'magnet' ? 'g-amulet-coin' : 'g-idcard', 30)}<span class="row-t"><b>${esc(b.op === 'tribute' ? `Tribute · ${b.label}` : b.label)}</b></span>${b.tone ? `<i class="tag">${b.tone === 'r' ? '!' : '•'}</i>` : ''}</button>`)
     || `<div class="row"><span class="row-t"><b>Nothing to do here now</b><em>${esc(realmLine(c))}</em></span></div>`;
   const det = `<div class="plinth">${x.holder}</div><b class="det-t">${esc(c.who?.name ?? c.name)}</b><p>${esc([c.who?.rank, c.who?.line].filter(Boolean).join(' · '))}</p>${map(c.rows, (r) => `<p><b>${esc(r.label)}</b> ${esc(r.value)}</p>`)}${c.boon ? `<p class="nt8">${esc(c.boon.name)}${c.boon.weak ? ' (weak)' : ''}</p>` : ''}`;
   const body = pn('l-main', `${cap(c.name)} · ${c.pill}`, rows, 'panel') + pn('l-det', '', det, 'det')
@@ -202,6 +202,22 @@ export function r5Arrival(x: ArrivalX, run: R5Run): string {
   const p = frame({ id: 'johto', g: 'Empire', kind: `jo37${sk}`, bg: 'roof', top: { title: x.region, sub: `Day ${x.day} · a new region` }, body, run, noTabs: true,
     who: who5(x.who), line: x.line, ctas: [[x.more ? 'Next' : 'Find a base', 'more', '', 'dom-opening-next']], footOpts: { testid: 'dom-opening', lineAct: 'more' }, keys: [['Enter', x.more ? 'next' : 'find a base']] });
   return p;
+}
+
+// ---------- the Magnet Train (mockup `magnet`, kind mg38) ----------
+
+export interface MagnetX { from: string; to: string; toRegion: string; region: string; team: string; seats: number; leaves: string; arrives: string; fare: number; people: string[]; line: string; notice: string | null; can: boolean }
+
+export function r5Magnet(x: MagnetX, run: R5Run): string {
+  const ppl = `<span class="ppl">${SP('t-clerkm', 70)}${x.people.join('')}</span>`;
+  const cars = map([0, 1, 2, 3, 4, 5], (i) => `<u style="--i:${i}"></u>`);
+  const dl = map([['Holder', x.team], ['Seats', `Boss + ${x.seats}`], ['Fare', money(x.fare)], ['Leaves', x.leaves], ['Arrives', `${x.arrives} · ${x.to}`]], ([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`);
+  const body = `<div class="pf38" data-nocheck=""><i class="rail"></i><div class="mt38"><i class="nose"></i><i class="body">${cars}</i><i class="spd"></i></div>${ppl}</div>
+  <div class="tk38" data-m="card" data-testid="r8-magnet"><small>Magnet Pass</small><b>${esc(x.from.toUpperCase())} ⇄ ${esc(x.to.toUpperCase())}</b><dl>${dl}</dl><i class="pch" data-nocheck="">✦</i></div>`;
+  return frame({ id: 'magnet', g: 'Empire', kind: 'mg38', bg: 'roof', top: { title: 'Magnet Train', sub: `${x.from} → ${x.to} · 2 h` }, body, run, noTabs: true,
+    who: x.notice ? null : { name: 'Conductor', k: 't-clerkm' }, line: x.notice ?? x.line,
+    ctas: [['Not tonight', 'r8MagnetBack', '', 'r8-magnet-back'], [`Ride to ${x.toRegion}`, 'r8MagnetGo', '', 'r8-magnet-ride']], footOpts: { testid: x.notice ? 'dom-notice' : 'r8-magnet-line' },
+    keys: [['Enter', x.can ? 'ride' : 'ok'], ['Esc', 'not tonight']] });
 }
 
 // ---------- the Underworld (mockup `underworld`) ----------

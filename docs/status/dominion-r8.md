@@ -10,7 +10,7 @@ Every page is drawn from the mockup's markup and the pass-50 styles, with the ru
 - `chair`: the visitor at the desk (their sprite, the lead Pokémon, the plaque, the question, two answers and Hand it off, the right hand's whisper). Keys 1-3, Enter, V waiting room, C close the doors, O settings.
 - `handoff`: who answers for you, as cards (rank stars, lean, why someone can't).
 - `queue` (new page, V): the waiting room, the visitor at the door first, then the rest of the docket.
-- `favours` (new page, F from the waiting room): who owes you (Favours, deals that pay) and who you owe (Grudges, deals that cost).
+- `favours` (new page, F from the waiting room): who owes you (Favours, deals that pay) and who you owe (Grudges, deals that cost). **Call it in** on a Favour (its button, or ↑↓ and Enter) spends it: ₽1,500 back and the HQ's Heat −10 (`courtRules.json` `callIn`, `src/core/dominion/favours.ts`). Grudges and deals can't be called in.
 - `tally`: NET money, the visitors, what changed, To the Night.
 - `night` (new page): the HQ at Night opens on the night shift (four of the crew and what they do). Enter sleeps, Esc stays up (the HQ for a Night action).
 
@@ -19,6 +19,7 @@ Every page is drawn from the mockup's markup and the pass-50 styles, with the ru
 - `fronts`: the Holdings list (P) with the detail panel; buying works as before.
 - `broadcast`: the hijacked TV (the Boss on air, the ticker, the line).
 - `regions`: the Empire across regions (G), four region cards. A second tap opens a held region's own page (its buttons and standing orders). Keys L sail, W world, U the Underworld, Y the Gym case.
+- `magnet` (new page): from Johto, a held Kanto's page has **Magnet Train**. The page shows the pass (Saffron ⇄ Goldenrod, seats, fare, times) and the conductor. Riding costs ₽600 and the rest of the Day (nothing more in the Evening) and works like a short visit: Stability +10, one grievance gone, the away count reset (`regions.json` `magnet`, realm op `magnet`).
 - `world` (new page, W): the islands, the route, Pick the Holder / Sail.
 - `holder` and `sail`: the old Leaving page split in two, as in the mockups. Holder cards (second tap goes on); the boat, who comes (chips), the orders (one chip, ◀▶ to change, O or the 1/4 chip for the next order).
 - `johto`: a region after the first opens on its arrival page (welcome card, crew and ace, start money, heat, who runs the region: the rival Boss, the Hero, the wild card and a Gym Leader). Enter reads the arrival lines.
@@ -60,8 +61,6 @@ Differences left on purpose (live data, not looks): a short test run has fewer v
 
 ## Needs a mechanic (not built, no placeholder)
 
-- `magnet`: the Magnet Train between Kanto and Johto. No train travel exists; Johto's data only names a holding with a "Magnet Train link" hook.
-- Waiting room: **Call it in** for a favour (spend a Favour for something). Favours and Grudges are recorded, but nothing spends them.
 - Ending: the mockup has no region map or funds graph, so the old ending's `dom-end-region-*` and `dom-end-graph` are gone; the numbers stay in the stats row.
 - Johto: the mockup's **Region skin** button (the skins are R9's settings).
 
@@ -72,8 +71,8 @@ Differences left on purpose (live data, not looks): a short test run has fewer v
 
 ## Tests
 
-- `tests/unit/dominionR8.test.ts` (7): the waiting room (closed doors give null; the door visitor first), the favour ledger (empty, then a Favour, a Grudge and a paying deal), the visitor page's test ids, the Night's four rows, the Underworld's states, the Gym case's eight Gyms, the regions grid and World with four regions.
-- `tests/e2e/dominionR8.spec.ts` (3): the Chair pages, the Empire pages (Takeover to Johto's arrival, a held region's page and orders), the Ending, Credits and Hall of Infamy. Each shot checks that every sprite drew. `R8_SHOTS=<dir>` writes the 960x540 shots and markup there.
+- `tests/unit/dominionR8.test.ts` (13): Call it in (pays, cools, spent once; Grudges, strangers and shut doors refused; Heat floors at 0), the Magnet Train (fare, Day spent, Stability; no money, Night or no line refused; an Evening ride), the waiting room (closed doors give null; the door visitor first), the favour ledger (empty, then a Favour, a Grudge and a paying deal), the visitor page's test ids, the Night's four rows, the Underworld's states, the Gym case's eight Gyms, the regions grid and World with four regions.
+- `tests/e2e/dominionR8.spec.ts` (3): the Chair pages (and calling in Rosa's Favour), the Empire pages (Takeover to Johto's arrival, a held region's page and orders, the Magnet Train ride), the Ending, Credits and Hall of Infamy. Each shot checks that every sprite drew. `R8_SHOTS=<dir>` writes the 960x540 shots and markup there.
 - Updated for the new pages: `dominionChair.spec.ts` (the settings value is `b.tag`), `dominionTakeover.spec.ts` (no Hero file on the page), `dominionRegions.spec.ts` (Holder then Sail; the region page before its orders; wait for the arrival page to close), `dominionEnding.spec.ts` (Credits before closing the books).
 
 No save change.

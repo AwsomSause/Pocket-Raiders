@@ -20,7 +20,7 @@ const RG = () => DOMINION_DATA.regions;
 const money = (n: number): string => `₽${n.toLocaleString('en-US')}`;
 const rankName = (id: string): string => DOMINION_DATA.crew.ranks.find((r) => r.id === id)?.word ?? id;
 
-export interface RealmButton { op: 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo'; label: string; tone: '' | 'y' | 'r' }
+export interface RealmButton { op: 'visit' | 'pay' | 'replace' | 'spy' | 'talk' | 'orders' | 'tribute' | 'trip' | 'letGo' | 'magnet'; label: string; tone: '' | 'y' | 'r' }
 export interface RealmCard {
   id: string; name: string; crest: string; colour: string; glow: string; shade: string;
   state: 'held' | 'seceded' | 'sellout' | 'lost' | 'here' | 'next' | 'later';
@@ -67,8 +67,10 @@ function heldCard(b: DominionBlock, h: HeldRegion): RealmCard {
       if (riskOf(b, h) >= RG().betrayal.longTalkAt) buttons.push({ op: 'talk', label: B.talk!, tone: 'r' });
     }
     buttons.push({ op: 'orders', label: B.orders!, tone: '' }, { op: 'tribute', label: `${h.tribute}%`, tone: '' });
+    if (RG().magnet.links[b.realm?.at ?? ''] === h.id) buttons.push({ op: 'magnet', label: B.magnet!, tone: 'y' });
   } else if (h.status === 'sellout') {
     buttons.push({ op: 'visit', label: B.visit!, tone: '' }, { op: 'replace', label: B.replace!, tone: 'y' }, { op: 'letGo', label: B.letGo!, tone: '' });
+    if (RG().magnet.links[b.realm?.at ?? ''] === h.id) buttons.push({ op: 'magnet', label: B.magnet!, tone: 'y' });
   } else if (h.status === 'seceded') {
     buttons.push({ op: 'trip', label: B.trip!, tone: 'y' }, { op: 'letGo', label: B.letGo!, tone: '' });
   }

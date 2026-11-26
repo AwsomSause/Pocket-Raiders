@@ -751,7 +751,8 @@
    "talk": "Long Talk",
    "orders": "Orders",
    "trip": "Long Trip",
-   "letGo": "Let go"
+   "letGo": "Let go",
+   "magnet": "Magnet Train"
   },
   "leave": {
    "title": "Leaving {region}",
@@ -769,5 +770,26 @@
   "boxFirst": "{region} first. Take it, and the next region waits across the water.",
   "boxTaken": "{region} is yours. Pick who holds it, set their orders, and sail for {next} (L).",
   "boxHeld": "{n} region(s) held behind you. Each week they pay tribute, and each week someone thinks about keeping it."
+ },
+ "magnet": {
+  "fare": 600,
+  "stab": 10,
+  "seats": 3,
+  "links": {
+   "johto": "kanto",
+   "kanto": "johto"
+  },
+  "stations": {
+   "kanto": "Saffron",
+   "johto": "Goldenrod"
+  },
+  "leaves": "22:05 · Platform 5",
+  "arrives": "00:05",
+  "lines": {
+   "ride": "The Magnet Train runs you to {region} and back by midnight. {holder} feels watched. Stability +{stab}.",
+   "noLine": "No Magnet Train runs from here to {region}.",
+   "late": "The last Magnet Train has gone. It runs in the Day and the Evening.",
+   "conductor": "“Tickets, please. And whatever is in that crate, keep it under the seat.”"
+  }
  }
 }

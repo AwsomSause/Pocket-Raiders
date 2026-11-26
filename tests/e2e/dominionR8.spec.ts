@@ -83,7 +83,7 @@ test('R8 the Chair: a visitor, Hand it off, the waiting room, the favours, the T
   const errors = watch(page);
   await start(page, 'ui=new&tutorial=0');
   await dayOne(page);
-  await edit(page, `${CREW} for (const t of ['endDay']) session.dominionStep({ t });`);
+  await edit(page, `${CREW} for (const t of ['endDay']) session.dominionStep({ t }); const c = session.run.expansion.dominion.chair; if (c) c.tags = { rosa: 'favour' };`);
   const s = view(page, 'Dominion');
   await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');
 
@@ -101,9 +101,17 @@ test('R8 the Chair: a visitor, Hand it off, the waiting room, the favours, the T
   await shot('queue');
   await pressUntil(page, 'KeyF', () => s.getByTestId('r8-favours-back').isVisible());
   await shot('favours');
+  expect(JSON.stringify(await block(page))).toBe(before);
+  // Call it in: Rosa's Favour pays back money and cools the HQ, once.
+  const funds = (await block(page)).funds;
+  await s.getByTestId('r8-callin-0').dispatchEvent('click');
+  await expect(s.getByTestId('dom-notice')).toContainText('Rosa pays the favour back');
+  const called = await block(page);
+  expect(called.funds).toBeGreaterThan(funds);
+  expect(called.chair.tags.rosa).toBeUndefined();
+  await expect(s.getByTestId('r8-callin-0')).toHaveCount(0);
   await pressUntil(page, 'Escape', () => s.getByTestId('r8-queue-0').isVisible());
   await pressUntil(page, 'Escape', () => s.getByTestId('dom-chair-visitor').isVisible());
-  expect(JSON.stringify(await block(page))).toBe(before);
 
   // 3: Hand it off, Esc back.
   await pressUntil(page, 'Digit3', () => s.getByTestId('dom-hand').isVisible());
@@ -209,6 +217,21 @@ test('R8 the Empire: Takeover, Holdings, the broadcast, the regions, the World, 
   await expect(s.getByTestId('dom-orders')).toBeVisible();
   await shot('orders');
   await pressUntil(page, 'Escape', async () => !(await s.getByTestId('dom-orders').isVisible()));
+
+  // The Magnet Train back to Kanto: the pass, then the ride (the fare, Stability up).
+  await edit(page, `b.phase = 'day'; b.funds = 5000; b.realm.held[0].stability = 50;`);
+  await pressUntil(page, 'KeyG', () => s.getByTestId('dom-empire').isVisible());
+  await s.getByTestId('dom-empire-card-kanto').dispatchEvent('click');
+  await s.getByTestId('dom-empire-card-kanto').dispatchEvent('click');
+  await s.getByTestId('dom-empire-kanto-magnet').dispatchEvent('click');
+  await expect(s.getByTestId('r8-magnet')).toContainText('GOLDENROD');
+  await shot('magnet');
+  const stab = (await block(page)).realm.held[0].stability;
+  await s.getByTestId('r8-magnet-ride').dispatchEvent('click');
+  await expect(s.getByTestId('dom-notice')).toContainText('Magnet Train');
+  const rode = await block(page);
+  expect(rode.funds).toBe(5000 - 600);
+  expect(rode.realm.held[0].stability).toBeGreaterThan(stab);
   expect(errors).toEqual([]);
 });
 
