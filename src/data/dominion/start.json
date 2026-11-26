@@ -1,5 +1,5 @@
 {
-  "_source": "Evil Mode rework (DOMINION) slice D1. Design: /mnt/project-files/plans/evil-mode-rework/ Part 1 sections 1-2, Part 6 sections 1-2, Part 7 section 1.1, Part 9 A1 and A15. Numbers are starting values; none are playtested.",
+  "_source": "Evil Mode rework (DOMINION) slice D1. Design: /mnt/project-files/plans/evil-mode-rework/ Part 1 sections 1-2, Part 6 sections 1-2, Part 7 section 1.1, Part 9 A1 and A15. Numbers are starting values; none are playtested. Boss stats and traits (redesign R1 follow-up, 2026-11-26): each player trainer starts with its own Edge spread (always 10 points) and two traits; others use the default.",
   "start": {
     "funds": 1000,
     "heat": 5,
@@ -105,5 +105,29 @@
     "broke": "Not enough to pay everyone. {name} went unpaid.",
     "step": "First Step done: {label} (+₽{reward})."
   },
-  "lockedTab": "Opens in a later part of the Dominion build."
+  "lockedTab": "Opens in a later part of the Dominion build.",
+  "boss": {
+    "traits": [
+      {"id": "silver-tongue", "name": "Silver Tongue", "text": "Debates start 10 points up", "kind": "conviction", "n": 10},
+      {"id": "champions-pride", "name": "Champion's Pride", "text": "Debates start 5 points up", "kind": "conviction", "n": 5},
+      {"id": "old-grudge", "name": "Old Grudge", "text": "Every rival team starts 5 Tension higher", "kind": "tension", "n": 5},
+      {"id": "loud-mouth", "name": "Loud Mouth", "text": "Starts with 5 more Heat", "kind": "heat", "n": 5},
+      {"id": "clean-record", "name": "Clean Record", "text": "Starts with 5 less Heat", "kind": "heat", "n": -5},
+      {"id": "quiet-type", "name": "Quiet Type", "text": "+1 Stealth XP each time it grows", "kind": "learn", "stat": "stealth", "n": 1},
+      {"id": "bookworm", "name": "Bookworm", "text": "+1 Wits XP each time it grows", "kind": "learn", "stat": "wits", "n": 1},
+      {"id": "people-person", "name": "People Person", "text": "+1 Charm XP each time it grows", "kind": "learn", "stat": "charm", "n": 1},
+      {"id": "hard-hitter", "name": "Hard Hitter", "text": "+1 Brawn XP each time it grows", "kind": "learn", "stat": "brawn", "n": 1},
+      {"id": "steady-nerves", "name": "Steady Nerves", "text": "+1 Nerve XP each time it grows", "kind": "learn", "stat": "nerve", "n": 1}
+    ],
+    "default": {"edge": {"brawn": 2, "nerve": 2, "wits": 2, "charm": 2, "stealth": 2}, "traits": ["hard-hitter"]},
+    "byArchetype": {
+      "red": {"edge": {"brawn": 2, "nerve": 2, "wits": 2, "charm": 2, "stealth": 2}, "traits": ["quiet-type", "steady-nerves"]},
+      "blue": {"edge": {"brawn": 3, "nerve": 3, "wits": 2, "charm": 1, "stealth": 1}, "traits": ["champions-pride", "loud-mouth"]},
+      "green": {"edge": {"brawn": 1, "nerve": 2, "wits": 3, "charm": 2, "stealth": 2}, "traits": ["bookworm", "clean-record"]},
+      "hilda": {"edge": {"brawn": 2, "nerve": 2, "wits": 1, "charm": 3, "stealth": 2}, "traits": ["people-person", "hard-hitter"]},
+      "nate": {"edge": {"brawn": 2, "nerve": 3, "wits": 2, "charm": 2, "stealth": 1}, "traits": ["silver-tongue", "old-grudge"]}
+    },
+    "title": "Boss of {region}",
+    "autoMs": 2600
+  }
 }

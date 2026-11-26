@@ -34,6 +34,7 @@ import { interactionLog } from '../core/presentation/uiPrefs';
 import type { Achievement, Content } from '../core/contentSchema';
 import { finalizeRun, recordRunStarted } from '../core/profile';
 import { finishDominion } from '../core/dominion/ending';
+import { addToHall, hallEntry, titleOf } from '../core/dominion/hall';
 import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { finishRivalScene, rivalStoryScene } from '../core/story2/rivalStory';
 import { fieldTrialDue, finishFieldTrial } from '../core/story2/fieldTrial';
@@ -86,7 +87,7 @@ import { isStoryCampaign } from '../core/campaign/circuit';
 import { clearNextRun, nextRunStart } from '../core/story2/intake';
 import { jetBlessing } from '../core/story2/jetBlessing';
 import { scoutGift } from '../core/story2/starterScouts';
-import type { LoadoutPreset, Profile, RunPrep, RunState, Settings } from '../core/state';
+import type { DominionHallEntry, LoadoutPreset, Profile, RunPrep, RunState, Settings } from '../core/state';
 import { SaveManager, SLOTS, readActiveSlot, writeActiveSlot, type LoadResult, type SlotNumber, type SlotPeek } from '../save/saveManager';
 import type { StorageProvider } from '../save/storage';
 import type { AskEnv } from '../ai/ask';
@@ -1082,11 +1083,22 @@ export class GameSession {
     return chartersOpen(this.profile.dominionDone.length);
   }
 
+  /** DOMINION Hall of Infamy (R1 follow-up): the finished runs' teams, newest first. */
+  dominionHall(): readonly DominionHallEntry[] {
+    return this.profile.dominionHall ?? [];
+  }
+
+  /** The Boss title from the newest finished Dominion run ("Boss of Kanto"), or null before any. */
+  dominionBossTitle(): string | null {
+    return titleOf(this.dominionHall());
+  }
+
   /** DOMINION D16: a Dominion run whose last region is Taken counts once toward the Charters' unlock. */
   private noteDominionDone(): void {
     const run = this.run, b = run?.expansion?.dominion;
     if (!run || !b || !dominionFinished(b) || this.profile.dominionDone.includes(run.runId)) return;
-    this.profile = { ...this.profile, dominionDone: [...this.profile.dominionDone, run.runId] };
+    // R1 follow-up: the Hall of Infamy keeps the team; its newest entry is the Boss title.
+    this.profile = { ...this.profile, dominionDone: [...this.profile.dominionDone, run.runId], dominionHall: addToHall(this.profile.dominionHall ?? [], hallEntry(run, b)) };
     this.checkSave(this.saves.saveProfile(this.profile));
   }
 

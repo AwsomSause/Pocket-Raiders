@@ -8,6 +8,7 @@ import { colourDef, draftColours, goalDef } from '../../../../../core/dominion/f
 import type { TeamDraft } from '../../../../../core/dominion/schema';
 import { act } from '../../../kit';
 import { armbandIcon, emblem } from '../views';
+import { r5Infamy } from './empireR8';
 import { bg, esc, faceOf, foot, keys, map, page, pn, rep, SP, spr, st, top, type R5Cta, type R5Key, type R5Run } from './kit';
 
 const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
@@ -60,10 +61,11 @@ export function r5Title(m: R5TitleModel, run: R5Run): string {
 
 // ---------- the setup ----------
 
-export interface R5SetupBoss { name: string; pic: string }
+/** The Boss: name, picture, starting Edge stats (out of 10) and traits; the title a finished run earned (or null). */
+export interface R5SetupBoss { name: string; pic: string; stats: readonly [string, number][]; traits: readonly [string, string][]; title: string | null }
 export interface R5Starter { name: string; pic: string; level: number }
 export interface R5SetupModel {
-  page: 'boss' | 'types' | 'member' | 'charter';
+  page: 'boss' | 'types' | 'member' | 'charter' | 'hall';
   problem: string | null;
   boss: R5SetupBoss;
   starters: readonly R5Starter[];
@@ -76,6 +78,8 @@ export interface R5SetupModel {
   member: { which: 'grunt' | 'admin'; name: string; rank: string; pic: string; stats: readonly [string, number][]; facts: readonly string[]; pitch: string; wage: number; lv: number; loyalty: number; look: number; looks: number };
   /** The Charters page (`nextrun`): open or locked, the rows, the cursor. */
   charters: { open: boolean; lockLine: string; pickLine: string; at: number; rows: readonly { id: string; team: string; initial: string; colours: readonly string[]; question: string; patron: string; motto: string; from: string }[] };
+  /** The newest Hall of Infamy entry (a finished run's team), or null before any. */
+  hall: { team: string; region: string; day: number; runs: number; peds: { pic: string; name: string; role: string; top?: boolean }[] } | null;
 }
 
 const SETUP_KEYS: R5Key[] = [['Enter', 'Choose'], ['Esc', 'Back']];
@@ -112,16 +116,16 @@ const trait = (i: number, b: string, e: string): string => `<div class="trait" $
 const facts = (rows: readonly [string, string][]): string => `<dl class="facts">${map(rows, ([a, b]) => `<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`)}</dl>`;
 
 function bossPage(m: R5SetupModel, run: R5Run): string {
-  const mons = `<div class="mons r5m3">${map(m.starters, (s, i) => `<span ${st(i)}>${s.pic}<b>${esc(s.name)}</b><em>Lv ${s.level}</em></span>`)}</div>`;
+  const bars = map(m.boss.stats, ([k, v], i) => `<div class="bar" ${st(i)}><span>${esc(cap(k))}</span><i><u style="width:${v * 10}%"></u></i><b>${v}</b></div>`);
+  const mons = `<div class="mons r5m3 r5bm">${map(m.starters, (s, i) => `<span ${st(i + 5)}>${s.pic}<b>${esc(s.name)}</b></span>`)}</div>`;
   const ch = m.charters.open ? 'Start from a Charter · C' : 'Charters · locked';
   const chLine = m.charters.open ? 'An established team, its Patron and its debts' : m.charters.lockLine;
-  const notes = trait(0, 'Your own battles', 'You fight every battle yourself')
-    + trait(1, 'No uniform, no type rule', 'Any Pokémon under the level cap')
+  const notes = `<div data-testid="dom-boss-traits">${map(m.boss.traits, ([b, e], i) => trait(i, b, e))}</div>`
     + `<button class="trait r5tr" ${act('charters')} data-testid="dom-setup-charter-chip" ${st(2)}><b>${m.charters.open ? '' : '🔒 '}${esc(ch)}</b><em>${esc(chLine)}</em></button>`
     + facts([['Starting cash', m.funds], ['Partner', m.starters[0]?.name ?? '—'], ['Home', m.home]]);
   const ctas: R5Cta[] = [['Back', 'setupBack'], ['This is me', 'next', '', 'dom-next']];
   const line = m.problem ?? '“Kanto doesn’t need a hero. It needs a landlord.”';
-  return filePage('boss', { pic: m.boss.pic, name: m.boss.name, rank: 'The Boss', mid: ['Your Pokémon', mons], notes, line, ctas, testid: 'dom-setup-boss', title: 'Choose the Boss', boxTestid: m.problem ? 'dom-problem' : undefined }, run, [['C', 'Charters'], ...SETUP_KEYS]);
+  return filePage('boss', { pic: m.boss.pic, name: m.boss.name, rank: m.boss.title ?? 'The Boss', mid: ['Stats', `<div data-testid="dom-boss-stats">${bars}</div>${mons}`], notes, line, ctas, testid: 'dom-setup-boss', title: 'Choose the Boss', boxTestid: m.problem ? 'dom-problem' : undefined }, run, [['C', 'Charters'], ...SETUP_KEYS]);
 }
 
 function memberPage(m: R5SetupModel, run: R5Run): string {
@@ -144,13 +148,15 @@ const cardHex = (ids: readonly string[]): string => {
 
 function charterPage(m: R5SetupModel, run: R5Run): string {
   const c = m.charters;
+  const h = m.hall;
   const own = [
+    ...(h ? [['up', 'Hall of Infamy', `Your ${h.region} team, saved for good · H`, 'hall'] as const, ['up', 'Boss title', `“${m.boss.title ?? ''}” on your Boss page`] as const] : []),
     ['up', 'Charters', c.open ? `${c.rows.length} ready-made teams, now open` : c.lockLine],
-    ['up', 'The Boss', 'The same trainer, the same three Pokémon'],
+    ...(h ? [] : [['up', 'The Boss', 'The same trainer, the same three Pokémon'] as const]),
     ['dn', 'Money', 'Back to the start'],
     ['dn', 'Crew and Pokémon', 'You found a new team'],
   ] as const;
-  const left = map(own, ([k, b, e], i) => `<div class="chg ${k}" style="--i:${i};--d:${i * 70}ms"><i>${k === 'up' ? '▲' : '▼'}</i><b>${esc(b)}</b><em>${esc(e)}</em></div>`);
+  const left = map(own, ([k, b, e, a], i) => `<div class="chg ${k}" style="--i:${i};--d:${i * 70}ms"${a ? ` ${act(a)} data-testid="dom-carry-${a}"` : ''}><i>${k === 'up' ? '▲' : '▼'}</i><b>${esc(b)}</b><em>${esc(e)}</em></div>`);
   const first = Math.max(0, Math.min(c.at - 1, c.rows.length - 4)) & ~1;
   const cards = map(c.rows.slice(first, first + 4), (r, j) => {
     const i = first + j;
@@ -159,17 +165,24 @@ function charterPage(m: R5SetupModel, run: R5Run): string {
   const more = c.rows.length > 4 ? `+ ${c.rows.length - 4} more Charters · ↑↓ to see them` : c.pickLine;
   const cur = c.rows[c.at];
   const line = m.problem ?? (cur ? `${cur.team}, from ${cur.from}. “${cur.motto}”` : c.pickLine);
-  return page({ id: 'nextrun', g: 'Start', kind: 'nr48', body: bg('street', 'Start', run) + top('Start', { title: 'A Charter', sub: c.open ? 'An established start · optional' : 'Locked', crumb: null, id: 'nextrun' }, run)
+  return page({ id: 'nextrun', g: 'Start', kind: 'nr48', body: bg('street', 'Start', run) + top('Start', { title: h ? 'Next Dominion' : 'A Charter', sub: h ? `${h.runs} run${h.runs === 1 ? '' : 's'} finished` : c.open ? 'An established start · optional' : 'Locked', crumb: null, id: 'nextrun' }, run)
     + `\n  <section class="pn kp48" data-m="det"><h3><i>What carries over</i></h3>${left}</section>`
     + `\n  <section class="pn ch48${c.open ? '' : ' r5off'}" data-m="panel" data-testid="dom-setup-charters"><h3><i>Found a new team</i></h3><div class="cs48">${cards}</div>${c.open ? `<p class="mr48">${esc(more)}</p>` : `<p class="mr48 r5lock" data-testid="dom-charter-lock">🔒 ${esc(c.lockLine)} · ↑↓ to read them</p>`}</section>\n  `
     + foot({ name: 'Rotom', k: 'p-rotom' }, line, [['Back', 'setupBack'], ['Read the Charter', 'next', '', 'dom-next']], 'Start', run, { testid: m.problem ? 'dom-problem' : 'dom-charter-detail' })
-    + keys([['↑↓', 'team'], ['Enter', 'begin'], ['Esc', 'back']], 'Start', run) });
+    + keys([['↑↓', 'team'], ...(h ? [['H', 'Hall', 'hall'] as R5Key] : []), ['Enter', 'begin'], ['Esc', 'back']], 'Start', run) });
+}
+
+/** The Hall of Infamy from the next run's Charters page (R8's page, the newest finished run's team). */
+function hallPage(m: R5SetupModel, run: R5Run): string {
+  const h = m.hall!;
+  return r5Infamy({ region: h.region, day: h.day, peds: h.peds }, run, { team: h.team, ctas: [['Back', 'setupBack', '', 'dom-hall-back']], keys: [['Esc', 'back', 'setupBack']] });
 }
 
 export function r5Setup(m: R5SetupModel, run: R5Run): string {
   if (m.page === 'types') return typesPage(m, run);
   if (m.page === 'member') return memberPage(m, run);
   if (m.page === 'charter') return charterPage(m, run);
+  if (m.page === 'hall' && m.hall) return hallPage(m, run);
   return bossPage(m, run);
 }
 
@@ -179,19 +192,26 @@ export interface R5Actor { name: string; role: string; pic: string; face: string
 
 /** The opening: the first member on the left, the Boss on the right, one line at a time. Quoted lines are spoken
  *  (the member first, then the Boss, in turn); the rest is narration. */
-export function r5Cold(lines: readonly string[], shown: number, member: R5Actor, boss: R5Actor, run: R5Run): string {
+export function r5Cold(lines: readonly string[], shown: number, member: R5Actor, boss: R5Actor, run: R5Run, o: { log: boolean; auto: boolean } = { log: false, auto: false }): string {
   const i = Math.max(0, Math.min(shown, lines.length) - 1);
   const line = lines[i] ?? '';
-  let said = 0;
-  for (let k = 0; k < i; k++) if (/^["“]/.test(lines[k]!)) said++;
-  const who = /^["“]/.test(line) ? (said % 2 === 0 ? member : boss) : null;
+  // Quoted lines are spoken, the member first and then the Boss in turn; the rest is narration.
+  const whoAt = (k: number): R5Actor | null => {
+    if (!/^["“]/.test(lines[k] ?? '')) return null;
+    let said = 0;
+    for (let j = 0; j < k; j++) if (/^["“]/.test(lines[j]!)) said++;
+    return said % 2 === 0 ? member : boss;
+  };
+  const who = whoAt(i);
   const last = shown >= lines.length;
   const spk = who ? `<span class="spk6" style="--pc:${who.colour}">${faceOf(who.face, 62, who.colour)}<b>${esc(who.name)}</b></span>` : '';
+  const chips = `<span class="tb-chips"><i class="r5ch${o.log ? ' on' : ''}" ${act('coldLog')} data-testid="dom-cold-log">L · Log</i><i class="r5ch${o.auto ? ' on' : ''}" ${act('coldAuto')} data-testid="dom-cold-auto">Auto: ${o.auto ? 'on' : 'off'}</i></span>`;
+  const log = o.log ? `<section class="pn r5log" data-testid="dom-cold-logbox"><h3><i>Talk log</i></h3><div class="r5sc" data-scrollrow="${Math.max(0, i - 5)}">${map(lines.slice(0, i + 1), (l, k) => { const w = whoAt(k); return `<p${k === i ? ' class="on"' : ''}>${w ? `<b style="color:${w.colour}">${esc(w.name)}</b>` : '<b class="nar">·</b>'}${esc(l)}</p>`; })}</div><em>L or Esc closes the log</em></section>` : '';
   return page({ id: 'cold', g: 'Start', kind: 'scene sm-talk pg-cold', body: `${bg('rain', 'Start', run)}
   <div class="act l" style="--pc:${member.colour}">${member.pic}<span class="plate vs17"><b>${esc(member.name)}</b><em>${esc(member.role)}</em></span></div>
   <div class="act r" style="--pc:${boss.colour}">${boss.pic}<span class="plate vs17"><b>${esc(boss.name)}</b><em>${esc(boss.role)}</em></span></div>
-  <section class="tbox${who ? '' : ' r5nar'}" data-m="box" data-testid="dom-opening" ${act('more')}>${spk}<p>${esc(line)}</p><button class="cta on">${last ? 'To the HQ ▶' : 'Go on'}</button><span class="tb-chips"><i>${i + 1} of ${lines.length}</i></span><i class="more">▼</i></section>
-  ${keys([['Enter', 'next']], 'Start', run)}` });
+  <section class="tbox${who ? '' : ' r5nar'}" data-m="box" data-testid="dom-opening" ${act('more')}>${spk}<p>${esc(line)}</p><button class="cta on">${last ? 'To the HQ ▶' : 'Go on'}</button>${chips}<i class="more">▼</i></section>${log}
+  ${keys([['L', 'log', 'coldLog'], ['Enter', 'next']], 'Start', run)}` });
 }
 
 // ---------- the Founding (`found`) ----------
@@ -218,13 +238,13 @@ export function r5Founding(m: R5FoundingModel, run: R5Run): string {
 
 // ---------- the sign goes up (`sign`) ----------
 
-export interface R5SignModel { name: string; where: string; changes: readonly { up: boolean; b: string; e: string }[]; line: string; last: boolean; emblem: string }
+export interface R5SignModel { name: string; where: string; changes: readonly { up: boolean; b: string; e: string }[]; line: string; last: boolean; emblem: string; paper?: { masthead: string; headline: string; fx: string } }
 
 export function r5Sign(m: R5SignModel, run: R5Run): string {
   const coins = rep(14, (i) => `<i style="--a:${i * 26}deg;--r:${120 + (i % 4) * 40}px;--d:${(i % 5) * 60}ms"></i>`);
   const chg = map(m.changes, (c, i) => `<div class="chg ${c.up ? 'up' : 'dn'}" style="--i:${i};--d:${i * 110}ms"><i>${c.up ? '▲' : '▼'}</i><b>${esc(c.b)}</b><em>${esc(c.e)}</em></div>`);
   return page({ id: 'sign', g: 'Start', kind: 'res', body: bg('gold', 'Start', run) + top('Start', { title: 'The sign goes up', crumb: null, id: 'sign' }, run)
-    + `\n  <div class="r-l" data-testid="dom-sign"><small>The Founding</small><b class="r-big${m.name.length > 9 ? ' long' : ''}" data-m="funds" data-testid="dom-sign-name">${esc(m.name.toUpperCase())}</b><p>${esc(m.where)}</p><div class="coins" data-nocheck="">${coins}</div><div class="stamp" data-m="ttl">FOUNDED</div><span class="r5emb">${m.emblem}</span></div>`
+    + `\n  <div class="r-l" data-testid="dom-sign"><small>The Founding</small><b class="r-big${m.name.length > 9 ? ' long' : ''}" data-m="funds" data-testid="dom-sign-name">${esc(m.name.toUpperCase())}</b><p>${esc(m.where)}</p><div class="coins" data-nocheck="">${coins}</div><div class="stamp" data-m="ttl">FOUNDED</div><span class="r5emb">${m.emblem}</span>${m.paper ? `<div class="clip18" data-testid="dom-sign-paper"><small>${esc(m.paper.masthead)}</small><b>${esc(m.paper.headline)}</b><em>${esc(m.paper.fx)}</em></div>` : ''}</div>`
     + `\n  ${pn('r-lines', 'What changed', chg, 'panel')}\n  `
     + foot(null, m.line, [[m.last ? 'To the HQ' : 'Go on', 'more']], 'Start', run, { testid: 'dom-founded', lineAct: 'more' })
     + keys([['Enter', 'next']], 'Start', run) });

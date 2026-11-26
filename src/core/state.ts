@@ -1695,6 +1695,19 @@ export const LegacyMomentKindSchema = z.enum(LEGACY_MOMENT_KINDS);
 export type LegacyMomentKind = z.infer<typeof LegacyMomentKindSchema>;
 
 /** One party Pokémon as it was when the run ended. */
+/** DOMINION Hall of Infamy: one finished Dominion run, kept on the profile (core/dominion/hall.ts writes it). */
+export const DominionHallSchema = z.object({
+  runId: z.string(),
+  team: z.string(),
+  region: z.string(),
+  day: z.number().int().min(1),
+  /** The Boss's trainer (archetype id). */
+  boss: z.string(),
+  crew: z.array(z.object({ name: z.string(), look: z.string(), role: z.string() }).strict()).max(4),
+  ace: z.object({ speciesId: z.string(), level: z.number().int().min(1) }).strict().nullable(),
+}).strict();
+export type DominionHallEntry = z.infer<typeof DominionHallSchema>;
+
 export const LegacyMonSchema = z.object({
   uid: z.string(),
   speciesId: z.string(),
@@ -1933,6 +1946,9 @@ export const ProfileSchema = z.object({
   legacyRuns: z.array(LegacyRunSchema).default([]),
   /** DOMINION D16: run ids of the Dominion runs finished (the last region Taken); the first opens the Charters. Optional: older profiles load with none (no version bump). */
   dominionDone: z.array(z.string()).default([]),
+  /** DOMINION Hall of Infamy (R1 follow-up): each finished Dominion run's team, newest first (cap 10); the newest gives
+   *  the Boss title ("Boss of Kanto"). Optional: older profiles load with none (no version bump). */
+  dominionHall: z.array(DominionHallSchema).default([]),
   /** Ideas W10 Corner Nook (core/hubNook.ts): fortune cookie, wish star, note to your future self, gift codes, donation drive. Optional: older profiles load with the defaults (no version bump). */
   nook: z.object({
     cookieDay: z.string().nullable().default(null),

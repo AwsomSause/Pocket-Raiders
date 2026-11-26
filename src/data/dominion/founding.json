@@ -76,6 +76,7 @@
   ],
   "noGoal": { "name": "Rule", "line": "No special Goal: win by taking the region (Wipe Out, Shadow or Monarch).", "quote": "We don't need a reason. We need the region." },
   "band": { "grey": "#8a8f9e", "greyDark": "#5a5f6e", "ink": "#18141f", "white": "#ffffff", "near": 70, "contrast": 60 },
+  "paper": { "headline": "New gang in {district}? Police shrug", "dread": 3, "regard": -1 },
   "lines": {
     "ready": "The town says your name now, quietly. Time for the Founding: a name, colours, a mark and a motto.",
     "readyShort": "THE FOUNDING · O",

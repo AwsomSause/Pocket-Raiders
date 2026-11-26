@@ -259,11 +259,13 @@ export function r5Credits(x: { team: string; boss: string; bossName: string; too
 
 // ---------- the Hall of Infamy (mockup `infamy`) ----------
 
-export function r5Infamy(x: { region: string; day: number; peds: { pic: string; name: string; role: string; top?: boolean }[] }, run: R5Run): string {
+/** `o` (R1 follow-up): the Hall opened from the next run's pages, with its own text box buttons and keys. */
+export function r5Infamy(x: { region: string; day: number; peds: { pic: string; name: string; role: string; top?: boolean }[] }, run: R5Run, o?: { team: string; ctas: R5Cta[]; keys: R5Key[] }): string {
   const peds = map(x.peds.slice(0, 5), (p, i) => `<div class="ped30${p.top ? ' top' : ''}" style="--d:${i * 160}ms"><span class="sp">${p.pic}</span><i class="base"></i><b>${esc(p.name)}</b><em>${esc(p.role)}</em></div>`);
   return frame({ id: 'infamy', g: 'Empire', kind: 'hi30', bg: 'night', top: { title: 'Hall of Infamy', sub: `${x.region} taken · Day ${x.day}` }, run,
     body: `<i class="spot30" data-nocheck=""></i><section class="hall30" data-m="panel" data-testid="r8-infamy">${peds}</section>`,
-    who: { name: 'Rotom', k: 'p-rotom' }, line: `“Bzzt! Saved to the Hall. ${x.region} will remember. ${x.region} will not forgive.”`, ctas: [['Credits', 'r8Credits'], ['Next Dominion', 'endClose']], keys: [['Enter', 'continue', 'r8Credits']] });
+    who: { name: 'Rotom', k: 'p-rotom' }, line: o ? `“Bzzt! ${o.team}, the team that took ${x.region}. Saved for good.”` : `“Bzzt! Saved to the Hall. ${x.region} will remember. ${x.region} will not forgive.”`,
+    ctas: o?.ctas ?? [['Credits', 'r8Credits'], ['Next Dominion', 'endClose']], keys: o?.keys ?? [['Enter', 'continue', 'r8Credits']] });
 }
 
 export { top };

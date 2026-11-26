@@ -6,6 +6,7 @@
 import { DOMINION_DATA } from './data';
 import { peakOf, stepById } from './empire';
 import { fill } from './worldTurn';
+import { MOMENTS } from './moments';
 import type { DominionBlock, TeamDraft } from './schema';
 
 const F = () => DOMINION_DATA.founding;
@@ -103,7 +104,27 @@ export function found(block: DominionBlock, d: TeamDraft): { ok: boolean; block:
   const name = d.name.trim().replace(/\s+/g, ' ');
   b.team = { name, primary: d.primary, secondary: d.secondary, initial: d.initial, logo: d.logo, motto: d.motto.trim(), goal: d.goal, day: b.day };
   b.teamName = name;
+  // R1 follow-up: the morning paper runs the story (the sign's clipping); the HQ's district fears the name a little.
+  const home = b.field.districts[DOMINION_DATA.field.hq];
+  if (home) {
+    home.dread += F().paper.dread;
+    home.regard += F().paper.regard;
+  }
   return { ok: true, block: b, notice: fill(F().lines.done, { name }) };
+}
+
+/** R1 follow-up: the morning paper's clipping on the sign (mockup `sign`): masthead, headline and what the news did. */
+export function foundingPaper(b: DominionBlock): { masthead: string; headline: string; fx: string; district: string } {
+  const P = F().paper;
+  const district = b.field.districts[DOMINION_DATA.field.hq] ? (DOMINION_DATA.field.districts.find((d) => d.id === DOMINION_DATA.field.hq)?.name ?? '') : '';
+  const region = DOMINION_DATA.start.start.region;
+  const sign = (n: number): string => (n < 0 ? `−${-n}` : `+${n}`);
+  return {
+    masthead: `${fill(MOMENTS.paper.masthead, { region })} · Day ${b.team?.day ?? b.day}`,
+    headline: fill(P.headline, { district: district || region }).toUpperCase(),
+    fx: `Dread ${sign(P.dread)} · Regard ${sign(P.regard)}`,
+    district: district || region,
+  };
 }
 
 /** The scene after the Founding: the door, the first member tying the armband on, their line. */
