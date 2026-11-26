@@ -351,6 +351,8 @@ const BlockSchema = z.object({
   desk: z.lazy(() => DeskStateSchema).optional(),
   /** D8: Squads and Groups (Part 10). Optional; `squadsOf` fills it. */
   squads: z.lazy(() => SquadsStateSchema).optional(),
+  /** Redesign R5: the Crew pages' own rules (evenings off, the storm night, outfits, Boss skills, the team tag). Optional; no bump. */
+  crewPages: z.lazy(() => CrewPagesStateSchema).optional(),
   /** D22: moles in the crew, Suspicion, clues and the Confront talk. Optional; `spiesOf` fills it. */
   spies: z.lazy(() => SpiesStateSchema).optional(),
   /** D23: captives (the one being snatched, the Holding Cell, the questioning). Optional; `snatchOf` (snatch.ts) fills it. */
@@ -469,6 +471,12 @@ export type DominionAction =
   | { t: 'spyAsk'; q: string; text?: string }
   | { t: 'spyAccuse' }
   | { t: 'spyDrop' }
+  // Redesign R5, the Crew pages (crewPages.ts)
+  | { t: 'downtime'; member: string; place: string }
+  | { t: 'shelter'; choice: string }
+  | { t: 'outfit'; member: string; outfit: string }
+  | { t: 'skill'; id: string }
+  | { t: 'spray'; symbol: string; colour: string; slogan: string }
 
   // D24, police questioning (police.ts). A typed answer carries the judge its words got (Rotom's, or the rules').
   | { t: 'answer'; kind: AnswerKind; text?: string; judge?: Judge; rotom?: boolean }
@@ -2936,3 +2944,50 @@ export type DomChartersFile = z.infer<typeof DomChartersFileSchema>;
 /** The Ledger across all days (Part 5 §7): funds after each night, from run day `from`, one point per `step` days. */
 export const AnnalsSchema = z.object({ from: I.min(1), step: I.min(1), funds: z.array(I).max(720), /** Collapses (Part 5 §8). */ falls: N0.optional() }).strict();
 export type Annals = z.infer<typeof AnnalsSchema>;
+
+// ---------- Redesign R5: the Crew pages' rules (crewPages.json, block `crewPages`) ----------
+
+const FxKey = z.enum(['heatWeek', 'heatDay', 'taskXp', 'hireOff', 'raidDef', 'debate', 'spyCatch', 'income', 'wageOff', 'talk', 'recruit', 'morale']);
+const StatKey = z.enum(['brawn', 'nerve', 'wits', 'charm', 'stealth']);
+export const CrewPagesFileSchema = z.object({
+  _source: S,
+  downtime: z.object({
+    cooldown: I.min(1),
+    places: z.array(z.object({ id: S, name: S, where: S, icon: S, cost: N0, morale: N0, loyalty: N0, heat: I.max(0), stat: StatKey.nullable(), tenths: N0 }).strict()).min(1),
+  }).strict(),
+  shelter: z.object({
+    every: I.min(2), from: I.min(1), title: S, text: S, line: S,
+    choices: z.array(z.object({ id: S, label: S, loyalty: I, morale: N0, dread: N0, cost: N0, says: S }).strict()).min(2).max(4),
+  }).strict(),
+  outfits: z.array(z.object({ id: S, name: S, cost: N0, fx: FxKey.nullable(), n: N0, says: S }).strict()).min(2),
+  skills: z.object({
+    perPoint: I.min(1),
+    branches: z.array(z.object({ id: S, name: S, colour: S, nodes: z.array(z.object({ id: S, name: S, fx: FxKey, n: I.min(1), says: S }).strict()).min(1) }).strict()).min(1),
+  }).strict(),
+  graffiti: z.object({
+    symbols: z.array(z.object({ id: S, glyph: S, name: S }).strict()).min(1),
+    slogans: z.array(S).min(1), every: I.min(1), costPer: N0, dread: N0, heat: N0,
+  }).strict(),
+  bonds: z.object({ squadAt: N0, bestAt: N0, sameTask: N0 }).strict(),
+  binder: z.object({
+    gruntAt: N0, adminAt: N0, bossAt: N0,
+    sets: z.array(z.object({ id: z.enum(['rival-team', 'law']), label: S, fx: FxKey, n: I.min(1), says: S }).strict()),
+  }).strict(),
+}).strict();
+export type CrewPagesFile = z.infer<typeof CrewPagesFileSchema>;
+export type PageFxKey = z.infer<typeof FxKey>;
+
+export const CrewPagesStateSchema = z.object({
+  /** The last evening off for each member (day) and where they went. */
+  off: z.record(S, z.object({ day: I.min(1), place: S }).strict()),
+  /** The storm night answered last (day; 0 none). */
+  shelter: N0,
+  /** What each member wears (outfit id; missing = team colours). */
+  outfits: z.record(S, S),
+  /** Boss skills learned, in order. */
+  skills: z.array(S),
+  /** The team tag and the day it was last sprayed (0 never). */
+  tag: z.object({ symbol: S, colour: S, slogan: S }).strict().nullable(),
+  sprayed: N0,
+}).strict();
+export type CrewPagesState = z.infer<typeof CrewPagesStateSchema>;

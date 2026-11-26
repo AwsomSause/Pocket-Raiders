@@ -146,7 +146,8 @@ test('Boss Menu on Esc, Settings with the Dominion and Effects & motion tabs', a
   await pressUntil(page, 'Escape', s.getByTestId('dom-menu-title'));
   await page.keyboard.press('Digit3');
   await expect(s.getByTestId('dom-menu-title')).toHaveCount(0);
-  await expect(s.getByTestId('dom-file-keys')).toBeVisible();
+  // Redesign R5: the Crew tab opens the roster.
+  await expect(s.getByTestId('r5-roster')).toBeVisible();
 
   // The menu at three window sizes.
   await pressUntil(page, 'Escape', s.getByTestId('dom-phase'));

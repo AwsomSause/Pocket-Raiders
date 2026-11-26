@@ -27,7 +27,7 @@ import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
 import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
 import { EventPages } from './dominion/r6Events';
-import { CrewController } from './dominion/crewController';
+import { CrewController, R5_PAGES } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
 import { ChairController } from './dominion/chairController';
@@ -745,7 +745,7 @@ export class DominionScene extends Phaser.Scene {
   }
 
   /** Redesign R0: the pass-50 chrome's links (mockup page ids) go to the screens the game has; the rest wait for their slice. */
-  private r5go(id: string): void {
+  r5go(id: string): void {
     const b = this.block();
     if (!b) return;
     const TAB: Record<string, number> = { hq: 0, map: 1, roster: 2, reserve: 3, card: 4, jobs: 4, ledger: 5 };
@@ -759,6 +759,11 @@ export class DominionScene extends Phaser.Scene {
     if (id === 'herotrack' && b.hero) return this.openHero();
     // R6: the party chip, the Start menu's Bag and the Summary are pages of the Pokémon tab.
     if (id === 'party' || id === 'summary' || id === 'bag') { this.notice = null; this.res.openPage(id); return void this.view?.refresh(); }
+    // Redesign R5: the Crew pages, the Pyramid and the Boss Edge (the emblem's level badge).
+    if (R5_PAGES.includes(id) && id !== 'roster') return void (this.crew.openPage(id), this.view?.refresh());
+    if (id === 'squads') { this.tab(2); this.sq.raw('KeyU'); return void this.view?.refresh(); }
+    if (id === 'pyramid') { this.screen = 'pyramid'; return void this.view?.refresh(); }
+    if (id === 'levelup') return this.res.openEdge();
     if (id === 'save') { this.notice = 'Saved. Dominion saves every step.'; return void this.view?.refresh(); }
     if (id === 'base' && this.screen === 'hq') { this.hq.open(); return void this.view?.refresh(); }
     // Redesign R8: the Empire's and the Chair's pages.
@@ -1409,6 +1414,17 @@ export class DominionScene extends Phaser.Scene {
   }
   monFilesOf(ids: string[]): MonFiles {
     return this.monFiles(ids);
+  }
+
+  /** Redesign R5: the Boss's picture (the run's trainer) at a height, and their name. */
+  r5boss(h: number): { pic: string; name: string } {
+    return { pic: bossPic(this.files?.boss.file ?? null, h), name: this.files?.boss.name ?? 'Boss' };
+  }
+
+  /** Redesign R5: the pass-50 chrome's live data (the crew pages draw with it). */
+  r5run(): R5Run | null {
+    const b = this.block();
+    return b ? r5Run(this, b) : null;
   }
 
   /** D22: F on the Crew File opens the Confront room. */

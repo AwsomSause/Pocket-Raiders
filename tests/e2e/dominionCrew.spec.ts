@@ -37,7 +37,10 @@ test('Crew File, Hire Grunt, then the Morning: answer a talk, assign a task, and
   const s = await newDominion(page);
 
   // Tab 3 opens the Crew File on Rook (mockup 5).
+  // Redesign R5: tab 3 opens the roster; Enter opens the Crew File.
   await page.keyboard.press('Digit3');
+  await expect(s.getByTestId('r5-roster')).toBeVisible();
+  await page.keyboard.press('Enter');
   await expect(s.getByTestId('dom-file-name')).toContainText('ROOK');
   await expect(s.getByTestId('dom-file-stats')).toBeVisible();
   await expect(s.getByTestId('dom-file-personality')).toContainText('Clumsy');

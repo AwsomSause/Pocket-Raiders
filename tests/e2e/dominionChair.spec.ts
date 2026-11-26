@@ -37,6 +37,9 @@ test('the Chair: a visitor, the settings, Hand it off, a reload mid-sitting, the
   let s = await newDominion(page);
 
   // Day 1: hire a second Grunt (Crew File, H), then round to Day 2's Evening. Day 1 has no Chair.
+  // Redesign R5: the Crew tab opens the roster; pressing it again opens the file.
+  await page.keyboard.press('Digit3');
+  await expect(s.getByTestId('r5-roster')).toBeVisible();
   await page.keyboard.press('Digit3');
   await expect(s.getByTestId('dom-file-name')).toBeVisible();
   await page.keyboard.press('KeyH');

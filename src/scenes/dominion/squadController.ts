@@ -15,6 +15,9 @@ import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
 import { askText } from '../../ui/redux/ask';
 import { squadsView } from '../../ui/redux/screens/dominion/squads';
+import { r5Squads } from '../../ui/redux/screens/dominion/r50/crew';
+import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
+import { teamColours } from '../../core/dominion/founding';
 
 /** Any Dominion screen name (the scene's own union; kept loose so new screens need no edit here). */
 type ScreenName = string;
@@ -23,6 +26,8 @@ interface Host {
   setNotice(n: string | null): void;
   refresh(): void;
   step(a: DominionAction): boolean;
+  /** Redesign R5: the pass-50 chrome's live data. */
+  r5run(): R5Run | null;
 }
 
 const Q = () => DOMINION_DATA.squads;
@@ -79,6 +84,9 @@ export class SquadController {
       : squadBuilder(b, this.sq(), rowId, this.candAt, this.focus === 'builder', initial);
     const m = squadsModel(b, this.sel, this.page, bm, this.picker);
     this.page = m.page;
+    // Redesign R5: the squad cards in the pass-50 look; the builder and the order picker keep the D8 page.
+    const run = this.host.r5run();
+    if (run && this.focus === 'cards' && !m.picker && m.cards.length) return r5Squads(m, { run, team: teamColours(b), monFile: () => null, notice: notice ?? this.notice }, this.sel - this.page * CARDS_PER_PAGE);
     return squadsView(m, notice ?? this.notice);
   }
 

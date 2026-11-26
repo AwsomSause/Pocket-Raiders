@@ -1,0 +1,75 @@
+{
+  "_source": "Dominion redesign R5 (pass-50 mockups binder, bonds, downtime, shelter, disguise, skills, graffiti), with numbers from plans/evil-mode-rework/lists: internal-interactions #18 Ask for Time Off, #148 Wall Graffiti; team-actions #32 Graffiti Run; player-actions #98 Change Clothes, #271 Dye and Disguise; outside-interactions O212/O283 storms.",
+  "downtime": {
+    "cooldown": 3,
+    "places": [
+      { "id": "game-corner", "name": "Game Corner", "where": "Celadon", "icon": "g-amulet-coin", "cost": 200, "morale": 8, "loyalty": 0, "heat": 0, "stat": null, "tenths": 0 },
+      { "id": "training-hall", "name": "Training Hall", "where": "Your HQ", "icon": "g-black-belt", "cost": 0, "morale": 2, "loyalty": 0, "heat": 0, "stat": "brawn", "tenths": 5 },
+      { "id": "pokemon-tower", "name": "Pokémon Tower", "where": "Lavender", "icon": "g-soothe-bell", "cost": 0, "morale": 0, "loyalty": 1, "heat": 0, "stat": "wits", "tenths": 5 },
+      { "id": "cerulean-cape", "name": "Cerulean Cape", "where": "Cerulean", "icon": "g-tea", "cost": 50, "morale": 6, "loyalty": 0, "heat": -2, "stat": null, "tenths": 0 }
+    ]
+  },
+  "shelter": {
+    "every": 6,
+    "from": 3,
+    "title": "A stray at the door",
+    "text": "A soaked Poochyena slipped in with the rain. It is shaking, and it will not leave {name} alone.",
+    "line": "Boss… can we keep him? He’s got nowhere to go either.",
+    "choices": [
+      { "id": "keep", "label": "Keep it", "loyalty": 10, "morale": 0, "dread": 0, "cost": 100, "says": "{name}’s Loyalty +10 · ₽100 for food" },
+      { "id": "feed", "label": "Feed it, let it go", "loyalty": 0, "morale": 4, "dread": 0, "cost": 30, "says": "Everyone’s Morale +4 · ₽30" },
+      { "id": "out", "label": "Throw it out", "loyalty": -5, "morale": 0, "dread": 3, "cost": 0, "says": "Dread +3 · {name}’s Loyalty −5" }
+    ]
+  },
+  "outfits": [
+    { "id": "colours", "name": "Team colours", "cost": 0, "fx": null, "n": 0, "says": "No disguise: the armband shows" },
+    { "id": "hiker", "name": "Hiker", "cost": 150, "fx": "heatWeek", "n": 2, "says": "Blends in on routes · Heat −2 a week" },
+    { "id": "scientist", "name": "Scientist", "cost": 250, "fx": "taskXp", "n": 1, "says": "Reads the manuals · task XP +1" },
+    { "id": "clown", "name": "Clown", "cost": 100, "fx": "heatDay", "n": 1, "says": "Crowds love him · Heat −1 a day" },
+    { "id": "lady", "name": "Lady", "cost": 300, "fx": "hireOff", "n": 5, "says": "Opens doors · hiring 5% cheaper" }
+  ],
+  "skills": {
+    "perPoint": 1,
+    "branches": [
+      { "id": "fear", "name": "Fear", "colour": "#e0294a", "nodes": [
+        { "id": "glare", "name": "Glare", "fx": "raidDef", "n": 5, "says": "Rival raids on the HQ 5% less likely to work" },
+        { "id": "make-an-example", "name": "Make an example", "fx": "debate", "n": 1, "says": "+1 in every Debate" },
+        { "id": "nobody-talks", "name": "Nobody talks", "fx": "spyCatch", "n": 10, "says": "10% chance a rival spy is caught each night" },
+        { "id": "reign-of-terror", "name": "Reign of terror", "fx": "raidDef", "n": 10, "says": "Rival raids 10% less likely to work" }
+      ] },
+      { "id": "greed", "name": "Greed", "colour": "#e0901c", "nodes": [
+        { "id": "skim", "name": "Skim", "fx": "income", "n": 40, "says": "₽40 more dirty money a day" },
+        { "id": "second-books", "name": "Second books", "fx": "wageOff", "n": 10, "says": "Wages cost 10% less" },
+        { "id": "golden-handshake", "name": "Golden handshake", "fx": "hireOff", "n": 15, "says": "Hiring costs 15% less" },
+        { "id": "own-the-game-corner", "name": "Own the Game Corner", "fx": "income", "n": 120, "says": "₽120 more dirty money a day" }
+      ] },
+      { "id": "charm", "name": "Charm", "colour": "#25b3c7", "nodes": [
+        { "id": "smooth-talker", "name": "Smooth talker", "fx": "talk", "n": 5, "says": "+5% in every questioning" },
+        { "id": "friends-in-silph", "name": "Friends in Silph", "fx": "recruit", "n": 5, "says": "Recruiting 5% more likely" },
+        { "id": "press-darling", "name": "Press darling", "fx": "heatWeek", "n": 2, "says": "Heat −2 a week" },
+        { "id": "mayors-ear", "name": "Mayor’s ear", "fx": "morale", "n": 1, "says": "Everyone’s Morale +1 a day" }
+      ] }
+    ]
+  },
+  "graffiti": {
+    "symbols": [
+      { "id": "bolt", "glyph": "⚡", "name": "Bolt" },
+      { "id": "crown", "glyph": "♛", "name": "Crown" },
+      { "id": "fang", "glyph": "▼", "name": "Fang" },
+      { "id": "eye", "glyph": "◉", "name": "Eye" }
+    ],
+    "slogans": ["We were here", "Nobody sleeps tonight"],
+    "every": 7,
+    "costPer": 50,
+    "dread": 2,
+    "heat": 1
+  },
+  "bonds": { "squadAt": 30, "bestAt": 60, "sameTask": 15 },
+  "binder": {
+    "gruntAt": 1, "adminAt": 2, "bossAt": 4,
+    "sets": [
+      { "id": "rival-team", "label": "Every face of a rival team", "fx": "raidDef", "n": 5, "says": "Rival raids 5% less likely to work" },
+      { "id": "law", "label": "Every officer on your case", "fx": "talk", "n": 5, "says": "+5% in every questioning" }
+    ]
+  }
+}
