@@ -401,7 +401,8 @@ export class CrewController {
     if (this.host.screenName !== 'crew' || this.overlay || this.talking()) return false;
     const m = b.members[this.sel];
     if (!m) return false;
-    if (this.pull) return code !== 'KeyQ';
+    // A page key leaves the New card and does its job (C opens the card, M the wall...).
+    if (this.pull) this.pull = null;
     if (code === 'KeyC') return this.togglePersona(), true;
     // On the card page the arrow keys flip members (key()); no letters (Q is the round-4 command wheel).
     if (this.persona) return false;
