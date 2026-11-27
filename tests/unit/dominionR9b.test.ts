@@ -104,6 +104,25 @@ describe('R9 follow-up: settings v49', () => {
     expect(LOOK_DEFAULT).toMatchObject({ chatter: 'some', captions: false, heard: [], photos: 0, awayMute: true, wrap: true, tall: true });
   });
 
+  it('an old settings save from v45, v46, v47 or v48 loads through every step and gets the look defaults', () => {
+    const PHONE = ['chatter', 'captions', 'capSize', 'musicNames', 'heard', 'photos', 'voice', 'voiceVol', 'awayMute', 'focus', 'palette', 'wrap', 'clicks', 'lockedSkins', 'tall'];
+    const r9Look = Object.fromEntries(Object.entries({ ...LOOK_DEFAULT, ticker: 'off' }).filter(([k]) => !PHONE.includes(k)));
+    const { look: _drop, ...noLook } = DEFAULT_SETTINGS.expansion.dominionPrefs;
+    const old = (v: number) => ({ ...DEFAULT_SETTINGS, musicVolume: 0.3, expansion: { ...DEFAULT_SETTINGS.expansion, dominionPrefs: v === 48 ? { ...noLook, look: r9Look } : noLook } });
+    for (const raw of [
+      { format: 'pkmn-roguelike', record: 'settings', schemaVersion: 45, savedAt: '', data: old(45) },
+      { format: 'pkmn-roguelike', record: 'settings', schemaVersion: 46, savedAt: '', data: old(46) },
+      { format: 'pkmn-roguelike', record: 'settings', schemaVersion: 47, savedAt: '', data: old(47) },
+      { format: 'pkmn-roguelike', record: 'settings', schemaVersion: 48, savedAt: '', data: old(48) },
+    ]) {
+      const storage = new MemoryStorageProvider();
+      storage.set('pkr.settings', JSON.stringify(raw));
+      const got = new SaveManager(storage, content).loadSettings();
+      expect(got.musicVolume, `v${raw.schemaVersion}`).toBe(0.3);
+      expect(got.expansion.dominionPrefs.look, `v${raw.schemaVersion}`).toEqual(raw.schemaVersion === 48 ? { ...LOOK_DEFAULT, ticker: 'off' } : LOOK_DEFAULT);
+    }
+  });
+
   it('a changed phone look round-trips; a bad value is refused (failure case)', () => {
     const storage = new MemoryStorageProvider();
     const p = DEFAULT_SETTINGS.expansion.dominionPrefs;
