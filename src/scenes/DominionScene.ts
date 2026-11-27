@@ -30,7 +30,7 @@ import { EventPages } from './dominion/r6Events';
 import { CrewController, type CrewCursors } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
-import { DayPages } from './dominion/r3Day';
+import { DayPages, WEEK_PAGES, type DayPage } from './dominion/r3Day';
 import { ChairController } from './dominion/chairController';
 import { ReserveController } from './dominion/reserveController';
 import { typeBoxOpen } from '../ui/typeBox';
@@ -782,7 +782,7 @@ export class DominionScene extends Phaser.Scene {
     if (id === 'street' || id === 'deploy') return void this.day.open(id);
     if (id === 'focus' && this.screen === 'map') { this.day.focus = !this.day.focus; return void this.view?.refresh(); }
     if (id === 'evening' && (this.screen === 'hq' || this.screen === 'map')) return void this.day.open('evening');
-    if (id === 'clock' || id === 'recap' || id === 'calendar') return void this.day.open(id);
+    if (id === 'clock' || id === 'recap' || id === 'calendar' || (WEEK_PAGES as readonly string[]).includes(id)) return void this.day.open(id as DayPage);
   }
 
   /** R3: the crew controller draws the Morning and Assign a task with the pass-50 pages. */

@@ -121,7 +121,7 @@ function meetSide(t: MeetPanel): string {
   return pn('m-side m12 meet50', `${t.title} · ${t.district}`, `<p class="mt50">${esc(t.what)}</p><p class="mw50">${esc(t.who)}</p>${map(t.choices, (c, i) => `<button class="row sm${i === t.at ? ' on' : ''}" ${go('townMeet', i)} ${st(i)} data-testid="dom-town-${i}"><span class="row-t"><b>${esc(c)}</b></span></button>`)}`, 'det').replace('<section ', '<section data-testid="dom-town" ');
 }
 
-const MAP_KEYS: readonly R5Key[] = [['←→↑↓', 'district'], ['T', 'target'], ['Enter', 'open']];
+const MAP_KEYS: readonly R5Key[] = [['←→↑↓', 'district'], ['T', 'target'], ['Y', 'timetable', 'dayTt'], ['U', 'papers', 'dayNp'], ['Enter', 'open']];
 
 export function r5Map(m: MapModel, x: R5MapExtras, o: { notice: string | null; garage: boolean; meet: MeetPanel | null; alert: string | null; focus: boolean; evening?: boolean }, run: R5Run): string {
   const side = o.meet ? meetSide(o.meet) : o.garage ? garageSide(m) : fileSide(m, x);
@@ -186,7 +186,7 @@ export function r5District(m: DistrictModel, face: string, notice: string | null
     top: { title: `District · ${m.name}`, crumb: null },
     body: por + '\n  ' + stats + '\n  ' + notes,
     who: null, line,
-    ctas: [['Walk the street', NAV, 'street', 'dom-df-street'], ...(m.cta ? [[m.cta, 'dfCard', '', 'dom-df-cta'] as R5Cta] : [])],
+    ctas: [['Walk the street', NAV, 'street', 'dom-df-street'], ['Travel there', NAV, 'travel', 'dom-df-travel'], ...(m.cta ? [[m.cta, 'dfCard', '', 'dom-df-cta'] as R5Cta] : [])],
     footOpts: notice ? { testid: 'dom-notice', lineAct: 'dismiss' } : m.banner ? { testid: 'dom-df-banner' } : {},
     keys: [['1-9', 'action'], ['T', 'target'], ['Enter', 'Card'], ['Esc', 'map']],
   });

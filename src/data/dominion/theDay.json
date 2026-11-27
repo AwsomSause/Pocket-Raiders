@@ -1,0 +1,302 @@
+{
+  "_source": "Dominion redesign R3 (pass 50, The Day): Rotom's forecast (pass 15), the ways to travel and the Magnet Line (passes 12 and 38), the flooded Underground Path (pass 39), the Newsstand, Scrapbook and Press interview (pass 18). Director answer 2026-11-26: simple real rules for the six pages.",
+  "weather": {
+    "forecast": 7,
+    "kinds": [
+      {
+        "id": "sunny",
+        "word": "Sunny",
+        "icon": "wx-sun",
+        "weight": 40,
+        "odds": {},
+        "heat": 0,
+        "trains": true,
+        "flood": false,
+        "fx": []
+      },
+      {
+        "id": "rain",
+        "word": "Rain",
+        "icon": "wx-rain",
+        "weight": 22,
+        "odds": {
+          "stealth": 5
+        },
+        "heat": -1,
+        "trains": true,
+        "flood": false,
+        "fx": [
+          [
+            "up",
+            "Stealth jobs +5%",
+            "Rain covers footsteps"
+          ],
+          [
+            "up",
+            "Heat −1 a job",
+            "Officers stay under cover"
+          ]
+        ]
+      },
+      {
+        "id": "storm",
+        "word": "Storm",
+        "icon": "wx-rain",
+        "weight": 8,
+        "odds": {
+          "stealth": 10
+        },
+        "heat": -1,
+        "trains": false,
+        "flood": true,
+        "fx": [
+          [
+            "up",
+            "Stealth jobs +10%",
+            "Nobody hears a thing"
+          ],
+          [
+            "up",
+            "Heat −1 a job",
+            "The police stay in"
+          ],
+          [
+            "dn",
+            "No trains",
+            "The Magnet Line stops in a storm"
+          ],
+          [
+            "dn",
+            "The Underground Path floods",
+            "Cerulean to Vermilion by road gets wet"
+          ]
+        ]
+      },
+      {
+        "id": "fog",
+        "word": "Fog",
+        "icon": "wx-fog",
+        "weight": 14,
+        "odds": {
+          "wits": 5,
+          "stealth": 5
+        },
+        "heat": 0,
+        "trains": true,
+        "flood": false,
+        "fx": [
+          [
+            "up",
+            "Scouting +5%",
+            "Nobody sees you looking"
+          ],
+          [
+            "up",
+            "Stealth jobs +5%",
+            "Shapes in the fog"
+          ]
+        ]
+      },
+      {
+        "id": "hot",
+        "word": "Hot",
+        "icon": "wx-set",
+        "weight": 16,
+        "odds": {
+          "nerve": -5
+        },
+        "heat": 1,
+        "trains": true,
+        "flood": false,
+        "fx": [
+          [
+            "dn",
+            "Nerve jobs −5%",
+            "Tempers are short"
+          ],
+          [
+            "dn",
+            "Heat +1 a job",
+            "Everyone is out on the street"
+          ]
+        ]
+      }
+    ],
+    "words": {
+      "today": "Today",
+      "rotom": "Bzzt! {day}: {word}. {tip}",
+      "tipGood": "Good day for {stat} jobs.",
+      "tipBad": "Keep your head down.",
+      "tipNone": "Nothing special."
+    }
+  },
+  "travel": {
+    "ways": {
+      "road": {
+        "name": "Main road",
+        "what": "Fast",
+        "toll": 150
+      },
+      "back": {
+        "name": "Back streets",
+        "what": "Slow · one more action · no toll",
+        "extra": 1
+      },
+      "train": {
+        "name": "Magnet Line",
+        "what": "No actions · fare ₽{fare}",
+        "fare": 200,
+        "policeAt": 40,
+        "policeHeat": 3
+      }
+    },
+    "stations": [
+      "viridian",
+      "pewter",
+      "cerulean",
+      "celadon",
+      "saffron",
+      "lavender",
+      "vermilion",
+      "fuchsia"
+    ],
+    "lines": [
+      {
+        "id": "gold",
+        "name": "Gold Line",
+        "colour": "#ffd75a",
+        "stops": [
+          "pewter",
+          "cerulean",
+          "saffron",
+          "vermilion"
+        ]
+      },
+      {
+        "id": "red",
+        "name": "Crimson Line",
+        "colour": "#e0294a",
+        "stops": [
+          "viridian",
+          "celadon",
+          "saffron",
+          "lavender"
+        ]
+      },
+      {
+        "id": "blue",
+        "name": "Bay Line",
+        "colour": "#5ac8fa",
+        "stops": [
+          "viridian",
+          "fuchsia",
+          "vermilion"
+        ]
+      }
+    ],
+    "first": 9,
+    "every": 15,
+    "tunnel": [
+      [
+        "cerulean",
+        "saffron"
+      ],
+      [
+        "saffron",
+        "vermilion"
+      ]
+    ],
+    "flood": {
+      "wade": {
+        "name": "Wade through",
+        "what": "Fast · same actions",
+        "cost": "The team gets soaked: −5% on this job",
+        "odds": -5
+      },
+      "ride": {
+        "name": "Ride a Water Pokémon",
+        "what": "Needs a party Pokémon that knows Surf",
+        "cost": "Safe, but everyone sees it: Heat +2",
+        "heat": 2,
+        "move": "surf"
+      },
+      "round": {
+        "name": "Go round",
+        "what": "Slow · one more action",
+        "cost": "Dry, and no toll",
+        "extra": 1
+      }
+    },
+    "lines2": {
+      "toll": "{rival} toll ₽{n}",
+      "noToll": "no toll",
+      "police": "Police check: Heat +{n}",
+      "cancelled": "Cancelled: storm",
+      "noStation": "No station there",
+      "set": "From now on the Boss travels by {way}.",
+      "flooded": "The Underground Path is flooded.",
+      "soaked": "Soaked",
+      "noSurf": "Nobody in the team knows Surf.",
+      "wet": "The team will {how} the Underground Path.",
+      "onTime": "On time",
+      "line": "Bzzt! {way} to {district}: {what}.",
+      "floodNote": "tunnel flooded"
+    }
+  },
+  "papers": {
+    "city": "{district} Times",
+    "gazette": "Saffron Gazette",
+    "heads": {
+      "fear": [
+        "CROOKS IN {colour}: IS YOUR SHOP NEXT?",
+        "{team} STRIKES AGAIN",
+        "SHOPKEEPERS LOCK THEIR DOORS"
+      ],
+      "kind": [
+        "THE POLITE THIEVES",
+        "{team}: NOT WHAT WE EXPECTED",
+        "A GANG WITH MANNERS"
+      ],
+      "quiet": [
+        "ALL QUIET IN {district}",
+        "NOTHING TO REPORT",
+        "A CALM NIGHT"
+      ]
+    },
+    "decks": {
+      "fear": "Shopkeepers are worried",
+      "kind": "A clerk says they said thank you",
+      "quiet": "The city sleeps"
+    },
+    "interview": {
+      "every": 7,
+      "fear": {
+        "dread": 3,
+        "regard": -1
+      },
+      "kind": {
+        "regard": 3,
+        "heat": 1
+      },
+      "said": "You talked to the papers. {how}",
+      "wait": "The papers want a new story first (day {day})."
+    },
+    "book": 30,
+    "lines": {
+      "fear": "{district} is scared of us.",
+      "kind": "{district} thinks we are charming.",
+      "quiet": "Nothing in the papers yet. Do a job first.",
+      "book": "{n} headlines. {region} is starting to remember the name.",
+      "bookNone": "No clippings yet. A job makes the papers the next morning.",
+      "fearFx": "Dread {n}",
+      "kindFx": "Regard {n}",
+      "plainFx": "Heat {n}"
+    },
+    "ask": {
+      "line": "Boss! Some say {team} is behind it. Any comment for {region}?",
+      "kind": "“We’re businessmen. {region} is safer with us.”",
+      "fear": "“{region} should be afraid.”",
+      "walk": "Walk past the camera"
+    }
+  }
+}

@@ -40,20 +40,40 @@ All pages use the mockups' markup and classes (`r50.css`), filled from the run. 
 
 Differences left on purpose (live data, not looks): a new run holds no districts, has one crew member and no jobs yet; the game has ten districts (Pallet too) and nine district actions (the mockup drew five chips, so the file has a pager); the Ledger charts weeks (the game keeps weekly books, not daily); the Morning keeps the crew strip and Start the day (the old screen's controls); long game lines wrap to two smaller lines instead of being cut.
 
-## Needs a mechanic (not built, no placeholder)
+## R3's own rules (director answer 2026-11-26: simple real rules for the six pages)
 
-- **Scrapbook** (`scrap`): the game keeps only yesterday's and today's jobs for the paper; a run-long headline history needs a run save change.
-- **Newsstand** (`papers`): several city papers with their own slant and "Give an interview" do not exist.
-- **Travel** (`travel`): moving between districts is one step; routes with ambush odds and tolls do not exist.
-- **Weather** (`weather`) and the clock's Forecast button: Dominion has no weather.
-- **Timetable** (`timetable`): no Magnet Train or schedules.
-- **Flooded tunnel** (`flood`): no route events with choices.
+Rules in `src/core/dominion/theDay.ts`, numbers and words in `src/data/dominion/theDay.json` (Zod-checked on load).
+
+- **Rotom's forecast** (`weather`; the clock's Forecast button or F): every day has one sky (Sunny, Rain, Storm, Fog, Hot), drawn from the run seed and the day on its own stream `dominion-weather`, so the week ahead never changes. Day 1 is always Sunny. Rain and Fog put stealth (and Fog scouting) jobs up 5%, a Storm 10%; Hot puts nerve jobs down 5%. Rain and Storm take 1 Heat off a job, Hot adds 1. Both the Boss's Card and the crew's tasks use it.
+- **Travel** (`travel`; the District file's Travel there): the Boss picks a way that sticks. Main road: fast, but a rival takes ₽150 for each of their districts the road passes through. Back streets: one more action, no toll. Magnet Line: station to station for ₽200 and no actions; a police check on board (Heat +3) when the place you go to is at 40% Heat or more. A storm cancels the trains (the main road is used).
+- **Timetable** (`timetable`; Y on the map, or the Start menu): the metro map with who holds each station, and today's trains from the Boss's station with Cancelled / Police check / rival turf. Board makes the Magnet Line the way and moves the map's cursor there.
+- **Flooded tunnel** (`flood`; F on Travel): on a storm day a walk through the Underground Path (Cerulean–Saffron–Vermilion) asks how, for that day: wade through (−5% on the job), ride a party Pokémon that knows Surf (Heat +2), or go round (one more action; the default).
+- **Newsstand** (`papers`; U on the map): three papers on yesterday's busiest job: the Ledger plain, the town's own paper scared (its Dread), the Saffron Gazette charmed (its Regard). **Give an interview** (by day, once a week, one action): kind (Regard +3, Heat +1) or fear (Dread +3, Regard −1) where the story was.
+- **Scrapbook** (`scrap`; S on the Newsstand): each morning after a job the paper's headline is clipped (the last 30 stay; the cork shows the last six).
+
+Save: optional fields only (`field.sky`, `field.route`, `field.wet`, `paper.book`, `paper.said`), so old saves load unchanged; a run from before this has a Sunny day until its next morning.
+
+| Page | Mockup | Game |
+|---|---|---|
+| Forecast | ![](dominion-r3/mock-weather.jpg) | ![](dominion-r3/game-weather.jpg) |
+| Travel | ![](dominion-r3/mock-travel.jpg) | ![](dominion-r3/game-travel.jpg) |
+| Timetable | ![](dominion-r3/mock-timetable.jpg) | ![](dominion-r3/game-timetable.jpg) |
+| Flooded tunnel | ![](dominion-r3/mock-flood.jpg) | ![](dominion-r3/game-flood.jpg) |
+| Newsstand | ![](dominion-r3/mock-papers.jpg) | ![](dominion-r3/game-papers.jpg) |
+| Scrapbook | ![](dominion-r3/mock-scrap.jpg) | ![](dominion-r3/game-scrap.jpg) |
+
+Left out on purpose: the mockup's ambush odds on Travel (the game's ways cost actions, money and Heat instead), Fire types and the Fireworks crowd (no type or festival rules for weather yet), and the Magnet Train to Johto row on the Timetable (R8's #1567 owns that train; the row joins once it is in evil-mode).
+
+## Still needs a mechanic
+
 - Calendar festivals (Fireworks, Bug Catch) and Hero gym dates: no festival or Hero schedule data.
 
 ## Tests
 
+- `tests/unit/dominionR3Day.test.ts` (12): weather (Day 1, the seed, every kind comes up, the Card's odds and Heat, the World Turn saves it), tolls, back streets, the train (fare, storm, no station, police check), the flooded tunnel (round by default, wade, Surf needed, resets each day), the Scrapbook (a job, a quiet day, the 30 cap), the interview (cost, once a week, morning and no-action refusals), and the six pages' test ids.
+- `tests/unit/dominionField.test.ts`: its Card maths tests pin a clear Day 2 (the weather is tested on its own).
 - `tests/unit/dominionR3.test.ts` (9): map, Focus view, district file, Morning / Assign / paper / Ledger keep the old test ids and don't change the block; a talk hides Start the day; report lines split; the clock marks one phase; the calendar marks past days, today and paydays.
-- `tests/e2e/dominionR3.spec.ts`: map, Focus, Place crew, District file, street, Ledger, clock, calendar, Evening, paper, Morning, Last night, Assign; no console errors. `R5_WAIT=6000 R5_DUMP=1` saves the shots and page HTML.
+- `tests/e2e/dominionR3.spec.ts`: map, Focus, Place crew, District file, street, Ledger, clock, calendar, Evening, paper, Morning, Last night, Assign; a second test for the Forecast, Timetable (Board), Travel (a way), the Flooded tunnel (wade), the Newsstand and the Scrapbook; no console errors. `R5_WAIT=6000 R5_DUMP=1` saves the shots and page HTML.
 - Updated for the new pages: `dominionCrew`, `dominionPages` (Assign tasks / M open Assign; the Day's pages sit under the Region Map tab), `dominionMap` (targets are their own chips; the text box's ▼).
 
-No save change.
+No save version change (optional block fields only).

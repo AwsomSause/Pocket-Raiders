@@ -28,6 +28,10 @@ import { actionDef } from '../../core/dominion/field';
 import type { CrewCursors } from './crewController';
 import { bossPic, facePic, r5Run } from './r50Bridge';
 import { memberPic } from '../../ui/redux/screens/dominion/teamPic';
+import { r5Flood, r5Forecast, r5Papers, r5Scrap, r5Timetable, r5Travel } from '../../ui/redux/screens/dominion/r50/day4';
+import { interviewDue, ROUTES, THE_DAY, WETS } from '../../core/dominion/theDay';
+import { fill } from '../../core/dominion/worldTurn';
+import { departures, floodModel, forecastModel, papersModel, scrapModel, timetableModel, travelModel } from './r3Week';
 
 const F = () => DOMINION_DATA.field;
 
@@ -73,7 +77,10 @@ const ROTOM: R5Speaker = { name: 'Rotom', k: 'p-rotom' };
 /** The map's line: the file's alert, else what's left today. */
 const alertOf = (m: MapModel): string | null => m.file.alert?.text ?? null;
 
-export type DayPage = 'street' | 'deploy' | 'evening' | 'clock' | 'recap' | 'calendar';
+export type DayPage = 'street' | 'deploy' | 'evening' | 'clock' | 'recap' | 'calendar' | WeekPage;
+/** R3's pages with their own rules (theDay.ts). */
+export type WeekPage = 'weather' | 'travel' | 'timetable' | 'flood' | 'papers' | 'scrap';
+export const WEEK_PAGES: readonly WeekPage[] = ['weather', 'travel', 'timetable', 'flood', 'papers', 'scrap'];
 
 interface Host {
   screenName: string;
@@ -94,6 +101,11 @@ export class DayPages {
   page: DayPage | null = null;
   private base = '';
   private at = 0;
+  /** The page under this one (Back returns there: the clock under the forecast, the papers under the Scrapbook). */
+  private prev: { page: DayPage; at: number } | null = null;
+  /** Travel's destination, and the press interview's question showing. */
+  private to = '';
+  private asking = false;
   /** Focus view on the map (F): the HUD folds away. Presentation only. */
   focus = false;
   constructor(private readonly scene: Phaser.Scene, private readonly host: Host) {}
@@ -123,7 +135,12 @@ export class DayPages {
     if (p === 'deploy' && s !== 'map') return false;
     if (p === 'street' && s === 'map') return false;
     if (p === 'evening' && s !== 'hq' && s !== 'map') return false;
-    if ((p === 'clock' || p === 'recap' || p === 'calendar') && s !== 'hq' && s !== 'map' && s !== 'district') return false;
+    if ((p === 'clock' || p === 'recap' || p === 'calendar' || WEEK_PAGES.includes(p as WeekPage)) && s !== 'hq' && s !== 'map' && s !== 'district') return false;
+    const b0 = this.block();
+    if (p === 'travel') this.to = this.host.dayCursor()?.district ?? b0?.field.at ?? '';
+    if (p === 'travel' && !this.to) return false;
+    this.prev = this.page && this.page !== p && (WEEK_PAGES.includes(p as WeekPage)) ? { page: this.page, at: this.at } : null;
+    this.asking = false;
     this.page = p;
     this.base = s;
     const b = this.block();
@@ -132,7 +149,17 @@ export class DayPages {
     this.host.refresh();
     return true;
   }
-  close(): void { this.page = null; this.host.setNotice(null); this.host.refresh(); }
+  close(): void { this.page = null; this.prev = null; this.asking = false; this.host.setNotice(null); this.host.refresh(); }
+  /** Back: to the page underneath, else off the pages. */
+  private back(): void {
+    if (!this.prev) return this.close();
+    this.page = this.prev.page;
+    this.at = this.prev.at;
+    this.prev = null;
+    this.asking = false;
+    this.host.setNotice(null);
+    this.host.refresh();
+  }
 
   // ---------- the map and the file (the scene's own screens) ----------
 
@@ -152,6 +179,13 @@ export class DayPages {
     if (b && this.page === 'clock') return r5Clock(this.clockModel(b), this.run(b));
     if (b && this.page === 'recap') return r5Recap(this.recapModel(b), this.run(b));
     if (b && this.page === 'calendar') return r5Calendar(this.calModel(b), this.run(b));
+    const run = services().session.run!;
+    if (b && this.page === 'weather') return r5Forecast(forecastModel(b, run, this.at), this.run(b));
+    if (b && this.page === 'travel') return r5Travel(travelModel(b, run, this.to, this.at, notice), this.run(b));
+    if (b && this.page === 'timetable') return r5Timetable(timetableModel(b, this.at, notice), this.run(b));
+    if (b && this.page === 'flood') return r5Flood(floodModel(this.scene, b, run, this.at, notice), this.run(b));
+    if (b && this.page === 'papers') return r5Papers(papersModel(b, run, this.at, this.asking, notice), this.run(b));
+    if (b && this.page === 'scrap') return r5Scrap(scrapModel(b), this.run(b));
     if (!b || !c) return '';
     if (this.page === 'deploy') return r5Deploy(mapModel(b, services().session.run!, c), mapExtras(b, c, this.host.dayBoss()), this.deployModel(b, c), notice, this.run(b));
     return r5Street(this.streetModel(b, c), notice, this.run(b));
@@ -384,6 +418,7 @@ export class DayPages {
     const b = this.block(), c = this.host.dayCursor();
     if (!b) return false;
     if (this.host.dayNotice() && (a === 'confirm' || a === 'back')) { this.host.setNotice(null); return true; }
+    if (this.page && WEEK_PAGES.includes(this.page as WeekPage)) return this.weekKey(a, b);
     if (this.page === 'evening' || this.page === 'recap') {
       if (a === 'confirm' || a === 'back') this.close();
       return true;
@@ -417,6 +452,47 @@ export class DayPages {
     return true;
   }
 
+  /** The keys of R3's own-rule pages. */
+  private weekKey(a: InputAction, b: DominionBlock): boolean {
+    const p = this.page as WeekPage;
+    const n = p === 'weather' ? THE_DAY.weather.forecast : p === 'travel' || p === 'flood' || p === 'papers' ? 3 : p === 'timetable' ? departures(b).length : 0;
+    const prev = p === 'weather' || p === 'papers' ? 'left' : 'up', next = p === 'weather' || p === 'papers' ? 'right' : 'down';
+    if (a === 'back') { if (this.asking) { this.asking = false; this.host.refresh(); } else this.back(); return true; }
+    if (this.asking) {
+      if (a === 'confirm') this.press(0);
+      return true;
+    }
+    if (n && (a === prev || a === next)) { this.at = (this.at + (a === prev ? -1 : 1) + n) % n; this.host.refresh(); return true; }
+    if (a !== 'confirm') return true;
+    if (p === 'weather' || p === 'scrap') this.close();
+    else if (p === 'travel') this.wayRow(this.at);
+    else if (p === 'flood') this.flRow(this.at);
+    else if (p === 'timetable') this.board();
+    return true;
+  }
+  private wayRow(i: number): void {
+    if (this.at !== i) { this.at = i; this.host.refresh(); return; }
+    this.host.step({ t: 'day', op: 'route', how: ROUTES[i]! });
+  }
+  private flRow(i: number): void {
+    if (this.at !== i) { this.at = i; this.host.refresh(); return; }
+    this.host.step({ t: 'day', op: 'flood', how: WETS[i]! });
+  }
+  /** Board: the Magnet Line becomes the Boss's way, and the map's cursor goes to the train's station. */
+  private board(): void {
+    const b = this.block();
+    const r = b ? departures(b)[this.at] : undefined;
+    if (!r) return;
+    const c = this.host.dayCursor();
+    if (c) this.host.setDayCursor({ ...c, district: r.id, target: 0 });
+    this.host.step({ t: 'day', op: 'route', how: 'train' });
+  }
+  private press(i: number): void {
+    this.asking = false;
+    if (i >= 2) return this.host.refresh();
+    this.host.step({ t: 'day', op: 'interview', how: i === 0 ? 'kind' : 'fear' });
+  }
+
   /** F on the map: Focus view. */
   raw(code: string): boolean {
     if (code === 'KeyF' && this.host.screenName === 'map' && !this.page) {
@@ -425,6 +501,13 @@ export class DayPages {
       return true;
     }
     if (code === 'KeyC' && this.owns() && this.page === 'clock') { this.page = 'calendar'; this.at = this.calToday(); this.host.refresh(); return true; }
+    if (code === 'KeyF' && this.owns() && this.page === 'clock') return this.open('weather');
+    if (code === 'KeyS' && this.owns() && this.page === 'papers' && !this.asking) return this.open('scrap');
+    if (code === 'KeyF' && this.owns() && this.page === 'travel') return this.open('flood');
+    if (/^Digit[1-3]$/.test(code) && this.owns() && this.page === 'papers' && this.asking) { this.press(Number(code.slice(5)) - 1); return true; }
+    // The map's own letters for the Timetable (Y) and the Newsstand (U). Travel is the District file's button.
+    const MAPK: Record<string, WeekPage> = { KeyY: 'timetable', KeyU: 'papers' };
+    if (MAPK[code] && !this.page && this.host.screenName === 'map') return this.open(MAPK[code]!);
     // Number keys still pick an action under the street (the scene's own keys); letters stay with the page.
     return this.owns() && /^Key/.test(code);
   }
@@ -437,7 +520,22 @@ export class DayPages {
       clockNext: () => { this.page = null; this.host.dayNext(); },
       calDay: (i) => { this.at = Number(i); this.host.refresh(); },
       dayCal: () => { this.page = 'calendar'; this.at = this.calToday(); this.host.refresh(); },
-      dayBack: () => this.close(),
+      dayBack: () => this.back(),
+      dayDone: () => this.close(),
+      dayWx: () => { this.open('weather'); },
+      dayTt: () => { this.open('timetable'); },
+      dayNp: () => { this.open('papers'); },
+      dayScrap: () => { this.open('scrap'); },
+      dayFlood: () => { this.open('flood'); },
+      wayGo: () => this.wayRow(this.at),
+      wxDay: (i) => { this.at = Number(i); this.host.refresh(); },
+      wayRow: (i) => this.wayRow(Number(i)),
+      flRow: (i) => this.flRow(Number(i)),
+      ttRow: (i) => { if (this.at === Number(i)) this.board(); else { this.at = Number(i); this.host.refresh(); } },
+      ttBoard: () => this.board(),
+      npPick: (i) => { this.at = Number(i); this.host.refresh(); },
+      pressAsk: () => { const b = this.block(); if (b && interviewDue(b) === null && b.phase === 'day' && b.actions > 0) { this.asking = true; this.host.setNotice(null); } else if (b) this.host.setNotice(interviewDue(b) !== null ? fill(THE_DAY.papers.interview.wait, { day: interviewDue(b)! }) : 'Give the interview in the day, with an action left.'); this.host.refresh(); },
+      press: (i) => this.press(Number(i)),
     };
   }
 }

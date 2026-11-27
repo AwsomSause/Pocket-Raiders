@@ -40,7 +40,9 @@ const go = (r: RunState, a: DominionAction): RunState => {
 };
 const tryStep = (r: RunState, a: DominionAction) => stepInRun(content, r, a);
 /** Day 2, the Day phase, 4 actions (rested). */
-const day = (seed?: string): RunState => go(go(go(go(started(seed), { t: 'open' }), { t: 'toNight' }), { t: 'rest' }), { t: 'toDay' });
+/** Redesign R3: these tests are about the Card's own maths, so Day 2 is clear (the weather's tests are in dominionR3Day). */
+const clear = (r: RunState): RunState => { const out = structuredClone(r); out.expansion!.dominion!.field.sky = 'sunny'; return out; };
+const day = (seed?: string): RunState => clear(go(go(go(go(started(seed), { t: 'open' }), { t: 'toNight' }), { t: 'rest' }), { t: 'toDay' }));
 const withBlock = (r: RunState, f: (b: DominionBlock) => void): RunState => {
   const out = structuredClone(r);
   f(out.expansion!.dominion!);

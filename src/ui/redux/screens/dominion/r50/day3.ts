@@ -1,7 +1,7 @@
 // DOMINION redesign R3 (pass 50, "The Day"): the clock dial (mockup `clock`), last night (`recap`) and the calendar
 // (`calendar`). Live data only; the scene's DayPages builds the models. Pure markup.
 
-import { esc, go, map, pn, rep, SP, type R5Cta, type R5Run, type R5Speaker } from './kit';
+import { esc, go, map, NAV, pn, rep, SP, type R5Cta, type R5Run, type R5Speaker } from './kit';
 import { frame } from './day';
 
 // ---------- The Day: the clock (mockup `clock`) ----------
@@ -38,8 +38,8 @@ export function r5Clock(c: R5Clock, run: R5Run): string {
     top: { title: 'The Day', sub: `Day ${c.day}`, crumb: ['Map', 'map'] },
     body: dial + '\n  ' + pn('ph15', 'Today', rows, 'det'),
     who: c.who, line: c.line,
-    ctas: [['Back', 'dayBack', '', 'dom-clock-back'], [c.cta, 'clockNext', '', 'dom-clock-next']],
-    keys: [['↑↓', 'phase'], ['C', 'calendar', 'dayCal'], ['Enter', 'go'], ['Esc', 'back']],
+    ctas: [['Back', 'dayBack', '', 'dom-clock-back'], ['Forecast', NAV, 'weather', 'dom-clock-wx'], [c.cta, 'clockNext', '', 'dom-clock-next']],
+    keys: [['↑↓', 'phase'], ['F', 'forecast', 'dayWx'], ['C', 'calendar', 'dayCal'], ['Enter', 'go'], ['Esc', 'back']],
   });
 }
 

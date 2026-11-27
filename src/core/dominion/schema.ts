@@ -282,6 +282,10 @@ export const FieldSchema = z.object({
   /** Hero attention from Attacks (D11 reads it). */
   hero: N0,
   fight: FieldFightSchema.nullable(),
+  /** Redesign R3 (theDay.ts): today's sky (set each morning; none = Sunny), the Boss's way to travel, and today's way through the flooded Underground Path. */
+  sky: z.enum(['sunny', 'rain', 'storm', 'fog', 'hot']).optional(),
+  route: z.enum(['road', 'back', 'train']).optional(),
+  wet: z.enum(['wade', 'ride', 'round']).optional(),
 }).strict();
 export type Field = z.infer<typeof FieldSchema>;
 
@@ -432,6 +436,8 @@ export type DominionAction =
   | { t: 'patron'; patron: string }
   // D6: where a member's district task (Patrol, Hold, Chant...) is done
   | { t: 'where'; member: string; district: string }
+  // Redesign R3 (theDay.ts): the way to travel, the way through the flooded tunnel, a press interview
+  | { t: 'day'; op: 'route' | 'flood' | 'interview'; how: string }
   // D6b: the answer to a street meeting (town.ts)
   | { t: 'townMeet'; choice: number }
   // D12, the Chair: answer the visitor (0 or 1), hand the card to a member, read on, close the doors, the settings
@@ -2352,6 +2358,9 @@ export const PaperStateSchema = z.object({
   snap: NewsSnapSchema.nullable(),
   /** m10: a member the police grabbed on a botched job, waiting on Bail / Break out / Leave (`left`: custody until the night). */
   caught: z.object({ member: S, action: S, district: S, day: I.min(1), left: z.boolean() }).strict().nullable().optional(),
+  /** Redesign R3 (theDay.ts): the Scrapbook's clippings (the last 30 mornings with a job) and the day of the last press interview. */
+  book: z.array(z.object({ d: I.min(1), head: S, deck: S }).strict()).optional(),
+  said: I.min(1).optional(),
 }).strict();
 export type PaperState = z.infer<typeof PaperStateSchema>;
 // ---------- D7: the Founding and team colours (founding.json, armbands.json, block `team`) ----------

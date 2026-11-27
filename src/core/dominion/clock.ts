@@ -265,6 +265,7 @@ export function step(block: DominionBlock, action: DominionAction, seed: string)
     case 'deskAsk':
     case 'deskInspect':
     case 'deskStamp':
+    case 'day': // Redesign R3: handled by session.ts (theDay.ts)
     case 'found': // D7: handled by session.ts (founding.ts)
     case 'takeover': // D14: handled by session.ts (takeover.ts)
       return no(block);
