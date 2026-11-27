@@ -14,6 +14,13 @@ import { storyAssetId, storyTrackIsMade } from '../core/storyAudio';
 
 let recentSfx: SfxPlay[] = [];
 
+/** A listener told of each sound and song that starts (Dominion's captions and Jukebox, redesign R9). Presentation only. */
+export interface AudioWatch { sfx?(id: string): void; music?(id: string): void }
+let watch: AudioWatch | null = null;
+export function setAudioWatch(w: AudioWatch | null): void { watch = w; }
+/** The song playing now, if any. */
+export const musicNow = (): string | null => currentMusic?.id ?? null;
+
 export function playSfx(scene: Phaser.Scene, id: string, volumeScale = 1, detune = 0): void {
   const { session, assets } = services();
   if (!assets.has(id) || session.settings.muted) return;
@@ -22,6 +29,7 @@ export function playSfx(scene: Phaser.Scene, id: string, volumeScale = 1, detune
   recentSfx = recentSfx.filter((p) => now - p.at < SFX_WINDOW_MS);
   if (!sfxAllowed(recentSfx, id, now)) return;
   recentSfx.push({ id, at: now });
+  try { watch?.sfx?.(id); } catch { /* a listener never stops a sound */ }
   try {
     scene.sound.play(id, { volume: session.settings.sfxVolume * volumeScale, detune });
   } catch {
@@ -97,6 +105,7 @@ export function playMusic(scene: Phaser.Scene, id: string): void {
     const sound = scene.sound.add(id, { loop: true, volume: fade > 0 ? 0 : volume });
     sound.play();
     currentMusic = { id, sound };
+    try { watch?.music?.(id); } catch { /* a listener never stops a song */ }
     // A song that fades in (the Galar stadium song): volume climbs from 0 to the music setting over the fade; presentation only.
     if (fade > 0) scene.tweens.addCounter({ from: 0, to: 1, duration: fade, onUpdate: (t) => { if (currentMusic?.sound === sound) (sound as Phaser.Sound.BaseSound & { setVolume?: (v: number) => void }).setVolume?.(session.settings.musicVolume * t.getValue()!); } });
   } catch {

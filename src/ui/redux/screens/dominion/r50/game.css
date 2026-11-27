@@ -71,3 +71,82 @@
 #rx #r5 .trait.r5tr:hover{border-left-color:var(--yel)}
 #rx #r5 .r5seg b+span{margin-top:0}
 #rx #r5 .r5seg span kbd{font:800 10px/1 var(--fb);padding:1px 4px;border-radius:3px;background:#efe6d4;color:#1d1622}
+
+/* ---------- Redesign R9: the look settings (Settings · Screen, Access, Options, Region skin, Ambience, Button feel) ---------- */
+/* Screen · Status: separate chips, or no capsule at all. */
+#rx #r5[data-status=chips] .cap23{gap:6px;background:none!important;border:0!important;box-shadow:none!important}
+#rx #r5[data-status=chips] .cap23>u{padding:3px 8px;background:#17131d;border:2px solid #000;border-radius:999px;box-shadow:2px 2px 0 var(--red)}
+#rx #r5[data-status=hidden] .cap23{display:none}
+/* Screen · Key hints: the keys without their words, or only the Start and Rotom chips. */
+#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27){font-size:0;gap:2px}
+#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27) kbd{font-size:12px}
+#rx #r5[data-keys=icons] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27) .pad20{font-size:10px}
+#rx #r5[data-keys=off] .keys>span:not(.ph13):not(.ls21):not(.pty31):not(.np27){display:none}
+/* Colour assist · Shapes: every warning colour also has a shape (danger ▲, good ●, yours ★, hero/police ■). */
+#rx #r5[data-colour=shapes] .heat b::before{content:'▲';margin-right:3px;font-size:.8em}
+#rx #r5[data-colour=shapes] [data-m=funds] b::before{content:'●';margin-right:3px;font-size:.8em}
+#rx #r5[data-colour=shapes] .war30>b:first-of-type::before{content:'★ '}
+#rx #r5[data-colour=shapes] .war30>b.r::before{content:'▲ '}
+#rx #r5[data-colour=shapes] .rp42::after{content:'■';position:absolute;right:-8px;top:-6px;font-size:9px;color:#5ad1ff}
+#rx #r5[data-colour=shapes] .tag::before{content:'◆ '}
+/* Colour assist · High contrast: solid dark panels and brighter small text. */
+#rx #r5[data-colour=contrast]{--mut:#ece6f4;--line:#fff8ea}
+#rx #r5[data-colour=contrast] .pn{background-color:#09070c!important;backdrop-filter:none!important}
+#rx #r5[data-colour=contrast] .foot p,#rx #r5[data-colour=contrast] .sd25{background:#fff!important;color:#000!important}
+/* Button feel · Cursor: an arrow or a Poké Ball instead of the N badge on what you picked. */
+#rx #r5[data-cursor=arrow] :is(.row,.wm,.ch,.srow).on::before{content:'▶';background:none!important;color:var(--yel)!important;box-shadow:none!important;border:0!important;font-size:18px}
+#rx #r5[data-cursor=arrow] .cta.on::before{content:'▶';background:none!important;color:var(--red)!important;box-shadow:none!important;border:0!important}
+#rx #r5[data-cursor=ball] :is(.row,.wm,.ch,.srow,.cta).on::before{content:'';background:linear-gradient(var(--red) 0 42%,#000 42% 58%,#fff 58%)!important;border:2px solid #000!important;border-radius:50%!important;box-shadow:none!important}
+/* Button feel · Press bounce off: buttons stay still under the pointer. */
+#rx #r5[data-press=off] :is(.cta,.row,.cell,.srow,.lb,.c49,.tb49,.sh-t,.si25,.ap13){transition:none!important;translate:none!important;scale:none!important}
+/* Options · Frame: the colour on every window's frame. */
+#rx #r5[data-frame=gold]{--fc:#e8b23a}
+#rx #r5[data-frame=night]{--fc:#2860c9}
+#rx #r5[data-frame=jade]{--fc:#16938a}
+#rx #r5[data-frame=plum]{--fc:#8e2bd1}
+#rx #r5[data-frame=ash]{--fc:#8a8296}
+#rx #r5:not([data-frame=nova]) .pn{box-shadow:5px 5px 0 var(--fc)!important;border-color:var(--fc)!important}
+#rx #r5:not([data-frame=nova]) .foot p{border-color:var(--fc)!important}
+/* Region skin: no skyline, no panel glints. Ambience off: no walkers, lanterns, fireworks or rain; no lightning. */
+#rx #r5[data-amb~=nosky] .sky37{display:none!important}
+#rx #r5[data-amb~=noglint] .pn::after{display:none!important}
+#rx #r5[data-amb~=off] :is(.lan34,.fw34,.stroll28,.rn39,.lt39,.tod15 .w3){display:none!important}
+#rx #r5[data-amb~=nolight] .lt39{display:none!important}
+/* Read aloud: the word being read. */
+#rx #r5 .ra9 .now{background:var(--yel);color:#1d1622;border-radius:3px}
+/* ---------- R9 follow-up: focus view, palette, tall screens, captions, the phone pages ---------- */
+/* Focus view: the top bar, tabs and key strip fold away (the page itself stays). */
+#rx #r5[data-focus=on] :is(.nb2,.tabs,.keys,.war30,.tk18){opacity:0!important;pointer-events:none!important}
+/* Colour assist · Red-green safe: reds lean orange, greens lean blue. */
+#rx #r5[data-pal=rg]{--red:#e66100;--grn:#3a7bd5;--yel:#f5c542}
+#rx #r5[data-pal=rg] .heat b{color:#e66100!important}
+/* Region skin · Locked skins hidden. */
+#rx #r5[data-lockskin=hide] .sv37.lk{display:none!important}
+/* Tall screens (a phone held upright): tabs drop to the bottom and side panels slide under the page. */
+@media (orientation: portrait) {
+  #rx #r5[data-tall=on] .tabs{top:auto!important;bottom:44px!important}
+  #rx #r5[data-tall=on] :is(.pn.st27,.pn.ip35,.pn.sq46,.pn.po49,.pn.pt20){position:relative!important;left:auto!important;right:auto!important;top:auto!important;width:auto!important;margin:8px 16px!important}
+}
+/* Captions: words for sounds, a card for the music. */
+#rx .r9cap{position:absolute;left:50%;bottom:58px;translate:-50% 0;z-index:60;padding:4px 12px;border-radius:6px;background:#0b0810e6;color:#fff8ea;border:2px solid #ffe9a8;font:700 14px/1.3 var(--fb,sans-serif);pointer-events:none;white-space:nowrap}
+#rx .r9cap.mus{color:#ffe9a8}
+#rx .r9cap.cs-s{font-size:12px}
+#rx .r9cap.cs-l{font-size:19px}
+/* Jukebox: the record turns while a track plays. Photo mode: the frame and filter on the viewfinder. */
+#rx #r5 .vin27.play .disc{animation:r5-spin9 3s linear infinite}
+@keyframes r5-spin9{to{rotate:360deg}}
+#rx #r5 .vf49.fl-mono .pic{filter:grayscale(1)}
+#rx #r5 .vf49.fl-night .pic{filter:brightness(.7) hue-rotate(200deg)}
+#rx #r5 .vf49.fl-none .pic{filter:none}
+#rx #r5 .vf49.f-plain .cap{display:none}
+/* R9 follow-up: the Captions tab's preview (mockup `captions`). */
+#rx #r5 .pn .pv-cap27{display:flex;flex-direction:column;gap:12px;padding:12px;margin-bottom:12px;border-radius:8px;background:#120c18;border:2px solid #3a3046}
+#rx #r5 .pn .pv-cap27 .r9cap-s{align-self:flex-start;padding:3px 8px;background:#0b0810;color:#fff8ea;font:700 13px/1.3 var(--fb,sans-serif);border-radius:4px}
+#rx #r5 .pn .pv-cap27 .r9cap-s.rt{align-self:flex-end}
+#rx #r5 .pn .pv-cap27 .r9cap-s.mus{color:#ffe9a8;border:1px solid #6a5420}
+#rx #r5 .pn .pv-cap27.cs-s .r9cap-s{font-size:11px}
+#rx #r5 .pn .pv-cap27.cs-l .r9cap-s{font-size:16px}
+/* R9 follow-up: the Rotom chip's typing bubble when crew chatter is waiting (pass 46). */
+#rx .rc46.due{position:relative}
+#rx .rc46.due::after{content:'…';position:absolute;right:-6px;top:-12px;padding:0 5px;border-radius:8px;background:#fff8ea;color:#1a1020;font:900 11px/14px var(--fb,sans-serif);animation:r9-type 1s steps(2) infinite}
+@keyframes r9-type{50%{opacity:.4}}

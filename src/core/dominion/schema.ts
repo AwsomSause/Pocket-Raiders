@@ -2660,6 +2660,34 @@ export const DominionLookSchema = z.object({
   /** Ambience: the moving layers behind pages (lanterns, walkers, rain, fireworks) and the lightning flashes. */
   ambience: z.enum(['full', 'off']).default('full'),
   lightning: z.boolean().default(true),
+  // R9 follow-up (settings v49): the Rotom Phone's pages and the rows the first R9 build left out.
+  /** Crew lines between pages (Rotom chatter): how often. */
+  chatter: z.enum(['off', 'some', 'lots']).default('some'),
+  /** Captions over Dominion pages: sounds in words, their size, and a card naming the music. */
+  captions: z.boolean().default(false),
+  capSize: z.enum(['s', 'm', 'l']).default('m'),
+  musicNames: z.boolean().default(true),
+  /** Jukebox: the music tracks heard so far (they join the Jukebox the first time they play). */
+  heard: z.array(z.string().min(1)).max(200).default([]),
+  /** Photo mode: pictures snapped (each one is saved to the player's device). */
+  photos: z.number().int().min(0).max(99999).default(0),
+  /** Read aloud: the browser voice by name ('' = the browser's own first voice) and its volume. */
+  voice: z.string().max(120).default(''),
+  voiceVol: z.number().min(0).max(1).default(1),
+  /** Quiet the game while its tab is in the background. */
+  awayMute: z.boolean().default(true),
+  /** Focus view: the top bar, tabs and key strip fold away on every Dominion page. */
+  focus: z.boolean().default(false),
+  /** Colour assist palette: the standard one, or red and green swapped for orange and blue. */
+  palette: z.enum(['standard', 'rg']).default('standard'),
+  /** Arrows run off the end of a list back to the start. */
+  wrap: z.boolean().default(true),
+  /** A click when a button is pressed. */
+  clicks: z.boolean().default(false),
+  /** Region skins not reached yet: shown as a preview, or hidden. */
+  lockedSkins: z.enum(['preview', 'hide']).default('preview'),
+  /** Tall screens (a phone held upright): the phone layout, or the same as wide. */
+  tall: z.boolean().default(true),
 }).strict();
 export type DominionLook = z.infer<typeof DominionLookSchema>;
 export const LOOK_DEFAULT: DominionLook = DominionLookSchema.parse({});

@@ -257,7 +257,7 @@ test('Rotom and the Boss Menu places open over the page and Esc comes back; Ligh
   await hereIs(page, 'settings');
   // Settings · Controls: the Board is in-game help here too (m5), and Esc comes back to Settings.
   // (Tab walks the categories to Controls; the rail shows the six around the open one.)
-  for (let i = 0; i < 8; i++) await page.keyboard.press('Tab');
+  for (let i = 0; i < 9; i++) await page.keyboard.press('Tab');
   await expect(s.getByTestId('dom-set-title')).toContainText('Controls');
   await page.screenshot({ path: info.outputPath('settings-controls.png') });
   await s.locator('[data-testid="dom-set-row-0"] [data-act="setRow"]').click();

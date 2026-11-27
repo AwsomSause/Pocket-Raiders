@@ -26,7 +26,7 @@ import { monFile } from '../ui/redux/game';
 import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
 import { bossPic, facePic, r5Hub, r5Party, r5Run, R5StartMenu } from './dominion/r50Bridge';
-import { r5SetLook } from '../ui/redux/screens/dominion/r50/kit';
+import { faceOf, r5SetLook, SP } from '../ui/redux/screens/dominion/r50/kit';
 import { readAloud, readAloudNow } from '../ui/redux/screens/dominion/r50/readAloud';
 import { bossPerson, heroPerson, memberPerson, memberSpeaker, monPic } from './dominion/r4Bridge';
 import { r5BossCard } from '../ui/redux/screens/dominion/r50/trainers';
@@ -77,6 +77,8 @@ import { FOUNDING_ROWS, type FoundingUi } from '../ui/redux/screens/dominion/fou
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
 import { BossMenuController, SETTINGS_CATS } from './dominion/bossMenuController';
+import { isPhonePage, RotomPhone, type PhoneHost } from './dominion/rotomController';
+import { startPhone } from './dominion/phone';
 import { fxClasses, fxOf } from '../core/dominion/fx';
 import { JobController } from './dominion/jobController';
 import { JobsX } from './dominion/r4Jobs';
@@ -156,6 +158,9 @@ export class DominionScene extends Phaser.Scene {
   /** D25: the Evening voices scene (mockup a10), an overlay on the HQ. */
   /** D27: the Boss Menu (v4 m1, Esc from the HQ) and Settings (m2). */
   private menu = new BossMenuController(this.menuHost());
+  /** Redesign R9 follow-up: the Rotom Phone's own pages (radio, inbox, Ask Rotom, the jukebox, photo mode...). */
+  private phone = new RotomPhone(this.phoneHost());
+  private phoneStop: (() => void) | null = null;
   /** The tutorial and the opening (tutorial-mockups a1-e9). */
   private tut = new TutorialController(this.tutHost());
   /** D28: the hold-Q command wheel, the Boss's board and the shutter between pages. */
@@ -211,6 +216,9 @@ export class DominionScene extends Phaser.Scene {
     this.desk = new DeskController(this);
     this.sq = new SquadController(this, this);
     this.menu = new BossMenuController(this.menuHost());
+    this.phone = new RotomPhone(this.phoneHost());
+    this.phoneStop?.();
+    this.phoneStop = startPhone(this, () => this.scene.isActive());
     this.tut = new TutorialController(this.tutHost());
     this.spy.destroy();
     this.spy = new SpyController(this);
@@ -353,6 +361,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.sq.acts(),
         ...this.nav.acts(),
         ...this.menu.acts(),
+        ...this.phoneActs(),
         r5go: (id) => this.r5go(id),
         r8StayUp: () => { this.stayUp = this.block()?.day ?? 0; this.view?.refresh(); },
         r5start: (i) => this.start.pick(Number(i)),
@@ -398,6 +407,10 @@ export class DominionScene extends Phaser.Scene {
       const wheelUp = this.nav.wheel;
       if (this.nav.raw(e)) return void (this.ate = wheelUp && (e.code === 'Backspace' || e.code === 'KeyX'));
       // D27: the Boss Menu and Settings read their letters and numbers first (S, R, D, 1-6); a move letter they take isn't also a move.
+      if (this.phone.owns()) {
+        if (this.phone.raw(e.code)) this.ate = MOVE_LETTERS.has(e.code);
+        return;
+      }
       if (this.menu.owns()) {
         if (this.menu.raw(e.code)) {
           if (e.code === 'Tab') e.preventDefault();
@@ -442,6 +455,8 @@ export class DominionScene extends Phaser.Scene {
       // D14: K opens the Takeover page from the HQ, the map and the Ledger.
       if (e.code === 'KeyK' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'ledger')) return void (this.tk.open(this.screen) && this.view?.refresh());
       if (this.heroRaw(e.code)) return;
+      // R9 follow-up: T is Rotom (the key strip's chip): its chatter when it has some, else Ask Rotom.
+      if (e.code === 'KeyT' && this.screen === 'hq' && this.inRun() && this.block()?.opened) { this.phone.rotomKey('hq'); return void this.view?.refresh(); }
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyL') this.closeLedger();
@@ -528,6 +543,8 @@ export class DominionScene extends Phaser.Scene {
       this.police.shutdown();
       this.debate.shutdown();
       this.snatch.shutdown();
+      this.phoneStop?.();
+      this.phoneStop = null;
     });
   }
 
@@ -558,6 +575,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.nav.wheel) return 'wheel';
     if (this.nav.boardOn()) return 'other';
     if (this.menu.owns()) return this.menu.page === 'menu' ? 'menu' : 'other';
+    if (this.phone.owns()) return 'other';
     const b = this.block();
     if (!b?.opened) return 'other';
     if (this.job.owns() || this.police.owns() || this.snatch.owns() || this.job.paperOwns() || this.voices.on || b.debate?.live || this.heroPending()) return 'other';
@@ -600,12 +618,34 @@ export class DominionScene extends Phaser.Scene {
     };
   }
 
+  /** R9 follow-up: what the Rotom Phone's pages may reach. */
+  private phoneHost(): PhoneHost {
+    const sc = this;
+    return {
+      scene: sc,
+      refresh: () => sc.view?.refresh(),
+      r5run: () => { const b = sc.block(); return b ? r5Run(sc, b) : null; },
+      r5go: (id: string) => { if (id === 'menu') { sc.menu.open(); sc.view?.refresh(); } else sc.r5go(id); },
+      settings: (id: string) => { sc.menu.go(id); sc.view?.refresh(); },
+      pic: (look: string | null, sz: number) => faceOf(look ? facePic(look, sc.block() ?? null, sz) : SP('p-rotom', sz), sz, '#8e2bd1'),
+      body: (look: string, h: number) => { const b = sc.block(); const tc = b ? teamColours(b) : null; return look.endsWith('.png') ? `<img class="px" src="${pngSrc(look, tc)}" alt="" style="height:${h}px;width:auto">` : tallTeam(look, h, tc); },
+      bossName: () => sc.files?.boss.name ?? 'Boss',
+      boss: (h: number) => bossPic(sc.files?.boss.file ?? null, h),
+    };
+  }
+  private phoneActs(): Record<string, (arg: string) => void> {
+    const p = this.phone.acts();
+    const m = this.menu.acts();
+    return { ...p, setLeft: (i) => (this.phone.owns() ? p.setLeft! : m.setLeft!)(i), setRight: (i) => (this.phone.owns() ? p.setRight! : m.setRight!)(i) };
+  }
+
   /** D27: what the Boss Menu controller may reach. */
   private menuHost() {
     const sc = this;
     return {
       refresh: () => sc.view?.refresh(),
       tabTo: (i: number) => { sc.screen = 'hq'; sc.notice = null; sc.tab(i); },
+      phone: (id: string, back: string) => { if (isPhonePage(id)) sc.phone.open(id, back); },
       hide: () => sc.leave(),
       openBoard: () => sc.nav.openBoard(),
       bossFile: () => sc.files?.boss.file ?? null,
@@ -793,6 +833,15 @@ export class DominionScene extends Phaser.Scene {
   private r5go(id: string): void {
     const b = this.block();
     if (!b) return;
+    // Redesign R9 follow-up: the phone's own pages (the Rotom chip's Ask opens the chatter when Rotom has some).
+    const from = this.phone.owns() ? null : this.menu.owns() ? 'menu' : this.screen === 'hq' || this.screen === 'map' || this.screen === 'crew' || this.screen === 'reserve' ? (this.screen === 'crew' ? 'roster' : this.screen) : 'hq';
+    if (isPhonePage(id)) {
+      this.menu.close();
+      if (id === 'ask' && from) this.phone.rotomKey(from);
+      else this.phone.open(id, from ?? 'hq');
+      return void this.view?.refresh();
+    }
+    this.phone.close();
     const TAB: Record<string, number> = { hq: 0, map: 1, roster: 2, reserve: 3, card: 4, jobs: 4, ledger: 5 };
     if (id in TAB) return this.tab(TAB[id]!);
     if (id === 'start' && this.screen === 'hq') return this.start.open();
@@ -823,12 +872,15 @@ export class DominionScene extends Phaser.Scene {
     if (look.readAloud) setTimeout(() => readAloud(document.getElementById('rx'), services().session.settings.expansion.dominionPrefs.look), 0);
     const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(this.block() ? r5Run(this, this.block()!) : null), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
     const ov = this.tut.overlay(this.screen);
+    // R9 follow-up: the Rotom chip types (a bubble) when Rotom has crew chatter waiting (T opens it).
+    const chip = this.phone.due() ? page.replace('class="ls21 ls23 rc46"', 'class="ls21 ls23 rc46 due" data-testid="r9-rotom-due"') : page;
     // Redesign R4: an overlay drawn for a pass-50 page (data-r5in) is placed inside that page by the page itself.
-    return `<div class="domfx ${fxClasses(fx)}">${page}${ov.startsWith('<div data-r5in') ? '' : ov}</div>`;
+    return `<div class="domfx ${fxClasses(fx)}">${chip}${ov.startsWith('<div data-r5in') ? '' : ov}</div>`;
   }
 
   private renderPage(): string {
     if (this.menu.owns()) return this.menu.render();
+    if (this.phone.owns()) return this.phone.render();
     if (this.tut.ownsPage()) return this.tut.renderPage();
     const b = this.block();
     if (b && this.inRun() && this.jx.owns()) return this.jx.render();
@@ -1075,6 +1127,7 @@ export class DominionScene extends Phaser.Scene {
     if (this.tut.key(a)) return void this.view?.refresh();
     if (this.nav.key(a)) return;
     if (this.menu.key(a)) return void this.view?.refresh();
+    if (this.phone.key(a)) return void this.view?.refresh();
     if (this.start.key(a)) return;
     if (this.bcard) {
       if (a === 'back' || a === 'confirm') this.bcard = false;
@@ -1285,6 +1338,7 @@ export class DominionScene extends Phaser.Scene {
     const b = this.block();
     if (!b?.opened || !this.inRun()) return null;
     if (this.menu.owns()) { const mp = this.menu.page!; return mp === 'menu' || mp === 'settings' ? mp : 'menu'; }
+    if (this.phone.owns()) return 'menu';
     if (this.police.owns()) return 'police';
     if (this.end.owns()) return null;
     switch (this.screen) {
@@ -1494,6 +1548,7 @@ export class DominionScene extends Phaser.Scene {
   }
 
   private tab(i: number): void {
+    this.phone.turn();
     if (this.screen === 'rival') this.screen = 'hq';
     if (this.screen !== 'hq' && this.screen !== 'map' && this.screen !== 'crew' && this.screen !== 'assign' && this.screen !== 'reserve' && this.screen !== 'pyramid' && this.screen !== 'ledger' && this.screen !== 'base' && this.screen !== 'squads') return;
     if (this.sq.tab(i)) return void this.view?.refresh();

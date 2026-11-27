@@ -82,8 +82,8 @@ test('Settings, the pages around it, the vault and the wheel in the pass-50 look
   await expect(s.getByTestId('dom-set-row-9')).toContainText('The Chair');
   await expect(s.getByTestId('dom-set-row-9')).toHaveClass(/\bon\b/);
 
-  // Tab walks the categories: Rotom, Effects, Sound, Access, Screen.
-  for (const [pid, n] of [['rotom', 'rotom'], ['seteff', 'seteff'], ['setsnd', 'setsnd'], ['access', 'access'], ['hud', 'hud']] as const) {
+  // Tab walks the categories: Rotom, Effects, Sound, Captions, Access, Screen.
+  for (const [pid, n] of [['rotom', 'rotom'], ['seteff', 'seteff'], ['setsnd', 'setsnd'], ['captions', 'captions'], ['access', 'access'], ['hud', 'hud']] as const) {
     await page.keyboard.press('Tab');
     await expect(s.getByTestId(`r5-${pid}`)).toBeVisible();
     await shot(n);

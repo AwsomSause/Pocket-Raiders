@@ -35,7 +35,7 @@ function oldRecord(version: number, edit: (data: Record<string, any>) => void) {
 
 describe('R9 settings v48: the Dominion look', () => {
   it('the settings record is at v48', () => {
-    expect(CURRENT_VERSIONS.settings).toBe(48);
+    expect(CURRENT_VERSIONS.settings).toBe(49);
   });
 
   it('a v45 record without a look loads with the default look and keeps everything else', () => {

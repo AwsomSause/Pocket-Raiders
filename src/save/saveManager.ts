@@ -43,7 +43,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 47, settings: 48, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 21, run: 47, settings: 49, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -504,6 +504,9 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       if (!p || typeof p !== 'object') return d;
       return { ...d, expansion: { ...d.expansion, dominionPrefs: { ...p, look: { ...LOOK_DEFAULT, ...((p as { look?: Json }).look ?? {}) } } } };
     },
+    // v48 -> v49 (Dominion R9 follow-up): the look gains the Rotom Phone's settings (chatter, captions, the Jukebox's
+    // heard tracks, the photo count, the voice, focus view and the rest); the step fills their defaults, keeping the rest.
+    48: (data) => MIGRATIONS.settings[47]!(data),
   },
   meta: {},
   timeline: {},

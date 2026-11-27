@@ -155,7 +155,7 @@ export function r5SetLook(l: DominionLook | undefined, region: string = 'kanto')
 export const r5Look = (): DominionLook => LOOK;
 /** The skin the pages wear: the region's own, or the one the player keeps. */
 export const r5Skin = (): 'kanto' | 'johto' => (LOOK.skin === 'region' ? REGION : LOOK.skin);
-const lookAttrs = (): string => `data-status="${LOOK.status}" data-ticker="${LOOK.ticker}" data-keys="${LOOK.keyHints}" data-colour="${LOOK.colour}" data-cursor="${LOOK.cursor}" data-press="${LOOK.press ? 'on' : 'off'}" data-frame="${LOOK.frame}" data-amb="${LOOK.ambience}${LOOK.lightning ? '' : ' nolight'}${LOOK.glints ? '' : ' noglint'}${LOOK.skyline ? '' : ' nosky'}"`;
+const lookAttrs = (): string => `data-status="${LOOK.status}" data-ticker="${LOOK.ticker}" data-keys="${LOOK.keyHints}" data-colour="${LOOK.colour}" data-cursor="${LOOK.cursor}" data-press="${LOOK.press ? 'on' : 'off'}" data-frame="${LOOK.frame}" data-amb="${LOOK.ambience}${LOOK.lightning ? '' : ' nolight'}${LOOK.glints ? '' : ' noglint'}${LOOK.skyline ? '' : ' nosky'}" data-focus="${LOOK.focus ? 'on' : 'off'}" data-pal="${LOOK.palette}" data-lockskin="${LOOK.lockedSkins}" data-tall="${LOOK.tall ? 'on' : 'off'}"`;
 
 // ---------- the page clock ----------
 

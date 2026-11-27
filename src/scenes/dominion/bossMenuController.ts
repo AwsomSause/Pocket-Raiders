@@ -27,6 +27,8 @@ import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
 import { PREVIEW, r5Ambience, r5Calm, r5Colours, r5Controls, r5Feel, r5Options, r5ReadAloud, r5Save, r5SetHome, r5SetPage, r5Skins, r5Vault, CONTROLS, FRAMES, SAVE_ROWS, type R5Cat, type R5Ctl, type R5Row, type R5Tile } from '../../ui/redux/screens/dominion/r50/settings';
 import { WHEEL_KEY } from '../../ui/redux/screens/dominion/views';
 import { bossPic } from './r50Bridge';
+import { isPhonePage, PHONE_APPS } from './rotomController';
+import { voices } from './phone';
 
 interface Host {
   refresh(): void;
@@ -53,6 +55,8 @@ interface Host {
   r5pre(): R5Run;
   /** Redesign R1: the HQ hub's page, for Rotom's X-ray over it (null before the run opens). */
   hubHtml(): string | null;
+  /** Redesign R9 follow-up: opens one of the Rotom Phone's own pages (radio, inbox, ...); Back returns to `back`. */
+  phone?(id: string, back: string): void;
 }
 
 /** The Guide's own pages (redesign R1, pass 50): Rotom's X-ray, the Style sheet and the Motion sheet. */
@@ -66,6 +70,7 @@ export const SETTINGS_CATS: readonly Cat[] = [
   { id: 'rotom', name: 'Rotom', icon: 'g-xtransceiver', pid: 'rotom' },
   { id: 'fx', name: 'Effects', icon: 'g-scope-lens', pid: 'seteff' },
   { id: 'audio', name: 'Sound', icon: 'g-mic', pid: 'setsnd' },
+  { id: 'captions', name: 'Captions', icon: '', pid: 'captions' },
   { id: 'access', name: 'Access', icon: 'g-town-map', pid: 'access' },
   { id: 'screen', name: 'Screen', icon: '', pid: 'hud' },
   { id: 'display', name: 'Display', icon: '', pid: 'setdisplay' },
@@ -206,6 +211,11 @@ export class BossMenuController {
     if (id === 'menu') return this.open();
     if (id === 'set') { this.mode = 'home'; return; }
     if (id === 'lessons') { this.mode = 'replay'; this.rAt = 0; return; }
+    if (isPhonePage(id) && this.host.phone) {
+      const back = this.mode === 'settings' ? `set:${SETTINGS_CATS[this.cat]!.pid}` : this.mode && this.mode !== 'menu' ? `set:${this.mode}` : 'menu';
+      this.mode = null;
+      return this.host.phone(id, back);
+    }
     // A page's mockup id first (so 'controls' is the key page, not the Controls category), then a category's own id.
     const byPid = SETTINGS_CATS.findIndex((x) => x.pid === id);
     if (byPid >= 0) return this.openSettings(byPid);
@@ -420,6 +430,8 @@ export class BossMenuController {
       ...g('sfxVolume', 'Effects', 'Stamps, coins, slams'),
       this.toggle('Sound', 'All music and effects', !this.settings().muted, () => this.save({ ...this.settings(), muted: !this.settings().muted })),
       this.toggle('Sirens', 'Police at Heat 70%', this.look().heatWarn, (v) => this.setLook({ heatWarn: v })),
+      this.volRow(),
+      this.toggle('Mute when away', 'Quiet while the tab is hidden', this.look().awayMute, (v) => this.setLook({ awayMute: v })),
       ...g('soundPack'),
       ...g('adaptiveMusic'),
     ];
@@ -451,6 +463,8 @@ export class BossMenuController {
       this.link('Region skin', l.skin === 'region' ? 'Follows the region' : `Always ${l.skin === 'johto' ? 'Johto' : 'Kanto'}`, 'skins'),
       this.link('Ambience', l.ambience === 'full' ? 'Moving layers behind pages' : 'Off', 'ambience'),
       this.link('Button feel', 'How every press answers back', 'feel'),
+      this.toggle('Focus view', 'Hides the tabs, keys and ticker', l.focus, (v) => this.setLook({ focus: v })),
+      this.link('On a phone', l.tall ? 'Pages stack on a tall screen' : 'Off: a tall screen keeps the wide layout', 'portrait'),
     ];
   }
 
@@ -459,6 +473,8 @@ export class BossMenuController {
       ? this.gameRow(d, 'Rotom level', 'How much Rotom does with a Key-Card')
       : this.gameRow(d, d.label.replace(/^Rotom for /, '').replace(/^./, (c) => c.toUpperCase()), d.id === 'claudeUse.battle' ? 'Whose moves Rotom picks · needs a Key-Card' : 'Rotom writes these · needs a Key-Card'));
     rows.splice(1, 0, this.link('Key-Card', this.cardLine() ?? 'No card: every line is the game’s own', 'vault', 'Vault'));
+    rows.push(this.seg('Crew banter', 'Rotom chats about the crew (T)', [['off', 'Off'], ['some', 'Some'], ['lots', 'Lots']] as const, this.look().chatter, (v) => this.setLook({ chatter: v })));
+    rows.push(...PHONE_APPS.map(([label, about, to]) => this.link(label, about, to)));
     return rows;
   }
 
@@ -467,6 +483,7 @@ export class BossMenuController {
     if (id === 'dominion') return this.runRows();
     if (id === 'fx') return this.fxRows();
     if (id === 'audio') return this.soundRows();
+    if (id === 'captions') return this.captionRows();
     if (id === 'access') return this.accessRows();
     if (id === 'screen') return this.screenRows();
     if (id === 'rotom') return this.rotomRows();
@@ -488,7 +505,9 @@ export class BossMenuController {
     const fresh = DominionPrefsSchema.parse({});
     if (id === 'dominion') this.setPrefs({ ...fresh, fx: this.prefs().fx, look: { ...this.look(), heatWarn: fresh.look.heatWarn } });
     else if (id === 'fx') { this.setPrefs({ ...this.prefs(), fx: fresh.fx, look: { ...this.look(), wipe: fresh.look.wipe } }); }
-    else if (id === 'screen') this.setLook({ status: fresh.look.status, ticker: fresh.look.ticker, keyHints: fresh.look.keyHints });
+    else if (id === 'screen') this.setLook({ status: fresh.look.status, ticker: fresh.look.ticker, keyHints: fresh.look.keyHints, focus: fresh.look.focus, tall: fresh.look.tall });
+    else if (id === 'captions') this.setLook({ captions: fresh.look.captions, capSize: fresh.look.capSize, musicNames: fresh.look.musicNames });
+    else if (id === 'rotom') this.setLook({ chatter: fresh.look.chatter });
     else {
       let s = this.settings();
       const ids = id === 'audio' ? ['musicVolume', 'sfxVolume', 'muted', 'soundPack', 'adaptiveMusic'] : id === 'access' ? ['fontSize', 'oneHanded', 'holdToConfirm'] : [];
@@ -500,7 +519,7 @@ export class BossMenuController {
         }
       }
       this.save(s);
-      if (id === 'audio') this.setLook({ heatWarn: fresh.look.heatWarn });
+      if (id === 'audio') this.setLook({ heatWarn: fresh.look.heatWarn, voiceVol: fresh.look.voiceVol, awayMute: fresh.look.awayMute });
       if (id === 'access') this.setLook({ colour: fresh.look.colour });
     }
     this.setNotice = `${SETTINGS_CATS[this.cat]!.name} is back to its starting values.`;
@@ -521,7 +540,10 @@ export class BossMenuController {
     ];
   }
   private colourRows(): Row[] {
-    return [this.seg('Colour assist', '', [['off', 'Off'], ['shapes', 'Shapes on'], ['contrast', 'High contrast']] as const, this.look().colour, (v) => this.setLook({ colour: v }))];
+    return [
+      this.seg('Colour assist', '', [['off', 'Off'], ['shapes', 'Shapes on'], ['contrast', 'High contrast']] as const, this.look().colour, (v) => this.setLook({ colour: v })),
+      this.seg('Palette', '', [['standard', 'Standard'], ['rg', 'Red-green safe']] as const, this.look().palette, (v) => this.setLook({ palette: v })),
+    ];
   }
   private readRows(): Row[] {
     const l = this.look();
@@ -529,6 +551,8 @@ export class BossMenuController {
       this.toggle('Read aloud', undefined, l.readAloud, (v) => { this.setLook({ readAloud: v }); if (v) this.host.r9read?.(); }),
       this.seg('Speed', '', [['slow', 'Slow'], ['normal', 'Normal'], ['fast', 'Fast']] as const, l.voiceRate, (v) => this.setLook({ voiceRate: v })),
       this.toggle('Highlight words', undefined, l.highlight, (v) => this.setLook({ highlight: v })),
+      this.voiceRow(),
+      this.volRow(),
     ];
   }
   private feelRows(): Row[] {
@@ -539,6 +563,8 @@ export class BossMenuController {
       this.seg('Cursor', '', [['arrow', 'Arrow'], ['ball', 'Poké Ball'], ['badge', 'N badge']] as const, l.cursor, (v) => this.setLook({ cursor: v })),
       ...g('holdToConfirm', 'Hold to confirm'),
       this.toggle('Press bounce', undefined, l.press, (v) => this.setLook({ press: v })),
+      this.toggle('Button sounds', undefined, l.clicks, (v) => this.setLook({ clicks: v })),
+      this.toggle('Menus wrap round', undefined, l.wrap, (v) => this.setLook({ wrap: v })),
     ];
   }
   private skinRows(): Row[] {
@@ -548,7 +574,28 @@ export class BossMenuController {
       this.seg('Skin', '', [['kanto', 'Kanto'], ['johto', 'Johto']] as const, l.skin === 'region' ? this.regionSkin() : l.skin, (v) => this.setLook({ skin: v })),
       this.toggle('Skyline behind pages', undefined, l.skyline, (v) => this.setLook({ skyline: v })),
       this.toggle('Panel glints', undefined, l.glints, (v) => this.setLook({ glints: v })),
+      this.seg('Locked skins', '', [['preview', 'Show'], ['hide', 'Hide']] as const, l.lockedSkins, (v) => this.setLook({ lockedSkins: v })),
     ];
+  }
+  /** Captions (mockup `captions`): sounds in words over the page, their size, the music's name. */
+  private captionRows(): Row[] {
+    const l = this.look();
+    return [
+      this.toggle('Captions', 'Every sound gets words', l.captions, (v) => this.setLook({ captions: v })),
+      this.seg('Caption size', 'Grows with Text size too', [['s', 'S'], ['m', 'M'], ['l', 'L']] as const, l.capSize, (v) => this.setLook({ capSize: v })),
+      this.toggle('Music names', 'Now playing card', l.musicNames, (v) => this.setLook({ musicNames: v })),
+    ];
+  }
+  /** Read aloud's voice: the browser's voices by name ('' is the browser's own pick). */
+  private voiceRow(): Row {
+    const names = ['', ...voices()];
+    const now = Math.max(0, names.indexOf(this.look().voice));
+    return { view: { label: 'Voice', ctl: { k: 'val', text: names[now] || 'Default' } }, change: (d) => { if (names.length > 1) this.setLook({ voice: names[(now + d + names.length) % names.length]! }); } };
+  }
+  /** Voices volume (Read aloud), in tenths. */
+  private volRow(): Row {
+    const v = this.look().voiceVol;
+    return { view: { label: 'Voices volume', sub: 'Read aloud', ctl: { k: 'sld', v, text: `${Math.round(v * 100)}%` } }, change: (d) => this.setLook({ voiceVol: Math.round(Math.max(0, Math.min(1, v + d * 0.1)) * 10) / 10 }) };
   }
   private ambienceRows(): Row[] {
     const l = this.look();
@@ -643,6 +690,7 @@ export class BossMenuController {
         + `<p data-testid="dom-fx-linked">${fxOf(s).linked ? 'The game’s own Motion settings hold some effects down.' : 'Follows the game’s Motion setting.'}</p>`;
     }
     if (id === 'audio') return PREVIEW.snd('Nova theme (HQ)', !s.muted);
+    if (id === 'captions') return PREVIEW.cap(p.look.captions, p.look.capSize, p.look.musicNames);
     if (id === 'access') return PREVIEW.acc(says.name, says.line, p.look.colour === 'shapes');
     if (id === 'screen' && run) return PREVIEW.hud(run, p.look.status, says.name, says.line);
     if (id === 'controls') return PREVIEW.game(['Controls', 'The game’s own control settings, the Board and the wheel.', 'Every key, side by side: Settings › Controls.']);
@@ -725,7 +773,7 @@ export class BossMenuController {
 
   private moveRow(d: number): void {
     const n = this.rows().length;
-    if (n) this.row = (this.row + d + n) % n;
+    if (n) this.row = this.look().wrap ? (this.row + d + n) % n : Math.max(0, Math.min(n - 1, this.row + d));
   }
   private setCat(i: number): void {
     this.cat = (i + SETTINGS_CATS.length) % SETTINGS_CATS.length;

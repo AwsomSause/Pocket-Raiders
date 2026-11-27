@@ -47,6 +47,9 @@ function speak(p: HTMLElement, look: DominionLook): void {
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.rate = RATE[look.voiceRate];
+  u.volume = look.voiceVol;
+  // Voice: a browser voice by name; Rotom (empty) is the browser's own first voice.
+  if (look.voice) { const v = speechSynthesis.getVoices().find((x) => x.name === look.voice); if (v) u.voice = v; }
   if (look.highlight) {
     const ws = words(p);
     const starts: number[] = [];
