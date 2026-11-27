@@ -25,7 +25,20 @@ import { mini, tall } from '../ui/redux/kit';
 import { monFile } from '../ui/redux/game';
 import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
-import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
+import { bossPic, facePic, r5Hub, r5Party, r5Run, R5StartMenu } from './dominion/r50Bridge';
+import { r5SetLook } from '../ui/redux/screens/dominion/r50/kit';
+import { readAloud, readAloudNow } from '../ui/redux/screens/dominion/r50/readAloud';
+import { bossPerson, heroPerson, memberPerson, memberSpeaker, monPic } from './dominion/r4Bridge';
+import { r5BossCard } from '../ui/redux/screens/dominion/r50/trainers';
+import { ownedGyms } from '../core/dominion/growth';
+import { masteryLevel } from '../core/dominion/field';
+import { bossMenuModel } from '../core/dominion/bossMenu';
+import { CrewPick, r5Card, r5CrewPick, r5HeroHit, type R5CrewCell, type R5Person } from '../ui/redux/screens/dominion/r50/jobs';
+import { actionDef } from '../core/dominion/field';
+import { arrival, r5Pics, speaker } from './dominion/r8Bridge';
+import { r5Arrival } from '../ui/redux/screens/dominion/r50/empireR8';
+import { nightRows } from '../core/dominion/r8Pages';
+import { r5Night } from '../ui/redux/screens/dominion/r50/chairR8';
 import { EventPages } from './dominion/r6Events';
 import { CrewController } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
@@ -598,6 +611,11 @@ export class DominionScene extends Phaser.Scene {
       bossFile: () => sc.files?.boss.file ?? null,
       replay: (lesson: string) => sc.tut.replay(lesson),
       r5run: () => { const b = sc.block(); return b ? r5Run(sc, b) : null; },
+      r9hub: () => { const b = sc.block(); return b ? sc.hubOnly(b) : ''; },
+      r9says: () => sc.r9says(),
+      r9crew: () => { const b = sc.block(); const tc = b ? teamColours(b) : null; return b ? b.members.slice(0, 6).map((m) => (m.look.endsWith('.png') ? `<img class="px" src="${pngSrc(m.look, tc)}" alt="" style="height:56px;width:auto">` : tallTeam(m.look, 56, tc))) : []; },
+      r9boss: () => sc.files?.boss.name ?? 'Boss',
+      r9read: () => readAloudNow(document.getElementById('rx'), services().session.settings.expansion.dominionPrefs.look),
       r5pre: () => sc.r5pre(),
       hubHtml: () => { const b = sc.block(); return b?.opened ? sc.hubHtml(b) : null; },
     };
@@ -608,10 +626,24 @@ export class DominionScene extends Phaser.Scene {
     return r5PreRun(r5Party(this));
   }
 
+  /** Redesign R9: the HQ hub's screen alone (Read aloud draws over it). */
+  private hubOnly(b: DominionBlock): string {
+    return this.hubHtml(b);
+  }
+
   /** Redesign R1: the HQ hub's page, for Rotom's X-ray over it. */
   hubHtml(b: DominionBlock): string {
     const x = r5Hub(b, { look: this.memberLook().look, bossFile: this.files?.boss.file ?? null, notice: null, at: this.at, threat: threatRow(b), desk: deskOpen(b) ? deskWaiting(b) : null, paper: paperNote(b) });
     return hubScr(hqModel(b), x, r5Run(this, b));
+  }
+
+  /** Redesign R9: the member on duty and what they say (the Read aloud, Access and Options previews). */
+  private r9says(): { name: string; line: string; colour: string } {
+    const b = this.block();
+    const m = b?.members[0];
+    if (!b || !m) return { name: 'Rotom', line: 'Bzzt! All quiet for now.', colour: '#ff8a1c' };
+    const name = m.name[0]!.toUpperCase() + m.name.slice(1).toLowerCase();
+    return { name, line: hqModel(b).says, colour: '#3f7fd9' };
   }
 
   // ---------- Redesign R1 (pass 50): the Start pages ----------
@@ -731,6 +763,19 @@ export class DominionScene extends Phaser.Scene {
     return r5Sign({ name: t.name, where: `Day ${b.day} · ${hqName(b)}`, changes, line: lines[Math.max(0, Math.min(this.foundedShown, lines.length) - 1)] ?? '', last: this.foundedShown >= lines.length, emblem: emblem(c, 70, 62, 42) }, r5Run(this, b));
   }
 
+  /** Redesign R8: the day the Boss chose to stay up (Esc on the Night page shows the HQ for a Night action). */
+  private stayUp = 0;
+  /** Redesign R8: the run's chrome data and how people are drawn, for the Empire and Chair pages. */
+  r8() {
+    const b = this.block();
+    return b ? { run: r5Run(this, b), pics: r5Pics(this, b) } : null;
+  }
+  /** Redesign R8 (mockup `night`): the HQ at Night opens on the night shift, until the Boss stays up. */
+  private nightPage(): boolean {
+    const b = this.block();
+    return !!b && this.screen === 'hq' && b.phase === 'night' && this.stayUp !== b.day && !this.chair.owns() && !this.crew.owns() && !this.start.on;
+  }
+
   /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. */
   private hqPage(b: DominionBlock): string {
     const m = hqModel(b);
@@ -759,7 +804,6 @@ export class DominionScene extends Phaser.Scene {
     if (id === 'herotrack' && b.hero) return this.openHero();
     // R6: the party chip, the Start menu's Bag and the Summary are pages of the Pokémon tab.
     if (id === 'party' || id === 'summary' || id === 'bag') { this.notice = null; this.res.openPage(id); return void this.view?.refresh(); }
-    if (id === 'save') { this.notice = 'Saved. Dominion saves every step.'; return void this.view?.refresh(); }
     if (id === 'base' && this.screen === 'hq') { this.hq.open(); return void this.view?.refresh(); }
     // Redesign R8: the Empire's and the Chair's pages.
     const EM: Record<string, 'cards' | 'world' | 'holder' | 'underworld' | 'gymcase'> = { regions: 'cards', empire: 'cards', world: 'world', holder: 'holder', sail: 'holder', underworld: 'underworld', gymcase: 'gymcase' };
@@ -773,8 +817,14 @@ export class DominionScene extends Phaser.Scene {
   /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
   private render(): string {
     const fx = fxOf(services().session.settings);
+    // Redesign R9: the look settings (Screen, Access, Options, Region skin, Ambience, Button feel) and Read aloud.
+    const look = services().session.settings.expansion.dominionPrefs.look;
+    r5SetLook(look, this.block()?.realm?.at);
+    if (look.readAloud) setTimeout(() => readAloud(document.getElementById('rx'), services().session.settings.expansion.dominionPrefs.look), 0);
     const page = this.nav.boardOn() && this.navHere() ? this.nav.wrap(this.nav.boardRender(this.block() ? r5Run(this, this.block()!) : null), 'board', fx.level) : this.nav.wrap(this.renderPage(), this.navHere() as Here, fx.level);
-    return `<div class="domfx ${fxClasses(fx)}">${page}${this.tut.overlay(this.screen)}</div>`;
+    const ov = this.tut.overlay(this.screen);
+    // Redesign R4: an overlay drawn for a pass-50 page (data-r5in) is placed inside that page by the page itself.
+    return `<div class="domfx ${fxClasses(fx)}">${page}${ov.startsWith('<div data-r5in') ? '' : ov}</div>`;
   }
 
   private renderPage(): string {
@@ -803,8 +853,12 @@ export class DominionScene extends Phaser.Scene {
         return this.foundedPage(b ?? null);
       case 'setup':
         return this.setupPage();
-      case 'opening':
+      case 'opening': {
+        // Redesign R8 (mockup `johto`): a region after the first opens on its arrival page.
+        const ar = b ? arrival(this, b, r5Run(this, b), { lines: openingLines(b), shown: this.shown, boss: bossPic(this.files?.boss.file ?? null, 86), ace: (services().session.run!.party.find((p) => p.hp > 0) ?? services().session.run!.party[0])?.speciesId ?? null }) : null;
+        if (ar && b) return r5Arrival(ar, r5Run(this, b));
         return this.openingPage(b ?? null);
+      }
       case 'hq':
         if (b && this.chair.owns()) return this.chair.render(this.notice);
         if (b && this.crew.owns()) return this.crew.render(this.notice);

@@ -3,14 +3,15 @@
 // the last pages, and asks the scene to jump. Nothing here is saved or rolled.
 
 import type Phaser from 'phaser';
-import { boardPins, boardStep, hubLine, jumpable, PAGE_NAMES, pinned, SHEETS, pushLast, spotOf, SPOTS, turn, type PageId } from '../../core/dominion/nav';
+import { boardPins, boardStep, hubLine, jumpable, PAGE_NAMES, pinned, PINS, SHEETS, pushLast, spotOf, SPOTS, turn, type PageId } from '../../core/dominion/nav';
 import { DOMINION_DATA } from '../../core/dominion/data';
 import type { DominionBlock } from '../../core/dominion/schema';
 import { services } from '../../game/services';
 import type { InputAction } from '../../ui/input';
-import { boardRows, r5Board } from '../../ui/redux/screens/dominion/r50/guide';
+import { boardView, ghostOf, SHUTTER_MS, shutterMode, withShutter, type Shutter } from '../../ui/redux/screens/dominion/navViews';
+import { r5Wheel } from '../../ui/redux/screens/dominion/r50/wheel';
 import type { R5Run } from '../../ui/redux/screens/dominion/r50/kit';
-import { boardView, ghostOf, SHUTTER_MS, shutterMode, wheelView, withShutter, type Shutter } from '../../ui/redux/screens/dominion/navViews';
+import { boardRows, r5Board } from '../../ui/redux/screens/dominion/r50/guide';
 
 /** The page the scene is showing: a Dominion page, the board, or null before the run opens (title, setup, opening). */
 export type Here = PageId | 'board' | null;
