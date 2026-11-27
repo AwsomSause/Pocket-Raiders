@@ -83,3 +83,5 @@
 #rx #r5 .r5log>em{font:700 11px/1 var(--fb);color:var(--mut);font-style:normal;text-align:right}
 #rx #r5 .r5bm{margin-top:14px}
 #rx #r5 .r5bm span{padding:4px 2px}
+/* R1 follow-up: the paper on the sign sits clear of the text box (the sign's left panel starts lower than the mockup's stamp page). */
+#rx #r5 .r-l .clip18[data-testid="dom-sign-paper"]{top:206px;left:330px}

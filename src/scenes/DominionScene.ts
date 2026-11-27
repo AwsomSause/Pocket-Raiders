@@ -512,8 +512,9 @@ export class DominionScene extends Phaser.Scene {
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
     onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
-    // open the game's interaction log there; the Confront room's text box keeps L (D22) (Shift+L still does).
-    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || this.screen === 'spy' || this.screen === 'empire' || (this.screen === 'takeover' && !!this.block()?.takeover?.taken)
+    // open the game's interaction log there; the Confront room's text box keeps L (D22) (Shift+L still does). The opening
+    // talk's L is its own Log (R1 follow-up).
+    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'opening' || this.screen === 'base' || this.screen === 'spy' || this.screen === 'empire' || (this.screen === 'takeover' && !!this.block()?.takeover?.taken)
       || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
     // D21: the desk hears every key first, so A and D stamp there instead of moving (the game's key map has them as ◀ ▶).
     const note = (e: KeyboardEvent): void => this.desk.note(e);
@@ -739,7 +740,7 @@ export class DominionScene extends Phaser.Scene {
     const bossFile = arch ? rxFileOf(this.manifest, arch.spriteAssetId)?.file ?? null : this.files?.boss.file ?? null;
     const peds = [
       { pic: bossPic(bossFile, 150), name: arch?.name ?? this.files?.boss.name ?? 'Boss', role: session.dominionBossTitle() ?? 'The Boss', top: true },
-      ...h.crew.map((c) => ({ pic: tall(c.look, 110), name: c.name, role: c.role })),
+      ...h.crew.map((c) => ({ pic: this.memberTall(c.look, null, 110), name: c.name, role: c.role })),
       ...(h.ace ? [{ pic: (() => { const f = monFile(this, h.ace!.speciesId, 'front'); return f ? mini(f, 110) : ''; })(), name: monName(h.ace.speciesId), role: `Ace · Lv ${h.ace.level}` }] : []),
     ];
     return { team: h.team, region: h.region, day: h.day, runs: all.length, peds };

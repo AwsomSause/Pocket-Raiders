@@ -104,12 +104,14 @@ test('the pass-50 Start pages: title, help, Boss, types, member, Charters, openi
   await page.keyboard.press('Enter');
   await shot('cold');
   // The Log (L opens it, Enter or L closes it, a line is not skipped) and Auto (its chip; off by default).
+  await page.waitForTimeout(300);
   const shown = await s.getByTestId('r5-cold').innerText();
   await page.keyboard.press('KeyL');
   await expect(s.getByTestId('dom-cold-logbox')).toBeVisible();
   await shot('cold-log');
   await page.keyboard.press('Enter');
   await expect(s.getByTestId('dom-cold-logbox')).toHaveCount(0);
+  await page.waitForTimeout(300);
   expect(await s.getByTestId('r5-cold').innerText()).toBe(shown);
   await expect(s.getByTestId('dom-cold-auto')).toContainText('off');
   await s.getByTestId('dom-cold-auto').click();
@@ -254,7 +256,7 @@ test('the Hall of Infamy: a finished run shows on Next Dominion, H opens the Hal
     const s = (window as any).__pkr.session;
     s.profile.dominionDone = ['old'];
     s.profile.dominionHall = [{ runId: 'old', team: 'Team Venom', region: 'Kanto', day: 41, boss: 'red',
-      crew: [{ name: 'Rook', look: 0, role: 'Grunt' }], ace: { speciesId: 'gengar', level: 52 } }];
+      crew: [{ name: 'Rook', look: 'dominion/c-rook0.png', role: 'Grunt' }], ace: { speciesId: 'gengar', level: 52 } }];
   });
   const s = await toTitle(page);
   await page.keyboard.press('Enter');
