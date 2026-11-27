@@ -84,9 +84,13 @@ test('set up a Dominion in the New look, live a day round the clock, and it relo
   await s.getByTestId('dom-order-find-recruit').click();
   await expect(s.getByTestId('dom-notice')).toContainText('Find one useful contact');
   await shot('hq-day');
-  // A locked tab says so; Esc closes the line.
+  // Redesign R4 opened the last shut tab: 5 is the Job board now; Esc shuts it and 1 is the HQ again.
   await page.keyboard.press('Digit5');
-  await expect(s.getByTestId('dom-notice')).toContainText('later part');
+  await expect(s.getByTestId('dom-board-0')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(s.getByTestId('dom-board-0')).toHaveCount(0);
+  await page.keyboard.press('Digit1');
+  await expect(s.getByTestId('dom-next')).toBeVisible();
   await s.getByTestId('dom-next').click();
   await expect(s.getByTestId('dom-phase')).toHaveText('EVENING');
   const before = await block(page);
