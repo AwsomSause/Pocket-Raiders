@@ -49,7 +49,25 @@ export const StartFileSchema = z.object({
   says: z.object({ grunt: z.array(S).min(1), admin: z.array(S).min(1) }).strict(),
   report: z.object({ guard: S, rest: S, tired: S, exhausted: S, cool: S, week: S, broke: S, step: S }).strict(),
   lockedTab: S,
+  /** Boss stats and traits (redesign R1 follow-up): each player trainer's starting Edge (10 points) and two traits. */
+  boss: z.object({
+    traits: z.array(z.object({ id: S, name: S, text: S, kind: z.enum(['conviction', 'tension', 'heat', 'learn']), n: I, stat: z.enum(STAT_IDS).optional() }).strict()).min(1),
+    default: z.lazy(() => BossStartSchema),
+    byArchetype: z.record(S, z.lazy(() => BossStartSchema)),
+    title: S,
+    /** The opening talk's Auto: milliseconds per line (presentation only). */
+    autoMs: I.min(500),
+  }).strict().superRefine((b, ctx) => {
+    const ids = new Set(b.traits.map((t) => t.id));
+    for (const t of b.traits) if ((t.kind === 'learn') !== !!t.stat) ctx.addIssue({ code: 'custom', message: `trait ${t.id}: a learn trait names its stat` });
+    for (const [k, v] of [['default', b.default] as const, ...Object.entries(b.byArchetype)]) {
+      const sum = STAT_IDS.reduce((n, id) => n + v.edge[id], 0);
+      if (sum !== 10) ctx.addIssue({ code: 'custom', message: `boss ${k}: Edge adds up to ${sum}, not 10` });
+      for (const t of v.traits) if (!ids.has(t)) ctx.addIssue({ code: 'custom', message: `boss ${k}: unknown trait ${t}` });
+    }
+  }),
 }).strict();
+const BossStartSchema = z.object({ edge: StatsSchema, traits: z.array(S).min(1).max(2) }).strict();
 export type StartFile = z.infer<typeof StartFileSchema>;
 
 
@@ -325,6 +343,9 @@ const BlockSchema = z.object({
   opened: z.boolean(),
   /** D2: the Boss's hands (districts, Heat, the Edge, travel, the fight an action waits on). */
   field: FieldSchema,
+  /** Boss stats and traits (R1 follow-up): the Boss's trainer and its traits, set when the run starts. Optional: runs
+   *  started before have none (no traits). */
+  boss: z.object({ id: S, traits: z.array(S) }).strict().optional(),
   /** D3: the crew's shared state (stores, leads, waiting list, hire list, talks, Patrons). Optional; `crewState` fills it. */
   crew: z.lazy(() => CrewStateSchema).optional(),
   /** D6: the Ledger's books, holding and Notoriety (Part 3 §1-2, Part 9 A14). Optional; `empireOf` (book.ts) fills it. */
@@ -2372,6 +2393,8 @@ export const FoundingFileSchema = z.object({
   goals: z.array(z.object({ id: S, name: S, line: S, quote: S }).strict()).length(14),
   noGoal: z.object({ name: S, line: S, quote: S }).strict(),
   band: z.object({ grey: HEX, greyDark: HEX, ink: HEX, white: HEX, near: N0, contrast: N0 }).strict(),
+  /** R1 follow-up: the morning paper on the sign (mockup `sign`) and what the news does in the HQ's district. */
+  paper: z.object({ headline: S, dread: I, regard: I }).strict(),
   lines: z.object({
     ready: S, readyShort: S, later: S, notYet: S, done: S, short: S, long: S, chars: S, taken: S, same: S, motto: S,
     said: z.object({ grunt: S, admin: S }).strict(),

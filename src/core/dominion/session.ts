@@ -1,6 +1,7 @@
 // DOMINION on a run: the setup writes `run.expansion.dominion`, each clock step updates it. Pure: a new run is returned
 // and the caller (GameSession.dominionApply) saves it.
 
+import { applyBossStart } from './bossTraits';
 import { tutStep } from './tutorial';
 import type { Content } from '../contentSchema';
 import { addLevels } from '../pokemon';
@@ -100,6 +101,7 @@ export function startInRun(content: Content, run: RunState, setup: DominionSetup
   // D5: the starting money is clean (A21). D19: every member gets their personality card.
   // D11: the region's Hero.
   const block = DominionBlockSchema.parse(ensureHero(fillCards(withRivals(withHq(withReserve(content, fresh), fresh.funds)), run.seed), run.archetypeId, run.seed));
+  applyBossStart(block, run.archetypeId);
   noteTop(block, out);
   out = { ...withBlock(out, block), inventory: { ...DOMINION_DATA.start.start.inventory } };
   return { run: out, problem: null };

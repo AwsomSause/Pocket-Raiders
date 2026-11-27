@@ -4,6 +4,7 @@
 // rest of the actions that waited on this slice. Every rule reads growth.json; every roll has its own stream.
 // Registers into field.ts (Card hooks, effects, gates, the fight settler), crew.ts (task kinds) and the World Turn.
 
+import { withLearn } from './bossTraits';
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
 import type { RunState } from '../state';
@@ -659,7 +660,7 @@ addActAfter((b, x, play) => {
   if (play.friendship && play.effect !== 'pamper' && x.run) for (const m of x.run.party) m.friendship = Math.min(255, m.friendship + play.friendship);
   const def = DOMINION_DATA.actions.actions.find((a) => a.id === x.action);
   if (play.edge && def?.stat && def.stat !== 'all') {
-    const l = edgeXp(b.field, def.stat, play.edge);
+    const l = edgeXp(b.field, def.stat, withLearn(b, def.stat, play.edge));
     if (l) out.push(l);
   }
   if (play.tension) {

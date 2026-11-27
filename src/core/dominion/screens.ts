@@ -10,7 +10,7 @@ const colourHex = (id: string): string => colourDef(id)?.hex ?? '#777';
 
 export const SETUP_PAGES = ['boss', 'types', 'member'] as const;
 /** D16: 'charter' is the optional established start (C on the Boss page), off the three-page path. */
-export type SetupPage = (typeof SETUP_PAGES)[number] | 'charter';
+export type SetupPage = (typeof SETUP_PAGES)[number] | 'charter' | 'hall';
 
 /** The setup pages' draft, kept by the scene until "Begin" (Part 1 §1.1, Part 7 §1.1). */
 export interface SetupDraft {

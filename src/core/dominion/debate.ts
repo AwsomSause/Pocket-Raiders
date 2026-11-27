@@ -7,6 +7,7 @@
 // gives the result (A4): Convinced (Merger or loyal Branch), Persuaded (a Branch with one demand), Unmoved, Offended.
 // Branches pay tribute and take a Branch Directive every Monday (A6). Pure: every roll is on `dominion-debate`.
 
+import { traitConviction } from './bossTraits';
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
 import { newMon } from '../run';
@@ -134,6 +135,7 @@ export function startConviction(b: DominionBlock, team: string, who = 'boss'): n
   n += S.perPage * Math.min(S.maxPages, b.debate?.pages ?? 0);
   n += S.perMastery * Math.max(0, masteryLevel(b.field.mastery['debate'] ?? 0) - 1);
   n += hqFx(b).debate;
+  if (who === 'boss') n += traitConviction(b);
   return clamp(n, -S.cap, S.cap);
 }
 

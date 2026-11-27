@@ -4,6 +4,7 @@
 // and used, number for number, when it's done. Pure: no Phaser, and this file never imports run.ts (the battle rules
 // reach it through fightEnd.ts). Rolls: stream `dominion-act` (an action), `dominion-police` (the police's night).
 
+import { withLearn } from './bossTraits';
 import type { Content } from '../contentSchema';
 import { addItem } from '../items';
 import { gainXp } from '../pokemon';
@@ -779,14 +780,14 @@ function grow(b: DominionBlock, def: ActionDef, play: Play, won: boolean, big: b
   const out: string[] = [];
   const stat = def.stat && def.stat !== 'all' ? def.stat : null;
   if (play.effect === 'train' || play.effect === 'plan') {
-    const l = stat ? edgeXp(f, stat, play.xp ?? 0) : null;
+    const l = stat ? edgeXp(f, stat, withLearn(b, stat, play.xp ?? 0)) : null;
     if (l) out.push(l);
     return out;
   }
   const E = F().edge.xp, M = F().mastery.xp;
   const k: 'big' | 'win' | 'fail' = big ? 'big' : won ? 'win' : 'fail';
   if (stat) {
-    const l = edgeXp(f, stat, E[k]);
+    const l = edgeXp(f, stat, withLearn(b, stat, E[k]));
     if (l) out.push(l);
   }
   const m = masteryXp(f, def, M[k]);

@@ -31,16 +31,24 @@ Kice, 2026-11-21 12:25 PM PT: "BUILD EVERYTHING AS CLOSE TO THE MOCKUPS AS YOU C
 
 Differences left on purpose (live data, not looks): a new profile has no Continue card and the Charters are locked; the Boss is the run's trainer with the run's three Pokémon; numbers, names and lessons are the run's; the game asks Boss, then types, then member (the mockup numbers types as step 1).
 
-## Needs a mechanic (not built, no placeholder)
+## Follow-up rules (built 2026-11-27, director answer: simple real rules for the left-out bits)
 
-- **Boss stats and traits** (Brawn, Nerve, Wits, Charm, Stealth; Silver Tongue, Old Grudge): the game's Boss has none, so the Boss page shows the run's Pokémon and the real rules instead.
-- **Next Dominion carry-overs** Hall of Infamy and the Boss title: no such records yet; the page lists only what really carries over.
-- **Your own team** as a Charter card (a blank Charter): New Dominion already does this from the title.
-- Opening talk: the **Log** and **Auto** chips (no talk log or auto-advance in the game).
-- The sign: the **newspaper clipping** (no papers at the Founding) and Rocket's Tension line.
-- How pages connect: **page counts** per group (the board lists the game's real routes instead).
+- **Boss stats and traits** (`src/data/dominion/start.json` `boss`, `src/core/dominion/bossTraits.ts`): each trainer starts with its own Edge spread (always 10 points: Brawn, Nerve, Wits, Charm, Stealth) and two traits. Traits act for real: Silver Tongue +10 and Champion's Pride +5 Conviction when the Boss (not an Admin) starts a Debate; Old Grudge +5 Tension on every rival team at the start; Loud Mouth +5 Heat, Clean Record -5 Heat at the start; the learn traits (Quiet Type, Bookworm, People Person, Hard Hitter, Steady Nerves) add 1 XP to their stat each time it grows. Red: Quiet Type and Steady Nerves; Blue: Champion's Pride and Loud Mouth; Green: Bookworm and Clean Record; Hilda: People Person and Hard Hitter; Nate: Silver Tongue and Old Grudge. The block keeps `boss` (optional, so runs started before keep their Edge and have no traits).
+- **Hall of Infamy and the Boss title** (`src/core/dominion/hall.ts`, profile `dominionHall`, optional with default `[]`, no version bump): a finished run (last region Taken) is kept once, newest first, at most ten: team, region, day, Boss, right hand and two more crew, Ace. The newest gives the title ("Boss of Kanto") on the Boss page. Next Dominion lists the Hall and the title; H opens the Hall (R8's Hall of Infamy page), Esc comes back.
+- **Opening talk Log and Auto**: L opens the talk log (every line so far, by speaker), L, Esc or Enter closes it without skipping a line; the Auto chip turns auto-advance on or off (one line every 2.6 s, `boss.autoMs`; off by default). A is not used for Auto because A is a move key.
+- **The paper on the sign** (`founding.json` `paper`): the Founding runs the story in the Ledger and really moves the HQ district's Dread +3 and Regard -1; the sign shows the clipping and a "<district> talks" row.
+
+| Page | Game |
+|---|---|
+| Boss: stats and traits | ![](dominion-r1/game-fu-boss.jpg) |
+| Opening talk: Log | ![](dominion-r1/game-fu-cold-log.jpg) |
+| The sign: the paper | ![](dominion-r1/game-fu-sign.jpg) |
+| Hall of Infamy (from Next Dominion) | ![](dominion-r1/game-fu-infamy.jpg) |
+
+Still not built: **Your own team** as a Charter card (New Dominion already does this from the title), Rocket's Tension line on the sign, and page counts on How pages connect (the board lists the real routes).
 
 ## Tests
 
-- New `tests/e2e/dominionR1.spec.ts`: walks every Start and Guide page by keys and taps; checks the run is unchanged by the Guide pages. `R5_DUMP=1` also saves a shot and the page HTML of each page for the side-by-side.
+- New `tests/unit/dominionBossTraits.test.ts` (8 tests): Edge sums, the run start's traits, Silver Tongue, learn XP, clamps, the Hall (once, newest first, ten), old profiles, the Founding paper.
+- New `tests/e2e/dominionR1.spec.ts`: walks every Start and Guide page by keys and taps; checks the run is unchanged by the Guide pages; Boss stats and traits, the talk Log and Auto, the sign's paper, and the Hall from Next Dominion. `R5_DUMP=1` also saves a shot and the page HTML of each page for the side-by-side.
 - `dominionTutorial.spec.ts`: the Lesson Book's Tutorial setting is now a tap (arrows walk the grid, as in the mockup).

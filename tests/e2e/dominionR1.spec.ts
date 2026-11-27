@@ -60,6 +60,10 @@ test('the pass-50 Start pages: title, help, Boss, types, member, Charters, openi
   // The Boss: portrait, the three Pokémon, notes; the Charters are locked on a new profile.
   await expect(s.getByTestId('dom-setup-boss')).toBeVisible();
   await expect(s.getByTestId('dom-setup-charter-chip')).toContainText('Charters');
+  // R1 follow-up: Red's Edge (five stats, 10 points) and two traits.
+  await expect(s.getByTestId('dom-boss-stats')).toContainText('Stealth');
+  await expect(s.getByTestId('dom-boss-traits')).toContainText('Quiet Type');
+  await expect(s.getByTestId('dom-boss-traits')).toContainText('Steady Nerves');
   await shot('boss');
   await page.keyboard.press('KeyC');
   await expect(s.getByTestId('dom-setup-charters')).toBeVisible();
@@ -99,6 +103,21 @@ test('the pass-50 Start pages: title, help, Boss, types, member, Charters, openi
   await expect(s.getByTestId('r5-cold')).toBeVisible();
   await page.keyboard.press('Enter');
   await shot('cold');
+  // The Log (L opens it, Enter or L closes it, a line is not skipped) and Auto (its chip; off by default).
+  await page.waitForTimeout(300);
+  const shown = await s.getByTestId('r5-cold').innerText();
+  await page.keyboard.press('KeyL');
+  await expect(s.getByTestId('dom-cold-logbox')).toBeVisible();
+  await shot('cold-log');
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('dom-cold-logbox')).toHaveCount(0);
+  await page.waitForTimeout(300);
+  expect(await s.getByTestId('r5-cold').innerText()).toBe(shown);
+  await expect(s.getByTestId('dom-cold-auto')).toContainText('off');
+  await s.getByTestId('dom-cold-auto').click();
+  await expect(s.getByTestId('dom-cold-auto')).toContainText('on');
+  await s.getByTestId('dom-cold-auto').click();
+  await expect(s.getByTestId('dom-cold-auto')).toContainText('off');
   for (let i = 0; i < 3; i++) await s.getByTestId('dom-opening').click();
   await expect(s.getByTestId('r5-hq')).toBeVisible();
 
@@ -124,6 +143,9 @@ test('the pass-50 Start pages: title, help, Boss, types, member, Charters, openi
   await s.getByTestId('dom-f-found').click();
   await expect(s.getByTestId('r5-sign')).toBeVisible();
   await expect(s.getByTestId('dom-sign-name')).not.toHaveText('');
+  // The paper on the sign: the Founding's news, and it really moves Dread and Regard at home.
+  await expect(s.getByTestId('dom-sign-paper')).toContainText('Ledger');
+  await expect(s.getByTestId('dom-sign-paper')).toContainText('Dread +3');
   await shot('sign');
   for (let i = 0; i < 3; i++) await s.getByTestId('dom-founded').click();
   await expect(s.getByTestId('r5-hq')).toBeVisible();
@@ -224,5 +246,34 @@ test('the pass-50 Guide pages: Lesson Book, Style and Motion sheets, X-ray, How 
   await page.keyboard.press('Escape');
   await expect(s.getByTestId('r5-hq')).toBeVisible();
   expect(await block(page)).toEqual(before);
+  expect(errors).toEqual([]);
+});
+
+test('the Hall of Infamy: a finished run shows on Next Dominion, H opens the Hall, Esc comes back', async ({ page }, info) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&tutorial=0');
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.profile.dominionDone = ['old'];
+    s.profile.dominionHall = [{ runId: 'old', team: 'Team Venom', region: 'Kanto', day: 41, boss: 'red',
+      crew: [{ name: 'Rook', look: 'dominion/c-rook0.png', role: 'Grunt' }], ace: { speciesId: 'gengar', level: 52 } }];
+  });
+  const s = await toTitle(page);
+  await page.keyboard.press('Enter');
+  await expect(s.getByTestId('dom-setup-boss')).toBeVisible();
+  // The newest finished run gives the Boss title.
+  await expect(s.getByTestId('dom-setup-boss')).toContainText('Boss of Kanto');
+  await page.keyboard.press('KeyC');
+  await expect(s.getByTestId('dom-setup-charters')).toBeVisible();
+  await expect(s.getByTestId('dom-carry-hall')).toBeVisible();
+  await page.keyboard.press('KeyH');
+  await expect(s.getByTestId('r8-infamy')).toBeVisible();
+  await expect(s.getByTestId('r8-infamy')).toContainText('Rook');
+  if (process.env.R5_DUMP) {
+    await page.waitForTimeout(6000);
+    await page.screenshot({ path: info.outputPath('infamy.png') });
+  }
+  await page.keyboard.press('Escape');
+  await expect(s.getByTestId('dom-setup-charters')).toBeVisible();
   expect(errors).toEqual([]);
 });

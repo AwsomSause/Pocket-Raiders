@@ -2,6 +2,7 @@
 // C Police, D Gyms, E Trainers, H Labs, I Wild Pokémon, K Crime World; town.ts plays them, town.json says what each
 // choice does) and the rival teams' moves against your Gym plans (rival actions 53, 62, 69, 79, 128; rivals.ts runs them).
 // Numbers live in growth.json "rivalGym" and town.json "meet"; the words in growth.json "lines".
+import { withLearn } from './bossTraits';
 import { chairOf } from './chair';
 import { courtOf } from './growthCourt';
 import { DOMINION_DATA } from './data';
@@ -71,7 +72,7 @@ setTownFx((b, fx, district, seed) => {
   if (fx.edge) {
     const n = DOMINION_DATA.town.meet.edge;
     bits.push(`Boss ${statName(fx.edge)} XP +${n}`);
-    const up = edgeXp(b.field, fx.edge, n);
+    const up = edgeXp(b.field, fx.edge, withLearn(b, fx.edge, n));
     if (up) bits.push(up);
   }
   if (fx.item) {

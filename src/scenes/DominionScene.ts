@@ -8,8 +8,11 @@ import { getArchetype } from '../core/archetypes';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { DOMINION_DATA } from '../core/dominion/data';
 import { dominionBlock } from '../core/dominion/session';
+import { bossStart } from '../core/dominion/bossTraits';
+import { monName } from '../core/dominion/crew';
 import { charterRows, hqModel, newSetup, openingLines, SETUP_PAGES, toggleType, typeGrid, type SetupDraft } from '../core/dominion/screens';
 import type { DominionAction, DominionBlock } from '../core/dominion/schema';
+import { STAT_IDS } from '../core/dominion/schema';
 import { services } from '../game/services';
 import { onInputAction, type InputAction } from '../ui/input';
 import { setLogKeyTaken } from '../ui/overlays';
@@ -59,7 +62,7 @@ import { mapView } from '../ui/redux/screens/dominion/fieldViews';
 import { ledgerModel, SPREADS } from '../core/dominion/ledgerScreens';
 import { ledgerView } from '../ui/redux/screens/dominion/ledger';
 import { meetModel } from '../core/dominion/town';
-import { foundedLines, foundingOpen, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
+import { foundedLines, foundingOpen, foundingPaper, initialOf, nameIdeas, newDraft, teamColours } from '../core/dominion/founding';
 import { FOUNDING_ROWS, type FoundingUi } from '../ui/redux/screens/dominion/founding';
 import { heroModel, interruptModel } from '../core/dominion/heroScreens';
 import { heroView, type MonFiles } from '../ui/redux/screens/dominion/heroViews';
@@ -86,6 +89,9 @@ export class DominionScene extends Phaser.Scene {
   private titleAt = 0;
   private setup: SetupDraft = newSetup();
   private shown = 1;
+  /** R1 follow-up: the opening talk's Log (every line so far) and Auto (the next line every few seconds, until the last). */
+  private coldLog = false;
+  private coldAuto = false;
   private at = 0;
   private notice: string | null = null;
   private leaving = false;
@@ -177,6 +183,10 @@ export class DominionScene extends Phaser.Scene {
     this.screen = 'title';
     this.setup = newSetup();
     this.shown = 1;
+    this.coldLog = false;
+    this.coldAuto = false;
+    // Auto (R1 follow-up): presentation only; it presses "Go on" for the player and stops on the last line.
+    this.time.addEvent({ delay: DOMINION_DATA.start.boss.autoMs, loop: true, callback: () => this.coldTick() });
     this.at = 0;
     this.notice = null;
     this.leaving = false;
@@ -271,10 +281,13 @@ export class DominionScene extends Phaser.Scene {
         next: () => this.next(),
         setupBack: () => this.back(),
         more: () => this.confirm(),
+        coldLog: () => this.coldToggle('log'),
+        coldAuto: () => this.coldToggle('auto'),
         order: (i) => { this.at = Number(i); this.confirm(); },
         tab: (i) => this.tab(Number(i)),
         // D16: the Charters page (C on the Boss page) and a click on one of its rows (a second click begins).
         charters: () => this.openCharters(),
+        hall: () => this.openHall(),
         charterRow: (i) => { const again = this.setup.cAt === Number(i); this.setup = { ...this.setup, cAt: Number(i), problem: null }; if (again) this.next(); else this.view?.refresh(); },
         district: (id) => this.pickDistrict(id),
         target: (i) => { if (this.cursor) this.cursor = { ...this.cursor, target: Number(i) }; this.view?.refresh(); },
@@ -404,8 +417,11 @@ export class DominionScene extends Phaser.Scene {
       if (this.inRun() && this.snatch.raw(e)) return;
       // R6: a street event reads L (its Text log) and 1-9 (answers) first.
       if (this.inRun() && this.ev.raw(e.code)) return;
+      // R1 follow-up: the opening talk's L (Log); Esc or L closes it. Auto is its chip (A is a move key).
+      if (this.screen === 'opening' && e.code === 'KeyL') return this.coldToggle('log');
+      if (this.screen === 'opening' && this.coldLog && e.code === 'Escape') return this.coldToggle('log');
       if (this.screen === 'founding') return;
-      if (this.screen === 'setup') return void (e.code === 'KeyC' && this.openCharters());
+      if (this.screen === 'setup') return void (e.code === 'KeyC' ? this.openCharters() : e.code === 'KeyH' && this.openHall());
       if (this.debate.raw(e.code, e)) return;
       // D12: while the Chair sits, O is its settings, not the Founding.
       if (e.code === 'KeyO' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'crew') && !this.chair.owns()) return this.openFounding();
@@ -496,8 +512,9 @@ export class DominionScene extends Phaser.Scene {
     // After `raw`, so a letter the HQ menu took (A, S) is not also read as a move.
     onInputAction(this, (a) => this.key(a), { onceEach: true });
     // L is the Ledger on the HQ, the map and the Crew File (D6) and Money on the HQ menu (D5, mockup 6), so it doesn't
-    // open the game's interaction log there; the Confront room's text box keeps L (D22) (Shift+L still does).
-    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'base' || this.screen === 'spy' || this.screen === 'empire' || (this.screen === 'takeover' && !!this.block()?.takeover?.taken)
+    // open the game's interaction log there; the Confront room's text box keeps L (D22) (Shift+L still does). The opening
+    // talk's L is its own Log (R1 follow-up).
+    setLogKeyTaken(() => this.scene.isActive() && (this.screen === 'opening' || this.screen === 'base' || this.screen === 'spy' || this.screen === 'empire' || (this.screen === 'takeover' && !!this.block()?.takeover?.taken)
       || (!!this.block()?.opened && ['hq', 'map', 'crew', 'ledger', 'hero'].includes(this.screen))));
     // D21: the desk hears every key first, so A and D stamp there instead of moving (the game's key map has them as ◀ ▶).
     const note = (e: KeyboardEvent): void => this.desk.note(e);
@@ -688,7 +705,7 @@ export class DominionScene extends Phaser.Scene {
     const m: R5SetupModel = {
       page: d.page,
       problem: d.problem,
-      boss: { name: f.boss.name, pic: bossPic(f.boss.file, 190) },
+      boss: { name: f.boss.name, pic: bossPic(f.boss.file, 190), ...this.bossFacts() },
       starters: f.starters.map((x) => ({ name: x.name, level: x.level, pic: x.file ? mini(x.file, 64) : '' })),
       funds: `₽${D.start.funds.toLocaleString('en-US')}`,
       home: `${districtDef(DOMINION_DATA.field.hq)?.name ?? 'Pewter'} back streets`,
@@ -703,8 +720,30 @@ export class DominionScene extends Phaser.Scene {
         open: f.charters.open, lockLine: f.charters.lockLine, pickLine: f.charters.pickLine, at: d.cAt,
         rows: f.charters.rows.map((c) => ({ id: c.id, team: c.team, initial: c.initial, colours: c.colours, question: c.question, patron: c.patron.name, motto: c.motto, from: c.from })),
       },
+      hall: this.hallModel(),
     };
     return r5Setup(m, this.r5pre());
+  }
+
+  /** R1 follow-up: the Boss's starting Edge and traits (by trainer), and the title a finished run earned. */
+  private bossFacts(): { stats: [string, number][]; traits: [string, string][]; title: string | null } {
+    const s = bossStart(services().session.run?.archetypeId ?? '');
+    return { stats: STAT_IDS.map((k) => [k, s.edge[k]]), traits: s.traits.map((t) => [t.name, t.text]), title: services().session.dominionBossTitle() };
+  }
+
+  /** R1 follow-up: the newest Hall of Infamy entry, with its pictures (the Hall page reuses R8's pedestals). */
+  private hallModel(): R5SetupModel['hall'] {
+    const all = services().session.dominionHall(), h = all[0];
+    if (!h) return null;
+    const session = services().session;
+    const arch = session.content.archetypes.get(h.boss);
+    const bossFile = arch ? rxFileOf(this.manifest, arch.spriteAssetId)?.file ?? null : this.files?.boss.file ?? null;
+    const peds = [
+      { pic: bossPic(bossFile, 150), name: arch?.name ?? this.files?.boss.name ?? 'Boss', role: session.dominionBossTitle() ?? 'The Boss', top: true },
+      ...h.crew.map((c) => ({ pic: this.memberTall(c.look, null, 110), name: c.name, role: c.role })),
+      ...(h.ace ? [{ pic: (() => { const f = monFile(this, h.ace!.speciesId, 'front'); return f ? mini(f, 110) : ''; })(), name: monName(h.ace.speciesId), role: `Ace · Lv ${h.ace.level}` }] : []),
+    ];
+    return { team: h.team, region: h.region, day: h.day, runs: all.length, peds };
   }
 
   private openingPage(b: DominionBlock | null): string {
@@ -713,7 +752,7 @@ export class DominionScene extends Phaser.Scene {
     const look = this.memberLook().look;
     const member: R5Actor = { name: mb?.name ?? 'Rook', role: mb?.rank === 'grunt' || !mb ? 'Your only Grunt' : 'Your first Admin', pic: this.memberTall(look, b, 250), face: facePic(look, b, 62), colour: '#3f7fd9' };
     const boss: R5Actor = { name: this.files?.boss.name ?? 'Boss', role: 'The Boss', pic: `<span class="flip r5blk">${bossPic(this.files?.boss.file ?? null, 250)}</span>`, face: this.bossFace(62), colour: '#e0294a' };
-    return r5Cold(openingLines(b), this.shown, member, boss, r5Run(this, b));
+    return r5Cold(openingLines(b), this.shown, member, boss, r5Run(this, b), { log: this.coldLog, auto: this.coldAuto });
   }
 
   private foundedPage(b: DominionBlock | null): string {
@@ -728,7 +767,10 @@ export class DominionScene extends Phaser.Scene {
       { up: true, b: 'Crew', e: `${m.name} wears it first` },
       { up: true, b: 'Goal', e: goal?.name ?? DOMINION_DATA.founding.noGoal.name },
     ];
-    return r5Sign({ name: t.name, where: `Day ${b.day} · ${hqName(b)}`, changes, line: lines[Math.max(0, Math.min(this.foundedShown, lines.length) - 1)] ?? '', last: this.foundedShown >= lines.length, emblem: emblem(c, 70, 62, 42) }, r5Run(this, b));
+    // R1 follow-up: the morning paper runs the story (its Dread and Regard are real, set by the Founding).
+    const paper = foundingPaper(b);
+    changes.push({ up: false, b: `${paper.district} talks`, e: paper.fx });
+    return r5Sign({ name: t.name, where: `Day ${b.day} · ${hqName(b)}`, changes, line: lines[Math.max(0, Math.min(this.foundedShown, lines.length) - 1)] ?? '', last: this.foundedShown >= lines.length, emblem: emblem(c, 70, 62, 42), paper }, r5Run(this, b));
   }
 
   /** Redesign R0 (pass 50): the HQ hub, or the Start menu over it. */
@@ -1113,8 +1155,22 @@ export class DominionScene extends Phaser.Scene {
     }
   }
 
+  private coldToggle(which: 'log' | 'auto'): void {
+    if (which === 'log') this.coldLog = !this.coldLog;
+    else this.coldAuto = !this.coldAuto;
+    this.view?.refresh();
+  }
+
+  private coldTick(): void {
+    const b = this.block();
+    if (this.screen !== 'opening' || !this.coldAuto || this.coldLog || !b || this.shown >= openingLines(b).length) return;
+    this.shown += 1;
+    this.view?.refresh();
+  }
+
   private confirm(): void {
     const b = this.block();
+    if (this.screen === 'opening' && this.coldLog) return this.coldToggle('log');
     if (this.screen === 'title') {
       const id = this.titleRows()[this.titleAt]?.id;
       if (id === 'leave') return this.leave();
@@ -1158,6 +1214,13 @@ export class DominionScene extends Phaser.Scene {
       if (m.panel === 'orders' && order) return void this.step(b.phase === 'day' ? { t: 'do', order: order.id } : { t: 'plan', order: order.id });
       return this.next();
     }
+    this.view?.refresh();
+  }
+
+  /** R1 follow-up: H on the Charters page: the Hall of Infamy (the newest finished run's team); Esc comes back. */
+  private openHall(): void {
+    if (this.screen !== 'setup' || this.setup.page !== 'charter' || !services().session.dominionHall().length) return;
+    this.setup = { ...this.setup, page: 'hall', problem: null };
     this.view?.refresh();
   }
 
@@ -1979,8 +2042,8 @@ export class DominionScene extends Phaser.Scene {
       return this.view?.refresh();
     }
     if (this.screen === 'setup') {
-      if (this.setup.page === 'charter') {
-        this.setup = { ...this.setup, page: 'boss', problem: null };
+      if (this.setup.page === 'charter' || this.setup.page === 'hall') {
+        this.setup = { ...this.setup, page: this.setup.page === 'hall' ? 'charter' : 'boss', problem: null };
         return this.view?.refresh();
       }
       const i = SETUP_PAGES.indexOf(this.setup.page as (typeof SETUP_PAGES)[number]);
