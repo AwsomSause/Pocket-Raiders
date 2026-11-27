@@ -136,6 +136,7 @@ export const START_ITEMS: readonly R5StartItem[] = [
   { id: 'reserve', icon: 'g-ball', label: 'Pokémon', about: 'The Reserve and the Pyramid' },
   { id: 'tcard', icon: 'g-badgecard', label: 'Boss card', about: 'Your card: level, money, gyms, the Hero' },
   { id: 'map', icon: 'g-town-map', label: 'Region map', about: 'Districts, targets and tonight’s jobs' },
+  { id: 'timetable', icon: 'g-member-card', label: 'Timetable', about: 'The Magnet Line: trains, fares and police checks' },
   { id: 'rivals', icon: 'g-scope-lens', label: 'Rivals', about: 'The other teams in Kanto' },
   { id: 'save', icon: 'g-journal', label: 'Save', about: 'The game saves every step' },
   { id: 'options', icon: 'g-machine-part', label: 'Options', about: 'Settings for Dominion and the game' },

@@ -47,6 +47,7 @@ import { takeoverStep } from './takeover';
 import { leave, realmStep, type Orders } from './regions';
 import { buyout, cancel, purge, settlePartners, shadowOne, sign } from './partners';
 import { applyCharter, applyTurn, charterById, TURN_FLAG } from './charters';
+import { dayStep } from './theDay';
 
 export const DOMINION_MODE_ID = 'dominion';
 export const isDominionRun = (run: RunState | null | undefined): boolean => run?.rules.modeId === DOMINION_MODE_ID;
@@ -274,6 +275,11 @@ function stepInner(content: Content, run: RunState, action: DominionAction): Ste
     // D10: Pokémon an action took (Kidnap, a lab's rare one, the Swap Meet) wait in the crew's pending list: place them now.
     const next = settleCrew(content, withBlock(work, DominionBlockSchema.parse(blk)));
     return { ok: true, block: next.expansion!.dominion!, notice, heal: false, run: next, fight: out.fight, roll: out.roll ?? null };
+  }
+  if (action.t === 'day') {
+    // Redesign R3 (theDay.ts): the way to travel, the flooded tunnel, a press interview (the party says who knows Surf).
+    const out = dayStep(block, run, action);
+    return { ok: out.ok, block: out.block, notice: out.notice, heal: false, run: out.ok ? withBlock(run, DominionBlockSchema.parse(out.block)) : run };
   }
   if (action.t === 'buy') {
     const out = buy(block, action.vehicle);

@@ -27,9 +27,10 @@ import { pngSrc, tallTeam } from '../ui/redux/screens/dominion/teamPic';
 import { hubScr, r5Hq, r5Start, START_ITEMS } from '../ui/redux/screens/dominion/r50/hub';
 import { bossPic, r5Hub, r5Run, R5StartMenu } from './dominion/r50Bridge';
 import { EventPages } from './dominion/r6Events';
-import { CrewController } from './dominion/crewController';
+import { CrewController, type CrewCursors } from './dominion/crewController';
 import { districtModel, districtOrder } from '../core/dominion/districtScreen';
 import { districtView } from '../ui/redux/screens/dominion/district';
+import { DayPages, WEEK_PAGES, type DayPage } from './dominion/r3Day';
 import { ChairController } from './dominion/chairController';
 import { ReserveController } from './dominion/reserveController';
 import { typeBoxOpen } from '../ui/typeBox';
@@ -167,6 +168,8 @@ export class DominionScene extends Phaser.Scene {
   private bcard = false;
   /** Redesign R0: the Start menu over the HQ (mockup `start`). */
   private start = new R5StartMenu((id) => this.r5go(id), () => this.view?.refresh());
+  /** Redesign R3: The Day's pages over the map and the District file (street, deploy) and the map's Focus view. */
+  private day = new DayPages(this, this.dayHost());
   private voices = new VoicesController({ refresh: () => this.view?.refresh(), onHq: () => this.screen === 'hq' && !this.crew.owns() && !this.police.owns() && !this.snatch?.owns() && !this.block()?.crew?.talks.length });
 
   constructor() {
@@ -207,6 +210,7 @@ export class DominionScene extends Phaser.Scene {
     this.cp = new CrewPick();
     this.bcard = false;
     this.jx = this.newJx();
+    this.day = new DayPages(this, this.dayHost());
     const { session } = services();
     const run = session.run;
     if (!run) return void this.scene.start('MainMenu');
@@ -298,6 +302,7 @@ export class DominionScene extends Phaser.Scene {
         buy: (id) => this.buy(id),
         ...this.ev.acts(),
         dismiss: () => { this.notice = null; this.res.dismiss(); this.rival.dismiss(); this.debate.dismiss(); this.spy.dismiss(); this.tk.dismiss(); this.em.dismiss(); this.pt.dismiss(); this.view?.refresh(); },
+        ledgerBack: () => this.closeLedger(),
         ledgerTab: (i) => { this.spread = Number(i); this.view?.refresh(); },
         ledgerPage: (d) => this.turnLedger(Number(d)),
         founding: () => this.openFounding(),
@@ -342,6 +347,7 @@ export class DominionScene extends Phaser.Scene {
         ...this.menu.acts(),
         r5go: (id) => this.r5go(id),
         r8StayUp: () => { this.stayUp = this.block()?.day ?? 0; this.view?.refresh(); },
+        ...this.day.acts(),
         r5start: (i) => this.start.pick(Number(i)),
       },
       overs: {
@@ -429,6 +435,7 @@ export class DominionScene extends Phaser.Scene {
       // D14: K opens the Takeover page from the HQ, the map and the Ledger.
       if (e.code === 'KeyK' && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'ledger')) return void (this.tk.open(this.screen) && this.view?.refresh());
       if (this.heroRaw(e.code)) return;
+      if (this.day.raw(e.code)) return;
       if (this.screen === 'ledger') {
         if (e.code in TAB_KEYS) this.tab(TAB_KEYS[e.code]!);
         else if (e.code === 'KeyL') this.closeLedger();
@@ -768,6 +775,25 @@ export class DominionScene extends Phaser.Scene {
     if ((id === 'ending' || id === 'credits' || id === 'infamy') && this.end.open()) { if (id !== 'ending') this.end.acts()[id === 'credits' ? 'r8Credits' : 'r8Infamy']!(''); return void this.view?.refresh(); }
     if ((id === 'queue' || id === 'favours') && this.chair.owns()) return this.chair.acts()[id === 'queue' ? 'r8Queue' : 'r8Favours']!('');
     if (id === 'chair' && this.screen === 'hq') return this.tab(0);
+    // R3: The Day's pages.
+    if (id === 'district' && this.screen === 'map') return this.openDistrict();
+    if (id === 'street' && this.screen === 'map') this.openDistrict();
+    if (id === 'deploy' && this.screen !== 'map') this.tab(1);
+    if (id === 'street' || id === 'deploy') return void this.day.open(id);
+    if (id === 'focus' && this.screen === 'map') { this.day.focus = !this.day.focus; return void this.view?.refresh(); }
+    if (id === 'evening' && (this.screen === 'hq' || this.screen === 'map')) return void this.day.open('evening');
+    if (id === 'clock' || id === 'recap' || id === 'calendar' || (WEEK_PAGES as readonly string[]).includes(id)) return void this.day.open(id as DayPage);
+  }
+
+  /** R3: the crew controller draws the Morning and Assign a task with the pass-50 pages. */
+  r5Crew(page: 'morning' | 'assign', c: CrewCursors, notice: string | null): string | null {
+    const b = this.block();
+    return b ? this.day.crewPage(page, b, c, notice) : null;
+  }
+  morningRow(i: number): void {
+    const b = this.block();
+    const p = b ? this.day.morningGo(b, i) : null;
+    if (p) this.r5go(p);
   }
 
   /** D27: every page wears the Effects & motion classes (fx.css turns the spectacle down; presentation only). */
@@ -785,13 +811,14 @@ export class DominionScene extends Phaser.Scene {
     if (b && this.inRun() && this.job.owns()) return this.job.render();
     if (b && this.inRun() && this.police.owns()) return this.police.render();
     if (b && this.inRun() && this.snatch.owns()) return this.snatch.render();
-    if (b && this.inRun() && this.job.paperOwns()) return this.job.renderPaper();
+    if (b && this.inRun() && this.job.paperOwns()) return this.day.paperPage(b);
     if (this.voices.on && this.screen === 'hq') return this.voices.render();
     // D13: a Debate on the table takes the screen (after the Debate action, a card answered, or a reload).
     if (b?.debate?.live && (this.screen === 'hq' || this.screen === 'map' || this.screen === 'card' || this.screen === 'rival' || this.screen === 'crew' || this.screen === 'reserve' || this.screen === 'pyramid' || this.screen === 'ledger' || this.screen === 'base')) this.debate.claim();
     // D17: the first time a hub page is drawn with the run complete, the ending opens over it.
     if (b && this.inRun() && (this.end.owns() || this.end.maybeOpen())) return this.end.render(this.notice);
     if (b && this.bcard && this.inRun()) return this.bossCardPage(b);
+    if (b && this.day.owns()) return this.day.render(this.notice);
     switch (this.screen) {
       case 'title':
         return this.titlePage();
@@ -811,7 +838,7 @@ export class DominionScene extends Phaser.Scene {
         return b ? this.hqPage(b) : '';
       case 'map':
         if (b && this.ev.owns()) return this.ev.render();
-        return b && this.cursor ? mapView(mapModel(b, services().session.run!, this.cursor), this.notice, this.garage, this.meetPanel()) : '';
+        return b && this.cursor ? this.day.mapPage(b, this.cursor, this.notice, this.garage, this.meetPanel()) : '';
       case 'card': {
         const c = b && this.cursor ? this.cardOf() : null;
         if (!b || !c) return '';
@@ -821,9 +848,9 @@ export class DominionScene extends Phaser.Scene {
       case 'assign':
         return this.crew.render(this.notice);
       case 'district':
-        return b && this.cursor ? districtView(districtModel(b, services().session.run!, this.cursor), this.notice) : '';
+        return b && this.cursor ? this.day.districtPage(b, this.cursor, this.notice) : '';
       case 'ledger':
-        return b ? ledgerView(ledgerModel(b, services().session.run!, this.spread), this.notice) : '';
+        return b ? this.day.ledgerPage(b, this.spread, this.notice) : '';
       case 'hero': {
         if (!b?.hero) return '';
         const m = heroModel(b, services().session.run!);
@@ -1065,6 +1092,7 @@ export class DominionScene extends Phaser.Scene {
       return;
     }
     if (this.ev.key(a)) return void this.view?.refresh();
+    if (this.day.key(a)) return void this.view?.refresh();
     if (this.chair.key(a)) return void this.view?.refresh();
     if (this.sq.key(a)) return void this.view?.refresh();
     if (this.res.key(a)) return void this.view?.refresh();
@@ -1223,6 +1251,23 @@ export class DominionScene extends Phaser.Scene {
       navJump: (p: PageId) => this.navJump(p),
       setNotice: (n: string | null) => { this.notice = n; },
       r5run: () => { const b = this.block(); return b ? r5Run(this, b) : null; },
+    };
+  }
+
+  /** R3: what The Day's pages need from the scene. */
+  private dayHost() {
+    const sc = (): DominionScene => this;
+    return {
+      get screenName() { return sc().screen; },
+      setNotice: (n: string | null) => { this.notice = n; },
+      refresh: () => this.view?.refresh(),
+      step: (a: DominionAction) => this.step(a),
+      dayCursor: () => this.cursor,
+      setDayCursor: (c: MapCursor) => { this.cursor = c; },
+      dayNotice: () => this.notice,
+      dayCard: () => this.openCard('district'),
+      dayBoss: () => this.files?.boss.file ?? null,
+      dayNext: () => { if (this.screen !== 'hq') this.tab(0); this.next(); },
     };
   }
 
